@@ -1,0 +1,9 @@
+*.pyc
+*.sqlite
+.coverage
+.env
+.pytest_cache/
+__pycache__
+htmlcov/
+secret.key
+venv/
