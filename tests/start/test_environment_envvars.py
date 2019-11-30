@@ -50,6 +50,15 @@ def test_csrf_strict(monkeypatch):
     assert environment.CSRF_STRICT is True
 
 
+def test_backlog_days(monkeypatch):
+    assert environment.BACKLOG_DAYS == 14
+
+    monkeypatch.setenv('BACKLOG_DAYS', '1337')
+    reload(environment)
+
+    assert environment.BACKLOG_DAYS == 1337
+
+
 def test_title(monkeypatch):
     assert environment.TITLE == environment.APP_NAME
 

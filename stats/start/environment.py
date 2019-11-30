@@ -1,6 +1,6 @@
 from os import getenv, path
 
-from stats.start.helper import parse_bool
+from stats.start.helper import parse_bool, parse_int
 
 APP_NAME = 'stats'
 MDL_NAME = __name__.split('.')[0]
@@ -22,6 +22,8 @@ SECRET_FILE = getenv('SECRET_FILE', 'secret.key')
 SECRET_BASE = getenv('SECRET_BASE', ROOT_DIR)
 
 CSRF_STRICT = parse_bool(getenv('CSRF_STRICT', 'true'), fallback=True)
+
+BACKLOG_DAYS = parse_int(getenv('BACKLOG_DAYS', '14'), fallback=True)
 
 TITLE = getenv('TITLE', APP_NAME)
 HTML_LANG = getenv('HTML_LANG', 'en')
