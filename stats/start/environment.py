@@ -27,6 +27,7 @@ BACKLOG_DAYS = parse_int(getenv('BACKLOG_DAYS', '14'), fallback=True)
 
 TITLE = getenv('TITLE', APP_NAME)
 HTML_LANG = getenv('HTML_LANG', 'en')
+FAVICON = getenv('FAVICON', 'hex.png')
 
 ERROR_CODES = (
     400, 401, 403, 404, 418,

@@ -1,7 +1,7 @@
 from stats.start.config import (
     BaseConfig, DevelopmentConfig, ProductionConfig, TestingConfig
 )
-from stats.start.environment import APP_NAME, HTML_LANG, TITLE
+from stats.start.environment import APP_NAME, FAVICON, HTML_LANG, TITLE
 
 
 def test_base_config():
@@ -9,6 +9,7 @@ def test_base_config():
 
     assert conf.APP_NAME == APP_NAME
     assert conf.DEBUG is False
+    assert conf.FAVICON == FAVICON
     assert conf.HTML_LANG == HTML_LANG
     assert conf.SECRET_KEY and isinstance(conf.SECRET_KEY, (str, bytes))
     assert conf.TESTING is False
