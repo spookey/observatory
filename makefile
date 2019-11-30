@@ -21,6 +21,12 @@ DIR_TESTS	:=	tests
 
 DIR_STATIC	:=	$(DIR_STATS)/static
 
+DIR_NODEM	:=	node_modules
+CMD_NPM		:=	npm
+
+OUT_STYLE	:=	$(DIR_STATIC)/style.css
+OUT_SCRIPT	:=	$(DIR_STATIC)/script.js
+
 
 .PHONY: help
 help:
@@ -29,6 +35,8 @@ help:
 	@echo
 	@echo "venv             install virtualenv"
 	@echo "requirements     install requirements into venv"
+	@echo
+	@echo "static           build files for static directory"
 	@echo
 	@echo "lint             run pylint"
 	@echo "plot             run pyreverse"
@@ -59,6 +67,16 @@ $(CMD_FLASK): $(DIR_VENV)
 $(CMD_ISORT) $(CMD_PYLINT) $(CMD_PYREV) $(CMD_PYTEST): $(DIR_VENV)
 	$(CMD_PIP) install -r "requirements-dev.txt"
 
+###
+# assets
+
+$(DIR_NODEM):
+	$(CMD_NPM) install
+
+.PHONY: static
+static: $(OUT_STYLE) $(OUT_SCRIPT)
+$(OUT_STYLE) $(OUT_SCRIPT): $(DIR_NODEM)
+	$(CMD_NPM) run dist
 
 ###
 # service
@@ -165,7 +183,7 @@ define _flask
 endef
 
 .PHONY: shell run
-run: $(CMD_FLASK)
+run: $(CMD_FLASK) static
 	$(call _flask,run --host "$(_HOST)" --port "$(_PORT)")
 shell: $(CMD_FLASK)
 	$(call _flask,shell)

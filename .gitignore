@@ -5,5 +5,7 @@
 .pytest_cache/
 __pycache__
 htmlcov/
+node_modules/
 secret.key
+stats/static/
 venv/
