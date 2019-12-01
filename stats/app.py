@@ -1,8 +1,11 @@
 from flask import Flask
 
+from stats.lib.cli import BP_CLI
 from stats.shared import errorhandler
 from stats.start.environment import ERROR_CODES, MDL_NAME
-from stats.start.extensions import CSRF_PROTECT, DB, MIGRATE
+from stats.start.extensions import (
+    BCRYPT, CSRF_PROTECT, DB, LOGIN_MANAGER, MIGRATE
+)
 from stats.start.logger import initialize_logging
 from stats.views.side import BLUEPRINT_SIDE
 
@@ -21,8 +24,10 @@ def create_app(config_obj):
 
 
 def register_extensions(app):
+    BCRYPT.init_app(app)
     CSRF_PROTECT.init_app(app)
     DB.init_app(app)
+    LOGIN_MANAGER.init_app(app)
     MIGRATE.init_app(app, DB)
 
 
@@ -32,5 +37,5 @@ def register_errorhandlers(app):
 
 
 def register_blueprints(app):
-#     app.register_blueprint(BLUEPRINT_MAIN)
+    app.register_blueprint(BP_CLI)
     app.register_blueprint(BLUEPRINT_SIDE)

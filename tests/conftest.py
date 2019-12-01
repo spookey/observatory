@@ -1,6 +1,7 @@
 from pytest import fixture
 
 from stats.app import create_app
+from stats.models.user import User
 from stats.start.config import TestingConfig
 from stats.start.extensions import DB as _db
 
@@ -52,3 +53,22 @@ def ctx_app(app):
 def client(ctx_app):
     with ctx_app.test_client() as cli:
         yield cli
+
+###
+# DB helpers
+
+
+USER_NAME = 'user'
+USER_PASS = 'secret'
+
+
+@fixture(scope='function')
+def gen_user():
+    def make(username=USER_NAME, password=USER_PASS, **kwargs):
+        return User.create(
+            username=username,
+            password=password,
+            **kwargs
+        )
+
+    return make

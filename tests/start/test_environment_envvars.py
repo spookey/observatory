@@ -41,6 +41,15 @@ def test_secret(monkeypatch):
     assert environment.SECRET_FILE == '✏️'
 
 
+def test_bcrypt_log_rounds(monkeypatch):
+    assert environment.BCRYPT_LOG_ROUNDS == 13
+
+    monkeypatch.setenv('BCRYPT_LOG_ROUNDS', '42')
+    reload(environment)
+
+    assert environment.BCRYPT_LOG_ROUNDS == 42
+
+
 def test_csrf_strict(monkeypatch):
     assert environment.CSRF_STRICT is True
 

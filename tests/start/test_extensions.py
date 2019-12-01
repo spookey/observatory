@@ -1,11 +1,18 @@
 from pytest import mark
 
 from stats.start.environment import MIGR_DIR
-from stats.start.extensions import CSRF_PROTECT, DB, MIGRATE
+from stats.start.extensions import (
+    BCRYPT, CSRF_PROTECT, DB, LOGIN_MANAGER, MIGRATE
+)
 
 
 @mark.usefixtures('app')
 class TestExtensions:
+
+    @staticmethod
+    def test_for_bcrypt(app):
+        assert BCRYPT is not None
+        assert app.config['BCRYPT_LOG_ROUNDS'] is not None
 
     @staticmethod
     def test_for_csrf(app):
@@ -17,6 +24,11 @@ class TestExtensions:
     def test_for_db():
         assert DB is not None
         assert DB.engine.url.database is None  # memory db
+
+    @staticmethod
+    def test_for_login_manager(app):
+        assert LOGIN_MANAGER is not None
+        assert app.login_manager == LOGIN_MANAGER
 
     # pylint: disable=invalid-name
 

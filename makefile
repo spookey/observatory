@@ -50,6 +50,10 @@ help:
 	@echo "run              run application"
 	@echo "shell            launch a shell"
 	@echo
+	@echo "cli-adduser      add a new user"
+	@echo "cli-setpass      set password of user"
+	@echo "cli-setstate-..  toggle active/blocked of user"
+	@echo
 
 
 ###
@@ -201,6 +205,19 @@ dbup: $(CMD_FLASK)
 	$(call _flask,db upgrade)
 dbdown: $(CMD_FLASK)
 	$(call _flask,db downgrade)
+
+
+###
+# cli
+.PHONY: cli-adduser cli-setpass cli-setstate-active cli-setstate-blocked
+cli-adduser: $(CMD_FLASK)
+	$(call _flask,cli adduser)
+cli-setpass: $(CMD_FLASK)
+	$(call _flask,cli setpass)
+cli-setstate-active: $(CMD_FLASK)
+	$(call _flask,cli setstate --active)
+cli-setstate-blocked: $(CMD_FLASK)
+	$(call _flask,cli setstate --blocked)
 
 
 ###

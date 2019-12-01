@@ -1,8 +1,8 @@
 from os import path, urandom
 
 from stats.start.environment import (
-    APP_NAME, CSRF_STRICT, DATABASE, DATABASE_DEV, FAVICON, HTML_LANG,
-    SECRET_BASE, SECRET_FILE, TITLE
+    APP_NAME, BCRYPT_LOG_ROUNDS, CSRF_STRICT, DATABASE, DATABASE_DEV, FAVICON,
+    HTML_LANG, SECRET_BASE, SECRET_FILE, TITLE
 )
 
 
@@ -21,6 +21,7 @@ def secret_key(base=SECRET_BASE, filename=SECRET_FILE):
 
 
 class BaseConfig:
+    BCRYPT_LOG_ROUNDS = BCRYPT_LOG_ROUNDS
     APP_NAME = APP_NAME
     DEBUG = False
     FAVICON = FAVICON
@@ -39,6 +40,7 @@ class DevelopmentConfig(BaseConfig):
 
 
 class TestingConfig(BaseConfig):
+    BCRYPT_LOG_ROUNDS = 5
     SQLALCHEMY_DATABASE_URI = 'sqlite://'
     TESTING = True
     WTF_CSRF_ENABLED = False

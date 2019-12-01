@@ -8,6 +8,7 @@ def test_base_config():
     conf = BaseConfig()
 
     assert conf.APP_NAME == APP_NAME
+    assert conf.BCRYPT_LOG_ROUNDS == 13
     assert conf.DEBUG is False
     assert conf.FAVICON == FAVICON
     assert conf.HTML_LANG == HTML_LANG
@@ -30,6 +31,7 @@ def test_devel_config():
 def test_test_config():
     conf = TestingConfig()
 
+    assert conf.BCRYPT_LOG_ROUNDS == 5
     assert conf.DEBUG is False
     assert conf.SQLALCHEMY_DATABASE_URI == 'sqlite://'
     assert conf.TESTING is True
