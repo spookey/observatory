@@ -49,8 +49,8 @@ class TestUser:
         one = gen_user(username='one')
         two = gen_user(username='two')
 
-        assert one.get_id() == f'{one.prime}'
-        assert two.get_id() == f'{two.prime}'
+        assert one.get_id() == '{}'.format(one.prime)
+        assert two.get_id() == '{}'.format(two.prime)
 
     @staticmethod
     def test_is_active(gen_user):
