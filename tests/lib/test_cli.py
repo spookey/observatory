@@ -1,6 +1,6 @@
+from pytest import fixture, mark
+
 from stats.models.user import User
-from pytest import mark
-from pytest import fixture
 
 
 @fixture(scope='function')
@@ -46,6 +46,17 @@ class TestCli:
         assert 'already present' in result.output.lower()
 
         assert User.query.all() == [user]
+
+    @staticmethod
+    def test_adduser_invalid_name(invoke):
+        assert User.query.all() == []
+
+        result = invoke(
+            'adduser', '--username', '🙋‍♀️', '--password', '🤷‍♀️'
+        )
+        assert 'invalid name' in result.output
+
+        assert User.query.all() == []
 
     @staticmethod
     def test_setpass(invoke, gen_user):

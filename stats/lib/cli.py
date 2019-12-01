@@ -1,6 +1,7 @@
 import click
 from flask import Blueprint
 
+from stats.lib.text import is_safename
 from stats.models.user import User
 
 BP_CLI = Blueprint('cli', __name__)
@@ -12,6 +13,10 @@ BP_CLI = Blueprint('cli', __name__)
 def adduser(username, password):
     if User.by_username(username) is not None:
         click.secho('{} already present!'.format(username), fg='red')
+        return
+
+    if not is_safename(username):
+        click.secho('{} is an invalid name!'.format(username), fg='red')
         return
 
     user = User.create(username=username, password=password)
