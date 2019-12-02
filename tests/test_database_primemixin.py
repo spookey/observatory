@@ -11,7 +11,7 @@ class PrimeMixinPhony(PrimeMixin, DB.Model):
     pass
 
 
-@fixture
+@fixture(scope='function')
 def _pri():
     return PrimeMixinPhony()
 
@@ -64,5 +64,7 @@ class TestPrimeMixin:
         assert _pri == PrimeMixinPhony.by_prime(1)
         assert None is PrimeMixinPhony.by_prime(-1)
         assert None is PrimeMixinPhony.by_prime(0.1)
+        assert None is PrimeMixinPhony.by_prime(0.9)
         assert None is PrimeMixinPhony.by_prime('omg')
         assert None is PrimeMixinPhony.by_prime(b'wtf')
+        assert None is PrimeMixinPhony.by_prime('🤷‍♀️')
