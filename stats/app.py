@@ -7,6 +7,7 @@ from stats.start.extensions import (
     BCRYPT, CSRF_PROTECT, DB, LOGIN_MANAGER, MIGRATE
 )
 from stats.start.logger import initialize_logging
+from stats.views.main import BLUEPRINT_MAIN
 from stats.views.side import BLUEPRINT_SIDE
 
 
@@ -38,4 +39,5 @@ def register_errorhandlers(app):
 
 def register_blueprints(app):
     app.register_blueprint(BP_CLI)
+    app.register_blueprint(BLUEPRINT_MAIN)
     app.register_blueprint(BLUEPRINT_SIDE)
