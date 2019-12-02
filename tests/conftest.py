@@ -1,6 +1,7 @@
 from pytest import fixture
 
 from stats.app import create_app
+from stats.models.sensor import Sensor
 from stats.models.user import User
 from stats.start.config import TestingConfig
 from stats.start.extensions import DB as _db
@@ -56,6 +57,27 @@ def client(ctx_app):
 
 ###
 # DB helpers
+
+
+SENSOR_NAME = 'test'
+SENSOR_TITLE = 'Test Sensor'
+SENSOR_DESCRIPTION = 'Some sensor just for UnitTests'
+
+
+@fixture(scope='function')
+def gen_sensor():
+    def make(
+            name=SENSOR_NAME,
+            title=SENSOR_TITLE,
+            description=SENSOR_DESCRIPTION,
+            **kwargs
+    ):
+        return Sensor.create(
+            name=name, title=title, description=description,
+            **kwargs
+        )
+
+    return make
 
 
 USER_NAME = 'user'
