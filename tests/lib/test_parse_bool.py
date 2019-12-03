@@ -1,4 +1,4 @@
-from stats.start.helper import FALSY, TRUTHY, parse_bool
+from stats.lib.parse import FALSY, TRUTHY, parse_bool
 
 UNKNOWN = ('', '_', '🛒')
 WRONG = (23, None, Exception)

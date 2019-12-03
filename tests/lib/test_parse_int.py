@@ -1,6 +1,6 @@
 from string import digits, punctuation
 
-from stats.start.helper import parse_int
+from stats.lib.parse import parse_int
 
 
 def test_simple():

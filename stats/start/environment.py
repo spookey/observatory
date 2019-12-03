@@ -1,6 +1,6 @@
 from os import getenv, path
 
-from stats.start.helper import parse_bool, parse_int
+from stats.lib.parse import parse_bool, parse_int
 
 APP_NAME = 'stats'
 MDL_NAME = __name__.split('.')[0]
