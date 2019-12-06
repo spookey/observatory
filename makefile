@@ -226,3 +226,18 @@ cli-setstate-blocked: $(CMD_FLASK)
 .PHONY: travis
 travis: $(CMD_PYTEST)
 	$(call _tcov,--durations=10)
+
+
+CMD_MKTMP	:=	mktemp
+CMD_GIT		:=	git
+CMD_MAKE	:=	make
+CMD_RM		:=	rm
+
+.PHONY: travis-phony
+travis-phony:
+	tmpdir=$$($(CMD_MKTMP) -d -t "$(DIR_STATS).phony") && \
+	echo "=> $$tmpdir" && \
+	$(CMD_GIT) clone . "$$tmpdir" && \
+	$(CMD_MAKE) -C "$$tmpdir" travis && \
+	echo "<= $$tmpdir" && \
+	$(CMD_RM) -rf "$$tmpdir"
