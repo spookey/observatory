@@ -2,7 +2,7 @@ from pytest import mark
 
 from stats.start.environment import MIGR_DIR
 from stats.start.extensions import (
-    BCRYPT, CSRF_PROTECT, DB, LOGIN_MANAGER, MIGRATE
+    BCRYPT, CSRF_PROTECT, DB, LOGIN_MANAGER, MIGRATE, REST
 )
 
 
@@ -38,3 +38,10 @@ class TestExtensions:
         assert MIGRATE == app.extensions['migrate'].migrate
         assert MIGRATE.directory == MIGR_DIR
         assert MIGRATE.db == db
+
+    @staticmethod
+    def test_for_rest(app):
+        assert REST is not None
+        assert REST.prefix == '/api'
+        for ep in REST.endpoints:
+            assert ep in app.view_functions

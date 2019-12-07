@@ -18,8 +18,6 @@ class TestMainIndex:
     @mark.usefixtures('ctx_app')
     def test_basic_view(visitor):
         res = visitor(ENDPOINT)
-        # assert res.page == ''
-
         title = res.soup.select('h1 a.title')[-1]
         subtitle = res.soup.select('h2.subtitle')[-1]
         assert title.string == TITLE

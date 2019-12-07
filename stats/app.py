@@ -1,10 +1,11 @@
 from flask import Flask
 
 from stats.lib.cli import BP_CLI
+from stats.rest.sensor import BP_REST_SENSOR
 from stats.shared import errorhandler, tagline
 from stats.start.environment import ERROR_CODES, MDL_NAME
 from stats.start.extensions import (
-    BCRYPT, CSRF_PROTECT, DB, LOGIN_MANAGER, MIGRATE
+    BCRYPT, CSRF_PROTECT, DB, LOGIN_MANAGER, MIGRATE, REST
 )
 from stats.start.logger import initialize_logging
 from stats.views.main import BLUEPRINT_MAIN
@@ -31,6 +32,7 @@ def register_extensions(app):
     DB.init_app(app)
     LOGIN_MANAGER.init_app(app)
     MIGRATE.init_app(app, DB)
+    REST.init_app(app)
 
 
 def register_errorhandlers(app):
@@ -42,6 +44,7 @@ def register_blueprints(app):
     app.register_blueprint(BP_CLI)
     app.register_blueprint(BLUEPRINT_MAIN)
     app.register_blueprint(BLUEPRINT_SIDE)
+    app.register_blueprint(BP_REST_SENSOR)
 
 
 def register_template_functions(app):

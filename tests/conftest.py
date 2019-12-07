@@ -1,3 +1,5 @@
+from json import loads
+
 from bs4 import BeautifulSoup
 from flask import url_for
 from pytest import fixture
@@ -89,7 +91,14 @@ def _visitor(client):
         res.url = url
         res.request = request
         res.page = request.get_data(as_text=True)
+
         res.soup = BeautifulSoup(res.page, 'html.parser')
+
+        try:
+            res.json = loads(res.page)
+        except ValueError:
+            res.json = None
+
         return res
 
     return make
