@@ -1,3 +1,5 @@
+from bs4 import BeautifulSoup
+from flask import url_for
 from pytest import fixture
 
 from stats.app import create_app
@@ -54,6 +56,49 @@ def ctx_app(app):
 def client(ctx_app):
     with ctx_app.test_client() as cli:
         yield cli
+
+
+def _visitor(client):
+    def make(
+            endpoint,
+            *,
+            code=200,
+            data=None,
+            headers=None,
+            method='get',
+            params=None,
+            query_string=None,
+    ):
+        params = params if params is not None else {}
+        url = url_for(endpoint, **params)
+
+        caller = {
+            'get': client.get,
+            'post': client.post,
+            'put': client.put,
+        }.get(method.lower())
+
+        request = caller(
+            url, data=data, headers=headers, query_string=query_string
+        )
+        assert request.status_code == code
+
+        def res():
+            pass
+
+        res.url = url
+        res.request = request
+        res.page = request.get_data(as_text=True)
+        res.soup = BeautifulSoup(res.page, 'html.parser')
+        return res
+
+    return make
+
+
+@fixture(scope='function')
+def visitor(client):
+    yield _visitor(client)
+
 
 ###
 # DB helpers

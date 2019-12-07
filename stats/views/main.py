@@ -10,3 +10,11 @@ BLUEPRINT_MAIN = Blueprint('main', __name__)
 @LOGIN_MANAGER.user_loader
 def user_loader(prime):
     return User.by_prime(prime)
+
+
+@BLUEPRINT_MAIN.route('/')
+def index():
+    return render_template(
+        'main/index.html',
+        title=tagline(),
+    )
