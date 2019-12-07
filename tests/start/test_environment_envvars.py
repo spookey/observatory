@@ -69,7 +69,7 @@ def test_backlog_days(monkeypatch):
 
 
 def test_title(monkeypatch):
-    assert environment.TITLE == environment.APP_NAME
+    assert environment.TITLE == 'Status'
 
     monkeypatch.setenv('TITLE', '🕹')
     reload(environment)
@@ -93,3 +93,14 @@ def test_favicon(monkeypatch):
     reload(environment)
 
     assert environment.FAVICON == '💥'
+
+
+def test_taglines(monkeypatch):
+    for num in range(1, 6 + 1):
+        name = 'TAGLINE_{:02d}'.format(num)
+        assert isinstance(getattr(environment, name, None), str)
+
+        monkeypatch.setenv(name, '*️⃣')
+        reload(environment)
+
+        assert getattr(environment, name, None) == '*️⃣'

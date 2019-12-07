@@ -27,9 +27,16 @@ CSRF_STRICT = parse_bool(getenv('CSRF_STRICT', 'true'), fallback=True)
 
 BACKLOG_DAYS = parse_int(getenv('BACKLOG_DAYS', '14'), fallback=True)
 
-TITLE = getenv('TITLE', APP_NAME)
+TITLE = getenv('TITLE', 'Status')
 HTML_LANG = getenv('HTML_LANG', 'en')
 FAVICON = getenv('FAVICON', 'hex.png')
+
+TAGLINE_01 = getenv('TAGLINE_01', 'Hey Peter, what\'s happening?')
+TAGLINE_02 = getenv('TAGLINE_02', 'Someone set us up the bomb!')
+TAGLINE_03 = getenv('TAGLINE_03', 'We get signal!')
+TAGLINE_04 = getenv('TAGLINE_04', 'Terror as a business!')
+TAGLINE_05 = getenv('TAGLINE_05', 'Looking at numbers!')
+TAGLINE_06 = getenv('TAGLINE_06', 'Rage against the virtual machine.')
 
 ERROR_CODES = (
     400, 401, 403, 404, 418,

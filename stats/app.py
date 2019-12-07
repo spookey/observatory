@@ -2,6 +2,7 @@ from flask import Flask
 
 from stats.lib.cli import BP_CLI
 from stats.shared import errorhandler
+from stats.shared import errorhandler, tagline
 from stats.start.environment import ERROR_CODES, MDL_NAME
 from stats.start.extensions import (
     BCRYPT, CSRF_PROTECT, DB, LOGIN_MANAGER, MIGRATE
@@ -20,6 +21,7 @@ def create_app(config_obj):
     register_extensions(app)
     register_errorhandlers(app)
     register_blueprints(app)
+    register_template_functions(app)
 
     return app
 
@@ -41,3 +43,9 @@ def register_blueprints(app):
     app.register_blueprint(BP_CLI)
     app.register_blueprint(BLUEPRINT_MAIN)
     app.register_blueprint(BLUEPRINT_SIDE)
+
+
+def register_template_functions(app):
+    app.jinja_env.globals.update(
+        tagline=tagline
+    )
