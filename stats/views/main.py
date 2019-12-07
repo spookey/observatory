@@ -1,6 +1,7 @@
-from flask import Blueprint, current_app, render_template
+from flask import Blueprint, render_template
 
 from stats.models.user import User
+from stats.shared import tagline
 from stats.start.extensions import LOGIN_MANAGER
 
 BLUEPRINT_MAIN = Blueprint('main', __name__)

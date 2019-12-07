@@ -96,11 +96,11 @@ def test_favicon(monkeypatch):
 
 
 def test_taglines(monkeypatch):
-    for num in range(1, 6 + 1):
-        name = 'TAGLINE_{:02d}'.format(num)
-        assert isinstance(getattr(environment, name, None), str)
+    for num, line in enumerate(environment.TAGLINES):
+        assert environment.TAGLINES[num] == line
 
+        name = 'TAGLINE_{:02d}'.format(1 + num)
         monkeypatch.setenv(name, '*️⃣')
         reload(environment)
 
-        assert getattr(environment, name, None) == '*️⃣'
+        assert environment.TAGLINES[num] == '*️⃣'

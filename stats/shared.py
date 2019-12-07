@@ -1,7 +1,8 @@
 from flask import render_template
 from jinja2 import Markup
 
-from stats.support import random_tagline
+from stats.lib.text import random_line
+from stats.start.environment import TAGLINES
 
 
 def errorhandler(error):
@@ -13,4 +14,4 @@ def errorhandler(error):
 
 
 def tagline():
-    return Markup(random_tagline())
+    return Markup(random_line(TAGLINES))

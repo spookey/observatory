@@ -1,7 +1,6 @@
 from flask import Flask
 
 from stats.lib.cli import BP_CLI
-from stats.shared import errorhandler
 from stats.shared import errorhandler, tagline
 from stats.start.environment import ERROR_CODES, MDL_NAME
 from stats.start.extensions import (
