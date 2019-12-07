@@ -67,7 +67,7 @@ def _visitor(client):
             headers=None,
             method='get',
             params=None,
-            query_string=None,
+            query_string=None
     ):
         params = params if params is not None else {}
         url = url_for(endpoint, **params)
