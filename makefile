@@ -49,6 +49,7 @@ help:
 	@echo
 	@echo "run              run application"
 	@echo "shell            launch a shell"
+	@echo "routes           show flask routes"
 	@echo
 	@echo "cli-adduser      add a new user"
 	@echo "cli-setpass      set password of user"
@@ -186,11 +187,13 @@ define _flask
 	$(CMD_FLASK) $(1)
 endef
 
-.PHONY: shell run
+.PHONY: shell run routes
 run: $(CMD_FLASK) static
 	$(call _flask,run --host "$(_HOST)" --port "$(_PORT)")
 shell: $(CMD_FLASK)
 	$(call _flask,shell)
+routes: $(CMD_FLASK)
+	$(call _flask,routes)
 
 
 ###
