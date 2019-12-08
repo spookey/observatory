@@ -78,3 +78,20 @@ class TestCRUDMixin:
         assert _crud_c in CRUDMixinPhony.query.all()
         _crud_c.delete(_commit=True)
         assert _crud_c not in CRUDMixinPhony.query.all()
+
+    @staticmethod
+    def test_logging(caplog, _crud_c):
+
+        crud = CRUDMixinPhony.create(value='yes')
+        log_c, log_s = caplog.records[-2:]
+        assert 'creating' in log_c.message.lower()
+        assert 'saving' in log_s.message.lower()
+
+        crud.update(value='no')
+        log_u, log_s = caplog.records[-2:]
+        assert 'updating' in log_u.message.lower()
+        assert 'saving' in log_s.message.lower()
+
+        crud.delete()
+        log_d = caplog.records[-1]
+        assert 'deleting' in log_d.message.lower()

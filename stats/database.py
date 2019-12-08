@@ -1,6 +1,10 @@
+from logging import getLogger
+
 from sqlalchemy.ext.declarative import declared_attr
 
 from stats.start.extensions import DB
+
+LOG = getLogger(__name__)
 
 # pylint: disable=no-member
 
@@ -9,10 +13,14 @@ class CRUDMixin:
 
     @classmethod
     def create(cls, _commit=True, **kwargs):
+        LOG.info('creating model "%s"', cls.__name__)
+
         inst = cls(**kwargs)
         return inst.save(_commit=_commit)
 
     def update(self, _commit=True, **kwargs):
+        LOG.info('updating model "%s"', self.__class__.__name__)
+
         for attr, value in kwargs.items():
             setattr(self, attr, value)
         if _commit:
@@ -20,12 +28,16 @@ class CRUDMixin:
         return self
 
     def save(self, _commit=True):
+        LOG.info('saving model "%s"', self.__class__.__name__)
+
         DB.session.add(self)
         if _commit:
             DB.session.commit()
         return self
 
     def delete(self, _commit=True):
+        LOG.info('deleting model "%s"', self.__class__.__name__)
+
         DB.session.delete(self)
         if _commit:
             DB.session.commit()

@@ -1,5 +1,5 @@
 from pytest import mark
-from werkzeug.exceptions import NotFound
+from werkzeug.exceptions import BadRequest, NotFound
 
 from stats.shared import errorhandler
 from stats.start.environment import ERROR_CODES
@@ -18,3 +18,13 @@ def test_emitter():
 
     assert 'ERROR TEST' in res
     assert code == 404
+
+
+@mark.usefixtures('ctx_app')
+def test_logging(caplog):
+    error = BadRequest('ERROR TEST LOG')
+    errorhandler(error)
+
+    msg = caplog.records[-1]
+    assert str(error.code) in msg.message
+    assert error.description in msg.message
