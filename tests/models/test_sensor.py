@@ -84,3 +84,24 @@ class TestSensor:
 
         assert sensor.points == _pointsort(complete)
         assert sensor.query_points_outdated().all() == _pointsort(olds)
+
+    @staticmethod
+    def test_cleanup(gen_sensor, gen_points_batch):
+        sensor = gen_sensor()
+        _, _, complete = gen_points_batch(sensor, old=5, new=0)
+
+        assert sensor.points == _pointsort(complete)
+        sensor.cleanup()
+
+        assert sensor.points == []
+
+    @staticmethod
+    def test_append(gen_sensor, gen_points_batch):
+        sensor = gen_sensor()
+        _, _, complete = gen_points_batch(sensor, old=5, new=0)
+
+        assert sensor.points == _pointsort(complete)
+        point = sensor.append(value=23)
+
+        assert point.sensor == sensor
+        assert sensor.points == [point]

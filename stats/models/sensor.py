@@ -1,8 +1,11 @@
 from datetime import datetime
+from logging import getLogger
 
 from stats.database import Model
 from stats.models.point import Point
 from stats.start.extensions import DB
+
+LOG = getLogger(__name__)
 
 # pylint: disable=no-member
 
@@ -30,3 +33,15 @@ class Sensor(Model):
     @classmethod
     def query_points_outdated(cls):
         return Point.query_outdated(Point.query.join(cls))
+
+    @classmethod
+    def cleanup(cls):
+        query = cls.query_points_outdated()
+        LOG.info('cleanup "%d" outdated points', query.count())
+
+        for point in query.all():
+            point.delete()
+
+    def append(self, value):
+        self.cleanup()
+        return Point.create(sensor=self, value=value)

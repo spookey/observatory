@@ -28,7 +28,7 @@ class TestSensorSingle:
         Point.create(sensor=sensor, value=23.42)
 
         res = visitor(ENDPOINT, params={'name': sensor.name})
-        assert res.json == marshal(sensor, SensorSingle.SINGLE)
+        assert res.json == marshal(sensor, SensorSingle.SINGLE_GET)
 
     @staticmethod
     def test_post_empty(visitor):
@@ -59,11 +59,10 @@ class TestSensorSingle:
         value = 23.42
         res = visitor(
             ENDPOINT, params={'name': sensor.name},
-            method='post',
-            data={'value': value}
+            method='post', data={'value': value}, code=201
         )
 
         point = Point.query.first()
         assert point.value == value
 
-        assert res.json == marshal(sensor, SensorSingle.SINGLE)
+        assert res.json == marshal(sensor, SensorSingle.SINGLE_POST)

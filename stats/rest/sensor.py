@@ -15,14 +15,14 @@ BP_REST_SENSOR = Blueprint('sensor', __name__)
 @REST.resource('/sensor', endpoint='api.sensor.listing')
 class SensorListing(Resource):
 
-    LISTING = {
+    LISTING_GET = {
         'name': fields.String(),
         'title': fields.String(),
         'description': fields.String(),
         'created': fields.DateTime(dt_format='iso8601'),
     }
 
-    @marshal_with(LISTING)
+    @marshal_with(LISTING_GET)
     def get(self):
         return Sensor.query.all()
 
@@ -30,7 +30,7 @@ class SensorListing(Resource):
 @REST.resource('/sensor/<name>', endpoint='api.sensor.single')
 class SensorSingle(Resource):
 
-    SINGLE = {
+    SINGLE_GET = {
         'name': fields.String(),
         'points': fields.Nested({
             'value': fields.Float(),
@@ -39,15 +39,15 @@ class SensorSingle(Resource):
     }
 
     @staticmethod
-    def get_or_abort(name):
+    def sensor_or_abort(name):
         sensor = Sensor.by_name(name)
         if not sensor:
             abort(404, message='Sensor {} not present'.format(name))
         return sensor
 
-    @marshal_with(SINGLE)
+    @marshal_with(SINGLE_GET)
     def get(self, name):
-        return self.get_or_abort(name)
+        return self.sensor_or_abort(name)
 
     @staticmethod
     def parse():
@@ -55,9 +55,14 @@ class SensorSingle(Resource):
         parser.add_argument('value', type=float, required=True)
         return parser.parse_args()
 
-    @marshal_with(SINGLE)
+    SINGLE_POST = {
+        'name': fields.String(),
+        'uri': fields.Url('api.sensor.single', absolute=True),
+    }
+
+    @marshal_with(SINGLE_POST)
     def post(self, name):
         args = self.parse()
-        sensor = self.get_or_abort(name)
-        Point.create(sensor=sensor, value=args.value)
-        return sensor
+        sensor = self.sensor_or_abort(name)
+        sensor.append(args.value)
+        return sensor, 201

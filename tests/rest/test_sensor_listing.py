@@ -25,4 +25,4 @@ class TestSensorListing:
             gen_sensor(name='one'), gen_sensor(name='two'),
         ]
         res = visitor(ENDPOINT)
-        assert res.json == marshal(sensors, SensorListing.LISTING)
+        assert res.json == marshal(sensors, SensorListing.LISTING_GET)
