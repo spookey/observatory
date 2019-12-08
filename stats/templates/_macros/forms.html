@@ -1,0 +1,45 @@
+{% macro _render_field(field) %}
+  {% if field.type in ['CSRFTokenField', 'HiddenField'] %}
+    {{ field() }}
+  {% elif field.type in ['StringField', 'PasswordField'] %}
+    <div class="control">
+      {{ field.label(class='label') }}
+      {{ field(
+        class='input' ~ (' is-danger' if field.errors),
+        placeholder=field.description
+      ) }}
+    </div>
+  {% elif field.type in ['BooleanField'] %}
+    <div class="control">
+      {{ field(class='checkbox') }}
+      {{ field.label(
+        class='checkbox',
+        title=field.description,
+      ) }}
+    </div>
+  {% elif field.type in ['SubmitField'] %}
+    <div class="control">
+      {{ field(
+        class='button is-dark',
+        title=field.description,
+      ) }}
+    </div>
+  {% endif %}
+  {% for error in field.errors %}
+    <p class="help is-danger">
+      {{ error }}
+    </p>
+  {% endfor %}
+{% endmacro %}
+
+{% macro render_form(form, action=request.url, method='POST') %}
+  {% if form %}
+  <form action="{{ action }}" method="{{ method }}">
+  {% for field in form %}
+    <div class="field">
+      {{ _render_field(field) }}
+    </div>
+  {% endfor %}
+  </form>
+  {% endif %}
+{% endmacro %}

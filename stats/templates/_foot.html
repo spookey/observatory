@@ -8,6 +8,13 @@
         <p>
           <small>{{ tagline() }}</small>
         </p>
+        {% if current_user.is_authenticated %}
+        <p>
+          <a href="{{ url_for('user.logout') }}">
+            Logout {{ current_user.username }}
+          </a>
+        </p>
+        {% endif %}
       </div>
     </div>
   </div>

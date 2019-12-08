@@ -1,11 +1,11 @@
 from pytest import mark
 
 from stats.models.user import User
-from stats.views.main import user_loader
+from stats.views.user import user_loader
 
 
 @mark.usefixtures('session')
-class TestMainUserLoader:
+class TestUserLoader:
 
     @staticmethod
     def test_user_loader_no_user():

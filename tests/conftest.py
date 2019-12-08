@@ -2,6 +2,7 @@ from json import loads
 
 from bs4 import BeautifulSoup
 from flask import url_for
+from flask_login import logout_user
 from pytest import fixture
 
 from stats.app import create_app
@@ -148,3 +149,22 @@ def gen_user():
         )
 
     yield make
+    logout_user()
+
+
+@fixture(scope='function')
+def gen_user_loggedin(gen_user, client):
+    def make(username=USER_NAME, password=USER_PASS, **kwargs):
+        user = gen_user(username=username, password=password, **kwargs)
+        client.post(
+            url_for('user.login'),
+            data={
+                'username': username, 'password': password,
+                'remember': False, 'submit': True
+            },
+            follow_redirects=True
+        )
+        return user
+
+    yield make
+    logout_user()

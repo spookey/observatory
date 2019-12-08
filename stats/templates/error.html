@@ -11,6 +11,13 @@
         {{ error.description }}
       </div>
     </article>
+    {% if error.code == 401 %}
+    <article class="message is-light">
+      <div class="message-body">
+        <a href="{{ url_for('user.login', next=request.url) }}">Login</a>
+      </div>
+    </article>
+    {% endif %}
   </div>
 </section>
 {% endblock %}
