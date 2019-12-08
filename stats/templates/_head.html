@@ -1,4 +1,4 @@
-<section class="hero is-bold is-dark">
+<section class="hero is-dark">
   <div class="hero-body">
     <div class="container">
       <div class="columns">
@@ -12,3 +12,20 @@
     </div>
   </div>
 </section>
+
+{% with flashed = get_flashed_messages(with_categories=true) %}
+  {% if flashed %}
+  <section class="section">
+    <div class="container">
+    {% for category, message in flashed %}
+      <div class="notification{{ ' is-' ~ category|lower if category in (
+        'info', 'success', 'warning', 'danger', 'dark', 'black', 'light', 'primary',
+      ) }}">
+        <button class="delete click"></button>
+        {{ message }}
+      </div>
+    {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+{% endwith %}

@@ -1,6 +1,16 @@
 {%- extends '_base.html' %}
 
 {%- block content %}
-<div>{{ error.description }}</div>
-<div>{{ error.code }}</div>
+<section class="section">
+  <div class="container">
+    <article class="message is-dark">
+      <div class="message-header">
+        <p>{{ error.code }}</p>
+      </div>
+      <div class="message-body">
+        {{ error.description }}
+      </div>
+    </article>
+  </div>
+</section>
 {%- endblock %}
