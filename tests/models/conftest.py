@@ -33,4 +33,4 @@ def gen_points_batch():
 
         return olds, news, [fl for at in (olds, news) for fl in at]
 
-    return make
+    yield make

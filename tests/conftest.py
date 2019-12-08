@@ -101,12 +101,12 @@ def _visitor(client):
 
         return res
 
-    return make
+    yield make
 
 
 @fixture(scope='function')
 def visitor(client):
-    yield _visitor(client)
+    yield from _visitor(client)
 
 
 ###
@@ -131,7 +131,7 @@ def gen_sensor():
             **kwargs
         )
 
-    return make
+    yield make
 
 
 USER_NAME = 'user'
@@ -147,4 +147,4 @@ def gen_user():
             **kwargs
         )
 
-    return make
+    yield make
