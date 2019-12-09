@@ -2,6 +2,7 @@ from logging import getLogger
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, logout_user
+from werkzeug.http import parse_authorization_header
 
 from stats.forms.user import LoginForm
 from stats.models.user import User
@@ -14,6 +15,17 @@ LOG = getLogger(__name__)
 @LOGIN_MANAGER.user_loader
 def user_loader(prime):
     return User.by_prime(prime)
+
+
+@LOGIN_MANAGER.request_loader
+def request_loader(req):
+    auth = parse_authorization_header(req.headers.get('authorization'))
+    if auth is not None:
+        if auth.username is not None and auth.password is not None:
+            user = User.by_username(auth.username)
+            if user is not None and user.check_password(auth.password):
+                return user
+    return None
 
 
 @BLUEPRINT_USER.route('/logout')

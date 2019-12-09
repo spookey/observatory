@@ -1,8 +1,8 @@
 from flask import Blueprint
+from flask_login import login_required
 from flask_restful import Resource, abort, fields, marshal_with
 from flask_restful.reqparse import RequestParser
 
-from stats.models.point import Point
 from stats.models.sensor import Sensor
 from stats.start.extensions import REST
 
@@ -60,6 +60,7 @@ class SensorSingle(Resource):
         'uri': fields.Url('api.sensor.single', absolute=True),
     }
 
+    @login_required
     @marshal_with(SINGLE_POST)
     def post(self, name):
         args = self.parse()

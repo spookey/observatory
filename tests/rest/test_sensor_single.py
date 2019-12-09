@@ -31,7 +31,16 @@ class TestSensorSingle:
         assert res.json == marshal(sensor, SensorSingle.SINGLE_GET)
 
     @staticmethod
-    def test_post_empty(visitor):
+    def test_post_not_logged_in(visitor, gen_sensor):
+        sensor = gen_sensor()
+        visitor(
+            ENDPOINT, params={'name': sensor.name},
+            method='post', code=401
+        )
+
+    @staticmethod
+    def test_post_empty(visitor, gen_user_loggedin):
+        gen_user_loggedin()
         res = visitor(
             ENDPOINT, params={'name': 'test'},
             method='post', code=400
@@ -39,7 +48,8 @@ class TestSensorSingle:
         assert res.json.get('message', None) is not None
 
     @staticmethod
-    def test_post_wrong(visitor, gen_sensor):
+    def test_post_wrong(visitor, gen_sensor, gen_user_loggedin):
+        gen_user_loggedin()
         sensor = gen_sensor()
         for data in (
                 {'some': 'thing'},
@@ -52,7 +62,8 @@ class TestSensorSingle:
             )
 
     @staticmethod
-    def test_post_single(visitor, gen_sensor):
+    def test_post_single(visitor, gen_sensor, gen_user_loggedin):
+        gen_user_loggedin()
         sensor = gen_sensor()
         assert Point.query.all() == []
 
