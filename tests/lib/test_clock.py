@@ -11,11 +11,11 @@ def test_epoch_from_ts():
         assert epoch_milliseconds(stamp) == 1000 * value
 
 
-def test_epoch_fallback():
-    res = epoch_seconds(None)
-    assert res is not None
+def test_epoch_now():
+    start = datetime.utcnow()
+    res = epoch_seconds(start)
     assert res <= (
-        datetime.utcnow() - datetime.utcfromtimestamp(0)
+        start - datetime.utcfromtimestamp(0)
     ).total_seconds()
 
 

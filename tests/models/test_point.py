@@ -22,6 +22,19 @@ class TestPoint:
         assert start <= point.stamp
         assert point.stamp <= datetime.utcnow()
 
+        assert point.epoch > 0
+        assert point.epoch_ms > 0
+        assert point.outdated is False
+
+    @staticmethod
+    def test_epochs(gen_sensor):
+        point = Point.create(sensor=gen_sensor(), value=0)
+
+        assert point.epoch <= (
+            point.stamp - datetime.utcfromtimestamp(0)
+        ).total_seconds()
+        assert point.epoch_ms == 1000 * point.epoch
+
     @staticmethod
     def test_delete_cascade(gen_sensor):
         sensor = gen_sensor()

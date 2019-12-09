@@ -4,7 +4,6 @@ from stats.start.environment import BACKLOG_DAYS
 
 
 def epoch_seconds(stamp):
-    stamp = stamp if stamp else datetime.utcnow()
     return int((stamp - datetime.utcfromtimestamp(0)).total_seconds())
 
 
