@@ -72,6 +72,12 @@ $(CMD_FLASK): $(DIR_VENV)
 $(CMD_ISORT) $(CMD_PYLINT) $(CMD_PYREV) $(CMD_PYTEST): $(DIR_VENV)
 	$(CMD_PIP) install -r "requirements-dev.txt"
 
+.PHONY: requirements-pudb
+requirements-pudb: $(CMD_PYTEST)
+	$(CMD_PIP) install pudb pytest-pudb
+	@echo
+	@echo "import pudb; pudb.set_trace()"
+
 ###
 # assets
 
