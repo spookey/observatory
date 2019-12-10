@@ -11,6 +11,14 @@ from stats.models.user import User
 from stats.start.config import TestingConfig
 from stats.start.extensions import DB as _db
 
+
+SENSOR_NAME = 'test'
+SENSOR_TITLE = 'Test Sensor'
+SENSOR_DESCRIPTION = 'Some sensor just for UnitTests'
+
+USER_NAME = 'user'
+USER_PASS = 'secret'
+
 # pylint: disable=invalid-name
 # pylint: disable=no-member
 # pylint: disable=redefined-outer-name
@@ -70,7 +78,7 @@ def _visitor(client):
             headers=None,
             method='get',
             params=None,
-            query_string=None
+            query_string=None,
     ):
         params = params if params is not None else {}
         url = url_for(endpoint, **params)
@@ -114,11 +122,6 @@ def visitor(client):
 # DB helpers
 
 
-SENSOR_NAME = 'test'
-SENSOR_TITLE = 'Test Sensor'
-SENSOR_DESCRIPTION = 'Some sensor just for UnitTests'
-
-
 @fixture(scope='function')
 def gen_sensor():
     def make(
@@ -128,15 +131,15 @@ def gen_sensor():
             **kwargs
     ):
         return Sensor.create(
-            name=name, title=title, description=description,
+            name=name,
+            title=title,
+            description=description,
             **kwargs
         )
 
     yield make
 
 
-USER_NAME = 'user'
-USER_PASS = 'secret'
 
 
 @fixture(scope='function')
@@ -159,10 +162,12 @@ def gen_user_loggedin(gen_user, client):
         client.post(
             url_for('user.login'),
             data={
-                'username': username, 'password': password,
-                'remember': False, 'submit': True
+                'username': username,
+                'password': password,
+                'remember': False,
+                'submit': True
             },
-            follow_redirects=True
+            follow_redirects=True,
         )
         return user
 
