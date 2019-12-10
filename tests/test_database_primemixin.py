@@ -20,10 +20,6 @@ def _pri():
 class TestPrimeMixin:
 
     @staticmethod
-    def test_tablename(_pri):
-        assert _pri.__tablename__ == 'primemixinphony'
-
-    @staticmethod
     def test_primekey_init(_pri):
         assert _pri is not None
         assert _pri.prime is None

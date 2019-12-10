@@ -11,7 +11,6 @@ from stats.models.user import User
 from stats.start.config import TestingConfig
 from stats.start.extensions import DB as _db
 
-
 SENSOR_NAME = 'test'
 SENSOR_TITLE = 'Test Sensor'
 SENSOR_DESCRIPTION = 'Some sensor just for UnitTests'

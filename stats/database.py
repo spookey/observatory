@@ -7,6 +7,7 @@ from stats.start.extensions import DB
 LOG = getLogger(__name__)
 
 # pylint: disable=no-member
+# pylint: disable=too-few-public-methods
 
 
 class CRUDMixin:
@@ -44,12 +45,14 @@ class CRUDMixin:
         return True
 
 
-class PrimeMixin:
-    prime = DB.Column(DB.Integer(), primary_key=True)
-
+class NameMixin:
     @declared_attr
     def __tablename__(self):
         return self.__name__.lower()
+
+
+class PrimeMixin:
+    prime = DB.Column(DB.Integer(), primary_key=True)
 
     @classmethod
     def by_prime(cls, value):
@@ -61,5 +64,9 @@ class PrimeMixin:
         return None
 
 
-class Model(CRUDMixin, PrimeMixin, DB.Model):
+class BaseModel(CRUDMixin, NameMixin, DB.Model):
+    __abstract__ = True
+
+
+class Model(PrimeMixin, BaseModel):
     __abstract__ = True

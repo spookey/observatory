@@ -96,7 +96,15 @@ class TestSensor:
         assert sensor.points == []
 
     @staticmethod
-    def test_append(gen_sensor, gen_points_batch):
+    def test_append(gen_sensor):
+        sensor = gen_sensor()
+        assert Point.query.count() == 0
+        sensor.append(42)
+        assert Point.query.count() == 1
+        assert Point.query.all() == sensor.points
+
+    @staticmethod
+    def test_append_cleanup(gen_sensor, gen_points_batch):
         sensor = gen_sensor()
         _, _, complete = gen_points_batch(sensor, old=5, new=0)
 
