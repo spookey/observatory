@@ -78,6 +78,7 @@ requirements-pudb: $(CMD_PYTEST)
 	@echo
 	@echo "import pudb; pudb.set_trace()"
 
+
 ###
 # assets
 
@@ -88,6 +89,7 @@ $(DIR_NODEM):
 static: $(OUT_STYLE) $(OUT_SCRIPT)
 $(OUT_STYLE) $(OUT_SCRIPT): $(DIR_NODEM)
 	$(CMD_NPM) run dist
+
 
 ###
 # service
@@ -218,6 +220,7 @@ dbdown: $(CMD_FLASK)
 
 ###
 # cli
+
 .PHONY: cli-adduser cli-setpass cli-setstate-active cli-setstate-blocked
 cli-adduser: $(CMD_FLASK)
 	$(call _flask,cli adduser)

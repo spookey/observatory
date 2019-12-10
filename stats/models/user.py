@@ -31,6 +31,7 @@ class User(UserMixin, Model):
 
     @property
     def is_active(self):
+        '''required by flask-login'''
         return self.active
 
     def check_password(self, plain):
