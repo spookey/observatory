@@ -5,12 +5,11 @@ from stats.start import environment
 
 
 def test_database(monkeypatch):
+    db_path = path.abspath(path.join(
+        environment.ROOT_DIR, 'database_dev.sqlite'
+    ))
     assert environment.DATABASE == 'sqlite://'
-    assert environment.DATABASE_DEV == 'sqlite:///{}'.format(
-        path.abspath(path.join(
-            environment.ROOT_DIR, 'database_dev.sqlite'
-        ))
-    )
+    assert environment.DATABASE_DEV == f'sqlite:///{db_path}'
 
     monkeypatch.setenv('DATABASE', '💾')
     monkeypatch.setenv('DATABASE_DEV', '📼')
@@ -99,8 +98,7 @@ def test_taglines(monkeypatch):
     for num, line in enumerate(environment.TAGLINES):
         assert environment.TAGLINES[num] == line
 
-        name = 'TAGLINE_{:02d}'.format(1 + num)
-        monkeypatch.setenv(name, '*️⃣')
+        monkeypatch.setenv(f'TAGLINE_{1 + num:02d}', '*️⃣')
         reload(environment)
 
         assert environment.TAGLINES[num] == '*️⃣'

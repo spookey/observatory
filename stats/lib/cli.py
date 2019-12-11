@@ -12,16 +12,16 @@ BP_CLI = Blueprint('cli', __name__)
 @click.password_option('--password')
 def adduser(username, password):
     if User.by_username(username) is not None:
-        click.secho('{} already present!'.format(username), fg='red')
+        click.secho(f'{username} already present!', fg='red')
         return
 
     if not is_safename(username):
-        click.secho('{} is an invalid name!'.format(username), fg='red')
+        click.secho(f'{username} is an invalid name!', fg='red')
         return
 
     user = User.create(username=username, password=password)
     user.save()
-    click.echo('{} created!'.format(username))
+    click.secho(f'{username} created!', fg='green')
 
 
 @BP_CLI.cli.command('setpass', help='Set password of user')
@@ -30,12 +30,12 @@ def adduser(username, password):
 def setpass(username, password):
     user = User.by_username(username)
     if user is None:
-        click.secho('{} not found!'.format(username), fg='red')
+        click.secho(f'{username} not found!', fg='red')
         return
 
     user.set_password(password)
     user.save()
-    click.echo('password changed for {}!'.format(username))
+    click.secho(f'password changed for {username}!', fg='green')
 
 
 @BP_CLI.cli.command('setstate', help='Toggle active state of user')
@@ -44,12 +44,10 @@ def setpass(username, password):
 def setstate(username, state):
     user = User.by_username(username)
     if user is None:
-        click.secho('{} not found!'.format(username), fg='red')
+        click.secho(f'{username} not found!', fg='red')
         return
 
     user.active = state
     user.save()
-
-    click.echo('state changed to {} for {}!'.format(
-        'active' if state else 'blocked', username
-    ))
+    state = 'active' if state else 'blocked'
+    click.secho(f'state changed to {state} for {username}!', fg='green')

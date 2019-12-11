@@ -42,7 +42,7 @@ class SensorSingle(Resource):
     def sensor_or_abort(name):
         sensor = Sensor.by_name(name)
         if not sensor:
-            abort(404, message='Sensor {} not present'.format(name))
+            abort(404, message=f'Sensor {name} not present')
         return sensor
 
     @marshal_with(SINGLE_GET)
