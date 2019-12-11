@@ -27,7 +27,7 @@ class LoginForm(FlaskForm):
     )
     submit = SubmitField(
         'Login',
-        description='Enter'
+        description='Submit'
     )
 
     def __init__(self, *args, **kwargs):
