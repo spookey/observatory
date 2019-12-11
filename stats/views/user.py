@@ -41,8 +41,9 @@ def logout():
 def login():
     form = LoginForm()
     if request.method == 'POST' and form.validate_on_submit():
-        if form.action():
-            flash('Welcome back!', 'dark')
+        user = form.action()
+        if user is not None:
+            flash(f'Welcome {user.username}!', 'dark')
             return redirect(
                 request.args.get('next') or url_for('main.index')
             )

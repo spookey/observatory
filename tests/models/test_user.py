@@ -109,14 +109,15 @@ class TestUser:
         assert user.check_password(pw2) is True
 
     @staticmethod
-    def test_update_last_login(gen_user):
+    def test_refresh(gen_user):
         start = datetime.utcnow()
         user = gen_user()
 
         assert user.last_login is None
 
-        user.set_last_login()
+        refreshed = user.refresh(_commit=False)
         assert user.save()
+        assert refreshed == user
 
         assert start <= user.last_login
         assert user.last_login <= datetime.utcnow()

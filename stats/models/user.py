@@ -49,6 +49,6 @@ class User(UserMixin, Model):
     def set_password(self, plain):
         self.pw_hash = self.hash_password(plain)
 
-    def set_last_login(self, _commit=True):
+    def refresh(self, _commit=True):
         self.last_login = datetime.utcnow()
-        self.save(_commit=_commit)
+        return self.save(_commit=_commit)

@@ -27,8 +27,7 @@ class TestLoginForm:
     def test_empty_invalid():
         form = LoginForm()
         assert form.validate() is False
-        assert form.action() is False
-
+        assert form.action() is None
         assert form.user is None
 
     @staticmethod
@@ -63,7 +62,7 @@ class TestLoginForm:
         user = gen_user(username=USER_NAME, password=USER_PASS)
         form = LoginForm(username=USER_NAME, password=USER_PASS)
         assert form.validate() is True
-        assert form.action() is True
+        assert form.action() == user
         assert form.user == user
         assert current_user == user
         assert user.is_authenticated is True
@@ -76,7 +75,7 @@ class TestLoginForm:
 
         form = LoginForm(username=USER_NAME, password=USER_PASS)
         assert form.validate() is True
-        assert form.action() is True
+        assert form.action() == user
 
         assert start <= user.last_login
         assert user.last_login <= datetime.utcnow()

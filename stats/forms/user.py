@@ -58,9 +58,8 @@ class LoginForm(FlaskForm):
 
     def action(self):
         if not self.validate():
-            return False
+            return
 
         LOG.info('login for user "%s"', self.user.username)
-        login_user(self.user, remember=self.remember.data)
-        self.user.set_last_login()
-        return True
+        if login_user(self.user, remember=self.remember.data):
+            return self.user.refresh()
