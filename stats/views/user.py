@@ -40,6 +40,7 @@ def logout():
 @BLUEPRINT_USER.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+
     if request.method == 'POST' and form.validate_on_submit():
         user = form.action()
         if user is not None:

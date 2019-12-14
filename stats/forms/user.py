@@ -58,7 +58,7 @@ class LoginForm(FlaskForm):
 
     def action(self):
         if not self.validate():
-            return
+            return None
 
         LOG.info('login for user "%s"', self.user.username)
         if login_user(self.user, remember=self.remember.data):
