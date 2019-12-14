@@ -5,6 +5,7 @@ FLASK		:=	application.py
 _HOST		:=	::1
 _PORT		:=	5000
 
+CMD_GIT		:=	git
 CMD_VENV	:=	virtualenv
 DIR_VENV	:=	venv
 VER_PY		:=	3.7
@@ -168,7 +169,7 @@ tcovh-open: tcovh
 # cleanup
 
 define _gitclean
-	git clean \
+	$(CMD_GIT) clean \
 		-e "*.py" \
 		-e "*.sqlite" \
 		-e ".env" \
@@ -241,7 +242,6 @@ travis: $(CMD_PYTEST)
 
 
 CMD_MKTMP	:=	mktemp
-CMD_GIT		:=	git
 CMD_MAKE	:=	make
 CMD_RM		:=	rm
 
