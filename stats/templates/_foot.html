@@ -1,21 +1,25 @@
 <footer class="footer">
-  <div class="container has-text-centered">
+  <div class="container">
     <div class="columns">
-      <div class="column is-8-desktop is-offset-2-desktop">
+      <div class="column">
         <p>
           <strong>{{ config.TITLE }}</strong>
         </p>
         <p>
           <small>{{ tagline() }}</small>
         </p>
-        {% if current_user.is_authenticated %}
+      </div>
+    </div>
+    {% if current_user.is_authenticated %}
+    <div class="columns">
+      <div class="column">
         <p>
           <a href="{{ url_for('user.logout') }}">
             Logout {{ current_user.username }}
           </a>
         </p>
-        {% endif %}
       </div>
     </div>
+    {% endif %}
   </div>
 </footer>
