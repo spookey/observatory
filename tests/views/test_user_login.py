@@ -27,7 +27,7 @@ class TestUserLogin:
         res = visitor(ENDPOINT)
         form = res.soup.select('form')[-1]
         fields = [
-            (inpt.attrs['name'], inpt.attrs['type'])
+            (inpt.attrs.get('name'), inpt.attrs.get('type'))
             for inpt in form.select('input')
         ]
         assert len(fields) == 4
