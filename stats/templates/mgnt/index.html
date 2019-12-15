@@ -1,0 +1,13 @@
+{% extends '_base.html' %}
+{% from 'mgnt/_macros/sensor.html' import show_sensor %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h3 class="title">Sensors</h3>
+    {% for sensor in sensors %}
+      {{ show_sensor(sensor) }}
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

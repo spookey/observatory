@@ -9,6 +9,7 @@ from stats.start.extensions import (
 )
 from stats.start.logger import initialize_logging
 from stats.views.main import BLUEPRINT_MAIN
+from stats.views.mgnt import BLUEPRINT_MGNT
 from stats.views.side import BLUEPRINT_SIDE
 from stats.views.user import BLUEPRINT_USER
 
@@ -44,6 +45,7 @@ def register_errorhandlers(app):
 def register_blueprints(app):
     app.register_blueprint(BP_CLI)
     app.register_blueprint(BLUEPRINT_MAIN)
+    app.register_blueprint(BLUEPRINT_MGNT)
     app.register_blueprint(BLUEPRINT_SIDE)
     app.register_blueprint(BLUEPRINT_USER)
     app.register_blueprint(BP_REST_SENSOR)

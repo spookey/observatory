@@ -1,7 +1,8 @@
 from pytest import mark
 from werkzeug.datastructures import MultiDict
-from stats.models.sensor import Sensor
+
 from stats.forms.sensor import SensorEditForm
+from stats.models.sensor import Sensor
 
 
 @mark.usefixtures('session', 'ctx_app')

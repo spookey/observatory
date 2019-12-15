@@ -9,6 +9,12 @@
         placeholder=field.description
       ) }}
     </div>
+  {% elif field.type in ['TextAreaField'] %}
+    {{ field.label(class='label') }}
+    {{ field(
+      class='textarea' ~ (' is-danger' if field.errors),
+      placeholder=field.description,
+    ) }}
   {% elif field.type in ['BooleanField'] %}
     <div class="control">
       {{ field(class='checkbox') }}
