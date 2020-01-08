@@ -6,6 +6,7 @@ from flask_login import logout_user
 from pytest import fixture
 
 from stats.app import create_app
+from stats.models.config import Config
 from stats.models.sensor import Sensor
 from stats.models.user import User
 from stats.start.config import TestingConfig
@@ -14,6 +15,10 @@ from stats.start.extensions import DB as _db
 SENSOR_NAME = 'test'
 SENSOR_TITLE = 'Test Sensor'
 SENSOR_DESCRIPTION = 'Some sensor just for UnitTests'
+
+CONFIG_NAME = 'test'
+CONFIG_TITLE = 'Test Config'
+CONFIG_DESCRIPTION = 'Some config just for UnitTests'
 
 USER_NAME = 'user'
 USER_PASS = 'secret'
@@ -139,6 +144,22 @@ def gen_sensor():
     yield make
 
 
+@fixture(scope='function')
+def gen_config():
+    def make(
+            name=CONFIG_NAME,
+            title=CONFIG_TITLE,
+            description=CONFIG_DESCRIPTION,
+            **kwargs,
+    ):
+        return Config.create(
+            name=name,
+            title=title,
+            description=description,
+            **kwargs
+        )
+
+    yield make
 
 
 @fixture(scope='function')
