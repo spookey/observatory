@@ -1,4 +1,4 @@
-from pytest import fixture, mark
+from pytest import mark
 
 from stats.database import NameMixin
 from stats.start.extensions import DB
@@ -11,14 +11,11 @@ class NameMixinPhony(NameMixin, DB.Model):
     prime = DB.Column(DB.Integer(), primary_key=True)
 
 
-@fixture(scope='function')
-def _nme():
-    return NameMixinPhony()
-
-
 @mark.usefixtures('session')
 class TestNameMixin:
 
     @staticmethod
-    def test_tablename(_nme):
-        assert _nme.__tablename__ == 'namemixinphony'
+    def test_tablename():
+        nme = NameMixinPhony()
+
+        assert nme.__tablename__ == 'namemixinphony'

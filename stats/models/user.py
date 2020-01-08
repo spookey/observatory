@@ -6,6 +6,7 @@ from stats.database import Model
 from stats.start.extensions import BCRYPT, DB
 
 # pylint: disable=no-member
+# pylint: disable=too-many-ancestors
 
 
 class User(UserMixin, Model):

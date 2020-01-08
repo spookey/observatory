@@ -8,6 +8,7 @@ LOG = getLogger(__name__)
 
 # pylint: disable=no-member
 # pylint: disable=too-few-public-methods
+# pylint: disable=too-many-ancestors
 
 
 class CRUDMixin:

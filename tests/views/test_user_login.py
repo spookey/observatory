@@ -30,7 +30,6 @@ class TestUserLogin:
             (inpt.attrs.get('name'), inpt.attrs.get('type'))
             for inpt in form.select('input')
         ]
-        assert len(fields) == 4
         assert fields == [
             ('username', 'text'),
             ('password', 'password'),
@@ -46,10 +45,14 @@ class TestUserLogin:
             'username': user.username, 'password': user.pw_hash,
             'remember': True, 'submit': True
         })
+
         form = res.soup.select('form')[-1]
-        assert form.select('#username')[-1].attrs['value'] == user.username
-        assert form.select('#password')[-1].attrs['value'] == ''
-        assert form.select('#remember')[-1].attrs['value'].lower() == 'true'
+        for sel, exp in [
+                ('#username', user.username),
+                ('#password', ''),
+                ('#remember', 'True'),
+        ]:
+            assert form.select(sel)[-1].attrs['value'] == exp
         assert current_user.is_authenticated is False
 
     @staticmethod
@@ -57,6 +60,7 @@ class TestUserLogin:
         assert current_user.is_authenticated is False
         user = gen_user(password=USER_PASS)
         home_url = url_for('main.index', _external=True)
+
         res = visitor(ENDPOINT, method='post', data={
             'username': user.username, 'password': USER_PASS,
             'remember': True, 'submit': True
@@ -72,6 +76,7 @@ class TestUserLogin:
         assert current_user.is_authenticated is False
         user = gen_user(password=USER_PASS)
         next_url = url_for('side.favicon', _external=True)
+
         res = visitor(ENDPOINT, method='post', data={
             'username': user.username, 'password': USER_PASS,
             'remember': True, 'submit': True

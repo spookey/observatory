@@ -54,6 +54,7 @@ class TestMgntEditSensor:
             'name': name, 'title': title,
             'description': description, 'submit': True
         })
+
         form = res.soup.select('form')[-1]
         assert form.select('#name')[-1].attrs['value'] == name
         assert form.select('#title')[-1].attrs['value'] == title

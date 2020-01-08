@@ -8,6 +8,7 @@ from stats.start.environment import BACKLOG_DAYS
 from stats.start.extensions import DB
 
 # pylint: disable=no-member
+# pylint: disable=too-many-ancestors
 
 
 class Point(Model):

@@ -53,5 +53,5 @@ def register_blueprints(app):
 
 def register_template_functions(app):
     app.jinja_env.globals.update(
-        tagline=tagline
+        tagline=tagline,
     )

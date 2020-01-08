@@ -1,4 +1,4 @@
-from pytest import fixture, mark
+from pytest import mark
 
 from stats.database import PrimeMixin
 from stats.start.extensions import DB
@@ -11,18 +11,15 @@ class PrimeMixinPhony(PrimeMixin, DB.Model):
     pass
 
 
-@fixture(scope='function')
-def _pri():
-    return PrimeMixinPhony()
-
-
 @mark.usefixtures('session')
 class TestPrimeMixin:
 
     @staticmethod
-    def test_primekey_init(_pri):
-        assert _pri is not None
-        assert _pri.prime is None
+    def test_primekey_init():
+        pri = PrimeMixinPhony()
+
+        assert pri is not None
+        assert pri.prime is None
 
     @staticmethod
     def test_primekey_autoset(session):
@@ -39,25 +36,31 @@ class TestPrimeMixin:
         assert res is None
 
     @staticmethod
-    def test_by_prime(session, _pri):
-        session.add(_pri)
+    def test_by_prime(session):
+        pri = PrimeMixinPhony()
+
+        session.add(pri)
         session.commit()
-        assert _pri == PrimeMixinPhony.by_prime(1)
+        assert pri == PrimeMixinPhony.by_prime(1)
 
     @staticmethod
-    def test_by_prime_types(session, _pri):
-        session.add(_pri)
+    def test_by_prime_types(session):
+        pri = PrimeMixinPhony()
+
+        session.add(pri)
         session.commit()
-        assert _pri == PrimeMixinPhony.by_prime(1)
-        assert _pri == PrimeMixinPhony.by_prime(1.0)
-        assert _pri == PrimeMixinPhony.by_prime('1')
-        assert _pri == PrimeMixinPhony.by_prime(b'1')
+        assert pri == PrimeMixinPhony.by_prime(1)
+        assert pri == PrimeMixinPhony.by_prime(1.0)
+        assert pri == PrimeMixinPhony.by_prime('1')
+        assert pri == PrimeMixinPhony.by_prime(b'1')
 
     @staticmethod
-    def test_by_prime_invalid(session, _pri):
-        session.add(_pri)
+    def test_by_prime_invalid(session):
+        pri = PrimeMixinPhony()
+
+        session.add(pri)
         session.commit()
-        assert _pri == PrimeMixinPhony.by_prime(1)
+        assert pri == PrimeMixinPhony.by_prime(1)
         assert None is PrimeMixinPhony.by_prime(-1)
         assert None is PrimeMixinPhony.by_prime(0.1)
         assert None is PrimeMixinPhony.by_prime(0.9)

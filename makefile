@@ -197,7 +197,7 @@ define _flask
 endef
 
 .PHONY: shell run routes
-run: $(CMD_FLASK) static
+run: $(CMD_FLASK) $(OUT_STYLE) $(OUT_SCRIPT)
 	$(call _flask,run --host "$(_HOST)" --port "$(_PORT)")
 shell: $(CMD_FLASK)
 	$(call _flask,shell)

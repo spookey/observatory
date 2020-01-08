@@ -2,6 +2,8 @@ from wtforms import ValidationError
 
 from stats.lib.text import is_safename
 
+# pylint: disable=too-few-public-methods
+
 
 class SafeName:
     def __init__(self, message=None):

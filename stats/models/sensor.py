@@ -8,6 +8,7 @@ from stats.start.extensions import DB
 LOG = getLogger(__name__)
 
 # pylint: disable=no-member
+# pylint: disable=too-many-ancestors
 
 
 class Sensor(Model):

@@ -1,4 +1,4 @@
-from pytest import fixture, mark
+from pytest import mark
 
 from stats.database import CRUDMixin
 from stats.start.extensions import DB
@@ -14,75 +14,81 @@ class CRUDMixinPhony(CRUDMixin, DB.Model):
     value = DB.Column(DB.String())
 
 
-@fixture(scope='function')
-def _crud_c():
-    return CRUDMixinPhony.create(value=PAYLOAD, _commit=True)
-
-
-@fixture(scope='function')
-def _crud_nc():
-    return CRUDMixinPhony.create(value=PAYLOAD, _commit=False)
-
-
 @mark.usefixtures('session')
 class TestCRUDMixin:
 
     @staticmethod
-    def test_create_no_commit(_crud_nc):
-        assert _crud_nc.prime is None
-        assert _crud_nc.value == PAYLOAD
-        assert _crud_nc in CRUDMixinPhony.query.all()
+    def test_create_no_commit():
+        crud = CRUDMixinPhony.create(value=PAYLOAD, _commit=False)
+
+        assert crud.prime is None
+        assert crud.value == PAYLOAD
+        assert crud in CRUDMixinPhony.query.all()
 
     @staticmethod
-    def test_create_commit(_crud_c):
-        assert _crud_c.prime == 1
-        assert _crud_c.value == PAYLOAD
-        assert _crud_c in CRUDMixinPhony.query.all()
+    def test_create_commit():
+        crud = CRUDMixinPhony.create(value=PAYLOAD, _commit=True)
+
+        assert crud.prime == 1
+        assert crud.value == PAYLOAD
+        assert crud in CRUDMixinPhony.query.all()
 
     @staticmethod
-    def test_update_no_comit(_crud_nc):
-        assert _crud_nc.value == PAYLOAD
-        _crud_nc.update(value=LAYPOAD, _commit=False)
-        assert _crud_nc.value == LAYPOAD
+    def test_update_no_comit():
+        crud = CRUDMixinPhony.create(value=PAYLOAD, _commit=False)
+
+        assert crud.value == PAYLOAD
+        crud.update(value=LAYPOAD, _commit=False)
+        assert crud.value == LAYPOAD
 
     @staticmethod
-    def test_update_comit(_crud_c):
-        assert _crud_c.value == PAYLOAD
-        _crud_c.update(value=LAYPOAD, _commit=True)
-        assert _crud_c.value == LAYPOAD
+    def test_update_comit():
+        crud = CRUDMixinPhony.create(value=PAYLOAD, _commit=True)
+
+        assert crud.value == PAYLOAD
+        crud.update(value=LAYPOAD, _commit=True)
+        assert crud.value == LAYPOAD
 
     @staticmethod
-    def test_save_no_commit(session, _crud_nc):
-        assert _crud_nc not in session.dirty
-        _crud_nc.value = LAYPOAD
-        assert _crud_nc not in session.dirty
-        _crud_nc.save(_commit=False)
-        assert _crud_nc not in session.dirty
+    def test_save_no_commit(session):
+        crud = CRUDMixinPhony.create(value=PAYLOAD, _commit=False)
+
+        assert crud not in session.dirty
+        crud.value = LAYPOAD
+        assert crud not in session.dirty
+        crud.save(_commit=False)
+        assert crud not in session.dirty
 
     @staticmethod
-    def test_save_commit(session, _crud_c):
-        assert _crud_c not in session.dirty
-        _crud_c.value = LAYPOAD
-        assert _crud_c in session.dirty
-        _crud_c.save(_commit=True)
-        assert _crud_c not in session.dirty
+    def test_save_commit(session):
+        crud = CRUDMixinPhony.create(value=PAYLOAD, _commit=True)
+
+        assert crud not in session.dirty
+        crud.value = LAYPOAD
+        assert crud in session.dirty
+        crud.save(_commit=True)
+        assert crud not in session.dirty
 
     @staticmethod
-    def test_delete_no_commit(_crud_nc):
-        assert _crud_nc in CRUDMixinPhony.query.all()
-        _crud_nc.delete(_commit=False)
-        assert _crud_nc not in CRUDMixinPhony.query.all()
+    def test_delete_no_commit():
+        crud = CRUDMixinPhony.create(value=PAYLOAD, _commit=False)
+
+        assert crud in CRUDMixinPhony.query.all()
+        crud.delete(_commit=False)
+        assert crud not in CRUDMixinPhony.query.all()
 
     @staticmethod
-    def test_delete_commit(_crud_c):
-        assert _crud_c in CRUDMixinPhony.query.all()
-        _crud_c.delete(_commit=True)
-        assert _crud_c not in CRUDMixinPhony.query.all()
+    def test_delete_commit():
+        crud = CRUDMixinPhony.create(value=PAYLOAD, _commit=True)
+
+        assert crud in CRUDMixinPhony.query.all()
+        crud.delete(_commit=True)
+        assert crud not in CRUDMixinPhony.query.all()
 
     @staticmethod
-    def test_logging(caplog, _crud_c):
+    def test_logging(caplog):
+        crud = CRUDMixinPhony.create(value='yes', _commit=True)
 
-        crud = CRUDMixinPhony.create(value='yes')
         log_c, log_s = caplog.records[-2:]
         assert 'creating' in log_c.message.lower()
         assert 'saving' in log_s.message.lower()
