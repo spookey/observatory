@@ -2,6 +2,7 @@ from datetime import datetime
 from logging import getLogger
 
 from stats.database import Model
+from stats.lib.clock import time_format
 from stats.models.point import Point
 from stats.start.extensions import DB
 
@@ -30,6 +31,10 @@ class Sensor(Model):
     @classmethod
     def by_name(cls, name):
         return cls.query.filter(cls.name == name).first()
+
+    @property
+    def created_fmt(self):
+        return time_format(self.created)
 
     @classmethod
     def query_points_outdated(cls):

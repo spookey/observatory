@@ -94,6 +94,18 @@ def test_favicon(monkeypatch):
     assert environment.FAVICON == '💥'
 
 
+def test_fmt_fields(monkeypatch):
+    assert environment.FMT_STRFTIME == '%d.%m.%Y %H:%M:%S UTC'
+    assert environment.FMT_MOMENT == 'DD. MMM YYYY HH:mm:ss'
+
+    monkeypatch.setenv('FMT_STRFTIME', '⏰')
+    monkeypatch.setenv('FMT_MOMENT', '⏱')
+    reload(environment)
+
+    assert environment.FMT_STRFTIME == '⏰'
+    assert environment.FMT_MOMENT == '⏱'
+
+
 def test_taglines(monkeypatch):
     for num, line in enumerate(environment.TAGLINES):
         assert environment.TAGLINES[num] == line

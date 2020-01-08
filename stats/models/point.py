@@ -3,7 +3,9 @@ from datetime import datetime
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from stats.database import Model
-from stats.lib.clock import epoch_milliseconds, epoch_seconds, is_outdated
+from stats.lib.clock import (
+    epoch_milliseconds, epoch_seconds, is_outdated, time_format
+)
 from stats.start.environment import BACKLOG_DAYS
 from stats.start.extensions import DB
 
@@ -21,13 +23,17 @@ class Point(Model):
         DB.Integer(), DB.ForeignKey('sensor.prime'), nullable=False
     )
 
-    @hybrid_property
+    @property
     def epoch(self):
         return epoch_seconds(self.stamp)
 
-    @hybrid_property
+    @property
     def epoch_ms(self):
         return epoch_milliseconds(self.stamp)
+
+    @property
+    def stamp_fmt(self):
+        return time_format(self.stamp)
 
     @hybrid_property
     def outdated(self):

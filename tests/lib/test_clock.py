@@ -1,6 +1,9 @@
 from datetime import datetime, timedelta
 
-from stats.lib.clock import epoch_milliseconds, epoch_seconds, is_outdated
+from stats.lib.clock import (
+    epoch_milliseconds, epoch_seconds, is_outdated, time_format
+)
+from stats.start.environment import FMT_STRFTIME
 
 
 def test_epoch_from_ts():
@@ -29,3 +32,13 @@ def test_is_outdated():
     assert is_outdated(now - timedelta(days=3), days=days) is True
     assert is_outdated(now - timedelta(days=4), days=days) is True
     assert is_outdated(now - timedelta(days=5), days=days) is True
+
+
+def test_time_format():
+    now = datetime.utcnow()
+
+    assert time_format(None) == ''
+    assert time_format(now, fmt='') == ''
+    assert time_format(now, fmt='%Y') == f'{now.year}'
+    assert time_format(now, fmt='%-m') == f'{now.month}'
+    assert time_format(now) == now.strftime(FMT_STRFTIME)

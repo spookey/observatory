@@ -5,6 +5,7 @@ from sqlalchemy.exc import IntegrityError
 
 from stats.models.point import Point
 from stats.models.sensor import Sensor
+from stats.start.environment import FMT_STRFTIME
 
 
 def _pointsort(points):
@@ -52,6 +53,11 @@ class TestSensor:
 
         assert Sensor.by_name('one') == one
         assert Sensor.by_name('two') == two
+
+    @staticmethod
+    def test_created_fmt(gen_sensor):
+        sensor = gen_sensor()
+        assert sensor.created_fmt == sensor.created.strftime(FMT_STRFTIME)
 
     @staticmethod
     def test_delete_cascade(gen_sensor):

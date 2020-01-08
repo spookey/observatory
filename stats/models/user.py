@@ -3,6 +3,7 @@ from datetime import datetime
 from flask_login import UserMixin
 
 from stats.database import Model
+from stats.lib.clock import time_format
 from stats.start.extensions import BCRYPT, DB
 
 # pylint: disable=no-member
@@ -34,6 +35,14 @@ class User(UserMixin, Model):
     def is_active(self):
         '''required by flask-login'''
         return self.active
+
+    @property
+    def created_fmt(self):
+        return time_format(self.created)
+
+    @property
+    def last_login_fmt(self):
+        return time_format(self.last_login)
 
     def check_password(self, plain):
         if plain is None:

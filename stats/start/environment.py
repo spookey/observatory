@@ -31,6 +31,9 @@ TITLE = getenv('TITLE', 'Status')
 HTML_LANG = getenv('HTML_LANG', 'en')
 FAVICON = getenv('FAVICON', 'hex.png')
 
+FMT_STRFTIME = getenv('FMT_STRFTIME', '%d.%m.%Y %H:%M:%S UTC')
+FMT_MOMENT = getenv('FMT_MOMENT', 'DD. MMM YYYY HH:mm:ss')
+
 TAGLINES = [
     getenv('TAGLINE_01', 'Hey Peter, what\'s happening?'),
     getenv('TAGLINE_02', 'Someone set us up the bomb!'),

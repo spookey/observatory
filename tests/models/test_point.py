@@ -4,6 +4,7 @@ from pytest import mark
 
 from stats.models.point import Point
 from stats.models.sensor import Sensor
+from stats.start.environment import FMT_STRFTIME
 
 
 @mark.usefixtures('session')
@@ -34,6 +35,12 @@ class TestPoint:
             point.stamp - datetime.utcfromtimestamp(0)
         ).total_seconds()
         assert point.epoch_ms == 1000 * point.epoch
+
+    @staticmethod
+    def test_stamp_fmt(gen_sensor):
+        sensor = gen_sensor()
+        point = Point.create(sensor=sensor, value=42)
+        assert point.stamp_fmt == point.stamp.strftime(FMT_STRFTIME)
 
     @staticmethod
     def test_delete_cascade(gen_sensor):

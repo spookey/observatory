@@ -4,6 +4,7 @@ from pytest import mark, raises
 from sqlalchemy.exc import IntegrityError
 
 from stats.models.user import User
+from stats.start.environment import FMT_STRFTIME
 
 
 @mark.usefixtures('session')
@@ -66,6 +67,11 @@ class TestUser:
         assert user.is_active == user.active
 
     @staticmethod
+    def test_created_fmt(gen_user):
+        user = gen_user()
+        assert user.created_fmt == user.created.strftime(FMT_STRFTIME)
+
+    @staticmethod
     def test_hash_password():
         assert User.hash_password(None) is None
         pw_text = 'secret'
@@ -121,3 +127,10 @@ class TestUser:
 
         assert start <= user.last_login
         assert user.last_login <= datetime.utcnow()
+
+    @staticmethod
+    def test_last_login_fmt(gen_user):
+        user = gen_user()
+        assert user.last_login_fmt == ''
+        user.refresh()
+        assert user.last_login_fmt == user.last_login.strftime(FMT_STRFTIME)

@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from stats.start.environment import BACKLOG_DAYS
+from stats.start.environment import BACKLOG_DAYS, FMT_STRFTIME
 
 
 def epoch_seconds(stamp):
@@ -13,3 +13,9 @@ def epoch_milliseconds(stamp):
 
 def is_outdated(stamp, days=BACKLOG_DAYS):
     return stamp <= datetime.utcnow() - timedelta(days=days)
+
+
+def time_format(stamp, fmt=FMT_STRFTIME):
+    if stamp is None:
+        return ''
+    return stamp.strftime(fmt)
