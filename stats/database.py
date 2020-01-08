@@ -1,7 +1,9 @@
+from datetime import datetime
 from logging import getLogger
 
 from sqlalchemy.ext.declarative import declared_attr
 
+from stats.lib.clock import time_format
 from stats.start.extensions import DB
 
 LOG = getLogger(__name__)
@@ -63,6 +65,24 @@ class PrimeMixin:
         ]):
             return cls.query.get(int(value))
         return None
+
+
+class CommonMixin:
+    name = DB.Column(DB.String(length=64), unique=True, nullable=False)
+    title = DB.Column(DB.String(length=512), nullable=False)
+    description = DB.Column(DB.String(length=4096), nullable=False)
+
+    @classmethod
+    def by_name(cls, name):
+        return cls.query.filter(cls.name == name).first()
+
+
+class CreatedMixin:
+    created = DB.Column(DB.DateTime(), nullable=False, default=datetime.utcnow)
+
+    @property
+    def created_fmt(self):
+        return time_format(self.created)
 
 
 class BaseModel(CRUDMixin, NameMixin, DB.Model):

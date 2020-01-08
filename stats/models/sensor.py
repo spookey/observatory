@@ -1,8 +1,6 @@
-from datetime import datetime
 from logging import getLogger
 
-from stats.database import Model
-from stats.lib.clock import time_format
+from stats.database import CommonMixin, CreatedMixin, Model
 from stats.models.point import Point
 from stats.start.extensions import DB
 
@@ -12,29 +10,15 @@ LOG = getLogger(__name__)
 # pylint: disable=too-many-ancestors
 
 
-class Sensor(Model):
-    name = DB.Column(DB.String(length=64), unique=True, nullable=False)
-    title = DB.Column(DB.String(length=512), nullable=False)
-    description = DB.Column(DB.String(length=4096), nullable=False)
-    created = DB.Column(
-        DB.DateTime(), nullable=False, default=datetime.utcnow
-    )
-
+class Sensor(CommonMixin, CreatedMixin, Model):
     points = DB.relationship(
-        'Point',
+        Point,
         backref=DB.backref('sensor', lazy=True),
         order_by=Point.stamp.desc(),
         cascade='all,delete',
         lazy=True,
     )
 
-    @classmethod
-    def by_name(cls, name):
-        return cls.query.filter(cls.name == name).first()
-
-    @property
-    def created_fmt(self):
-        return time_format(self.created)
 
     @classmethod
     def query_points_outdated(cls):
