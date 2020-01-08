@@ -4,7 +4,7 @@ from flask import render_template
 from jinja2 import Markup
 
 from stats.lib.text import random_line
-from stats.start.environment import TAGLINES
+from stats.start.environment import FMT_MOMENT, TAGLINES
 
 LOG = getLogger(__name__)
 
@@ -24,3 +24,14 @@ def errorhandler(error):
 
 def tagline():
     return Markup(random_line(TAGLINES))
+
+
+def moment_config():
+    script = f'''
+<script>
+  document.addEventListener("DOMContentLoaded", function() {{
+    window.momentConfig("{FMT_MOMENT}");
+  }});
+</script>
+    '''
+    return Markup(''.join(line.strip() for line in script.splitlines()))

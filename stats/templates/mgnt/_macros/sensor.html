@@ -62,9 +62,11 @@
           <div class="level-right">
             <div class="level-item has-text-centered">
               {% with latest = sensor.points|first %}
-                <span title="{{ latest.epoch }}">
-                  {{ latest.stamp }}
+              <div>
+                <span class="moment relative" title="{{ latest.epoch_ms }}">
+                  {{ latest.stamp_fmt }}
                 </span>
+              </div>
               {% endwith %}
             </div>
           </div>

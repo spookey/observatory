@@ -1,6 +1,7 @@
 import axios from "axios";
 import Chart from "chart.js";
-import moment from "moment";
+import { momentize } from "./moments";
 import { flashClose } from "./notifications";
 
+momentize();
 flashClose();

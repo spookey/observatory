@@ -2,7 +2,7 @@ from flask import Flask
 
 from stats.lib.cli import BP_CLI
 from stats.rest.sensor import BP_REST_SENSOR
-from stats.shared import errorhandler, tagline
+from stats.shared import errorhandler, moment_config, tagline
 from stats.start.environment import ERROR_CODES, MDL_NAME
 from stats.start.extensions import (
     BCRYPT, CSRF_PROTECT, DB, LOGIN_MANAGER, MIGRATE, REST
@@ -53,5 +53,6 @@ def register_blueprints(app):
 
 def register_template_functions(app):
     app.jinja_env.globals.update(
+        moment_config=moment_config,
         tagline=tagline,
     )
