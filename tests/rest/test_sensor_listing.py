@@ -22,7 +22,7 @@ class TestSensorListing:
     @staticmethod
     def test_get_listing(visitor, gen_sensor):
         sensors = [
-            gen_sensor(name='one'), gen_sensor(name='two'),
+            gen_sensor(slug='one'), gen_sensor(slug='two'),
         ]
         res = visitor(ENDPOINT)
         assert res.json == marshal(sensors, SensorListing.LISTING_GET)

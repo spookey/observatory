@@ -11,7 +11,7 @@ class TestSensorEditForm:
     @staticmethod
     def test_basic_fields():
         form = SensorEditForm()
-        assert form.name is not None
+        assert form.slug is not None
         assert form.title is not None
         assert form.description is not None
         assert form.submit is not None
@@ -35,31 +35,31 @@ class TestSensorEditForm:
         assert form.sensor is None
 
     @staticmethod
-    def test_no_safe_name():
-        form = SensorEditForm(name='🐭', title='t')
+    def test_no_safe_slug():
+        form = SensorEditForm(slug='🐭', title='t')
         assert form.validate() is False
-        assert 'safe name' in form.name.errors[-1].lower()
+        assert 'safe slug' in form.slug.errors[-1].lower()
 
     @staticmethod
     def test_already_present(gen_sensor):
         sensor = gen_sensor()
-        form = SensorEditForm(name=sensor.name, title='t')
+        form = SensorEditForm(slug=sensor.slug, title='t')
         assert form.validate() is False
-        assert 'already present' in form.name.errors[-1].lower()
+        assert 'already present' in form.slug.errors[-1].lower()
 
     @staticmethod
-    def test_name_conflict(gen_sensor):
-        orig = gen_sensor(name='original')
-        edit = gen_sensor(name='editing')
+    def test_slug_conflict(gen_sensor):
+        orig = gen_sensor(slug='original')
+        edit = gen_sensor(slug='editing')
         form = SensorEditForm(
-            obj=edit, formdata=MultiDict({'name': orig.name})
+            obj=edit, formdata=MultiDict({'slug': orig.slug})
         )
         assert form.validate() is False
-        assert 'name conflict' in form.name.errors[-1].lower()
+        assert 'slug conflict' in form.slug.errors[-1].lower()
 
     @staticmethod
     def test_edit_exisiting(gen_sensor):
-        name = 'changed_sensor'
+        slug = 'changed_sensor'
         title = 'The changed sensor'
         description = 'Some changed sensor for testing'
 
@@ -67,12 +67,12 @@ class TestSensorEditForm:
         assert Sensor.query.all() == [sensor]
         form = SensorEditForm(
             obj=sensor, formdata=MultiDict({
-                'name': name, 'title': title, 'description': description,
+                'slug': slug, 'title': title, 'description': description,
             })
         )
         assert form.validate() is True
         edited = form.action()
-        assert edited.name == name
+        assert edited.slug == slug
         assert edited.title == title
         assert edited.description == description
         assert edited == sensor
@@ -80,14 +80,14 @@ class TestSensorEditForm:
 
     @staticmethod
     def test_create_new():
-        name = 'sensor'
+        slug = 'sensor'
         title = 'The Sensor'
         description = 'Some Sensor for testing'
 
-        form = SensorEditForm(name=name, title=title, description=description)
+        form = SensorEditForm(slug=slug, title=title, description=description)
         assert form.validate() is True
         sensor = form.action()
-        assert sensor.name == name
+        assert sensor.slug == slug
         assert sensor.title == title
         assert sensor.description == description
 

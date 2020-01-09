@@ -20,7 +20,7 @@ def index():
 
 
 @BLUEPRINT_MGNT.route(
-    '/manage/sensor/edit/<string:name>',
+    '/manage/sensor/edit/<string:slug>',
     methods=['GET', 'POST']
 )
 @BLUEPRINT_MGNT.route(
@@ -28,14 +28,14 @@ def index():
     methods=['GET', 'POST']
 )
 @login_required
-def edit_sensor(name=None):
-    title = 'Edit Sensor' if name else 'Create new Sensor'
-    form = SensorEditForm(obj=Sensor.by_name(name))
+def edit_sensor(slug=None):
+    title = 'Edit Sensor' if slug else 'Create new Sensor'
+    form = SensorEditForm(obj=Sensor.by_slug(slug))
 
     if request.method == 'POST' and form.validate_on_submit():
         sensor = form.action()
         if sensor is not None:
-            flash(f'Saved {sensor.name}!', 'success')
+            flash(f'Saved {sensor.slug}!', 'success')
             return redirect(url_for('mgnt.index'))
 
     return render_template(

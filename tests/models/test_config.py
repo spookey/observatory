@@ -13,13 +13,13 @@ class TestConfig:
     @staticmethod
     def test_default_fields(gen_config):
         start = datetime.utcnow()
-        name = 'test'
+        slug = 'test'
         title = 'Some test config'
         description = 'Description of some test config'
 
-        config = gen_config(name=name, title=title, description=description)
+        config = gen_config(slug=slug, title=title, description=description)
 
-        assert config.name == name
+        assert config.slug == slug
         assert config.title == title
         assert config.description == description
 
@@ -29,23 +29,23 @@ class TestConfig:
         assert config.displays == []
 
     @staticmethod
-    def test_name_unique(gen_config):
-        one = gen_config(name='demo', title='one', _commit=False)
+    def test_slug_unique(gen_config):
+        one = gen_config(slug='demo', title='one', _commit=False)
         assert one.save(_commit=True)
 
-        two = gen_config(name='demo', title='two', _commit=False)
+        two = gen_config(slug='demo', title='two', _commit=False)
         with raises(IntegrityError):
             assert two.save(_commit=True)
 
     @staticmethod
-    def test_by_name(gen_config):
-        one = gen_config(name='one')
-        two = gen_config(name='two')
+    def test_by_slug(gen_config):
+        one = gen_config(slug='one')
+        two = gen_config(slug='two')
 
         assert Config.query.all() == [one, two]
 
-        assert Config.by_name('one') == one
-        assert Config.by_name('two') == two
+        assert Config.by_slug('one') == one
+        assert Config.by_slug('two') == two
 
     @staticmethod
     def test_created_fmt(gen_config):

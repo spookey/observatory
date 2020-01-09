@@ -2,15 +2,15 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired
 
-from stats.forms.validators import SafeName
+from stats.forms.validators import SafeSlug
 from stats.models.sensor import Sensor
 
 
 class SensorEditForm(FlaskForm):
-    name = StringField(
-        'Name',
-        validators=[DataRequired(), SafeName()],
-        description='Name of sensor endpoint',
+    slug = StringField(
+        'Slug',
+        validators=[DataRequired(), SafeSlug()],
+        description='Slug of sensor endpoint',
     )
     title = StringField(
         'Title',
@@ -34,14 +34,14 @@ class SensorEditForm(FlaskForm):
         if not super().validate():
             return False
 
-        sensor = Sensor.by_name(self.name.data)
+        sensor = Sensor.by_slug(self.slug.data)
         if sensor is not None:
             if self.sensor is None:
-                self.name.errors.append('Sensor already present!')
+                self.slug.errors.append('Sensor already present!')
                 return False
 
             if self.sensor.prime != sensor.prime:
-                self.name.errors.append('Sensor name conflict!')
+                self.slug.errors.append('Sensor slug conflict!')
                 return False
 
         return True
@@ -51,7 +51,7 @@ class SensorEditForm(FlaskForm):
             return None
 
         if not self.sensor:
-            self.sensor = Sensor.create(name=self.name.data, _commit=False)
+            self.sensor = Sensor.create(slug=self.slug.data, _commit=False)
 
         self.populate_obj(self.sensor)
         return self.sensor.save()

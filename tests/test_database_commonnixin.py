@@ -6,7 +6,7 @@ from stats.database import CommonMixin, Model
 # pylint: disable=no-member
 # pylint: disable=too-many-ancestors
 
-NAME = 'test'
+SLUG = 'test'
 TITLE = 'Test title'
 DESCRIPTION = 'Description of test'
 
@@ -21,19 +21,19 @@ class TestCommonMixin:
     @staticmethod
     def test_fields():
         cmn = CommonMixinPhony.create(
-            name=NAME, title=TITLE, description=DESCRIPTION
+            slug=SLUG, title=TITLE, description=DESCRIPTION
         )
 
-        assert cmn.name == NAME
+        assert cmn.slug == SLUG
         assert cmn.title == TITLE
         assert cmn.description == DESCRIPTION
 
     @staticmethod
-    def test_by_name():
+    def test_by_slug():
         cmn = CommonMixinPhony.create(
-            name=NAME, title=TITLE, description=DESCRIPTION
+            slug=SLUG, title=TITLE, description=DESCRIPTION
         )
 
         assert CommonMixinPhony.query.all() == [cmn]
 
-        assert CommonMixinPhony.by_name(NAME) == cmn
+        assert CommonMixinPhony.by_slug(SLUG) == cmn

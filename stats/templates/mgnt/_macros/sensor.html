@@ -13,12 +13,12 @@
     <div class="level-right">
       <div class="level-item has-text-right-tablet has-text-centered">
         <div>
-          <div class="heading">Name</div>
+          <div class="heading">Slug</div>
           <code class="subtitle is-3">
             <a title="Edit" href="{{
-              url_for('mgnt.edit_sensor', name=sensor.name)
+              url_for('mgnt.edit_sensor', slug=sensor.slug)
             }}" >
-              {{ sensor.name }}
+              {{ sensor.slug }}
             </a>
           </code>
         </div>

@@ -12,11 +12,11 @@ from stats.models.user import User
 from stats.start.config import TestingConfig
 from stats.start.extensions import DB as _db
 
-SENSOR_NAME = 'test'
+SENSOR_SLUG = 'test'
 SENSOR_TITLE = 'Test Sensor'
 SENSOR_DESCRIPTION = 'Some sensor just for UnitTests'
 
-CONFIG_NAME = 'test'
+CONFIG_SLUG = 'test'
 CONFIG_TITLE = 'Test Config'
 CONFIG_DESCRIPTION = 'Some config just for UnitTests'
 
@@ -129,13 +129,13 @@ def visitor(client):
 @fixture(scope='function')
 def gen_sensor():
     def make(
-            name=SENSOR_NAME,
+            slug=SENSOR_SLUG,
             title=SENSOR_TITLE,
             description=SENSOR_DESCRIPTION,
             **kwargs
     ):
         return Sensor.create(
-            name=name,
+            slug=slug,
             title=title,
             description=description,
             **kwargs
@@ -147,13 +147,13 @@ def gen_sensor():
 @fixture(scope='function')
 def gen_config():
     def make(
-            name=CONFIG_NAME,
+            slug=CONFIG_SLUG,
             title=CONFIG_TITLE,
             description=CONFIG_DESCRIPTION,
             **kwargs,
     ):
         return Config.create(
-            name=name,
+            slug=slug,
             title=title,
             description=description,
             **kwargs

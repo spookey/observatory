@@ -31,7 +31,7 @@ class TestMgntIndex:
         sensor = gen_sensor()
         res = visitor(ENDPOINT)
         text = res.soup.text
-        assert sensor.name in text
+        assert sensor.slug in text
         assert sensor.title in text
         assert sensor.description in text
         assert 'Points' in text

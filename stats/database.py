@@ -68,13 +68,13 @@ class PrimeMixin:
 
 
 class CommonMixin:
-    name = DB.Column(DB.String(length=64), unique=True, nullable=False)
+    slug = DB.Column(DB.String(length=64), unique=True, nullable=False)
     title = DB.Column(DB.String(length=512), nullable=False)
     description = DB.Column(DB.String(length=4096), nullable=False)
 
     @classmethod
-    def by_name(cls, name):
-        return cls.query.filter(cls.name == name).first()
+    def by_slug(cls, slug):
+        return cls.query.filter(cls.slug == slug).first()
 
 
 class CreatedMixin:

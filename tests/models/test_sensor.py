@@ -20,13 +20,13 @@ class TestSensor:
     @staticmethod
     def test_default_fields(gen_sensor):
         start = datetime.utcnow()
-        name = 'test'
+        slug = 'test'
         title = 'Some test sensor'
         description = 'Description of some test sensor'
 
-        sensor = gen_sensor(name=name, title=title, description=description)
+        sensor = gen_sensor(slug=slug, title=title, description=description)
 
-        assert sensor.name == name
+        assert sensor.slug == slug
         assert sensor.title == title
         assert sensor.description == description
 
@@ -37,23 +37,23 @@ class TestSensor:
         assert sensor.displays == []
 
     @staticmethod
-    def test_name_unique(gen_sensor):
-        one = gen_sensor(name='demo', title='one', _commit=False)
+    def test_slug_unique(gen_sensor):
+        one = gen_sensor(slug='demo', title='one', _commit=False)
         assert one.save(_commit=True)
 
-        two = gen_sensor(name='demo', title='two', _commit=False)
+        two = gen_sensor(slug='demo', title='two', _commit=False)
         with raises(IntegrityError):
             assert two.save(_commit=True)
 
     @staticmethod
-    def test_by_name(gen_sensor):
-        one = gen_sensor(name='one')
-        two = gen_sensor(name='two')
+    def test_by_slug(gen_sensor):
+        one = gen_sensor(slug='one')
+        two = gen_sensor(slug='two')
 
         assert Sensor.query.all() == [one, two]
 
-        assert Sensor.by_name('one') == one
-        assert Sensor.by_name('two') == two
+        assert Sensor.by_slug('one') == one
+        assert Sensor.by_slug('two') == two
 
     @staticmethod
     def test_created_fmt(gen_sensor):

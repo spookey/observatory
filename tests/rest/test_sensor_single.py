@@ -13,11 +13,11 @@ class TestSensorSingle:
 
     @staticmethod
     def test_url():
-        assert url_for(ENDPOINT, name='test') == '/api/sensor/test'
+        assert url_for(ENDPOINT, slug='test') == '/api/sensor/test'
 
     @staticmethod
     def test_get_empty_single(visitor):
-        res = visitor(ENDPOINT, params={'name': 'error'}, code=404)
+        res = visitor(ENDPOINT, params={'slug': 'error'}, code=404)
         msg = res.json.get('message', None)
         assert msg
         assert 'not present' in msg.lower()
@@ -27,14 +27,14 @@ class TestSensorSingle:
         sensor = gen_sensor()
         Point.create(sensor=sensor, value=23.42)
 
-        res = visitor(ENDPOINT, params={'name': sensor.name})
+        res = visitor(ENDPOINT, params={'slug': sensor.slug})
         assert res.json == marshal(sensor, SensorSingle.SINGLE_GET)
 
     @staticmethod
     def test_post_not_logged_in(visitor, gen_sensor):
         sensor = gen_sensor()
         visitor(
-            ENDPOINT, params={'name': sensor.name},
+            ENDPOINT, params={'slug': sensor.slug},
             method='post', code=401
         )
 
@@ -42,7 +42,7 @@ class TestSensorSingle:
     def test_post_empty(visitor, gen_user_loggedin):
         gen_user_loggedin()
         res = visitor(
-            ENDPOINT, params={'name': 'test'},
+            ENDPOINT, params={'slug': 'test'},
             method='post', code=400
         )
         assert res.json.get('message', None) is not None
@@ -57,7 +57,7 @@ class TestSensorSingle:
                 {'value': 'error'},
         ):
             visitor(
-                ENDPOINT, params={'name': sensor.name},
+                ENDPOINT, params={'slug': sensor.slug},
                 method='post', data=data, code=400
             )
 
@@ -69,7 +69,7 @@ class TestSensorSingle:
 
         value = 23.42
         res = visitor(
-            ENDPOINT, params={'name': sensor.name},
+            ENDPOINT, params={'slug': sensor.slug},
             method='post', data={'value': value}, code=201
         )
 
