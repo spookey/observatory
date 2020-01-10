@@ -3,7 +3,7 @@ from logging import getLogger
 
 from sqlalchemy.ext.declarative import declared_attr
 
-from stats.lib.clock import time_format
+from stats.lib.clock import epoch_milliseconds, epoch_seconds, time_format
 from stats.start.extensions import DB
 
 LOG = getLogger(__name__)
@@ -83,6 +83,14 @@ class CreatedMixin:
     @property
     def created_fmt(self):
         return time_format(self.created)
+
+    @property
+    def created_epoch(self):
+        return epoch_seconds(self.created)
+
+    @property
+    def created_epoch_ms(self):
+        return epoch_milliseconds(self.created)
 
 
 class BaseModel(CRUDMixin, NameMixin, DB.Model):

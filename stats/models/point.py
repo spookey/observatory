@@ -24,16 +24,16 @@ class Point(Model):
     )
 
     @property
-    def epoch(self):
+    def stamp_fmt(self):
+        return time_format(self.stamp)
+
+    @property
+    def stamp_epoch(self):
         return epoch_seconds(self.stamp)
 
     @property
-    def epoch_ms(self):
+    def stamp_epoch_ms(self):
         return epoch_milliseconds(self.stamp)
-
-    @property
-    def stamp_fmt(self):
-        return time_format(self.stamp)
 
     @hybrid_property
     def outdated(self):

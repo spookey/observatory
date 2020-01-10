@@ -28,6 +28,15 @@ class TestCreatedMixin:
         assert crt.created <= datetime.utcnow()
 
     @staticmethod
+    def test_created_epoch():
+        crt = CreatedMixinPhony.create(_commit=True)
+
+        assert crt.created_epoch <= (
+            crt.created - datetime.utcfromtimestamp(0)
+        ).total_seconds()
+        assert crt.created_epoch_ms == 1000 * crt.created_epoch
+
+    @staticmethod
     def test_created_fmt():
         crt = CreatedMixinPhony.create(_commit=True)
 

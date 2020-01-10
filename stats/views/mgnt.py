@@ -15,7 +15,7 @@ def index():
     return render_template(
         'mgnt/index.html',
         title='Management',
-        sensors=sensors
+        sensors=sensors,
     )
 
 
