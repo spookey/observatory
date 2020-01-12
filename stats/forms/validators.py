@@ -1,6 +1,6 @@
 from wtforms import ValidationError
 
-from stats.lib.text import is_safename
+from stats.lib.text import is_slugable
 
 # pylint: disable=too-few-public-methods
 
@@ -12,5 +12,5 @@ class SafeSlug:
         self.message = message
 
     def __call__(self, _, field):
-        if not is_safename(field.data):
+        if not is_slugable(field.data):
             raise ValidationError(self.message)

@@ -1,7 +1,7 @@
 import click
 from flask import Blueprint
 
-from stats.lib.text import is_safename
+from stats.lib.text import is_slugable
 from stats.models.user import User
 
 BP_CLI = Blueprint('cli', __name__)
@@ -15,7 +15,7 @@ def adduser(username, password):
         click.secho(f'{username} already present!', fg='red')
         return
 
-    if not is_safename(username):
+    if not is_slugable(username):
         click.secho(f'{username} is an invalid name!', fg='red')
         return
 
