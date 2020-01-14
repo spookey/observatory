@@ -6,7 +6,7 @@ from flask_login import logout_user
 from pytest import fixture
 
 from stats.app import create_app
-from stats.models.config import Config
+from stats.models.prompt import Prompt
 from stats.models.sensor import Sensor
 from stats.models.user import User
 from stats.start.config import TestingConfig
@@ -16,9 +16,9 @@ SENSOR_SLUG = 'test'
 SENSOR_TITLE = 'Test Sensor'
 SENSOR_DESCRIPTION = 'Some sensor just for UnitTests'
 
-CONFIG_SLUG = 'test'
-CONFIG_TITLE = 'Test Config'
-CONFIG_DESCRIPTION = 'Some config just for UnitTests'
+PROMPT_SLUG = 'test'
+PROMPT_TITLE = 'Test Prompt'
+PROMPT_DESCRIPTION = 'Some prompt just for UnitTests'
 
 USER_NAME = 'user'
 USER_PASS = 'secret'
@@ -145,14 +145,14 @@ def gen_sensor():
 
 
 @fixture(scope='function')
-def gen_config():
+def gen_prompt():
     def make(
-            slug=CONFIG_SLUG,
-            title=CONFIG_TITLE,
-            description=CONFIG_DESCRIPTION,
+            slug=PROMPT_SLUG,
+            title=PROMPT_TITLE,
+            description=PROMPT_DESCRIPTION,
             **kwargs,
     ):
-        return Config.create(
+        return Prompt.create(
             slug=slug,
             title=title,
             description=description,

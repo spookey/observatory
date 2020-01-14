@@ -34,7 +34,7 @@ class TestSensor:
         assert sensor.created <= datetime.utcnow()
 
         assert sensor.points == []
-        assert sensor.displays == []
+        assert sensor.mapping == []
 
     @staticmethod
     def test_slug_unique(gen_sensor):

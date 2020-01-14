@@ -25,12 +25,12 @@ class EnumHorizon(Enum):
     INVERT = 2
 
 
-class Display(BaseModel):
+class Mapper(BaseModel):
     sensor_pime = DB.Column(
         DB.Integer(), DB.ForeignKey('sensor.prime'), primary_key=True
     )
-    config_pime = DB.Column(
-        DB.Integer(), DB.ForeignKey('config.prime'), primary_key=True
+    prompt_pime = DB.Column(
+        DB.Integer(), DB.ForeignKey('prompt.prime'), primary_key=True
     )
     created = DB.Column(
         DB.DateTime(), nullable=False, default=datetime.utcnow

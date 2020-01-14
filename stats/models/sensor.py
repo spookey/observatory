@@ -1,7 +1,7 @@
 from logging import getLogger
 
 from stats.database import CommonMixin, CreatedMixin, Model
-from stats.models.display import Display
+from stats.models.mapper import Mapper
 from stats.models.point import Point
 from stats.start.extensions import DB
 
@@ -20,9 +20,9 @@ class Sensor(CommonMixin, CreatedMixin, Model):
         lazy=True,
     )
 
-    displays = DB.relationship(
-        Display,
-        primaryjoin='Sensor.prime == Display.sensor_pime',
+    mapping = DB.relationship(
+        Mapper,
+        primaryjoin='Sensor.prime == Mapper.sensor_pime',
         backref=DB.backref('sensor', lazy=True),
         lazy=True,
     )
