@@ -1,13 +1,74 @@
 {% extends '_base.html' %}
-{% from 'mgnt/_macros/sensor.html' import show_sensor %}
+{% from 'mgnt/_macros/common.html' import show_common %}
+
+{% macro _show_prompt(prompt, endpoint) %}
+{% call() show_common(prompt, endpoint) %}
+{% endcall %}
+{% endmacro %}
+
+
+{% macro _show_sensor(sensor, endpoint) %}
+{% call() show_common(sensor, endpoint) %}
+<div class="level">
+  <div class="level-left">
+    <div class="level-item has-text-centered">
+      <strong>
+        Points
+      </strong>
+    </div>
+  </div>
+  <div class="level-right">
+    <div class="level-item has-text-centered">
+      {{ sensor.points|length }}
+    </div>
+  </div>
+</div>
+{% if sensor.points %}
+<div class="level">
+  <div class="level-left">
+    <div class="level-item has-text-centered">
+      <strong>
+        Latest
+      </strong>
+    </div>
+  </div>
+  <div class="level-right">
+    <div class="level-item has-text-centered">
+      {% with latest = sensor.points|first %}
+      <div>
+        <span class="moment relative" title="{{ latest.epoch_ms }}">
+          {{ latest.stamp_fmt }}
+        </span>
+      </div>
+      {% endwith %}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endcall %}
+{% endmacro %}
+
 
 {% block content %}
+{% for (title, things, show, endpoint) in [
+  ('Prompts', prompts, _show_prompt, 'mgnt.edit_prompt'),
+  ('Sensors', sensors, _show_sensor, 'mgnt.edit_sensor')
+] %}
 <section class="section">
   <div class="container">
-    <h3 class="title">Sensors</h3>
-    {% for sensor in sensors %}
-      {{ show_sensor(sensor) }}
+    <h3 class="title">{{ title }}</h3>
+    {% for thing in things %}
+      {{ show(thing, endpoint) }}
     {% endfor %}
+    <div class="content has-text-right">
+      <a
+        class="button is-dark"
+        href="{{ url_for(endpoint, slug=None) }}"
+      >
+        Create new
+      </a>
+    </div>
   </div>
 </section>
+  {% endfor %}
 {% endblock %}
