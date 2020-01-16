@@ -26,11 +26,11 @@ class EnumHorizon(Enum):
 
 
 class Mapper(BaseModel):
-    sensor_pime = DB.Column(
-        DB.Integer(), DB.ForeignKey('sensor.prime'), primary_key=True
-    )
     prompt_pime = DB.Column(
         DB.Integer(), DB.ForeignKey('prompt.prime'), primary_key=True
+    )
+    sensor_pime = DB.Column(
+        DB.Integer(), DB.ForeignKey('sensor.prime'), primary_key=True
     )
     created = DB.Column(
         DB.DateTime(), nullable=False, default=datetime.utcnow
@@ -47,6 +47,13 @@ class Mapper(BaseModel):
     horizon = DB.Column(
         DB.Enum(EnumHorizon), nullable=False, default=EnumHorizon.NORMAL
     )
+
+    @classmethod
+    def by_commons(cls, prompt, sensor):
+        return cls.query.filter(
+            cls.prompt == prompt,
+            cls.sensor == sensor,
+        ).first()
 
     @property
     def created_fmt(self):

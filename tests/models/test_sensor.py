@@ -1,11 +1,7 @@
-from datetime import datetime
-
-from pytest import mark, raises
-from sqlalchemy.exc import IntegrityError
+from pytest import mark
 
 from stats.models.point import Point
 from stats.models.sensor import Sensor
-from stats.start.environment import FMT_STRFTIME
 
 
 def _pointsort(points):
@@ -18,47 +14,10 @@ def _pointsort(points):
 class TestSensor:
 
     @staticmethod
-    def test_default_fields(gen_sensor):
-        start = datetime.utcnow()
-        slug = 'test'
-        title = 'Some test sensor'
-        description = 'Description of some test sensor'
-
-        sensor = gen_sensor(slug=slug, title=title, description=description)
-
-        assert sensor.slug == slug
-        assert sensor.title == title
-        assert sensor.description == description
-
-        assert start <= sensor.created
-        assert sensor.created <= datetime.utcnow()
+    def test_points_field(gen_sensor):
+        sensor = gen_sensor(slug='test')
 
         assert sensor.points == []
-        assert sensor.mapping == []
-
-    @staticmethod
-    def test_slug_unique(gen_sensor):
-        one = gen_sensor(slug='demo', title='one', _commit=False)
-        assert one.save(_commit=True)
-
-        two = gen_sensor(slug='demo', title='two', _commit=False)
-        with raises(IntegrityError):
-            assert two.save(_commit=True)
-
-    @staticmethod
-    def test_by_slug(gen_sensor):
-        one = gen_sensor(slug='one')
-        two = gen_sensor(slug='two')
-
-        assert Sensor.query.all() == [one, two]
-
-        assert Sensor.by_slug('one') == one
-        assert Sensor.by_slug('two') == two
-
-    @staticmethod
-    def test_created_fmt(gen_sensor):
-        sensor = gen_sensor()
-        assert sensor.created_fmt == sensor.created.strftime(FMT_STRFTIME)
 
     @staticmethod
     def test_delete_cascade(gen_sensor):
