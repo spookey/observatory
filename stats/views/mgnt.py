@@ -8,18 +8,17 @@ from stats.models.sensor import Sensor
 BLUEPRINT_MGNT = Blueprint('mgnt', __name__)
 
 
-@BLUEPRINT_MGNT.route('/manage/')
 @BLUEPRINT_MGNT.route('/manage')
 @login_required
 def index():
-    sensors = Sensor.query.all()
     prompts = Prompt.query.all()
+    sensors = Sensor.query.all()
 
     return render_template(
         'mgnt/index.html',
         title='Management',
-        sensors=sensors,
         prompts=prompts,
+        sensors=sensors,
     )
 
 
@@ -45,10 +44,6 @@ def _edit_common(form, slug=None):
     methods=['GET', 'POST']
 )
 @BLUEPRINT_MGNT.route(
-    '/manage/prompt/edit/',
-    methods=['GET', 'POST']
-)
-@BLUEPRINT_MGNT.route(
     '/manage/prompt/edit',
     methods=['GET', 'POST']
 )
@@ -61,10 +56,6 @@ def edit_prompt(slug=None):
 
 @BLUEPRINT_MGNT.route(
     '/manage/sensor/edit/<string:slug>',
-    methods=['GET', 'POST']
-)
-@BLUEPRINT_MGNT.route(
-    '/manage/sensor/edit/',
     methods=['GET', 'POST']
 )
 @BLUEPRINT_MGNT.route(

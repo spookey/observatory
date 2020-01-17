@@ -1,7 +1,8 @@
 from datetime import datetime
 
-from pytest import mark, raises, fixture
+from pytest import fixture, mark, raises
 from sqlalchemy.exc import IntegrityError
+
 from stats.models.prompt import Prompt
 from stats.models.sensor import Sensor
 from stats.start.environment import FMT_STRFTIME

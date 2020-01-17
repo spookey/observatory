@@ -1,6 +1,8 @@
 from datetime import datetime
 from enum import Enum
 
+from sqlalchemy import and_
+
 from stats.database import BaseModel
 from stats.lib.clock import time_format
 from stats.start.extensions import DB
@@ -50,10 +52,10 @@ class Mapper(BaseModel):
 
     @classmethod
     def by_commons(cls, prompt, sensor):
-        return cls.query.filter(
+        return cls.query.filter(and_(
             cls.prompt == prompt,
             cls.sensor == sensor,
-        ).first()
+        )).first()
 
     @property
     def created_fmt(self):
