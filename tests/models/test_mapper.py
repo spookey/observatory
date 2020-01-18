@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pytest import mark
 
 from stats.models.mapper import EnumAxis, EnumCast, EnumHorizon, Mapper
@@ -8,16 +10,16 @@ from stats.start.environment import FMT_STRFTIME
 class TestMapper:
 
     @staticmethod
-    def test_default_fields(gen_sensor, gen_prompt):
-        sensor = gen_sensor()
+    def test_default_fields(gen_prompt, gen_sensor):
         prompt = gen_prompt()
+        sensor = gen_sensor()
 
         mapper = Mapper.create(
-            sensor=sensor, prompt=prompt
+            prompt=prompt, sensor=sensor,
         )
 
-        assert mapper.sensor == sensor
         assert mapper.prompt == prompt
+        assert mapper.sensor == sensor
         assert mapper.active is True
         assert mapper.axis == EnumAxis.LEFT
         assert mapper.cast == EnumCast.NATURAL
@@ -42,11 +44,21 @@ class TestMapper:
 
     @staticmethod
     def test_created_fmt(gen_prompt, gen_sensor):
-        prompt = gen_prompt()
-        sensor = gen_sensor()
-
         mapper = Mapper.create(
-            sensor=sensor, prompt=prompt
+            prompt=gen_prompt(),
+            sensor=gen_sensor(),
         )
 
         assert mapper.created_fmt == mapper.created.strftime(FMT_STRFTIME)
+
+    @staticmethod
+    def test_created_epoch(gen_prompt, gen_sensor):
+        mapper = Mapper.create(
+            prompt=gen_prompt(),
+            sensor=gen_sensor(),
+        )
+
+        assert mapper.created_epoch <= (
+            mapper.created - datetime.utcfromtimestamp(0)
+        ).total_seconds()
+        assert mapper.created_epoch_ms == 1000 * mapper.created_epoch

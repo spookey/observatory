@@ -68,3 +68,11 @@ class TestCommon:
     def test_created_fmt(_comm):
         thing = _comm.gen_common()
         assert thing.created_fmt == thing.created.strftime(FMT_STRFTIME)
+
+    @staticmethod
+    def test_created_epoch(_comm):
+        thing = _comm.gen_common()
+        assert thing.created_epoch <= (
+            thing.created - datetime.utcfromtimestamp(0)
+        ).total_seconds()
+        assert thing.created_epoch_ms == 1000 * thing.created_epoch

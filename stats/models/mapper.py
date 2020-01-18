@@ -1,10 +1,8 @@
-from datetime import datetime
 from enum import Enum
 
 from sqlalchemy import and_
 
-from stats.database import BaseModel
-from stats.lib.clock import time_format
+from stats.database import BaseModel, CreatedMixin
 from stats.start.extensions import DB
 
 # pylint: disable=no-member
@@ -27,15 +25,12 @@ class EnumHorizon(Enum):
     INVERT = 2
 
 
-class Mapper(BaseModel):
+class Mapper(CreatedMixin, BaseModel):
     prompt_pime = DB.Column(
         DB.Integer(), DB.ForeignKey('prompt.prime'), primary_key=True
     )
     sensor_pime = DB.Column(
         DB.Integer(), DB.ForeignKey('sensor.prime'), primary_key=True
-    )
-    created = DB.Column(
-        DB.DateTime(), nullable=False, default=datetime.utcnow
     )
     active = DB.Column(
         DB.Boolean(), nullable=False, default=True
@@ -56,7 +51,3 @@ class Mapper(BaseModel):
             cls.prompt == prompt,
             cls.sensor == sensor,
         )).first()
-
-    @property
-    def created_fmt(self):
-        return time_format(self.created)
