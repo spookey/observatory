@@ -51,7 +51,7 @@ class TestPoint:
         assert sensor.points == [point]
         assert Point.query.all() == [point]
 
-        point.delete()
+        assert point.delete()
 
         assert Sensor.query.all() == [sensor]
         assert sensor.points == []

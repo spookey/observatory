@@ -43,6 +43,34 @@ class TestMapper:
         assert Mapper.by_commons(p_two, s_one) is None
 
     @staticmethod
+    def test_delete_cascade(gen_prompt, gen_sensor):
+        prompt = gen_prompt()
+        sensor = gen_sensor()
+        mapper = Mapper.create(prompt=prompt, sensor=sensor)
+
+        assert Mapper.query.all() == [mapper]
+        assert prompt.mapping == [mapper]
+        assert sensor.mapping == [mapper]
+
+        assert mapper.delete()
+
+        assert prompt.mapping == []
+        assert sensor.mapping == []
+        assert Mapper.query.all() == []
+
+    @staticmethod
+    def test_delete_cascade_common(gen_prompt, gen_sensor):
+        for name in ['prompt', 'sensor']:
+            mapper = Mapper.create(
+                prompt=gen_prompt(slug=f'test_{name}'),
+                sensor=gen_sensor(slug=f'test_{name}'),
+            )
+
+            assert Mapper.query.all() == [mapper]
+            assert getattr(mapper, name).delete()
+            assert Mapper.query.all() == []
+
+    @staticmethod
     def test_created_fmt(gen_prompt, gen_sensor):
         mapper = Mapper.create(
             prompt=gen_prompt(),

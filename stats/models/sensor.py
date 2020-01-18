@@ -24,6 +24,7 @@ class Sensor(CommonMixin, CreatedMixin, Model):
         Mapper,
         primaryjoin='Sensor.prime == Mapper.sensor_pime',
         backref=DB.backref('sensor', lazy=True),
+        cascade='all,delete',
         lazy=True,
     )
 
