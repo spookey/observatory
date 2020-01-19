@@ -1,8 +1,6 @@
 from flask import url_for
 from pytest import mark
 
-from stats.models.mapper import Mapper
-
 ENDPOINT = 'mgnt.index'
 
 
@@ -21,36 +19,22 @@ class TestMgntIndex:
     @staticmethod
     def test_titles(visitor, gen_user_loggedin):
         gen_user_loggedin()
+
         res = visitor(ENDPOINT)
         subtitle = res.soup.select('h2 a.subtitle')[-1]
-        headings = res.soup.select('h3.title')
+        heading = res.soup.select('h3.title')[-1]
         assert subtitle.text.strip() == 'Management'
-        for head in headings:
-            assert head.text.strip() in ['Prompts', 'Sensors', 'Mapping']
+        assert heading.text.strip() == 'Overview'
 
     @staticmethod
-    def test_total_view(visitor, gen_user_loggedin, gen_prompt, gen_sensor):
+    def test_view(visitor, gen_user_loggedin):
         gen_user_loggedin()
-        prompt = gen_prompt()
-        sensor = gen_sensor()
-        mapper = Mapper.create(prompt=prompt, sensor=sensor)
 
         res = visitor(ENDPOINT)
-        text = res.soup.text
-
-        assert prompt.slug in text
-        assert prompt.title in text
-        assert prompt.description in text
-        assert prompt.created_fmt in text
-
-        assert sensor.slug in text
-        assert sensor.title in text
-        assert sensor.description in text
-        assert sensor.created_fmt in text
-        assert 'Points' in text
-
-        assert mapper.created_fmt in text
-        assert 'Yes' in text
-        assert mapper.axis.name in text
-        assert mapper.cast.name in text
-        assert mapper.horizon.name in text
+        for elem in res.soup.select('.level'):
+            assert elem.select('.heading')[0].text.strip() == 'Type'
+            assert elem.select('.title')[-1].text.strip() in [
+                'Prompts', 'Sensors', 'Mapping'
+            ]
+            assert elem.select('.heading')[1].text.strip() == 'Amount'
+            assert elem.select('.subtitle')[-1].text.strip() == '0'

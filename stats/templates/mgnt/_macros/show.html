@@ -1,3 +1,122 @@
+{% macro create_button(endpoint) %}
+<div class="content has-text-right">
+  <a
+    class="button is-dark"
+    href="{{ url_for(endpoint, slug=None) }}"
+  >
+    Create new
+  </a>
+</div>
+{% endmacro %}
+
+
+{% macro show_common(thing, endpoint) %}
+{% if thing %}
+<div class="content">
+  <div class="level">
+    <div class="level-left">
+      <div class="level-item has-text-left-tablet has-text-centered">
+        <div>
+          <div class="heading">Title</div>
+          <div class="title is-3">{{ thing.title }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="level-right">
+      <div class="level-item has-text-right-tablet has-text-centered">
+        <div>
+          <div class="heading">Slug</div>
+          <code class="subtitle is-3">
+            <a title="Edit" href="{{
+              url_for(endpoint, slug=thing.slug)
+            }}" >
+              {{ thing.slug }}
+            </a>
+          </code>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="box">
+    <div class="media">
+      <div class="media-content">
+        {% if thing.description %}
+        <div class="content">
+          <p>
+            <strong>Description</strong>
+            <blockquote>{{ thing.description }}</blockquote>
+          </p>
+        </div>
+        {% endif %}
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item has-text-centered">
+              <strong>
+                Created
+              </strong>
+            </div>
+          </div>
+          <div class="level-right">
+            <div class="level-item has-text-centered">
+              <div>
+                <span class="moment absolute" title="{{ thing.created_epoch_ms }}">
+                  {{ thing.created_fmt }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        {{ caller() if caller }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endmacro %}
+
+
+{% macro show_sensor(sensor, endpoint) %}
+{% call() show_common(sensor, endpoint) %}
+<div class="level">
+  <div class="level-left">
+    <div class="level-item has-text-centered">
+      <strong>
+        Points
+      </strong>
+    </div>
+  </div>
+  <div class="level-right">
+    <div class="level-item has-text-centered">
+      {{ sensor.points|length }}
+    </div>
+  </div>
+</div>
+{% if sensor.points %}
+<div class="level">
+  <div class="level-left">
+    <div class="level-item has-text-centered">
+      <strong>
+        Latest
+      </strong>
+    </div>
+  </div>
+  <div class="level-right">
+    <div class="level-item has-text-centered">
+      {% with latest = sensor.points|first %}
+      <div>
+        <span class="moment relative" title="{{ latest.stamp_epoch_ms }}">
+          {{ latest.stamp_fmt }}
+        </span>
+      </div>
+      {% endwith %}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endcall %}
+{% endmacro %}
+
+
 {% macro show_mapper(mapper, endpoint) %}
 {% if mapper %}
 <div class="content">

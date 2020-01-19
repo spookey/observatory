@@ -13,16 +13,42 @@ BLUEPRINT_MGNT = Blueprint('mgnt', __name__)
 @BLUEPRINT_MGNT.route('/manage')
 @login_required
 def index():
-    mapping = Mapper.query.all()
-    prompts = Prompt.query.all()
-    sensors = Sensor.query.all()
-
     return render_template(
         'mgnt/index.html',
         title='Management',
-        mapping=mapping,
-        prompts=prompts,
-        sensors=sensors,
+        mapping=Mapper.query.count(),
+        prompts=Prompt.query.count(),
+        sensors=Sensor.query.count(),
+    )
+
+
+@BLUEPRINT_MGNT.route('/manage/mapper/view')
+@login_required
+def view_mapper():
+    return render_template(
+        'mgnt/view.html',
+        title='View mapping',
+        mapping=Mapper.query.all(),
+    )
+
+
+@BLUEPRINT_MGNT.route('/manage/prompt/view')
+@login_required
+def view_prompt():
+    return render_template(
+        'mgnt/view.html',
+        title='View prompts',
+        prompts=Prompt.query.all(),
+    )
+
+
+@BLUEPRINT_MGNT.route('/manage/sensor/view')
+@login_required
+def view_sensor():
+    return render_template(
+        'mgnt/view.html',
+        title='View sensors',
+        sensors=Sensor.query.all(),
     )
 
 
