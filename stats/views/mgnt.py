@@ -26,78 +26,31 @@ def index():
     )
 
 
-def _edit_common(form, slug=None):
-    name = form.Model.__name__.lower()
-    title = f'Edit {name}' if slug else f'Create new {name}'
-
-    if request.method == 'POST' and form.validate_on_submit():
-        thing = form.action()
-        if thing is not None:
-            flash(f'Saved {name} {thing.slug}!', 'success')
-            return redirect(url_for('mgnt.index'))
-
-    return render_template(
-        'mgnt/edit.html',
-        title=title,
-        form=form,
-    )
-
-
-@BLUEPRINT_MGNT.route(
-    '/manage/prompt/edit/<string:slug>',
-    methods=['GET', 'POST']
-)
-@BLUEPRINT_MGNT.route(
-    '/manage/prompt/edit',
-    methods=['GET', 'POST']
-)
-@login_required
-def edit_prompt(slug=None):
-    return _edit_common(
-        PromptEditForm(obj=Prompt.by_slug(slug)),
-    )
-
-
-@BLUEPRINT_MGNT.route(
-    '/manage/sensor/edit/<string:slug>',
-    methods=['GET', 'POST']
-)
-@BLUEPRINT_MGNT.route(
-    '/manage/sensor/edit',
-    methods=['GET', 'POST']
-)
-@login_required
-def edit_sensor(slug=None):
-    return _edit_common(
-        SensorEditForm(obj=Sensor.by_slug(slug)),
-    )
-
-
 @BLUEPRINT_MGNT.route(
     '/manage/mapper/edit'
     '/sensor/<string:sensor_slug>'
     '/prompt/<string:prompt_slug>',
-    methods=['GET', 'POST']
+    methods=['GET', 'POST'],
 )
 @BLUEPRINT_MGNT.route(
     '/manage/mapper/edit'
     '/prompt/<string:prompt_slug>'
     '/sensor/<string:sensor_slug>',
-    methods=['GET', 'POST']
+    methods=['GET', 'POST'],
 )
 @BLUEPRINT_MGNT.route(
     '/manage/mapper/edit'
     '/sensor/<string:sensor_slug>',
-    methods=['GET', 'POST']
+    methods=['GET', 'POST'],
 )
 @BLUEPRINT_MGNT.route(
     '/manage/mapper/edit'
     '/prompt/<string:prompt_slug>',
-    methods=['GET', 'POST']
+    methods=['GET', 'POST'],
 )
 @BLUEPRINT_MGNT.route(
     '/manage/mapper/edit',
-    methods=['GET', 'POST']
+    methods=['GET', 'POST'],
 )
 @login_required
 def edit_mapper(prompt_slug=None, sensor_slug=None):
@@ -122,4 +75,51 @@ def edit_mapper(prompt_slug=None, sensor_slug=None):
         'mgnt/edit.html',
         title=title,
         form=form,
+    )
+
+
+def _edit_common(form):
+    name = form.Model.__name__.lower()
+    title = f'Edit {name}' if form.thing else f'Create new {name}'
+
+    if request.method == 'POST' and form.validate_on_submit():
+        thing = form.action()
+        if thing is not None:
+            flash(f'Saved {name} {thing.slug}!', 'success')
+            return redirect(url_for('mgnt.index'))
+
+    return render_template(
+        'mgnt/edit.html',
+        title=title,
+        form=form,
+    )
+
+
+@BLUEPRINT_MGNT.route(
+    '/manage/prompt/edit/<string:slug>',
+    methods=['GET', 'POST'],
+)
+@BLUEPRINT_MGNT.route(
+    '/manage/prompt/edit',
+    methods=['GET', 'POST'],
+)
+@login_required
+def edit_prompt(slug=None):
+    return _edit_common(
+        PromptEditForm(obj=Prompt.by_slug(slug)),
+    )
+
+
+@BLUEPRINT_MGNT.route(
+    '/manage/sensor/edit/<string:slug>',
+    methods=['GET', 'POST'],
+)
+@BLUEPRINT_MGNT.route(
+    '/manage/sensor/edit',
+    methods=['GET', 'POST'],
+)
+@login_required
+def edit_sensor(slug=None):
+    return _edit_common(
+        SensorEditForm(obj=Sensor.by_slug(slug)),
     )
