@@ -69,7 +69,7 @@ class TestMgntEditCommon:
 
         res = _comm.visitor(_comm.endpoint, method='post', data={
             'slug': slug, 'title': title,
-            'description': description, 'submit': True
+            'description': description, 'submit': True,
         })
 
         form = res.soup.select('form')[-1]
@@ -88,7 +88,7 @@ class TestMgntEditCommon:
 
         res = _comm.visitor(_comm.endpoint, method='post', data={
             'slug': slug, 'title': title,
-            'description': description, 'submit': True
+            'description': description, 'submit': True,
         }, code=302)
 
         assert res.request.headers['LOCATION'] == mgnt_url

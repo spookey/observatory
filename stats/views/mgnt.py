@@ -2,6 +2,8 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_required
 
 from stats.forms.common import PromptEditForm, SensorEditForm
+from stats.forms.mapper import MapperEditForm
+from stats.models.mapper import Mapper
 from stats.models.prompt import Prompt
 from stats.models.sensor import Sensor
 
@@ -33,7 +35,7 @@ def _edit_common(form, slug=None):
             return redirect(url_for('mgnt.index'))
 
     return render_template(
-        'mgnt/edit_common.html',
+        'mgnt/edit.html',
         title=title,
         form=form,
     )
@@ -66,4 +68,56 @@ def edit_prompt(slug=None):
 def edit_sensor(slug=None):
     return _edit_common(
         SensorEditForm(obj=Sensor.by_slug(slug)),
+    )
+
+
+@BLUEPRINT_MGNT.route(
+    '/manage/mapper/edit'
+    '/sensor/<string:sensor_slug>'
+    '/prompt/<string:prompt_slug>',
+    methods=['GET', 'POST']
+)
+@BLUEPRINT_MGNT.route(
+    '/manage/mapper/edit'
+    '/prompt/<string:prompt_slug>'
+    '/sensor/<string:sensor_slug>',
+    methods=['GET', 'POST']
+)
+@BLUEPRINT_MGNT.route(
+    '/manage/mapper/edit'
+    '/sensor/<string:sensor_slug>',
+    methods=['GET', 'POST']
+)
+@BLUEPRINT_MGNT.route(
+    '/manage/mapper/edit'
+    '/prompt/<string:prompt_slug>',
+    methods=['GET', 'POST']
+)
+@BLUEPRINT_MGNT.route(
+    '/manage/mapper/edit',
+    methods=['GET', 'POST']
+)
+@login_required
+def edit_mapper(prompt_slug=None, sensor_slug=None):
+    title = 'Edit mapper' if (
+        prompt_slug and sensor_slug
+    ) else 'Create new mapper'
+    form = MapperEditForm(obj=Mapper.by_commons(
+        prompt=Prompt.by_slug(prompt_slug),
+        sensor=Sensor.by_slug(sensor_slug),
+    ))
+
+    if request.method == 'POST' and form.validate_on_submit():
+        mapper = form.action()
+        if mapper is not None:
+            flash(
+                f'Saved mapper {mapper.prompt.slug} {mapper.sensor.slug}!',
+                'success'
+            )
+            return redirect(url_for('mgnt.index'))
+
+    return render_template(
+        'mgnt/edit.html',
+        title=title,
+        form=form,
     )
