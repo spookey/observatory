@@ -1,5 +1,6 @@
 {% extends '_base.html' %}
 {% from 'mgnt/_macros/common.html' import show_common %}
+{% from 'mgnt/_macros/mapper.html' import show_mapper %}
 
 {% macro _show_prompt(prompt, endpoint) %}
 {% call() show_common(prompt, endpoint) %}
@@ -36,7 +37,7 @@
     <div class="level-item has-text-centered">
       {% with latest = sensor.points|first %}
       <div>
-        <span class="moment relative" title="{{ latest.epoch_ms }}">
+        <span class="moment relative" title="{{ latest.stamp_epoch_ms }}">
           {{ latest.stamp_fmt }}
         </span>
       </div>
@@ -49,10 +50,17 @@
 {% endmacro %}
 
 
+{% macro _show_mapper(mapper, endpoint) %}
+{% call() show_mapper(mapper, endpoint) %}
+{% endcall %}
+{% endmacro %}
+
+
 {% block content %}
 {% for (title, things, show, endpoint) in [
   ('Prompts', prompts, _show_prompt, 'mgnt.edit_prompt'),
-  ('Sensors', sensors, _show_sensor, 'mgnt.edit_sensor')
+  ('Sensors', sensors, _show_sensor, 'mgnt.edit_sensor'),
+  ('Mapping', mapping, _show_mapper, 'mgnt.edit_mapper'),
 ] %}
 <section class="section">
   <div class="container">

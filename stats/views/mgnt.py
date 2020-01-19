@@ -13,12 +13,14 @@ BLUEPRINT_MGNT = Blueprint('mgnt', __name__)
 @BLUEPRINT_MGNT.route('/manage')
 @login_required
 def index():
+    mapping = Mapper.query.all()
     prompts = Prompt.query.all()
     sensors = Sensor.query.all()
 
     return render_template(
         'mgnt/index.html',
         title='Management',
+        mapping=mapping,
         prompts=prompts,
         sensors=sensors,
     )

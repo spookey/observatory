@@ -36,9 +36,25 @@
           </p>
         </div>
         {% endif %}
-        <div class="content">
-          {{ caller() }}
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item has-text-centered">
+              <strong>
+                Created
+              </strong>
+            </div>
+          </div>
+          <div class="level-right">
+            <div class="level-item has-text-centered">
+              <div>
+                <span class="moment absolute" title="{{ thing.created_epoch_ms }}">
+                  {{ thing.created_fmt }}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
+        {{ caller() if caller }}
       </div>
     </div>
   </div>
