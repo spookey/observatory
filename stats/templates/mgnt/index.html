@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% from 'mgnt/_macros/nav.html' import inner_navigation %}
 {% from 'mgnt/_macros/show.html' import create_button %}
 
 {% macro _level(title, amount, endpoint) %}
@@ -37,6 +38,7 @@
 {% block content %}
 <section class="section">
   <div class="container">
+    {{ inner_navigation() }}
     <h3 class="title">Overview</h3>
     {{ _level('Prompts', prompts, 'mgnt.view_prompt') }}
     {{ create_button('mgnt.edit_prompt') }}

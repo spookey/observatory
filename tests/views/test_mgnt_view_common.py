@@ -54,3 +54,22 @@ class TestMgntViewCommon:
         assert thing.title in text
         assert thing.description in text
         assert thing.created_fmt in text
+
+    @staticmethod
+    def test_inner_nav(_comm):
+        _comm.login()
+
+        res = _comm.visitor(_comm.endpoint)
+
+        for elem in res.soup.select('.tabs li'):
+            if elem.a['href'] == _comm.url:
+                assert 'is-active' in elem.attrs.get('class')
+            else:
+                assert 'is-active' not in elem.attrs.get('class')
+
+            assert elem.a['href'] in [
+                url_for('mgnt.index'),
+                url_for('mgnt.view_prompt'),
+                url_for('mgnt.view_sensor'),
+                url_for('mgnt.view_mapper'),
+            ]

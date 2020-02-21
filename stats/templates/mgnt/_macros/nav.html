@@ -1,0 +1,15 @@
+{% macro inner_navigation() %}
+  {% macro _li(ep, text) %}
+  <li class="{{ 'is-active' if request.endpoint == ep }}">
+    <a href="{{ url_for(ep) }}">{{ text }}</a>
+  </li>
+  {% endmacro %}
+  <div class="tabs is-centered is-boxed">
+    <ul>
+      {{ _li('mgnt.index', 'Index') }}
+      {{ _li('mgnt.view_prompt', 'Prompts') }}
+      {{ _li('mgnt.view_sensor', 'Sensors') }}
+      {{ _li('mgnt.view_mapper', 'Mapping') }}
+    </ul>
+  </div>
+{% endmacro %}
