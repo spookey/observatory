@@ -104,6 +104,7 @@ export PYLINT_MESSAGE_TEMPLATE
 define _lint
 	$(CMD_PYLINT) \
 		--disable "C0111" \
+		--disable "R0801" \
 		--msg-template="$$PYLINT_MESSAGE_TEMPLATE" \
 		--output-format="colorized" \
 			$(1)
