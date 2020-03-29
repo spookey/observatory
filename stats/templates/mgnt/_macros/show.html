@@ -102,7 +102,7 @@
   <div class="level-right">
     <div class="level-item has-text-centered">
       {% with latest = sensor.points|first %}
-        {{ time_rel(latest.stamp_epoch_ms, latest.stamp_fmt) }}
+        {{ time_rel(latest.created_epoch_ms, latest.created_fmt) }}
       {% endwith %}
     </div>
   </div>

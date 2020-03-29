@@ -19,14 +19,14 @@ def gen_points_batch():
         olds = [
             Point.create(
                 sensor=sensor, value=value,
-                stamp=start - timedelta(days=BACKLOG_DAYS, hours=value)
+                created=start - timedelta(days=BACKLOG_DAYS, hours=value)
             )
             for value in range(old)
         ]
         news = [
             Point.create(
                 sensor=sensor, value=value,
-                stamp=start + timedelta(days=BACKLOG_DAYS, hours=value)
+                created=start + timedelta(days=BACKLOG_DAYS, hours=value)
             )
             for value in range(new)
         ]

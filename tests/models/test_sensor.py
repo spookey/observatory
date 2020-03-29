@@ -6,7 +6,7 @@ from stats.models.sensor import Sensor
 
 def _pointsort(points):
     return list(sorted(
-        points, key=lambda p: p.stamp, reverse=True
+        points, key=lambda p: p.created, reverse=True
     ))
 
 

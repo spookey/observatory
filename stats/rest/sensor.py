@@ -34,7 +34,7 @@ class SensorSingle(Resource):
         'slug': fields.String(),
         'points': fields.Nested({
             'value': fields.Float(),
-            'stamp': fields.DateTime(dt_format='iso8601'),
+            'created': fields.DateTime(dt_format='iso8601'),
         }),
     }
 

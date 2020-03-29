@@ -15,7 +15,7 @@ class Sensor(CommonMixin, CreatedMixin, Model):
     points = DB.relationship(
         Point,
         backref=DB.backref('sensor', lazy=True),
-        order_by=Point.stamp.desc(),
+        order_by=Point.created.desc(),
         cascade='all,delete',
         lazy=True,
     )
