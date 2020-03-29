@@ -1,3 +1,6 @@
+{% from '_macros/time.html' import time_abs %}
+{% from '_macros/time.html' import time_rel %}
+
 {% macro create_button(endpoint) %}
 <div class="content has-text-right">
   <a
@@ -58,11 +61,7 @@
           </div>
           <div class="level-right">
             <div class="level-item has-text-centered">
-              <div>
-                <span class="moment absolute" title="{{ thing.created_epoch_ms }}">
-                  {{ thing.created_fmt }}
-                </span>
-              </div>
+              {{ time_abs(thing.created_epoch_ms, thing.created_fmt) }}
             </div>
           </div>
         </div>
@@ -103,11 +102,7 @@
   <div class="level-right">
     <div class="level-item has-text-centered">
       {% with latest = sensor.points|first %}
-      <div>
-        <span class="moment relative" title="{{ latest.stamp_epoch_ms }}">
-          {{ latest.stamp_fmt }}
-        </span>
-      </div>
+        {{ time_rel(latest.stamp_epoch_ms, latest.stamp_fmt) }}
       {% endwith %}
     </div>
   </div>
@@ -171,11 +166,7 @@
           </div>
           <div class="level-right">
             <div class="level-item has-text-centered">
-              <div>
-                <span class="moment absolute" title="{{ mapper.created_epoch_ms }}">
-                  {{ mapper.created_fmt }}
-                </span>
-              </div>
+              {{ time_abs(mapper.created_epoch_ms, mapper.created_fmt) }}
             </div>
           </div>
         </div>

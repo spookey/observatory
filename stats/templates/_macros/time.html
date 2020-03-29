@@ -1,0 +1,11 @@
+{% macro _momentize(value, fallback, variant) %}
+<span class="moment {{ variant }}" title="{{ value }}">{{ fallback }}</span>
+{% endmacro %}
+
+{% macro time_abs(value, fallback) %}
+{{ _momentize(value, fallback, 'absolute') }}
+{% endmacro %}
+
+{% macro time_rel(value, fallback) %}
+{{ _momentize(value, fallback, 'relative') }}
+{% endmacro %}
