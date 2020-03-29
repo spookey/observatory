@@ -31,7 +31,7 @@ class TestMgntIndex:
         gen_user_loggedin()
 
         res = visitor(ENDPOINT)
-        for elem in res.soup.select('.level'):
+        for elem in res.soup.select('.content.level'):
             assert elem.select('.heading')[0].text.strip() == 'Type'
             assert elem.select('.title')[-1].text.strip() in [
                 'Prompts', 'Sensors', 'Mapping'
