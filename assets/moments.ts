@@ -6,12 +6,12 @@ import moment from "moment";
 };
 
 /* convert moment timestamps */
-export function momentize(): void {
+export function momentTime(): void {
   document.addEventListener("DOMContentLoaded", (): void => {
 
     function convert(element: HTMLElement) {
-      if (!element.title || !element.innerHTML) { return; }
-      const value: number = parseInt(element.title, 10);
+      if (!element.dataset.value || !element.innerHTML) { return; }
+      const value: number = parseInt(element.dataset.value, 10);
       if (Number.isNaN(value)) { return; }
 
       function assign(conv: string) {

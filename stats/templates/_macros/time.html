@@ -1,5 +1,7 @@
 {% macro _momentize(value, fallback, variant) %}
-<span class="moment {{ variant }}" title="{{ value }}">{{ fallback }}</span>
+<span class="moment {{ variant }}" data-value="{{ value }}">
+  {{ fallback }}
+</span>
 {% endmacro %}
 
 {% macro time_abs(value, fallback) %}
