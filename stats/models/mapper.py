@@ -21,11 +21,6 @@ class EnumColor(Enum):
     BROWN = 0xa3685a
 
 
-class EnumAxis(Enum):
-    LEFT = 1
-    RIGHT = 2
-
-
 class EnumCast(Enum):
     NATURAL = 1
     INTEGER = 2
@@ -46,9 +41,6 @@ class Mapper(CreatedMixin, BaseModel):
     )
     active = DB.Column(
         DB.Boolean(), nullable=False, default=True
-    )
-    axis = DB.Column(
-        DB.Enum(EnumAxis), nullable=False, default=EnumAxis.LEFT
     )
     cast = DB.Column(
         DB.Enum(EnumCast), nullable=False, default=EnumCast.NATURAL

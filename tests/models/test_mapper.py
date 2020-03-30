@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pytest import mark
 
-from stats.models.mapper import EnumAxis, EnumCast, EnumHorizon, Mapper
+from stats.models.mapper import EnumCast, EnumColor, EnumHorizon, Mapper
 from stats.start.environment import FMT_STRFTIME
 
 
@@ -21,8 +21,8 @@ class TestMapper:
         assert mapper.prompt == prompt
         assert mapper.sensor == sensor
         assert mapper.active is True
-        assert mapper.axis == EnumAxis.LEFT
         assert mapper.cast == EnumCast.NATURAL
+        assert mapper.color == EnumColor.GRAY
         assert mapper.horizon == EnumHorizon.NORMAL
 
     @staticmethod

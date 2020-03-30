@@ -2,9 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import BooleanField, SelectField, SubmitField
 from wtforms.validators import DataRequired
 
-from stats.models.mapper import (
-    EnumAxis, EnumCast, EnumColor, EnumHorizon, Mapper
-)
+from stats.models.mapper import EnumCast, EnumColor, EnumHorizon, Mapper
 from stats.models.prompt import Prompt
 from stats.models.sensor import Sensor
 
@@ -26,12 +24,6 @@ class MapperEditForm(FlaskForm):
         'Active',
         default=True,
         description='Set active',
-    )
-    axis_sel = SelectField(
-        'Axis',
-        coerce=int,
-        validators=[DataRequired()],
-        description='Select axis',
     )
     cast_sel = SelectField(
         'Cast',
@@ -78,7 +70,6 @@ class MapperEditForm(FlaskForm):
         self.prompt_sel.choices = self._comm_choices(Prompt)
         self.sensor_sel.choices = self._comm_choices(Sensor)
 
-        self.axis_sel.choices = self._enum_choices(EnumAxis)
         self.cast_sel.choices = self._enum_choices(EnumCast)
         self.color_sel.choices = self._enum_choices(EnumColor)
         self.horizon_sel.choices = self._enum_choices(EnumHorizon)
@@ -122,7 +113,6 @@ class MapperEditForm(FlaskForm):
             )
 
         self.populate_obj(self.mapper)
-        self.mapper.axis = EnumAxis(self.axis_sel.data)
         self.mapper.cast = EnumCast(self.cast_sel.data)
         self.mapper.color = EnumColor(self.color_sel.data)
         self.mapper.horizon = EnumHorizon(self.horizon_sel.data)

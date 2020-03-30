@@ -2,9 +2,7 @@ from pytest import mark
 from werkzeug.datastructures import MultiDict
 
 from stats.forms.mapper import MapperEditForm
-from stats.models.mapper import (
-    EnumAxis, EnumCast, EnumColor, EnumHorizon, Mapper
-)
+from stats.models.mapper import EnumCast, EnumColor, EnumHorizon, Mapper
 
 GRAY = 9869462
 
@@ -18,7 +16,6 @@ class TestMapperEditForm:
         assert form.prompt_sel is not None
         assert form.sensor_sel is not None
         assert form.active is not None
-        assert form.axis_sel is not None
         assert form.cast_sel is not None
         assert form.color_sel is not None
         assert form.horizon_sel is not None
@@ -58,9 +55,6 @@ class TestMapperEditForm:
     @staticmethod
     def test_enum_choices():
         form = MapperEditForm()
-        assert form.axis_sel.choices == [
-            (en.value, en.name) for en in EnumAxis
-        ]
         assert form.cast_sel.choices == [
             (en.value, en.name) for en in EnumCast
         ]
@@ -86,8 +80,7 @@ class TestMapperEditForm:
         form = MapperEditForm(
             prompt_sel=mapper.prompt.prime,
             sensor_sel=mapper.sensor.prime,
-            axis_sel=1, cast_sel=1,
-            color_sel=GRAY, horizon_sel=1,
+            cast_sel=1, color_sel=GRAY, horizon_sel=1,
         )
         assert form.validate() is False
         assert 'already present' in form.prompt_sel.errors[-1].lower()
@@ -105,8 +98,7 @@ class TestMapperEditForm:
             obj=edit, formdata=MultiDict({
                 'prompt_sel': orig.prompt.prime,
                 'sensor_sel': orig.sensor.prime,
-                'axis_sel': 1, 'cast_sel': 1,
-                'color_sel': GRAY, 'horizon_sel': 1,
+                'cast_sel': 1, 'color_sel': GRAY, 'horizon_sel': 1,
             }),
         )
         assert form.validate() is False
@@ -115,7 +107,6 @@ class TestMapperEditForm:
 
     @staticmethod
     def test_edit_existing(gen_prompt, gen_sensor):
-        axis = EnumAxis.RIGHT
         cast = EnumCast.BOOLEAN
         color = EnumColor.GRAY
         horizon = EnumHorizon.INVERT
@@ -129,7 +120,6 @@ class TestMapperEditForm:
                 'prompt_sel': mapper.prompt.prime,
                 'sensor_sel': mapper.sensor.prime,
                 'active': False,
-                'axis_sel': axis.value,
                 'cast_sel': cast.value,
                 'color_sel': color.value,
                 'horizon_sel': horizon.value,
@@ -140,7 +130,6 @@ class TestMapperEditForm:
         assert edited.prompt == mapper.prompt
         assert edited.sensor == mapper.sensor
         assert edited.active is False
-        assert edited.axis == axis
         assert edited.cast == cast
         assert edited.color == color
         assert edited.horizon == horizon
@@ -149,7 +138,6 @@ class TestMapperEditForm:
     def test_create_new(gen_prompt, gen_sensor):
         prompt = gen_prompt()
         sensor = gen_sensor()
-        axis = EnumAxis.LEFT
         cast = EnumCast.INTEGER
         color = EnumColor.TURQUOISE
         horizon = EnumHorizon.NORMAL
@@ -158,7 +146,6 @@ class TestMapperEditForm:
             prompt_sel=prompt.prime,
             sensor_sel=sensor.prime,
             active=True,
-            axis_sel=axis.value,
             cast_sel=cast.value,
             color_sel=color.value,
             horizon_sel=horizon.value,
@@ -169,7 +156,6 @@ class TestMapperEditForm:
         assert mapper.prompt == prompt
         assert mapper.sensor == sensor
         assert mapper.active is True
-        assert mapper.axis == axis
         assert mapper.cast == cast
         assert mapper.color == color
         assert mapper.horizon == horizon

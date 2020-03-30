@@ -1,9 +1,7 @@
 from flask import url_for
 from pytest import mark
 
-from stats.models.mapper import (
-    EnumAxis, EnumCast, EnumColor, EnumHorizon, Mapper
-)
+from stats.models.mapper import EnumCast, EnumColor, EnumHorizon, Mapper
 
 ENDPOINT = 'mgnt.edit_mapper'
 
@@ -56,7 +54,6 @@ class TestMgntEditMapper:
             ('prompt_sel', '_sl_', '_cl_'),
             ('sensor_sel', '_sl_', '_cl_'),
             ('active', 'checkbox', '_cl_'),
-            ('axis_sel', '_sl_', '_cl_'),
             ('cast_sel', '_sl_', '_cl_'),
             ('color_sel', '_sl_', 'option'),
             ('horizon_sel', '_sl_', '_cl_'),
@@ -69,8 +66,8 @@ class TestMgntEditMapper:
 
         res = visitor(ENDPOINT, method='post', data={
             'prompt_sel': 23, 'sensor_sel': 42,
-            'active': True, 'axis_sel': 99, 'cast_sel': 99,
-            'color_sel': 99, 'horizon_sel': 99, 'submit': True,
+            'active': True, 'cast_sel': 99, 'color_sel': 99,
+            'horizon_sel': 99, 'submit': True,
         })
 
         form = res.soup.select('form')[-1]
@@ -78,7 +75,6 @@ class TestMgntEditMapper:
         assert form.select('#sensor_sel option') == []
         assert form.select('#active')[-1].attrs['value'] == 'True'
         for sel in [
-                '#axis_sel option',
                 '#cast_sel option',
                 '#color_sel option',
                 '#horizon_sel option'
@@ -92,7 +88,6 @@ class TestMgntEditMapper:
         gen_user_loggedin()
         prompt = gen_prompt()
         sensor = gen_sensor()
-        axis = EnumAxis.LEFT
         cast = EnumCast.INTEGER
         color = EnumColor.YELLOW
         horizon = EnumHorizon.NORMAL
@@ -100,9 +95,8 @@ class TestMgntEditMapper:
 
         res = visitor(ENDPOINT, method='post', data={
             'prompt_sel': prompt.prime, 'sensor_sel': sensor.prime,
-            'active': True, 'axis_sel': axis.value, 'cast_sel': cast.value,
-            'color_sel': color.value, 'horizon_sel': horizon.value,
-            'submit': True,
+            'active': True, 'cast_sel': cast.value, 'color_sel': color.value,
+            'horizon_sel': horizon.value, 'submit': True,
         }, code=302)
 
         assert res.request.headers['LOCATION'] == mgnt_url
@@ -110,7 +104,6 @@ class TestMgntEditMapper:
         assert mapper.prompt == prompt
         assert mapper.sensor == sensor
         assert mapper.active is True
-        assert mapper.axis == axis
         assert mapper.cast == cast
         assert mapper.color == color
         assert mapper.horizon == horizon
@@ -122,7 +115,6 @@ class TestMgntEditMapper:
         sensor = gen_sensor()
         original = Mapper.create(prompt=prompt, sensor=sensor)
 
-        axis = EnumAxis.RIGHT
         cast = EnumCast.BOOLEAN
         color = EnumColor.PURPLE
         horizon = EnumHorizon.INVERT
@@ -131,16 +123,14 @@ class TestMgntEditMapper:
             'prompt_slug': prompt.slug, 'sensor_slug': sensor.slug,
         }, method='post', data={
             'prompt_sel': prompt.prime, 'sensor_sel': sensor.prime,
-            'active': True, 'axis_sel': axis.value, 'cast_sel': cast.value,
-            'color_sel': color.value, 'horizon_sel': horizon.value,
-            'submit': True,
+            'active': True, 'cast_sel': cast.value, 'color_sel': color.value,
+            'horizon_sel': horizon.value, 'submit': True,
         }, code=302)
 
         changed = Mapper.query.first()
         assert changed == original
         assert changed.prompt == prompt
         assert changed.sensor == sensor
-        assert changed.axis == axis
         assert changed.cast == cast
         assert changed.color == color
         assert changed.horizon == horizon
