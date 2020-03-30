@@ -1,9 +1,11 @@
 import axios from "axios";
 import Chart from "chart.js";
-import { momentTime } from "./moments";
-import { flashClose } from "./notifications";
 import { colorizeSO } from "./colors";
+import { colorizeTX } from "./colors";
+import { flashClose } from "./notifications";
+import { momentTime } from "./moments";
 
-momentTime();
-flashClose();
 colorizeSO();
+colorizeTX();
+flashClose();
+momentTime();
