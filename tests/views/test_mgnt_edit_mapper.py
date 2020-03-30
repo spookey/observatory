@@ -109,6 +109,33 @@ class TestMgntEditMapper:
         assert mapper.horizon == horizon
 
     @staticmethod
+    def test_form_set_selections(
+            visitor, gen_prompt, gen_sensor, gen_user_loggedin
+    ):
+        gen_user_loggedin()
+        mapper = Mapper.create(
+            prompt=gen_prompt(), sensor=gen_sensor(),
+            cast=EnumCast.BOOLEAN, color=EnumColor.GREEN,
+            horizon=EnumHorizon.INVERT
+        )
+
+        res = visitor(ENDPOINT, params={
+            'prompt_slug': mapper.prompt.slug,
+            'sensor_slug': mapper.sensor.slug,
+        })
+
+        def _check(elem_id, expected):
+            assert res.soup.select(
+                f'{elem_id} > option[selected]'
+            )[-1]['value'] == f'{expected}'
+
+        _check('#prompt_sel', mapper.prompt.prime)
+        _check('#sensor_sel', mapper.sensor.prime)
+        _check('#cast_sel', mapper.cast.value)
+        _check('#color_sel', mapper.color.value)
+        _check('#horizon_sel', mapper.horizon.value)
+
+    @staticmethod
     def test_form_changes(visitor, gen_prompt, gen_sensor, gen_user_loggedin):
         gen_user_loggedin()
         prompt = gen_prompt()

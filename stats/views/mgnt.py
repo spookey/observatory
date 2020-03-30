@@ -88,6 +88,8 @@ def edit_mapper(prompt_slug=None, sensor_slug=None):
         sensor=Sensor.by_slug(sensor_slug),
     ))
 
+    if request.method != 'POST':
+        form.set_selections()
     if request.method == 'POST' and form.validate_on_submit():
         mapper = form.action()
         if mapper is not None:

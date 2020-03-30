@@ -74,6 +74,16 @@ class MapperEditForm(FlaskForm):
         self.color_sel.choices = self._enum_choices(EnumColor)
         self.horizon_sel.choices = self._enum_choices(EnumHorizon)
 
+    def set_selections(self):
+        if not self.mapper:
+            return
+        self.prompt_sel.data = self.mapper.prompt_pime
+        self.sensor_sel.data = self.mapper.sensor_pime
+
+        self.cast_sel.data = self.mapper.cast.value
+        self.color_sel.data = self.mapper.color.value
+        self.horizon_sel.data = self.mapper.horizon.value
+
     def validate(self):
         if not super().validate():
             return False

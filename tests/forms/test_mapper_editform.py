@@ -108,7 +108,7 @@ class TestMapperEditForm:
     @staticmethod
     def test_edit_existing(gen_prompt, gen_sensor):
         cast = EnumCast.BOOLEAN
-        color = EnumColor.GRAY
+        color = EnumColor.ORANGE
         horizon = EnumHorizon.INVERT
 
         mapper = Mapper.create(
@@ -133,6 +133,31 @@ class TestMapperEditForm:
         assert edited.cast == cast
         assert edited.color == color
         assert edited.horizon == horizon
+
+    @staticmethod
+    def test_set_selections(gen_prompt, gen_sensor):
+        prompt = gen_prompt()
+        sensor = gen_sensor()
+        cast = EnumCast.INTEGER
+        color = EnumColor.BLUE
+        horizon = EnumHorizon.INVERT
+
+        form = MapperEditForm(obj=Mapper.create(
+            prompt=prompt, sensor=sensor,
+            cast=cast, color=color, horizon=horizon
+        ))
+        assert form.prompt_sel.data != prompt.prime
+        assert form.sensor_sel.data != sensor.prime
+        assert form.cast_sel.data != cast.value
+        assert form.color_sel.data != color.value
+        assert form.horizon_sel.data != horizon.value
+
+        form.set_selections()
+        assert form.prompt_sel.data == prompt.prime
+        assert form.sensor_sel.data == sensor.prime
+        assert form.cast_sel.data == cast.value
+        assert form.color_sel.data == color.value
+        assert form.horizon_sel.data == horizon.value
 
     @staticmethod
     def test_create_new(gen_prompt, gen_sensor):
