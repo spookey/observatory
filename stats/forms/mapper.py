@@ -77,8 +77,8 @@ class MapperEditForm(FlaskForm):
     def set_selections(self):
         if not self.mapper:
             return
-        self.prompt_sel.data = self.mapper.prompt_pime
-        self.sensor_sel.data = self.mapper.sensor_pime
+        self.prompt_sel.data = self.mapper.prompt_prime
+        self.sensor_sel.data = self.mapper.sensor_prime
 
         self.cast_sel.data = self.mapper.cast.value
         self.color_sel.data = self.mapper.color.value

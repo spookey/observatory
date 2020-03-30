@@ -22,7 +22,7 @@ class Sensor(CommonMixin, CreatedMixin, Model):
 
     mapping = DB.relationship(
         Mapper,
-        primaryjoin='Sensor.prime == Mapper.sensor_pime',
+        primaryjoin='Sensor.prime == Mapper.sensor_prime',
         backref=DB.backref('sensor', lazy=True),
         cascade='all,delete',
         lazy=True,

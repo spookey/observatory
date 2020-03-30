@@ -33,10 +33,10 @@ class EnumHorizon(Enum):
 
 
 class Mapper(CreatedMixin, BaseModel):
-    prompt_pime = DB.Column(
+    prompt_prime = DB.Column(
         DB.Integer(), DB.ForeignKey('prompt.prime'), primary_key=True
     )
-    sensor_pime = DB.Column(
+    sensor_prime = DB.Column(
         DB.Integer(), DB.ForeignKey('sensor.prime'), primary_key=True
     )
     active = DB.Column(

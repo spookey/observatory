@@ -9,7 +9,7 @@ from stats.start.extensions import DB
 class Prompt(CommonMixin, CreatedMixin, Model):
     mapping = DB.relationship(
         Mapper,
-        primaryjoin='Prompt.prime == Mapper.prompt_pime',
+        primaryjoin='Prompt.prime == Mapper.prompt_prime',
         backref=DB.backref('prompt', lazy=True),
         cascade='all,delete',
         lazy=True,
