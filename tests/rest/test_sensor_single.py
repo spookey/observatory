@@ -1,5 +1,4 @@
-from flask import url_for
-from flask_restful import marshal
+from flask_restful import fields, marshal
 from pytest import mark
 
 from stats.models.point import Point
@@ -12,23 +11,25 @@ ENDPOINT = 'api.sensor.single'
 class TestSensorSingle:
 
     @staticmethod
-    def test_url():
-        assert url_for(ENDPOINT, slug='test') == '/api/sensor/test'
+    def test_point_marshal():
+        points = SensorSingle.SINGLE_GET['points']
+        assert isinstance(points, fields.Nested)
+
+        mdef = points.nested
+        assert isinstance(mdef['value'], fields.Float)
+        stamp = mdef['stamp']
+        assert isinstance(stamp, fields.DateTime)
+        assert stamp.attribute == 'created'
+        assert stamp.dt_format == 'iso8601'
 
     @staticmethod
-    def test_get_empty_single(visitor):
-        res = visitor(ENDPOINT, params={'slug': 'error'}, code=404)
-        msg = res.json.get('message', None)
-        assert msg
-        assert 'not present' in msg.lower()
-
-    @staticmethod
-    def test_get_single(visitor, gen_sensor):
+    def test_get_with_point(visitor, gen_sensor):
         sensor = gen_sensor()
-        Point.create(sensor=sensor, value=23.42)
+        point = Point.create(sensor=sensor, value=23.42)
 
         res = visitor(ENDPOINT, params={'slug': sensor.slug})
         assert res.json == marshal(sensor, SensorSingle.SINGLE_GET)
+        assert res.json['points'][-1]['value'] == point.value
 
     @staticmethod
     def test_post_not_logged_in(visitor, gen_sensor):

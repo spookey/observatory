@@ -1,6 +1,7 @@
 from flask import Flask
 
 from stats.lib.cli import BP_CLI
+from stats.rest.prompt import BP_REST_PROMPT
 from stats.rest.sensor import BP_REST_SENSOR
 from stats.shared import errorhandler, moment_config, tagline
 from stats.start.environment import ERROR_CODES, MDL_NAME
@@ -48,6 +49,7 @@ def register_blueprints(app):
     app.register_blueprint(BLUEPRINT_MGNT)
     app.register_blueprint(BLUEPRINT_SIDE)
     app.register_blueprint(BLUEPRINT_USER)
+    app.register_blueprint(BP_REST_PROMPT)
     app.register_blueprint(BP_REST_SENSOR)
 
 
