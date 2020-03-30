@@ -91,7 +91,7 @@ class TestMgntEditMapper:
         cast = EnumCast.INTEGER
         color = EnumColor.YELLOW
         horizon = EnumHorizon.NORMAL
-        mgnt_url = url_for('mgnt.index', _external=True)
+        view_url = url_for('mgnt.view_mapper', _external=True)
 
         res = visitor(ENDPOINT, method='post', data={
             'prompt_sel': prompt.prime, 'sensor_sel': sensor.prime,
@@ -99,7 +99,7 @@ class TestMgntEditMapper:
             'horizon_sel': horizon.value, 'submit': True,
         }, code=302)
 
-        assert res.request.headers['LOCATION'] == mgnt_url
+        assert res.request.headers['LOCATION'] == view_url
         mapper = Mapper.query.first()
         assert mapper.prompt == prompt
         assert mapper.sensor == sensor

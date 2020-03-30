@@ -95,7 +95,7 @@ def edit_mapper(prompt_slug=None, sensor_slug=None):
                 f'Saved mapper {mapper.prompt.slug} {mapper.sensor.slug}!',
                 'success'
             )
-            return redirect(url_for('mgnt.index'))
+            return redirect(url_for('mgnt.view_mapper'))
 
     return render_template(
         'mgnt/edit.html',
@@ -104,7 +104,7 @@ def edit_mapper(prompt_slug=None, sensor_slug=None):
     )
 
 
-def _edit_common(form):
+def _edit_common(form, redirect_ep):
     name = form.Model.__name__.lower()
     title = f'Edit {name}' if form.thing else f'Create new {name}'
 
@@ -112,7 +112,7 @@ def _edit_common(form):
         thing = form.action()
         if thing is not None:
             flash(f'Saved {name} {thing.slug}!', 'success')
-            return redirect(url_for('mgnt.index'))
+            return redirect(url_for(redirect_ep))
 
     return render_template(
         'mgnt/edit.html',
@@ -133,6 +133,7 @@ def _edit_common(form):
 def edit_prompt(slug=None):
     return _edit_common(
         PromptEditForm(obj=Prompt.by_slug(slug)),
+        'mgnt.view_prompt',
     )
 
 
@@ -148,4 +149,5 @@ def edit_prompt(slug=None):
 def edit_sensor(slug=None):
     return _edit_common(
         SensorEditForm(obj=Sensor.by_slug(slug)),
+        'mgnt.view_sensor',
     )

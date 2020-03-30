@@ -12,10 +12,12 @@ def _comm(request, visitor, gen_prompt, gen_sensor, gen_user_loggedin):
 
     res.login = gen_user_loggedin
     res.visitor = visitor
-    res.endpoint, res.model, res.gen_common, res.url = (
-        'mgnt.edit_prompt', Prompt, gen_prompt, '/manage/prompt/edit',
+    res.endpoint, res.view_ep, res.model, res.gen_common, res.url = (
+        'mgnt.edit_prompt', 'mgnt.view_prompt',
+        Prompt, gen_prompt, '/manage/prompt/edit',
     ) if request.param == 'prompt' else (
-        'mgnt.edit_sensor', Sensor, gen_sensor, '/manage/sensor/edit',
+        'mgnt.edit_sensor', 'mgnt.view_sensor',
+        Sensor, gen_sensor, '/manage/sensor/edit',
     )
 
     yield res
@@ -84,14 +86,14 @@ class TestMgntEditCommon:
         slug = 'my_common'
         title = 'My common'
         description = 'This is my common!'
-        mgnt_url = url_for('mgnt.index', _external=True)
+        view_url = url_for(_comm.view_ep, _external=True)
 
         res = _comm.visitor(_comm.endpoint, method='post', data={
             'slug': slug, 'title': title,
             'description': description, 'submit': True,
         }, code=302)
 
-        assert res.request.headers['LOCATION'] == mgnt_url
+        assert res.request.headers['LOCATION'] == view_url
         thing = _comm.model.query.first()
         assert thing.slug == slug
         assert thing.title == title
