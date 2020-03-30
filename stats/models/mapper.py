@@ -9,6 +9,18 @@ from stats.start.extensions import DB
 # pylint: disable=too-many-ancestors
 
 
+class EnumColor(Enum):
+    GRAY = 0x969896
+    RED = 0xc82829
+    ORANGE = 0xf5871f
+    YELLOW = 0xeab700
+    GREEN = 0x718c00
+    TURQUOISE = 0x3e999f
+    BLUE = 0x4271ae
+    PURPLE = 0x8959a8
+    BROWN = 0xa3685a
+
+
 class EnumAxis(Enum):
     LEFT = 1
     RIGHT = 2
@@ -40,6 +52,9 @@ class Mapper(CreatedMixin, BaseModel):
     )
     cast = DB.Column(
         DB.Enum(EnumCast), nullable=False, default=EnumCast.NATURAL
+    )
+    color = DB.Column(
+        DB.Enum(EnumColor), nullable=False, default=EnumColor.GRAY
     )
     horizon = DB.Column(
         DB.Enum(EnumHorizon), nullable=False, default=EnumHorizon.NORMAL
