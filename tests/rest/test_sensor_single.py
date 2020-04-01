@@ -1,4 +1,6 @@
-from flask_restful import fields, marshal
+from flask import url_for
+from flask_restful import marshal
+from flask_restful.fields import DateTime, Float, Nested
 from pytest import mark
 
 from stats.models.point import Point
@@ -12,15 +14,14 @@ class TestSensorSingle:
 
     @staticmethod
     def test_point_marshal():
-        points = SensorSingle.SINGLE_GET['points']
-        assert isinstance(points, fields.Nested)
-
-        mdef = points.nested
-        assert isinstance(mdef['value'], fields.Float)
-        stamp = mdef['stamp']
-        assert isinstance(stamp, fields.DateTime)
-        assert stamp.attribute == 'created'
+        mdef = SensorSingle.SINGLE_GET
+        assert isinstance(mdef['points'], Nested)
+        nest = mdef['points'].nested
+        assert isinstance(nest['value'], Float)
+        stamp = nest['stamp']
+        assert isinstance(stamp, DateTime)
         assert stamp.dt_format == 'iso8601'
+        assert stamp.attribute == 'created'
 
     @staticmethod
     def test_get_with_point(visitor, gen_sensor):
@@ -78,3 +79,7 @@ class TestSensorSingle:
         assert point.value == value
 
         assert res.json == marshal(sensor, SensorSingle.SINGLE_POST)
+
+        assert res.json['url'] == url_for(
+            'api.sensor.single', slug=sensor.slug, _external=True
+        )

@@ -1,5 +1,6 @@
 from flask import url_for
-from flask_restful import fields, marshal
+from flask_restful import marshal
+from flask_restful.fields import String, Url
 from pytest import fixture, mark
 
 from stats.rest.prompt import PromptListing
@@ -32,16 +33,12 @@ class TestCommonListing:
     @staticmethod
     def test_marshal(_comm):
         mdef = _comm.impl.LISTING_GET
-        assert isinstance(mdef['slug'], fields.String)
-        assert isinstance(mdef['title'], fields.String)
-        assert isinstance(mdef['description'], fields.String)
-        created = mdef['created']
-        assert isinstance(created, fields.DateTime)
-        assert created.dt_format == 'iso8601'
-        single = mdef['single']
-        assert isinstance(single, fields.Url)
-        assert single.absolute is True
-        assert single.endpoint == _comm.single_ep
+        assert isinstance(mdef['slug'], String)
+        assert isinstance(mdef['title'], String)
+        url = mdef['url']
+        assert isinstance(url, Url)
+        assert url.absolute is True
+        assert url.endpoint == _comm.single_ep
 
     @staticmethod
     def test_get_empty(_comm, visitor):
@@ -50,8 +47,8 @@ class TestCommonListing:
 
     @staticmethod
     def test_get_listing(_comm, visitor):
-        common = [
+        commons = [
             _comm.gen(slug='one'), _comm.gen(slug='two'),
         ]
         res = visitor(_comm.endpoint)
-        assert res.json == marshal(common, _comm.impl.LISTING_GET)
+        assert res.json == marshal(commons, _comm.impl.LISTING_GET)

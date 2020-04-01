@@ -1,5 +1,6 @@
 from flask import url_for
 from flask_restful import marshal
+from flask_restful.fields import DateTime, String
 from pytest import fixture, mark
 
 from stats.rest.prompt import PromptSingle
@@ -30,10 +31,19 @@ class TestCommonSingle:
         assert url_for(_comm.endpoint, slug='test') == f'{_comm.url}/test'
 
     @staticmethod
+    def test_marshal(_comm):
+        mdef = _comm.impl.SINGLE_GET
+        assert isinstance(mdef['slug'], String)
+        assert isinstance(mdef['title'], String)
+        assert isinstance(mdef['description'], String)
+        created = mdef['created']
+        assert isinstance(created, DateTime)
+        assert created.dt_format == 'iso8601'
+
+    @staticmethod
     def test_get_empty(_comm, visitor):
         res = visitor(_comm.endpoint, params={'slug': 'wrong'}, code=404)
         err = res.json.get('error', None)
-        assert err
         assert 'not present' in err.lower()
 
     @staticmethod
