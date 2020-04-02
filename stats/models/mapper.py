@@ -5,9 +5,6 @@ from sqlalchemy import and_
 from stats.database import BaseModel, CreatedMixin
 from stats.start.extensions import DB
 
-# pylint: disable=no-member
-# pylint: disable=too-many-ancestors
-
 
 class EnumColor(Enum):
     GRAY = 0x969896
@@ -31,6 +28,9 @@ class EnumHorizon(Enum):
     NORMAL = 1
     INVERT = 2
 
+# pylint: disable=no-member
+# pylint: disable=too-many-ancestors
+
 
 class Mapper(CreatedMixin, BaseModel):
     prompt_prime = DB.Column(
@@ -50,6 +50,31 @@ class Mapper(CreatedMixin, BaseModel):
     )
     horizon = DB.Column(
         DB.Enum(EnumHorizon), nullable=False, default=EnumHorizon.NORMAL
+    )
+
+    prompt = DB.relationship(
+        'Prompt',
+        primaryjoin='Mapper.prompt_prime == Prompt.prime',
+        backref=DB.backref(
+            'mapping',
+            order_by='Mapper.created.desc()',
+            cascade='all,delete-orphan',
+            lazy=True,
+        ),
+        order_by='Prompt.created.desc()',
+        lazy=True,
+    )
+    sensor = DB.relationship(
+        'Sensor',
+        primaryjoin='Mapper.sensor_prime == Sensor.prime',
+        backref=DB.backref(
+            'mapping',
+            order_by='Mapper.created.desc()',
+            cascade='all,delete-orphan',
+            lazy=True,
+        ),
+        order_by='Sensor.created.desc()',
+        lazy=True,
     )
 
     @classmethod

@@ -15,16 +15,7 @@ class Sensor(CommonMixin, CreatedMixin, Model):
         'Point',
         backref=DB.backref('sensor', lazy=True),
         order_by='Point.created.desc()',
-        cascade='all,delete',
-        lazy=True,
-    )
-
-    mapping = DB.relationship(
-        'Mapper',
-        primaryjoin='Sensor.prime == Mapper.sensor_prime',
-        backref=DB.backref('sensor', lazy=True),
-        order_by='Mapper.created.desc()',
-        cascade='all,delete',
+        cascade='all,delete-orphan',
         lazy=True,
     )
 
