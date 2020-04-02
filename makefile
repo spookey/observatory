@@ -11,11 +11,13 @@ DIR_VENV	:=	venv
 VER_PY		:=	3.7
 CMD_PIP		:=	$(DIR_VENV)/bin/pip$(VER_PY)
 CMD_PY		:=	$(DIR_VENV)/bin/python$(VER_PY)
-CMD_PYTEST	:=	$(DIR_VENV)/bin/pytest
-CMD_PYREV	:=	$(DIR_VENV)/bin/pyreverse
-CMD_PYLINT	:=	$(DIR_VENV)/bin/pylint
-CMD_ISORT	:=	$(DIR_VENV)/bin/isort
 CMD_FLASK	:=	$(DIR_VENV)/bin/flask
+CMD_ISORT	:=	$(DIR_VENV)/bin/isort
+CMD_PTPY	:=	$(DIR_VENV)/bin/ptpython
+CMD_PUDB	:=	$(DIR_VENV)/bin/pudb3
+CMD_PYLINT	:=	$(DIR_VENV)/bin/pylint
+CMD_PYREV	:=	$(DIR_VENV)/bin/pyreverse
+CMD_PYTEST	:=	$(DIR_VENV)/bin/pytest
 
 DIR_STATS	:=	stats
 DIR_TESTS	:=	tests
@@ -64,20 +66,20 @@ help:
 $(DIR_VENV):
 	$(CMD_VENV) -p "python$(VER_PY)" "$(DIR_VENV)"
 
-.PHONY: requirements requirements-dev
+.PHONY: requirements requirements-dev requirements-debug
 requirements: $(CMD_FLASK)
 requirements-dev: $(CMD_ISORT) $(CMD_PYLINT) $(CMD_PYREV) $(CMD_PYTEST)
+requirements-debug: $(CMD_PTPY) $(CMD_PUDB)
 
 $(CMD_FLASK): $(DIR_VENV)
 	$(CMD_PIP) install -r "requirements.txt"
 $(CMD_ISORT) $(CMD_PYLINT) $(CMD_PYREV) $(CMD_PYTEST): $(DIR_VENV)
 	$(CMD_PIP) install -r "requirements-dev.txt"
-
-.PHONY: requirements-pudb
-requirements-pudb: $(CMD_PYTEST)
-	$(CMD_PIP) install pudb pytest-pudb
+$(CMD_PTPY) $(CMD_PUDB): $(DIR_VENV)
+	$(CMD_PIP) install -r "requirements-debug.txt"
 	@echo
 	@echo "import pudb; pudb.set_trace()"
+	@echo
 
 
 ###

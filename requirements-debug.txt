@@ -1,0 +1,4 @@
+-r requirements-dev.txt
+flask-shell-ptpython
+pudb
+pytest-pudb
