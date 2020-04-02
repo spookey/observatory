@@ -1,7 +1,6 @@
 from logging import getLogger
 
 from stats.database import CommonMixin, CreatedMixin, Model
-from stats.models.mapper import Mapper
 from stats.models.point import Point
 from stats.start.extensions import DB
 
@@ -13,17 +12,18 @@ LOG = getLogger(__name__)
 
 class Sensor(CommonMixin, CreatedMixin, Model):
     points = DB.relationship(
-        Point,
+        'Point',
         backref=DB.backref('sensor', lazy=True),
-        order_by=Point.created.desc(),
+        order_by='Point.created.desc()',
         cascade='all,delete',
         lazy=True,
     )
 
     mapping = DB.relationship(
-        Mapper,
+        'Mapper',
         primaryjoin='Sensor.prime == Mapper.sensor_prime',
         backref=DB.backref('sensor', lazy=True),
+        order_by='Mapper.created.desc()',
         cascade='all,delete',
         lazy=True,
     )
