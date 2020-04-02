@@ -3,6 +3,8 @@ from datetime import datetime
 from pytest import mark
 
 from stats.models.mapper import EnumCast, EnumColor, EnumHorizon, Mapper
+from stats.models.prompt import Prompt
+from stats.models.sensor import Sensor
 from stats.start.environment import FMT_STRFTIME
 
 
@@ -59,7 +61,7 @@ class TestMapper:
         assert Mapper.query.all() == []
 
     @staticmethod
-    def test_delete_cascade_common(gen_prompt, gen_sensor):
+    def test_delete_cascade_orphan(gen_prompt, gen_sensor):
         for name in ['prompt', 'sensor']:
             mapper = Mapper.create(
                 prompt=gen_prompt(slug=f'test_{name}'),
@@ -69,6 +71,11 @@ class TestMapper:
             assert Mapper.query.all() == [mapper]
             assert getattr(mapper, name).delete()
             assert Mapper.query.all() == []
+
+        assert Prompt.query.count() == 1
+        assert Sensor.query.count() == 1
+        assert Prompt.query.first().slug == 'test_sensor'
+        assert Sensor.query.first().slug == 'test_prompt'
 
     @staticmethod
     def test_created_fmt(gen_prompt, gen_sensor):

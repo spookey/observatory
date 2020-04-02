@@ -20,16 +20,26 @@ class TestSensor:
         assert sensor.points == []
 
     @staticmethod
-    def test_delete_cascade(gen_sensor):
+    def test_backref_ordered(gen_sensor, gen_points_batch):
+        sensor = gen_sensor()
+        _, _, points = gen_points_batch(sensor)
+
+        assert sensor.points == _pointsort(points)
+
+    @staticmethod
+    def test_delete_cascade_orphan(gen_sensor):
         sensor = gen_sensor()
 
         assert Sensor.query.all() == [sensor]
         assert sensor.points == []
 
-        point = Point.create(sensor=sensor, value=42)
+        points = [
+            Point.create(sensor=sensor, value=23),
+            Point.create(sensor=sensor, value=42),
+        ]
 
-        assert Point.query.all() == [point]
-        assert sensor.points == [point]
+        assert Point.query.all() == points
+        assert sensor.points == _pointsort(points)
 
         assert sensor.delete()
 
@@ -37,11 +47,26 @@ class TestSensor:
         assert Point.query.all() == []
 
     @staticmethod
-    def test_backref_ordered(gen_sensor, gen_points_batch):
-        sensor = gen_sensor()
-        _, _, points = gen_points_batch(sensor)
+    def test_delete_cascade_others(gen_sensor):
+        keep_sensor = gen_sensor('keep')
+        drop_sensor = gen_sensor('drop')
 
-        assert sensor.points == _pointsort(points)
+        assert Sensor.query.all() == [keep_sensor, drop_sensor]
+        assert keep_sensor.points == []
+        assert drop_sensor.points == []
+
+        keep_point = Point.create(sensor=keep_sensor, value=23)
+        drop_point = Point.create(sensor=drop_sensor, value=42)
+
+        assert Point.query.all() == [keep_point, drop_point]
+
+        assert drop_sensor.points == [drop_point]
+        assert keep_sensor.points == [keep_point]
+
+        assert drop_sensor.delete()
+
+        assert Sensor.query.all() == [keep_sensor]
+        assert Point.query.all() == [keep_point]
 
     @staticmethod
     def test_query_points_outdated(gen_sensor, gen_points_batch):
