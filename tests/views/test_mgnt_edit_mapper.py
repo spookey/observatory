@@ -16,12 +16,6 @@ class TestMgntEditMapper:
         assert url_for(
             ENDPOINT, prompt_slug='the_prompt', sensor_slug='the_sensor'
         ) == '/manage/mapper/edit/prompt/the_prompt/sensor/the_sensor'
-        assert url_for(
-            ENDPOINT, prompt_slug='the_prompt'
-        ) == '/manage/mapper/edit/prompt/the_prompt'
-        assert url_for(
-            ENDPOINT, sensor_slug='the_sensor'
-        ) == '/manage/mapper/edit/sensor/the_sensor'
 
     @staticmethod
     def test_no_user(visitor):

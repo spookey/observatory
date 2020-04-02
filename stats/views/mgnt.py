@@ -65,16 +65,6 @@ def view_sensor():
     methods=['GET', 'POST'],
 )
 @BLUEPRINT_MGNT.route(
-    '/manage/mapper/edit'
-    '/sensor/<string:sensor_slug>',
-    methods=['GET', 'POST'],
-)
-@BLUEPRINT_MGNT.route(
-    '/manage/mapper/edit'
-    '/prompt/<string:prompt_slug>',
-    methods=['GET', 'POST'],
-)
-@BLUEPRINT_MGNT.route(
     '/manage/mapper/edit',
     methods=['GET', 'POST'],
 )
