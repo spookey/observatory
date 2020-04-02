@@ -18,11 +18,8 @@ class MapperListing(GenericListing):
 
 @REST.resource(
     '/mapper/prompt/<string:prompt_slug>/sensor/<sensor_slug>',
-    endpoint='api.mapper.single',
-)
-@REST.resource(
     '/mapper/sensor/<sensor_slug>/prompt/<string:prompt_slug>',
-    endpoint='api.mapper.single_reversed',
+    endpoint='api.mapper.single',
 )
 class MapperSingle(Resource):
     SINGLE_GET = mapper_single()
