@@ -19,7 +19,7 @@ class SensorListing(GenericListing):
     LISTING_GET = common_listing('api.sensor.single')
 
 
-@REST.resource('/sensor/<slug>', endpoint='api.sensor.single')
+@REST.resource('/sensor/<string:slug>', endpoint='api.sensor.single')
 class SensorSingle(CommonSingle):
     Model = Sensor
     SINGLE_GET = common_single(

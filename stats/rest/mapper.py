@@ -17,8 +17,8 @@ class MapperListing(GenericListing):
 
 
 @REST.resource(
-    '/mapper/prompt/<string:prompt_slug>/sensor/<sensor_slug>',
-    '/mapper/sensor/<sensor_slug>/prompt/<string:prompt_slug>',
+    '/mapper/prompt/<string:prompt_slug>/sensor/<string:sensor_slug>',
+    '/mapper/sensor/<string:sensor_slug>/prompt/<string:prompt_slug>',
     endpoint='api.mapper.single',
 )
 class MapperSingle(Resource):

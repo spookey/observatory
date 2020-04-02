@@ -15,7 +15,7 @@ class PromptListing(GenericListing):
     LISTING_GET = common_listing('api.prompt.single')
 
 
-@REST.resource('/prompt/<slug>', endpoint='api.prompt.single')
+@REST.resource('/prompt/<string:slug>', endpoint='api.prompt.single')
 class PromptSingle(CommonSingle):
     Model = Prompt
     SINGLE_GET = common_single()
