@@ -29,7 +29,7 @@ BACKLOG_DAYS = parse_int(getenv('BACKLOG_DAYS', '14'), fallback=True)
 
 TITLE = getenv('TITLE', 'Status')
 HTML_LANG = getenv('HTML_LANG', 'en')
-FAVICON = getenv('FAVICON', 'hex.png')
+FAVICON = getenv('FAVICON', 'logo.png')
 
 FMT_STRFTIME = getenv('FMT_STRFTIME', '%d.%m.%Y %H:%M:%S UTC')
 FMT_MOMENT = getenv('FMT_MOMENT', 'DD. MMM YYYY HH:mm:ss')

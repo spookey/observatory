@@ -86,7 +86,7 @@ def test_language(monkeypatch):
 
 
 def test_favicon(monkeypatch):
-    assert environment.FAVICON == 'hex.png'
+    assert environment.FAVICON == 'logo.png'
 
     monkeypatch.setenv('FAVICON', '💥')
     reload(environment)
