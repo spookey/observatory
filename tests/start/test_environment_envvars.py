@@ -68,7 +68,7 @@ def test_backlog_days(monkeypatch):
 
 
 def test_title(monkeypatch):
-    assert environment.TITLE == 'Status'
+    assert environment.TITLE == 'Observatory'
 
     monkeypatch.setenv('TITLE', '🕹')
     reload(environment)

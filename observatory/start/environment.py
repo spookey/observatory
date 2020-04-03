@@ -27,7 +27,7 @@ CSRF_STRICT = parse_bool(getenv('CSRF_STRICT', 'true'), fallback=True)
 
 BACKLOG_DAYS = parse_int(getenv('BACKLOG_DAYS', '14'), fallback=True)
 
-TITLE = getenv('TITLE', 'Status')
+TITLE = getenv('TITLE', 'Observatory')
 HTML_LANG = getenv('HTML_LANG', 'en')
 FAVICON = getenv('FAVICON', 'logo.png')
 
