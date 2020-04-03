@@ -3,7 +3,9 @@ from logging import getLogger
 
 from sqlalchemy.ext.declarative import declared_attr
 
-from observatory.lib.clock import epoch_milliseconds, epoch_seconds, time_format
+from observatory.lib.clock import (
+    epoch_milliseconds, epoch_seconds, time_format
+)
 from observatory.start.extensions import DB
 
 LOG = getLogger(__name__)
