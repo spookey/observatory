@@ -4,7 +4,7 @@ from flask_restful.fields import Boolean, DateTime, String
 from pytest import mark
 
 from observatory.models.mapper import Mapper
-from observatory.rest.generic import MapperSlugUrl
+from observatory.rest.generic import SlugUrl
 from observatory.rest.mapper import MapperSingle
 
 ENDPOINT = 'api.mapper.single'
@@ -32,11 +32,11 @@ class TestMapperSingle:
         assert isinstance(mdef['color'], String)
         assert isinstance(mdef['horizon'], String)
         prompt_url = mdef['prompt_url']
-        assert isinstance(prompt_url, MapperSlugUrl)
+        assert isinstance(prompt_url, SlugUrl)
         assert prompt_url.absolute is True
         assert prompt_url.endpoint == 'api.prompt.single'
         sensor_url = mdef['sensor_url']
-        assert isinstance(sensor_url, MapperSlugUrl)
+        assert isinstance(sensor_url, SlugUrl)
         assert sensor_url.absolute is True
         assert sensor_url.endpoint == 'api.sensor.single'
 

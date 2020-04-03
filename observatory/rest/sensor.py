@@ -37,7 +37,7 @@ class SensorSingle(CommonSingle):
 
     SINGLE_POST = {
         'slug': String(),
-        'url': Url('api.sensor.single', absolute=True),
+        'url': Url(endpoint='api.sensor.single', absolute=True),
         'value': Float(attribute='latest.value'),
     }
 

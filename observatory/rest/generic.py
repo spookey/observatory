@@ -2,13 +2,22 @@ from flask_restful import Resource, abort, marshal
 from flask_restful.fields import Boolean, DateTime, String, Url
 
 
-class MapperSlugUrl(Url):
+class SlugUrl(Url):
     def patch(self, obj):
         if self.attribute is not None:
             comm = getattr(obj, self.attribute, None)
             if comm is not None:
                 setattr(obj, 'slug', comm.slug)
 
+        return obj
+
+    def output(self, key, obj):
+        return super().output(key, self.patch(obj))
+
+
+class MapperSlugUrl(Url):
+    @staticmethod
+    def patch(obj):
         for field in ('prompt', 'sensor'):
             elem = getattr(obj, field, None)
             if elem is not None:
@@ -63,10 +72,10 @@ def mapper_single():
         cast=String(attribute='cast.name'),
         color=String(attribute='color.name'),
         horizon=String(attribute='horizon.name'),
-        prompt_url=MapperSlugUrl(
+        prompt_url=SlugUrl(
             attribute='prompt', endpoint='api.prompt.single', absolute=True,
         ),
-        sensor_url=MapperSlugUrl(
+        sensor_url=SlugUrl(
             attribute='sensor', endpoint='api.sensor.single', absolute=True,
         ),
     )

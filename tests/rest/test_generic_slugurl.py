@@ -1,6 +1,6 @@
 from flask import url_for
 
-from observatory.rest.generic import MapperSlugUrl
+from observatory.rest.generic import MapperSlugUrl, SlugUrl
 
 
 def make_obj(**kwargs):
@@ -13,6 +13,42 @@ def make_obj(**kwargs):
     return obj
 
 
+class TestSlugUrl:
+
+    @staticmethod
+    def test_empty():
+        obj = make_obj()
+        res = SlugUrl().patch(obj)
+
+        assert getattr(res, 'slug', None) is None
+
+    @staticmethod
+    def test_unmodified():
+        obj = make_obj(slug='unmodified slug')
+        res = SlugUrl().patch(obj)
+
+        assert getattr(res, 'slug', None) == 'unmodified slug'
+
+    @staticmethod
+    def test_set_slug():
+        obj = make_obj(
+            slug='wrong',
+            nested=make_obj(slug='real slug'),
+        )
+        res = SlugUrl(attribute='nested').patch(obj)
+
+        assert getattr(res, 'slug', None) == 'real slug'
+
+    @staticmethod
+    def test_output():
+        obj = make_obj(slug='test slug')
+
+        for endpoint in ('api.prompt.single', 'api.sensor.single'):
+            res = SlugUrl(endpoint=endpoint).output('slug', obj)
+
+            assert res == url_for(endpoint, slug='test slug')
+
+
 class TestMapperSlugUrl:
 
     @staticmethod
@@ -22,30 +58,18 @@ class TestMapperSlugUrl:
 
         assert getattr(res, 'prompt_slug', None) is None
         assert getattr(res, 'sensor_slug', None) is None
-        assert getattr(res, 'slug', None) is None
 
     @staticmethod
     def test_unmodified():
         obj = make_obj(
             prompt_slug='unmodified prompt_slug',
             sensor_slug='unmodified sensor_slug',
-            slug='unmodified slug',
+            # slug='unmodified slug',
         )
         res = MapperSlugUrl().patch(obj)
 
         assert getattr(res, 'prompt_slug', None) == 'unmodified prompt_slug'
         assert getattr(res, 'sensor_slug', None) == 'unmodified sensor_slug'
-        assert getattr(res, 'slug', None) == 'unmodified slug'
-
-    @staticmethod
-    def test_set_slug():
-        obj = make_obj(
-            slug='wrong',
-            nested=make_obj(slug='real slug'),
-        )
-        res = MapperSlugUrl(attribute='nested').patch(obj)
-
-        assert getattr(res, 'slug', None) == 'real slug'
 
     @staticmethod
     def test_set_common_prompt():
