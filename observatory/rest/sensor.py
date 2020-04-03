@@ -6,7 +6,8 @@ from flask_restful.reqparse import RequestParser
 
 from observatory.models.sensor import Sensor
 from observatory.rest.generic import (
-    DT_FORMAT, CommonSingle, GenericListing, common_listing, common_single
+    DT_FORMAT, CommonSingle, GenericListing, SlugUrl, common_listing,
+    common_single
 )
 from observatory.start.extensions import REST
 
@@ -48,3 +49,23 @@ class SensorSingle(CommonSingle):
         if not sensor.append(args.value):
             abort(500, error=f'Could not add {args.value} to {slug}')
         return marshal(sensor, self.SINGLE_POST), 201
+
+
+@REST.resource('/sensor/<string:slug>/latest', endpoint='api.sensor.latest')
+class SensorLatest(CommonSingle):
+    Model = Sensor
+    SINGLE_GET = {
+        'slug': String(attribute='sensor.slug'),
+        'stamp': DateTime(dt_format=DT_FORMAT, attribute='created'),
+        'url': SlugUrl(
+            attribute='sensor', endpoint='api.sensor.single', absolute=True
+        ),
+        'value': Float(),
+    }
+
+    def get(self, slug):
+        sensor = self.common_or_abort(slug)
+        latest = sensor.latest
+        if not latest:
+            abort(500, error=f'No values for {slug}')
+        return marshal(latest, self.SINGLE_GET), 200
