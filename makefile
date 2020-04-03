@@ -19,10 +19,10 @@ CMD_PYLINT	:=	$(DIR_VENV)/bin/pylint
 CMD_PYREV	:=	$(DIR_VENV)/bin/pyreverse
 CMD_PYTEST	:=	$(DIR_VENV)/bin/pytest
 
-DIR_STATS	:=	stats
+DIR_OBVTY	:=	observatory
 DIR_TESTS	:=	tests
 
-DIR_STATIC	:=	$(DIR_STATS)/static
+DIR_STATIC	:=	$(DIR_OBSVTY)/static
 
 DIR_NODEM	:=	node_modules
 CMD_NPM		:=	npm
@@ -33,8 +33,8 @@ OUT_SCRIPT	:=	$(DIR_STATIC)/script.js
 
 .PHONY: help
 help:
-	@echo "stats makefile"
-	@echo "--------------"
+	@echo "observatory makefile"
+	@echo "--------------------"
 	@echo
 	@echo "venv             install virtualenv"
 	@echo "requirements     install requirements into venv"
@@ -114,7 +114,7 @@ endef
 
 .PHONY: lint lintt
 lint: $(CMD_PYLINT)
-	$(call _lint,"$(DIR_STATS)")
+	$(call _lint,"$(DIR_OBVTY)")
 lintt: $(CMD_PYLINT)
 	$(call _lint,"$(DIR_TESTS)")
 
@@ -131,7 +131,7 @@ endef
 
 .PHONY: plot plott
 plot: $(CMD_PYREV)
-	$(call _reverse,$(DIR_STATS))
+	$(call _reverse,$(DIR_OBVTY))
 plott: $(CMD_PYREV)
 	$(call _reverse,$(DIR_TESTS),_$(DIR_SHORTER))
 
@@ -142,7 +142,7 @@ endef
 
 .PHONY: sort sortt
 sort: $(CMD_ISORT)
-	$(call _sort,"$(DIR_STATS)")
+	$(call _sort,"$(DIR_OBVTY)")
 sortt: $(CMD_ISORT)
 	$(call _sort,"$(DIR_TESTS)")
 
@@ -151,7 +151,7 @@ define _test
 	$(CMD_PYTEST) $(1) "$(DIR_TESTS)" -vv
 endef
 define _tcov
-	$(call _test,$(1) --cov="$(DIR_STATS)")
+	$(call _test,$(1) --cov="$(DIR_OBVTY)")
 endef
 
 HTMLCOV		:=	htmlcov
@@ -250,7 +250,7 @@ CMD_RM		:=	rm
 
 .PHONY: travis-phony
 travis-phony:
-	tmpdir=$$($(CMD_MKTMP) -d -t "$(DIR_STATS).phony") && \
+	tmpdir=$$($(CMD_MKTMP) -d -t "$(DIR_OBVTY).phony") && \
 	echo "=> $$tmpdir" && \
 	$(CMD_GIT) clone . "$$tmpdir" && \
 	$(CMD_MAKE) -C "$$tmpdir" travis && \

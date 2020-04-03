@@ -15,7 +15,7 @@ const devel = () => [
 const assetStyle = {
   input: 'assets/style.css',
   output: {
-    file: 'stats/static/style.css',
+    file: 'observatory/static/style.css',
     format: 'system',
   },
   plugins: [
@@ -35,7 +35,7 @@ const assetStyle = {
 const assetScript = {
   input: 'assets/script.ts',
   output: {
-    file: 'stats/static/script.js',
+    file: 'observatory/static/script.js',
     format: 'iife',
   },
   plugins: [

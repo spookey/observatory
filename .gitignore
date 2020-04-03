@@ -6,6 +6,6 @@
 __pycache__
 htmlcov/
 node_modules/
+observatory/static/
 secret.key
-stats/static/
 venv/

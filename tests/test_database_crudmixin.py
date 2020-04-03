@@ -1,7 +1,7 @@
 from pytest import mark
 
-from stats.database import CRUDMixin
-from stats.start.extensions import DB
+from observatory.database import CRUDMixin
+from observatory.start.extensions import DB
 
 # pylint: disable=no-member
 

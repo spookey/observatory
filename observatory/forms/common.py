@@ -2,9 +2,9 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired
 
-from stats.forms.validators import SafeSlug
-from stats.models.prompt import Prompt
-from stats.models.sensor import Sensor
+from observatory.forms.validators import SafeSlug
+from observatory.models.prompt import Prompt
+from observatory.models.sensor import Sensor
 
 
 class CommonEditForm(FlaskForm):

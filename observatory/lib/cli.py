@@ -1,8 +1,8 @@
 import click
 from flask import Blueprint
 
-from stats.lib.text import is_slugable
-from stats.models.user import User
+from observatory.lib.text import is_slugable
+from observatory.models.user import User
 
 BP_CLI = Blueprint('cli', __name__)
 

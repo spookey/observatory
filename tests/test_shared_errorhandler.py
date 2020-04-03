@@ -1,8 +1,8 @@
 from pytest import mark
 from werkzeug.exceptions import BadRequest, NotFound
 
-from stats.shared import errorhandler
-from stats.start.environment import ERROR_CODES
+from observatory.shared import errorhandler
+from observatory.start.environment import ERROR_CODES
 
 
 def test_app_spec(app):

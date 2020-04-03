@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 
-from stats.lib.clock import (
+from observatory.lib.clock import (
     epoch_milliseconds, epoch_seconds, is_outdated, time_format
 )
-from stats.start.environment import FMT_STRFTIME
+from observatory.start.environment import FMT_STRFTIME
 
 
 def test_epoch_from_ts():

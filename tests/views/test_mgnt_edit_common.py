@@ -1,8 +1,8 @@
 from flask import url_for
 from pytest import fixture, mark
 
-from stats.models.prompt import Prompt
-from stats.models.sensor import Sensor
+from observatory.models.prompt import Prompt
+from observatory.models.sensor import Sensor
 
 
 @fixture(scope='function', params=['prompt', 'sensor'])

@@ -3,7 +3,7 @@ from datetime import datetime
 from flask_login import current_user
 from pytest import mark
 
-from stats.forms.user import LoginForm
+from observatory.forms.user import LoginForm
 from tests.conftest import USER_NAME, USER_PASS
 
 

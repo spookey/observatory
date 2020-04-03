@@ -5,7 +5,7 @@ from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 
-from stats.start.environment import MIGR_DIR
+from observatory.start.environment import MIGR_DIR
 
 BCRYPT = Bcrypt()
 CSRF_PROTECT = CSRFProtect()

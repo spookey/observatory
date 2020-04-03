@@ -5,12 +5,12 @@ from flask import url_for
 from flask_login import logout_user
 from pytest import fixture
 
-from stats.app import create_app
-from stats.models.prompt import Prompt
-from stats.models.sensor import Sensor
-from stats.models.user import User
-from stats.start.config import TestingConfig
-from stats.start.extensions import DB as _db
+from observatory.app import create_app
+from observatory.models.prompt import Prompt
+from observatory.models.sensor import Sensor
+from observatory.models.user import User
+from observatory.start.config import TestingConfig
+from observatory.start.extensions import DB as _db
 
 SENSOR_SLUG = 'test'
 SENSOR_TITLE = 'Test Sensor'

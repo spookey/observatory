@@ -2,7 +2,7 @@ from logging import (
     DEBUG, ERROR, INFO, WARNING, Formatter, StreamHandler, getLogger
 )
 
-from stats.start.environment import LOG_LVL, MDL_NAME
+from observatory.start.environment import LOG_LVL, MDL_NAME
 
 FORMATTER = Formatter('''
 %(levelname)s - %(asctime)s | %(name)s | %(processName)s %(threadName)s

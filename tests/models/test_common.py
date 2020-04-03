@@ -3,9 +3,9 @@ from datetime import datetime
 from pytest import fixture, mark, raises
 from sqlalchemy.exc import IntegrityError
 
-from stats.models.prompt import Prompt
-from stats.models.sensor import Sensor
-from stats.start.environment import FMT_STRFTIME
+from observatory.models.prompt import Prompt
+from observatory.models.sensor import Sensor
+from observatory.start.environment import FMT_STRFTIME
 
 
 @fixture(scope='function', params=['prompt', 'sensor'])

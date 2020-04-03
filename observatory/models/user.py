@@ -2,9 +2,9 @@ from datetime import datetime
 
 from flask_login import UserMixin
 
-from stats.database import Model
-from stats.lib.clock import time_format
-from stats.start.extensions import BCRYPT, DB
+from observatory.database import Model
+from observatory.lib.clock import time_format
+from observatory.start.extensions import BCRYPT, DB
 
 # pylint: disable=no-member
 # pylint: disable=too-many-ancestors

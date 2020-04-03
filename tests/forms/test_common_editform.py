@@ -1,9 +1,9 @@
 from pytest import fixture, mark
 from werkzeug.datastructures import MultiDict
 
-from stats.forms.common import PromptEditForm, SensorEditForm
-from stats.models.prompt import Prompt
-from stats.models.sensor import Sensor
+from observatory.forms.common import PromptEditForm, SensorEditForm
+from observatory.models.prompt import Prompt
+from observatory.models.sensor import Sensor
 
 
 @fixture(scope='function', params=['prompt', 'sensor'])

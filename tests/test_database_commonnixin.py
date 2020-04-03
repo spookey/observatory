@@ -1,6 +1,6 @@
 from pytest import mark
 
-from stats.database import CommonMixin, Model
+from observatory.database import CommonMixin, Model
 
 # pylint: disable=too-few-public-methods
 # pylint: disable=no-member

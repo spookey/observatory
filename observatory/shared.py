@@ -3,8 +3,8 @@ from logging import getLogger
 from flask import render_template
 from jinja2 import Markup
 
-from stats.lib.text import random_line
-from stats.start.environment import FMT_MOMENT, TAGLINES
+from observatory.lib.text import random_line
+from observatory.start.environment import FMT_MOMENT, TAGLINES
 
 LOG = getLogger(__name__)
 

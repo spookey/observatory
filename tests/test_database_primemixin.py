@@ -1,7 +1,7 @@
 from pytest import mark
 
-from stats.database import PrimeMixin
-from stats.start.extensions import DB
+from observatory.database import PrimeMixin
+from observatory.start.extensions import DB
 
 # pylint: disable=no-member
 # pylint: disable=too-few-public-methods

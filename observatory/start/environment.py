@@ -1,8 +1,8 @@
 from os import getenv, path
 
-from stats.lib.parse import parse_bool, parse_int
+from observatory.lib.parse import parse_bool, parse_int
 
-APP_NAME = 'stats'
+APP_NAME = 'observatory'
 MDL_NAME = __name__.split('.')[0]
 
 THIS_DIR = path.abspath(path.dirname(__file__))

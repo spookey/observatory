@@ -3,8 +3,8 @@ from datetime import datetime
 from pytest import mark, raises
 from sqlalchemy.exc import IntegrityError
 
-from stats.models.user import User
-from stats.start.environment import FMT_STRFTIME
+from observatory.models.user import User
+from observatory.start.environment import FMT_STRFTIME
 
 
 @mark.usefixtures('session')

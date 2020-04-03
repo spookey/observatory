@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from stats.start.environment import BACKLOG_DAYS, FMT_STRFTIME
+from observatory.start.environment import BACKLOG_DAYS, FMT_STRFTIME
 
 
 def epoch_seconds(stamp):

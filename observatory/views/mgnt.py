@@ -1,11 +1,11 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_required
 
-from stats.forms.common import PromptEditForm, SensorEditForm
-from stats.forms.mapper import MapperEditForm
-from stats.models.mapper import Mapper
-from stats.models.prompt import Prompt
-from stats.models.sensor import Sensor
+from observatory.forms.common import PromptEditForm, SensorEditForm
+from observatory.forms.mapper import MapperEditForm
+from observatory.models.mapper import Mapper
+from observatory.models.prompt import Prompt
+from observatory.models.sensor import Sensor
 
 BLUEPRINT_MGNT = Blueprint('mgnt', __name__)
 

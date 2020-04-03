@@ -1,7 +1,7 @@
 from pytest import mark
 
-from stats.database import NameMixin
-from stats.start.extensions import DB
+from observatory.database import NameMixin
+from observatory.start.extensions import DB
 
 # pylint: disable=no-member
 # pylint: disable=too-few-public-methods

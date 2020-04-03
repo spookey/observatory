@@ -1,7 +1,7 @@
 from jinja2 import Markup
 
-from stats.shared import tagline
-from stats.start.environment import TAGLINES
+from observatory.shared import tagline
+from observatory.start.environment import TAGLINES
 
 
 def test_tagline():

@@ -1,4 +1,4 @@
-from stats.lib.text import is_slugable, random_line
+from observatory.lib.text import is_slugable, random_line
 
 
 def test_is_slugable():

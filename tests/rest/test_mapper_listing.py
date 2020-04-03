@@ -3,8 +3,8 @@ from flask_restful import marshal
 from flask_restful.fields import Boolean, String, Url
 from pytest import mark
 
-from stats.models.mapper import Mapper
-from stats.rest.mapper import MapperListing
+from observatory.models.mapper import Mapper
+from observatory.rest.mapper import MapperListing
 
 ENDPOINT = 'api.mapper.listing'
 

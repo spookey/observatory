@@ -1,6 +1,6 @@
 from flask import url_for
 
-from stats.rest.generic import MapperSlugUrl
+from observatory.rest.generic import MapperSlugUrl
 
 
 def make_obj(**kwargs):

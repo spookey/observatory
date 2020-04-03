@@ -2,8 +2,8 @@ from enum import Enum
 
 from sqlalchemy import and_
 
-from stats.database import BaseModel, CreatedMixin
-from stats.start.extensions import DB
+from observatory.database import BaseModel, CreatedMixin
+from observatory.start.extensions import DB
 
 
 class EnumColor(Enum):

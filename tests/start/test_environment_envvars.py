@@ -1,7 +1,7 @@
 from importlib import reload
 from os import path
 
-from stats.start import environment
+from observatory.start import environment
 
 
 def test_database(monkeypatch):

@@ -1,7 +1,7 @@
-from stats.start.config import (
+from observatory.start.config import (
     BaseConfig, DevelopmentConfig, ProductionConfig, TestingConfig
 )
-from stats.start.environment import APP_NAME, FAVICON, HTML_LANG, TITLE
+from observatory.start.environment import APP_NAME, FAVICON, HTML_LANG, TITLE
 
 
 def test_base_config():

@@ -4,9 +4,9 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, logout_user
 from werkzeug.http import parse_authorization_header
 
-from stats.forms.user import LoginForm
-from stats.models.user import User
-from stats.start.extensions import LOGIN_MANAGER
+from observatory.forms.user import LoginForm
+from observatory.models.user import User
+from observatory.start.extensions import LOGIN_MANAGER
 
 BLUEPRINT_USER = Blueprint('user', __name__)
 LOG = getLogger(__name__)

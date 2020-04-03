@@ -1,6 +1,6 @@
 from os import urandom
 
-from stats.start.config import secret_key
+from observatory.start.config import secret_key
 
 
 def test_key_read(tmpdir):

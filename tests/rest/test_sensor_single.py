@@ -3,8 +3,8 @@ from flask_restful import marshal
 from flask_restful.fields import DateTime, Float, Nested
 from pytest import mark
 
-from stats.models.point import Point
-from stats.rest.sensor import SensorSingle
+from observatory.models.point import Point
+from observatory.rest.sensor import SensorSingle
 
 ENDPOINT = 'api.sensor.single'
 

@@ -1,7 +1,7 @@
 from jinja2 import Markup
 
-from stats.shared import moment_config
-from stats.start.environment import FMT_MOMENT
+from observatory.shared import moment_config
+from observatory.start.environment import FMT_MOMENT
 
 
 def test_moment_config():

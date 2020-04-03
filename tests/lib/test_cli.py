@@ -1,6 +1,6 @@
 from pytest import fixture, mark
 
-from stats.models.user import User
+from observatory.models.user import User
 
 
 @fixture(scope='function')

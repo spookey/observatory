@@ -1,11 +1,11 @@
 from flask import Blueprint
 from flask_restful import Resource, abort, marshal
 
-from stats.models.mapper import Mapper
-from stats.models.prompt import Prompt
-from stats.models.sensor import Sensor
-from stats.rest.generic import GenericListing, mapper_listing, mapper_single
-from stats.start.extensions import REST
+from observatory.models.mapper import Mapper
+from observatory.models.prompt import Prompt
+from observatory.models.sensor import Sensor
+from observatory.rest.generic import GenericListing, mapper_listing, mapper_single
+from observatory.start.extensions import REST
 
 BP_REST_MAPPER = Blueprint('mapper', __name__)
 

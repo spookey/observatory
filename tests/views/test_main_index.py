@@ -1,7 +1,7 @@
 from flask import url_for
 from pytest import mark
 
-from stats.start.environment import TAGLINES, TITLE
+from observatory.start.environment import TAGLINES, TITLE
 
 ENDPOINT = 'main.index'
 

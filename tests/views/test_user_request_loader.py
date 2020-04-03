@@ -4,7 +4,7 @@ from pytest import mark
 from werkzeug.test import create_environ
 from werkzeug.wrappers import Request
 
-from stats.views.user import request_loader
+from observatory.views.user import request_loader
 from tests.conftest import USER_NAME, USER_PASS
 
 

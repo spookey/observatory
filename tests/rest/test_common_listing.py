@@ -3,8 +3,8 @@ from flask_restful import marshal
 from flask_restful.fields import String, Url
 from pytest import fixture, mark
 
-from stats.rest.prompt import PromptListing
-from stats.rest.sensor import SensorListing
+from observatory.rest.prompt import PromptListing
+from observatory.rest.sensor import SensorListing
 
 
 @fixture(scope='function', params=['prompt', 'sensor'])

@@ -3,9 +3,9 @@ from flask_restful import marshal
 from flask_restful.fields import Boolean, DateTime, String
 from pytest import mark
 
-from stats.models.mapper import Mapper
-from stats.rest.generic import MapperSlugUrl
-from stats.rest.mapper import MapperSingle
+from observatory.models.mapper import Mapper
+from observatory.rest.generic import MapperSlugUrl
+from observatory.rest.mapper import MapperSingle
 
 ENDPOINT = 'api.mapper.single'
 

@@ -5,7 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import BooleanField, PasswordField, StringField, SubmitField
 from wtforms.validators import DataRequired
 
-from stats.models.user import User
+from observatory.models.user import User
 
 LOG = getLogger(__name__)
 

@@ -2,9 +2,9 @@ from flask_wtf import FlaskForm
 from wtforms import BooleanField, SelectField, SubmitField
 from wtforms.validators import DataRequired
 
-from stats.models.mapper import EnumCast, EnumColor, EnumHorizon, Mapper
-from stats.models.prompt import Prompt
-from stats.models.sensor import Sensor
+from observatory.models.mapper import EnumCast, EnumColor, EnumHorizon, Mapper
+from observatory.models.prompt import Prompt
+from observatory.models.sensor import Sensor
 
 
 class MapperEditForm(FlaskForm):

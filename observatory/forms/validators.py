@@ -1,6 +1,6 @@
 from wtforms import ValidationError
 
-from stats.lib.text import is_slugable
+from observatory.lib.text import is_slugable
 
 # pylint: disable=too-few-public-methods
 

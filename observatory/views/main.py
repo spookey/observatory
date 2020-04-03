@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 
-from stats.shared import tagline
+from observatory.shared import tagline
 
 BLUEPRINT_MAIN = Blueprint('main', __name__)
 

@@ -1,7 +1,7 @@
 from flask import url_for
 from pytest import mark
 
-from stats.start.environment import FAVICON
+from observatory.start.environment import FAVICON
 
 FAV_URLS = ('/favicon.png', '/favicon.ico', '/logo.png')
 

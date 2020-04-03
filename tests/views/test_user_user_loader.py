@@ -1,7 +1,7 @@
 from pytest import mark
 
-from stats.models.user import User
-from stats.views.user import user_loader
+from observatory.models.user import User
+from observatory.views.user import user_loader
 
 
 @mark.usefixtures('session')

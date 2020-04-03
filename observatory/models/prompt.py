@@ -1,4 +1,4 @@
-from stats.database import CommonMixin, CreatedMixin, Model
+from observatory.database import CommonMixin, CreatedMixin, Model
 
 # pylint: disable=too-many-ancestors
 

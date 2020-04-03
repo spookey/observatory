@@ -1,11 +1,11 @@
 {
-  "name": "stats",
+  "name": "observatory",
   "version": "0.0.0",
   "description": "c[_]",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/spookey/dz_stats_page.git"
+    "url": "git+https://github.com/spookey/observatory.git"
   },
   "license": "MIT",
   "dependencies": {

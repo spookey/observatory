@@ -1,10 +1,10 @@
 from flask import Blueprint
 
-from stats.models.prompt import Prompt
-from stats.rest.generic import (
+from observatory.models.prompt import Prompt
+from observatory.rest.generic import (
     CommonSingle, GenericListing, common_listing, common_single
 )
-from stats.start.extensions import REST
+from observatory.start.extensions import REST
 
 BP_REST_PROMPT = Blueprint('prompt', __name__)
 

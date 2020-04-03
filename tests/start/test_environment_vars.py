@@ -1,12 +1,12 @@
-from stats.start.environment import APP_NAME, ERROR_CODES, MDL_NAME
+from observatory.start.environment import APP_NAME, ERROR_CODES, MDL_NAME
 
 
 def test_appname():
-    assert APP_NAME == 'stats'
+    assert APP_NAME == 'observatory'
 
 
 def test_modulename():
-    assert MDL_NAME == 'stats'
+    assert MDL_NAME == 'observatory'
 
 
 def test_errorcodes():

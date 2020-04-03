@@ -2,8 +2,8 @@ from datetime import datetime
 
 from pytest import mark
 
-from stats.database import CreatedMixin, Model
-from stats.start.environment import FMT_STRFTIME
+from observatory.database import CreatedMixin, Model
+from observatory.start.environment import FMT_STRFTIME
 
 # pylint: disable=too-few-public-methods
 # pylint: disable=no-member

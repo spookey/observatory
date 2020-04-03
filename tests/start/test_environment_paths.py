@@ -1,6 +1,6 @@
 from os import path
 
-from stats.start.environment import BASE_DIR, MIGR_DIR, ROOT_DIR, THIS_DIR
+from observatory.start.environment import BASE_DIR, MIGR_DIR, ROOT_DIR, THIS_DIR
 
 TEST_DIR = path.abspath(path.dirname(path.dirname(__file__)))
 
@@ -10,11 +10,11 @@ def test_rootdir():
 
 
 def test_basedir():
-    assert BASE_DIR == path.join(path.dirname(TEST_DIR), 'stats')
+    assert BASE_DIR == path.join(path.dirname(TEST_DIR), 'observatory')
 
 
 def test_thisdir():
-    assert THIS_DIR == path.join(path.dirname(TEST_DIR), 'stats', 'start')
+    assert THIS_DIR == path.join(path.dirname(TEST_DIR), 'observatory', 'start')
 
 
 def test_migratedir():

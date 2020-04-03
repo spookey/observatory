@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 
 from pytest import fixture
 
-from stats.models.point import Point
-from stats.start.environment import BACKLOG_DAYS
+from observatory.models.point import Point
+from observatory.start.environment import BACKLOG_DAYS
 
 
 @fixture(scope='function')

@@ -1,7 +1,7 @@
 from pytest import mark
 
-from stats.models.point import Point
-from stats.models.sensor import Sensor
+from observatory.models.point import Point
+from observatory.models.sensor import Sensor
 
 
 def _pointsort(points):

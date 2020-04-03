@@ -1,7 +1,7 @@
 from pytest import mark
 
-from stats.start.environment import MIGR_DIR
-from stats.start.extensions import (
+from observatory.start.environment import MIGR_DIR
+from observatory.start.extensions import (
     BCRYPT, CSRF_PROTECT, DB, LOGIN_MANAGER, MIGRATE, REST
 )
 

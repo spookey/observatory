@@ -2,9 +2,9 @@ from datetime import datetime
 
 from pytest import mark
 
-from stats.models.point import Point
-from stats.models.sensor import Sensor
-from stats.start.environment import FMT_STRFTIME
+from observatory.models.point import Point
+from observatory.models.sensor import Sensor
+from observatory.start.environment import FMT_STRFTIME
 
 
 @mark.usefixtures('session')

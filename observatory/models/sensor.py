@@ -1,8 +1,8 @@
 from logging import getLogger
 
-from stats.database import CommonMixin, CreatedMixin, Model
-from stats.models.point import Point
-from stats.start.extensions import DB
+from observatory.database import CommonMixin, CreatedMixin, Model
+from observatory.models.point import Point
+from observatory.start.extensions import DB
 
 LOG = getLogger(__name__)
 

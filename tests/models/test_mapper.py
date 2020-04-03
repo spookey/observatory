@@ -2,10 +2,10 @@ from datetime import datetime
 
 from pytest import mark
 
-from stats.models.mapper import EnumCast, EnumColor, EnumHorizon, Mapper
-from stats.models.prompt import Prompt
-from stats.models.sensor import Sensor
-from stats.start.environment import FMT_STRFTIME
+from observatory.models.mapper import EnumCast, EnumColor, EnumHorizon, Mapper
+from observatory.models.prompt import Prompt
+from observatory.models.sensor import Sensor
+from observatory.start.environment import FMT_STRFTIME
 
 
 @mark.usefixtures('session')

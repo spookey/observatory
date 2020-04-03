@@ -1,9 +1,9 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 
-from stats.database import CreatedMixin, Model
-from stats.lib.clock import is_outdated
-from stats.start.environment import BACKLOG_DAYS
-from stats.start.extensions import DB
+from observatory.database import CreatedMixin, Model
+from observatory.lib.clock import is_outdated
+from observatory.start.environment import BACKLOG_DAYS
+from observatory.start.extensions import DB
 
 # pylint: disable=no-member
 # pylint: disable=too-many-ancestors

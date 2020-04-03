@@ -4,11 +4,11 @@ from flask_restful import marshal
 from flask_restful.fields import DateTime, Float, Nested, String, Url
 from flask_restful.reqparse import RequestParser
 
-from stats.models.sensor import Sensor
-from stats.rest.generic import (
+from observatory.models.sensor import Sensor
+from observatory.rest.generic import (
     DT_FORMAT, CommonSingle, GenericListing, common_listing, common_single
 )
-from stats.start.extensions import REST
+from observatory.start.extensions import REST
 
 BP_REST_SENSOR = Blueprint('sensor', __name__)
 
