@@ -40,4 +40,4 @@ class MapperSingle(Resource):
         return marshal(
             self.object_or_abort(prompt_slug, sensor_slug),
             self.SINGLE_GET
-        )
+        ), 200

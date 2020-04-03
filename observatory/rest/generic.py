@@ -77,7 +77,7 @@ class GenericListing(Resource):
     LISTING_GET = None
 
     def get(self):
-        return marshal(self.Model.query.all(), self.LISTING_GET)
+        return marshal(self.Model.query.all(), self.LISTING_GET), 200
 
 
 class CommonSingle(Resource):
@@ -91,4 +91,4 @@ class CommonSingle(Resource):
         return obj
 
     def get(self, slug):
-        return marshal(self.common_or_abort(slug), self.SINGLE_GET)
+        return marshal(self.common_or_abort(slug), self.SINGLE_GET), 200
