@@ -19,18 +19,23 @@ class Sensor(CommonMixin, CreatedMixin, Model):
         lazy=True,
     )
 
-    @classmethod
-    def query_points_outdated(cls):
-        return Point.query_outdated(Point.query.join(cls))
+    @property
+    def query_points(self):
+        return Point.query.with_parent(self).order_by(Point.created.desc())
 
-    @classmethod
-    def cleanup(cls):
-        query = cls.query_points_outdated()
+    @property
+    def query_points_outdated(self):
+        return Point.query_outdated(self.query_points)
+
+    def cleanup(self):
+        query = self.query_points_outdated
         LOG.info('cleanup "%d" outdated points', query.count())
 
-        for point in query.all():
-            point.delete()
+        return all(point.delete() for point in query.all())
 
     def append(self, value):
         self.cleanup()
         return Point.create(sensor=self, value=value)
+
+    def latest(self):
+        return self.query_points.first()

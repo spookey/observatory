@@ -14,17 +14,21 @@ def _pointsort(points):
 class TestSensor:
 
     @staticmethod
-    def test_points_field(gen_sensor):
+    def test_points_field_and_query(gen_sensor):
         sensor = gen_sensor(slug='test')
 
         assert sensor.points == []
+        assert sensor.query_points.all() == []
+        assert sensor.query_points.count() == 0
+        assert sensor.query_points.first() is None
 
     @staticmethod
-    def test_backref_ordered(gen_sensor, gen_points_batch):
+    def test_points_ordered(gen_sensor, gen_points_batch):
         sensor = gen_sensor()
         _, _, points = gen_points_batch(sensor)
 
         assert sensor.points == _pointsort(points)
+        assert sensor.query_points.all() == _pointsort(points)
 
     @staticmethod
     def test_delete_cascade_orphan(gen_sensor):
@@ -47,7 +51,7 @@ class TestSensor:
         assert Point.query.all() == []
 
     @staticmethod
-    def test_delete_cascade_others(gen_sensor):
+    def test_delete_cascade_keep_others(gen_sensor):
         keep_sensor = gen_sensor('keep')
         drop_sensor = gen_sensor('drop')
 
@@ -74,7 +78,7 @@ class TestSensor:
         olds, _, complete = gen_points_batch(sensor)
 
         assert sensor.points == _pointsort(complete)
-        assert sensor.query_points_outdated().all() == _pointsort(olds)
+        assert sensor.query_points_outdated.all() == _pointsort(olds)
 
     @staticmethod
     def test_cleanup(gen_sensor, gen_points_batch):
@@ -82,7 +86,7 @@ class TestSensor:
         _, _, complete = gen_points_batch(sensor, old=5, new=0)
 
         assert sensor.points == _pointsort(complete)
-        sensor.cleanup()
+        assert sensor.cleanup()
 
         assert sensor.points == []
 
@@ -90,9 +94,10 @@ class TestSensor:
     def test_append(gen_sensor):
         sensor = gen_sensor()
         assert Point.query.count() == 0
-        sensor.append(42)
+        point = sensor.append(value=42)
         assert Point.query.count() == 1
         assert Point.query.all() == sensor.points
+        assert Point.query.first() == point
 
     @staticmethod
     def test_append_cleanup(gen_sensor, gen_points_batch):
@@ -104,3 +109,16 @@ class TestSensor:
 
         assert point.sensor == sensor
         assert sensor.points == [point]
+
+    @staticmethod
+    def test_latest_empty(gen_sensor):
+        sensor = gen_sensor()
+
+        assert sensor.latest() is None
+
+    @staticmethod
+    def test_latest(gen_sensor, gen_points_batch):
+        sensor = gen_sensor()
+        _, _, complete = gen_points_batch(sensor, old=5, new=0)
+
+        assert sensor.latest() == _pointsort(complete)[0]
