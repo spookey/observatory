@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_login import login_required
-from flask_restful import marshal
+from flask_restful import abort, marshal
 from flask_restful.fields import DateTime, Float, Nested, String, Url
 from flask_restful.reqparse import RequestParser
 
@@ -38,11 +38,13 @@ class SensorSingle(CommonSingle):
     SINGLE_POST = {
         'slug': String(),
         'url': Url('api.sensor.single', absolute=True),
+        'value': Float(attribute='latest.value'),
     }
 
     @login_required
     def post(self, slug):
         args = self.parse()
         sensor = self.common_or_abort(slug)
-        sensor.append(args.value)
+        if not sensor.append(args.value):
+            abort(500, error=f'Could not add {args.value} to {slug}')
         return marshal(sensor, self.SINGLE_POST), 201

@@ -77,7 +77,7 @@
 
 {% macro show_sensor(sensor, endpoint) %}
 {% call() show_common(sensor, endpoint) %}
-{% with points = sensor.query_points %}
+{% with amount = sensor.query_points.count() %}
 <div class="level">
   <div class="level-left">
     <div class="level-item has-text-centered">
@@ -88,11 +88,11 @@
   </div>
   <div class="level-right">
     <div class="level-item has-text-centered">
-      {{ points.count() }}
+      {{ amount }}
     </div>
   </div>
 </div>
-{% if points.count() %}
+{% if amount %}
 <div class="level">
   <div class="level-left">
     <div class="level-item has-text-centered">
@@ -103,11 +103,9 @@
   </div>
   <div class="level-right">
     <div class="level-item has-text-centered">
-      {% with latest = points.first() %}
-      {% if latest %}
-        {{ time_rel(latest.created_epoch_ms, latest.created_fmt) }}
+      {% if sensor.latest %}
+      {{ time_rel(sensor.latest.created_epoch_ms, sensor.latest.created_fmt) }}
       {% endif %}
-      {% endwith %}
     </div>
   </div>
 </div>

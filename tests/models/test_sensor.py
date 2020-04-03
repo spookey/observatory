@@ -81,6 +81,23 @@ class TestSensor:
         assert sensor.query_points_outdated.all() == _pointsort(olds)
 
     @staticmethod
+    def test_latest_empty(gen_sensor):
+        sensor = gen_sensor()
+
+        assert sensor.points == []
+        assert sensor.query_points.all() == []
+        assert sensor.latest is None
+
+    @staticmethod
+    def test_latest(gen_sensor, gen_points_batch):
+        sensor = gen_sensor()
+        _, _, complete = gen_points_batch(sensor, old=5, new=0)
+
+        assert sensor.points == _pointsort(complete)
+        assert sensor.query_points.all() == _pointsort(complete)
+        assert sensor.latest == _pointsort(complete)[0]
+
+    @staticmethod
     def test_cleanup(gen_sensor, gen_points_batch):
         sensor = gen_sensor()
         _, _, complete = gen_points_batch(sensor, old=5, new=0)
@@ -109,16 +126,3 @@ class TestSensor:
 
         assert point.sensor == sensor
         assert sensor.points == [point]
-
-    @staticmethod
-    def test_latest_empty(gen_sensor):
-        sensor = gen_sensor()
-
-        assert sensor.latest() is None
-
-    @staticmethod
-    def test_latest(gen_sensor, gen_points_batch):
-        sensor = gen_sensor()
-        _, _, complete = gen_points_batch(sensor, old=5, new=0)
-
-        assert sensor.latest() == _pointsort(complete)[0]
