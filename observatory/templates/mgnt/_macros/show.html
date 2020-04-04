@@ -77,7 +77,7 @@
 
 {% macro show_sensor(sensor, endpoint) %}
 {% call() show_common(sensor, endpoint) %}
-{% with amount = sensor.query_points.count() %}
+{% with amount = sensor.length %}
 <div class="level">
   <div class="level-left">
     <div class="level-item has-text-centered">

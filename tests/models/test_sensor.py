@@ -81,6 +81,20 @@ class TestSensor:
         assert sensor.query_points_outdated.all() == _pointsort(olds)
 
     @staticmethod
+    def test_length(gen_sensor):
+        sensor = gen_sensor()
+        assert sensor.length == 0
+
+        points = []
+        for num in range(1, 5):
+            points.append(Point.create(sensor=sensor, value=num))
+            assert sensor.length == num
+            assert sensor.points == _pointsort(points)
+
+        assert all(point.delete() for point in points)
+        assert sensor.length == 0
+
+    @staticmethod
     def test_latest_empty(gen_sensor):
         sensor = gen_sensor()
 

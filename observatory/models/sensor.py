@@ -28,6 +28,10 @@ class Sensor(CommonMixin, CreatedMixin, Model):
         return Point.query_outdated(self.query_points)
 
     @property
+    def length(self):
+        return self.query_points.count()
+
+    @property
     def latest(self):
         return self.query_points.first()
 
