@@ -43,8 +43,7 @@ class TestCommonSingle:
     @staticmethod
     def test_get_empty(_comm, visitor):
         res = visitor(_comm.endpoint, params={'slug': 'wrong'}, code=404)
-        err = res.json.get('error', None)
-        assert 'not present' in err.lower()
+        assert 'not present' in res.json['message'].lower()
 
     @staticmethod
     def test_get_single(_comm, visitor):

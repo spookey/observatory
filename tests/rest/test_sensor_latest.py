@@ -38,15 +38,13 @@ class TestSensorLatest:
     @staticmethod
     def test_sensor_empty(visitor):
         res = visitor(ENDPOINT, params={'slug': 'wrong'}, code=404)
-
-        assert 'not present' in res.json['error'].lower()
+        assert 'not present' in res.json['message'].lower()
 
     @staticmethod
     def test_latest_empty(visitor, gen_sensor):
         sensor = gen_sensor()
         res = visitor(ENDPOINT, params={'slug': sensor.slug}, code=500)
-
-        assert 'no values' in res.json['error'].lower()
+        assert 'no values' in res.json['message'].lower()
 
     @staticmethod
     def test_latest(visitor, gen_sensor):

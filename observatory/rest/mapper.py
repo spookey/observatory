@@ -33,7 +33,9 @@ class MapperSingle(Resource):
             sensor=Sensor.by_slug(sensor_slug),
         )
         if not obj:
-            abort(404, error=f'Mapper {prompt_slug} {sensor_slug} not present')
+            abort(
+                404, message=f'Mapper {prompt_slug} {sensor_slug} not present'
+            )
         return obj
 
     def get(self, prompt_slug, sensor_slug):

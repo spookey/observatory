@@ -45,8 +45,7 @@ class TestMapperSingle:
         res = visitor(ENDPOINT, params={
             'prompt_slug': 'prompt_test', 'sensor_slug': 'sensor_test',
         }, code=404)
-        err = res.json.get('error', None)
-        assert 'not present' in err.lower()
+        assert 'not present' in res.json['message'].lower()
 
     @staticmethod
     def test_get_listing(visitor, gen_prompt, gen_sensor):

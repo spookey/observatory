@@ -83,7 +83,7 @@ class TestSensorSingle:
             ENDPOINT, params={'slug': sensor.slug},
             method='post', data={'value': 23}, code=500,
         )
-        assert 'could not add' in res.json['error'].lower()
+        assert 'could not add' in res.json['message'].lower()
 
     @staticmethod
     @mark.parametrize('_value', [23.42, -1337, 0, float('inf')])

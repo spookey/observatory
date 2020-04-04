@@ -47,7 +47,7 @@ class SensorSingle(CommonSingle):
         args = self.parse()
         sensor = self.common_or_abort(slug)
         if not sensor.append(args.value):
-            abort(500, error=f'Could not add {args.value} to {slug}')
+            abort(500, message=f'Could not add {args.value} to {slug}')
         return marshal(sensor, self.SINGLE_POST), 201
 
 
@@ -67,5 +67,5 @@ class SensorLatest(CommonSingle):
         sensor = self.common_or_abort(slug)
         latest = sensor.latest
         if not latest:
-            abort(500, error=f'No values for {slug}')
+            abort(500, message=f'No values for {slug}')
         return marshal(latest, self.SINGLE_GET), 200

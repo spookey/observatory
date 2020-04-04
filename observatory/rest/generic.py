@@ -96,7 +96,7 @@ class CommonSingle(Resource):
     def common_or_abort(self, slug):
         obj = self.Model.by_slug(slug)
         if not obj:
-            abort(404, error=f'{self.Model.__name__} {slug} not present')
+            abort(404, message=f'{self.Model.__name__} {slug} not present')
         return obj
 
     def get(self, slug):
