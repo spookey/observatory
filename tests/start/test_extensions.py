@@ -43,5 +43,7 @@ class TestExtensions:
     def test_for_rest(app):
         assert REST is not None
         assert REST.prefix == '/api'
+        assert REST.decorators == [CSRF_PROTECT.exempt]
+        assert REST.serve_challenge_on_401 is True
         for ep in REST.endpoints:
             assert ep in app.view_functions

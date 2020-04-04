@@ -12,4 +12,8 @@ CSRF_PROTECT = CSRFProtect()
 DB = SQLAlchemy()
 LOGIN_MANAGER = LoginManager()
 MIGRATE = Migrate(directory=MIGR_DIR)
-REST = Api(prefix='/api', decorators=[CSRF_PROTECT.exempt])
+REST = Api(
+    decorators=[CSRF_PROTECT.exempt],
+    prefix='/api',
+    serve_challenge_on_401=True,
+)

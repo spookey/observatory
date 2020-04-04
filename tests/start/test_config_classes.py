@@ -12,6 +12,7 @@ def test_base_config():
     assert conf.DEBUG is False
     assert conf.FAVICON == FAVICON
     assert conf.HTML_LANG == HTML_LANG
+    assert conf.HTTP_BASIC_AUTH_REALM == TITLE
     assert conf.SECRET_KEY and isinstance(conf.SECRET_KEY, (str, bytes))
     assert conf.TESTING is False
     assert conf.TITLE == TITLE
