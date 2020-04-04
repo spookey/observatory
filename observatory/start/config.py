@@ -26,14 +26,15 @@ class BaseConfig:
     DEBUG = False
     FAVICON = FAVICON
     HTML_LANG = HTML_LANG
-    HTTP_BASIC_AUTH_REALM = TITLE
-    RESTFUL_JSON = {'indent': None, 'sort_keys': True}
     SECRET_KEY = secret_key()
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TESTING = False
     TITLE = TITLE
     WTF_CSRF_ENABLED = True
     WTF_CSRF_SSL_STRICT = CSRF_STRICT
+
+    HTTP_BASIC_AUTH_REALM = TITLE
+    RESTFUL_JSON = {'indent': None, 'sort_keys': True}
 
 
 class DevelopmentConfig(BaseConfig):
