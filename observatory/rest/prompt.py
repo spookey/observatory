@@ -12,7 +12,7 @@ BP_REST_PROMPT = Blueprint('prompt', __name__)
 @REST.resource('/prompt', endpoint='api.prompt.listing')
 class PromptListing(GenericListing):
     Model = Prompt
-    LISTING_GET = common_listing('api.prompt.single')
+    LISTING_GET = common_listing(endpoint='api.prompt.single')
 
 
 @REST.resource('/prompt/<string:slug>', endpoint='api.prompt.single')

@@ -1,6 +1,8 @@
+from datetime import datetime, timedelta
+
 from flask import url_for
 from flask_restful import marshal
-from flask_restful.fields import DateTime, Float, Nested, String, Url
+from flask_restful.fields import DateTime, Float, Integer, Nested, String, Url
 from pytest import mark
 
 from observatory.models.point import Point
@@ -13,12 +15,15 @@ ENDPOINT = 'api.sensor.single'
 class TestSensorSingle:
 
     @staticmethod
-    def test_point_marshal():
+    def test_get_marshal():
         mdef = SensorSingle.SINGLE_GET
-        assert isinstance(mdef['points'], Nested)
-        nest = mdef['points'].nested
-        assert isinstance(nest['value'], Float)
-        stamp = nest['stamp']
+        assert isinstance(mdef['length'], Integer)
+        latest = mdef['latest']
+        assert isinstance(latest, Nested)
+        assert latest.default == {}
+        lnst = latest.nested
+        assert isinstance(lnst['value'], Float)
+        stamp = lnst['stamp']
         assert isinstance(stamp, DateTime)
         assert stamp.dt_format == 'iso8601'
         assert stamp.attribute == 'created'
@@ -34,13 +39,38 @@ class TestSensorSingle:
         assert url.endpoint == 'api.sensor.single'
 
     @staticmethod
+    def test_no_point(visitor, gen_sensor):
+        sensor = gen_sensor()
+        res = visitor(ENDPOINT, params={'slug': sensor.slug})
+        assert res.json == marshal(sensor, SensorSingle.SINGLE_GET)
+        assert res.json['latest'] == {}
+
+    @staticmethod
     def test_get_with_point(visitor, gen_sensor):
         sensor = gen_sensor()
         point = Point.create(sensor=sensor, value=23.42)
 
         res = visitor(ENDPOINT, params={'slug': sensor.slug})
         assert res.json == marshal(sensor, SensorSingle.SINGLE_GET)
-        assert res.json['points'][-1]['value'] == point.value
+        assert res.json['latest']['value'] == point.value
+
+    @staticmethod
+    def test_latest(visitor, gen_sensor):
+        now = datetime.utcnow()
+        sensor = gen_sensor()
+
+        old = Point.create(
+            sensor=sensor, value=0, created=(now - timedelta(days=1))
+        )
+        new = Point.create(
+            sensor=sensor, value=1, created=(now + timedelta(days=1))
+        )
+        assert sensor.points == [new, old]
+        assert sensor.latest == new
+
+        res = visitor(ENDPOINT, params={'slug': sensor.slug}, code=200)
+        assert res.json['latest']['stamp'] == new.created.isoformat()
+        assert res.json['latest']['value'] == new.value
 
     @staticmethod
     def test_post_not_logged_in(visitor, gen_sensor):

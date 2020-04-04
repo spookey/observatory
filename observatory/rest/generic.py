@@ -1,5 +1,7 @@
 from flask_restful import Resource, abort, marshal
-from flask_restful.fields import Boolean, DateTime, String, Url
+from flask_restful.fields import (
+    Boolean, DateTime, Float, Integer, Nested, String, Url
+)
 
 
 class SlugUrl(Url):
@@ -31,21 +33,21 @@ class MapperSlugUrl(Url):
 
 DT_FORMAT = 'iso8601'
 
-COMMON_BASE = {
-    'slug': String(),
-    'title': String(),
-}
-MAPPER_BASE = {
-    'prompt': String(attribute='prompt.slug'),
-    'sensor': String(attribute='sensor.slug'),
-    'active': Boolean(),
-}
+COMMON_BASE = dict(
+    slug=String(),
+    title=String(),
+)
+MAPPER_BASE = dict(
+    prompt=String(attribute='prompt.slug'),
+    sensor=String(attribute='sensor.slug'),
+    active=Boolean(),
+)
 
 
-def common_listing(single_ep):
+def common_listing(endpoint):
     return dict(
         COMMON_BASE,
-        url=Url(endpoint=single_ep, absolute=True),
+        url=Url(endpoint=endpoint, absolute=True),
     )
 
 
@@ -79,6 +81,18 @@ def mapper_single():
             attribute='sensor', endpoint='api.sensor.single', absolute=True,
         ),
     )
+
+
+def sensor_single(nest_name, nest_default):
+    res = common_single(length=Integer())
+    res[nest_name] = Nested(
+        default=nest_default,
+        nested=dict(
+            value=Float(),
+            stamp=DateTime(dt_format=DT_FORMAT, attribute='created'),
+        ),
+    )
+    return res
 
 
 class GenericListing(Resource):
