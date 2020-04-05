@@ -148,7 +148,7 @@ sortt: $(CMD_ISORT)
 
 
 define _test
-	$(CMD_PYTEST) $(1) "$(DIR_TESTS)" -vv
+	$(CMD_PYTEST) -vv $(1) "$(DIR_TESTS)"
 endef
 define _tcov
 	$(call _test,$(1) --cov="$(DIR_OBVTY)")
