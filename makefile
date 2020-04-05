@@ -20,6 +20,7 @@ CMD_PYREV	:=	$(DIR_VENV)/bin/pyreverse
 CMD_PYTEST	:=	$(DIR_VENV)/bin/pytest
 
 DIR_OBVTY	:=	observatory
+DIR_STUFF	:=	stuff
 DIR_TESTS	:=	tests
 
 DIR_STATIC	:=	$(DIR_OBSVTY)/static
@@ -117,11 +118,13 @@ define _lint
 			$(1)
 endef
 
-.PHONY: lint lintt
+.PHONY: lint lintt lints
 lint: $(CMD_PYLINT)
 	$(call _lint,"$(DIR_OBVTY)")
 lintt: $(CMD_PYLINT)
 	$(call _lint,"$(DIR_TESTS)")
+lints: $(CMD_PYLINT)
+	$(call _lint,"$(DIR_STUFF)")
 
 
 define _reverse
@@ -134,22 +137,26 @@ define _reverse
 			$(1)
 endef
 
-.PHONY: plot plott
+.PHONY: plot plott plots
 plot: $(CMD_PYREV)
 	$(call _reverse,$(DIR_OBVTY))
 plott: $(CMD_PYREV)
 	$(call _reverse,$(DIR_TESTS),_$(DIR_OBVTY))
+plots: $(CMD_PYREV)
+	$(call _reverse,$(DIR_STUFF),_$(DIR_OBVTY))
 
 
 define _sort
 	$(CMD_ISORT) -cs -fss -m=5 -y -rc $(1)
 endef
 
-.PHONY: sort sortt
+.PHONY: sort sortt sorts
 sort: $(CMD_ISORT)
 	$(call _sort,"$(DIR_OBVTY)")
 sortt: $(CMD_ISORT)
 	$(call _sort,"$(DIR_TESTS)")
+sorts: $(CMD_ISORT)
+	$(call _sort,"$(DIR_STUFF)")
 
 
 define _test
