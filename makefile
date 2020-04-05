@@ -54,6 +54,11 @@ help:
 	@echo "shell            launch a shell"
 	@echo "routes           show flask routes"
 	@echo
+	@echo "db-init          create migration folder (only needed once)"
+	@echo "db-mig           create new db revision"
+	@echo "db-up            apply db revision upwards"
+	@echo "db-down          apply db revision downwards"
+	@echo
 	@echo "cli-adduser      add a new user"
 	@echo "cli-setpass      set password of user"
 	@echo "cli-setstate-..  toggle active/blocked of user"
@@ -156,7 +161,7 @@ endef
 
 HTMLCOV		:=	htmlcov
 
-.PHONY: test tcov tcovh
+.PHONY: test tcov tcovh tcovh-open
 test: $(CMD_PYTEST)
 	$(call _test,--durations=5)
 tcov: $(CMD_PYTEST)
@@ -199,7 +204,7 @@ define _flask
 	$(CMD_FLASK) $(1)
 endef
 
-.PHONY: shell run routes
+.PHONY: run shell routes
 run: $(CMD_FLASK) $(OUT_STYLE) $(OUT_SCRIPT)
 	$(call _flask,run --host "$(_HOST)" --port "$(_PORT)")
 shell: $(CMD_FLASK)
@@ -211,14 +216,14 @@ routes: $(CMD_FLASK)
 ###
 # database
 
-.PHONY: dbinit dbmig dbup dbdown
-dbinit: $(CMD_FLASK)
+.PHONY: db-init db-mig db-up db-down
+db-init: $(CMD_FLASK)
 	$(call _flask,db init)
-dbmig: $(CMD_FLASK)
+db-mig: $(CMD_FLASK)
 	$(call _flask,db migrate)
-dbup: $(CMD_FLASK)
+db-up: $(CMD_FLASK)
 	$(call _flask,db upgrade)
-dbdown: $(CMD_FLASK)
+db-down: $(CMD_FLASK)
 	$(call _flask,db downgrade)
 
 
