@@ -38,9 +38,9 @@ COMMON_BASE = dict(
     title=String(),
 )
 MAPPER_BASE = dict(
+    active=Boolean(),
     prompt=String(attribute='prompt.slug'),
     sensor=String(attribute='sensor.slug'),
-    active=Boolean(),
 )
 
 
@@ -54,8 +54,8 @@ def common_listing(endpoint):
 def common_single(**extra):
     return dict(
         COMMON_BASE,
-        description=String(),
         created=DateTime(dt_format=DT_FORMAT),
+        description=String(),
         **extra,
     )
 
@@ -70,9 +70,9 @@ def mapper_listing():
 def mapper_single():
     return dict(
         MAPPER_BASE,
-        created=DateTime(dt_format=DT_FORMAT),
         cast=String(attribute='cast.name'),
         color=String(attribute='color.name'),
+        created=DateTime(dt_format=DT_FORMAT),
         horizon=String(attribute='horizon.name'),
         prompt_url=SlugUrl(
             attribute='prompt', endpoint='api.prompt.single', absolute=True,
@@ -80,6 +80,7 @@ def mapper_single():
         sensor_url=SlugUrl(
             attribute='sensor', endpoint='api.sensor.single', absolute=True,
         ),
+        sortkey=String(),
     )
 
 
@@ -100,7 +101,7 @@ class GenericListing(Resource):
     LISTING_GET = None
 
     def get(self):
-        return marshal(self.Model.query.all(), self.LISTING_GET), 200
+        return marshal(self.Model.query_sorted().all(), self.LISTING_GET), 200
 
 
 class CommonSingle(Resource):

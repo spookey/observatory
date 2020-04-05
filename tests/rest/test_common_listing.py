@@ -47,8 +47,8 @@ class TestCommonListing:
 
     @staticmethod
     def test_get_listing(_comm, visitor):
-        commons = [
-            _comm.gen(slug='one'), _comm.gen(slug='two'),
-        ]
+        one = _comm.gen(slug='one')
+        two = _comm.gen(slug='two')
+        commons = [two, one]  # newest first, query is ordered
         res = visitor(_comm.endpoint)
         assert res.json == marshal(commons, _comm.impl.LISTING_GET)

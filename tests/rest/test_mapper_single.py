@@ -28,6 +28,7 @@ class TestMapperSingle:
         created = mdef['created']
         assert isinstance(created, DateTime)
         assert created.dt_format == 'iso8601'
+        assert isinstance(mdef['sortkey'], String)
         assert isinstance(mdef['cast'], String)
         assert isinstance(mdef['color'], String)
         assert isinstance(mdef['horizon'], String)
