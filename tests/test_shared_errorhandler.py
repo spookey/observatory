@@ -1,3 +1,4 @@
+from flask import url_for
 from pytest import mark
 from werkzeug.exceptions import BadRequest, NotFound
 
@@ -28,3 +29,5 @@ def test_logging(caplog):
     msg = caplog.records[-1]
     assert str(error.code) in msg.message
     assert error.description in msg.message
+    assert 'GET' in msg.message
+    assert url_for('.index', _external=True) in msg.message

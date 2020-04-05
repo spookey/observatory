@@ -1,6 +1,6 @@
 from logging import getLogger
 
-from flask import render_template
+from flask import render_template, request
 from jinja2 import Markup
 
 from observatory.lib.text import random_line
@@ -11,8 +11,8 @@ LOG = getLogger(__name__)
 
 def errorhandler(error):
     LOG.error(
-        'handling error "%s" - "%s"',
-        error.code, error.description
+        'handling error "%s" - "%s" for "%s %s"',
+        error.code, error.description, request.method, request.url
     )
 
     return render_template(
