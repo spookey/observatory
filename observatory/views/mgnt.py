@@ -28,7 +28,7 @@ def view_mapper():
     return render_template(
         'mgnt/view.html',
         title='View mapping',
-        mapping=Mapper.query.all(),
+        mapping=Mapper.query_sorted().all(),
     )
 
 

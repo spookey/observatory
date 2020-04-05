@@ -107,6 +107,23 @@ class TestMapper:
         assert mapper.created_epoch_ms == 1000 * mapper.created_epoch
 
     @staticmethod
+    def test_query_sorted(gen_prompt, gen_sensor):
+        m_thr = Mapper.create(
+            sortkey=U_THR,
+            prompt=gen_prompt('thr'), sensor=gen_sensor('thr')
+        )
+        m_two = Mapper.create(
+            sortkey=U_TWO,
+            prompt=gen_prompt('two'), sensor=gen_sensor('two')
+        )
+        m_one = Mapper.create(
+            sortkey=U_ONE,
+            prompt=gen_prompt('one'), sensor=gen_sensor('one')
+        )
+        assert Mapper.query.all() == [m_thr, m_two, m_one]
+        assert Mapper.query_sorted().all() == [m_one, m_two, m_thr]
+
+    @staticmethod
     def test_above_below(gen_prompt, gen_sensor):
         p_one = gen_prompt('one')
         p_two = gen_prompt('two')

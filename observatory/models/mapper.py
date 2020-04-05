@@ -89,10 +89,15 @@ class Mapper(CreatedMixin, BaseModel):
             cls.sensor == sensor,
         )).first()
 
+    @classmethod
+    def query_sorted(cls, query=None):
+        query = query if query is not None else cls.query
+        return query.order_by(cls.sortkey.asc())
+
     def query_above(self, query=None):
-        query = query if query is not None else Mapper.query
-        return query.filter(Mapper.sortkey > self.sortkey)
+        query = query if query is not None else self.query
+        return self.query_sorted(query.filter(Mapper.sortkey > self.sortkey))
 
     def query_below(self, query=None):
-        query = query if query is not None else Mapper.query
-        return query.filter(Mapper.sortkey < self.sortkey)
+        query = query if query is not None else self.query
+        return self.query_sorted(query.filter(Mapper.sortkey < self.sortkey))
