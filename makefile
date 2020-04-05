@@ -133,7 +133,7 @@ endef
 plot: $(CMD_PYREV)
 	$(call _reverse,$(DIR_OBVTY))
 plott: $(CMD_PYREV)
-	$(call _reverse,$(DIR_TESTS),_$(DIR_SHORTER))
+	$(call _reverse,$(DIR_TESTS),_$(DIR_OBVTY))
 
 
 define _sort
