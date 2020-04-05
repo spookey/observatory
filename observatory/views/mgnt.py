@@ -38,7 +38,7 @@ def view_prompt():
     return render_template(
         'mgnt/view.html',
         title='View prompts',
-        prompts=Prompt.query.all(),
+        prompts=Prompt.query_sorted().all(),
     )
 
 
@@ -48,7 +48,7 @@ def view_sensor():
     return render_template(
         'mgnt/view.html',
         title='View sensors',
-        sensors=Sensor.query.all(),
+        sensors=Sensor.query_sorted().all(),
     )
 
 

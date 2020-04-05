@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from pytest import mark
 
@@ -41,3 +41,12 @@ class TestCreatedMixin:
         crt = CreatedMixinPhony.create(_commit=True)
 
         assert crt.created_fmt == crt.created.strftime(FMT_STRFTIME)
+
+    @staticmethod
+    def test_query_sorted():
+        now = datetime.utcnow()
+        old = CreatedMixinPhony.create(created=(now + timedelta(days=-1)))
+        new = CreatedMixinPhony.create(created=(now + timedelta(days=+1)))
+
+        assert CreatedMixinPhony.query.all() == [old, new]
+        assert CreatedMixinPhony.query_sorted().all() == [new, old]

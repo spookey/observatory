@@ -94,6 +94,11 @@ class CreatedMixin:
     def created_epoch_ms(self):
         return epoch_milliseconds(self.created)
 
+    @classmethod
+    def query_sorted(cls, query=None):
+        query = query if query is not None else cls.query
+        return query.order_by(cls.created.desc())
+
 
 class BaseModel(CRUDMixin, NameMixin, DB.Model):
     __abstract__ = True
