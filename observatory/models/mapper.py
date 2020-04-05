@@ -1,8 +1,10 @@
 from enum import Enum
+from uuid import uuid4
 
 from sqlalchemy import and_
 
 from observatory.database import BaseModel, CreatedMixin
+from observatory.models.types.dbuuid import DBuuid
 from observatory.start.extensions import DB
 
 
@@ -42,6 +44,9 @@ class Mapper(CreatedMixin, BaseModel):
     active = DB.Column(
         DB.Boolean(), nullable=False, default=True
     )
+    sortkey = DB.Column(
+        DBuuid(), nullable=False, unique=True, default=uuid4
+    )
     cast = DB.Column(
         DB.Enum(EnumCast), nullable=False, default=EnumCast.NATURAL
     )
@@ -57,7 +62,7 @@ class Mapper(CreatedMixin, BaseModel):
         primaryjoin='Mapper.prompt_prime == Prompt.prime',
         backref=DB.backref(
             'mapping',
-            order_by='Mapper.created.desc()',
+            order_by='Mapper.sortkey.asc()',
             cascade='all,delete-orphan',
             lazy=True,
         ),
@@ -69,7 +74,7 @@ class Mapper(CreatedMixin, BaseModel):
         primaryjoin='Mapper.sensor_prime == Sensor.prime',
         backref=DB.backref(
             'mapping',
-            order_by='Mapper.created.desc()',
+            order_by='Mapper.sortkey.asc()',
             cascade='all,delete-orphan',
             lazy=True,
         ),
@@ -83,3 +88,11 @@ class Mapper(CreatedMixin, BaseModel):
             cls.prompt == prompt,
             cls.sensor == sensor,
         )).first()
+
+    def query_above(self, query=None):
+        query = query if query is not None else Mapper.query
+        return query.filter(Mapper.sortkey > self.sortkey)
+
+    def query_below(self, query=None):
+        query = query if query is not None else Mapper.query
+        return query.filter(Mapper.sortkey < self.sortkey)

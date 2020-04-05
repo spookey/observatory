@@ -1,4 +1,5 @@
 from datetime import datetime
+from uuid import UUID
 
 from pytest import mark
 
@@ -6,6 +7,10 @@ from observatory.models.mapper import EnumCast, EnumColor, EnumHorizon, Mapper
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
 from observatory.start.environment import FMT_STRFTIME
+
+U_ONE = UUID('11111111-1111-4111-1111-111111111111')
+U_TWO = UUID('22222222-2222-4222-2222-222222222222')
+U_THR = UUID('33333333-3333-4333-3333-333333333333')
 
 
 @mark.usefixtures('session')
@@ -23,9 +28,12 @@ class TestMapper:
         assert mapper.prompt == prompt
         assert mapper.sensor == sensor
         assert mapper.active is True
+        assert mapper.sortkey is not None
         assert mapper.cast == EnumCast.NATURAL
         assert mapper.color == EnumColor.GRAY
         assert mapper.horizon == EnumHorizon.NORMAL
+
+        assert isinstance(mapper.sortkey, UUID)
 
     @staticmethod
     def test_by_commons(gen_prompt, gen_sensor):
@@ -97,3 +105,52 @@ class TestMapper:
             mapper.created - datetime.utcfromtimestamp(0)
         ).total_seconds()
         assert mapper.created_epoch_ms == 1000 * mapper.created_epoch
+
+    @staticmethod
+    def test_above_below(gen_prompt, gen_sensor):
+        p_one = gen_prompt('one')
+        p_two = gen_prompt('two')
+        s_one = gen_sensor('one')
+        s_two = gen_sensor('two')
+        m_one = Mapper.create(sortkey=U_ONE, prompt=p_one, sensor=s_one)
+        m_two = Mapper.create(sortkey=U_TWO, prompt=p_one, sensor=s_two)
+        m_thr = Mapper.create(sortkey=U_THR, prompt=p_two, sensor=s_two)
+
+        assert m_one.query_above().all() == [m_two, m_thr]
+        assert m_one.query_below().all() == []
+        assert m_two.query_above().all() == [m_thr]
+        assert m_two.query_below().all() == [m_one]
+        assert m_thr.query_above().all() == []
+        assert m_thr.query_below().all() == [m_one, m_two]
+
+        qp_one = Mapper.query.filter(Mapper.prompt == p_one)
+        assert m_one.query_above(qp_one).all() == [m_two]
+        assert m_one.query_below(qp_one).all() == []
+        assert m_two.query_above(qp_one).all() == []
+        assert m_two.query_below(qp_one).all() == [m_one]
+        assert m_thr.query_above(qp_one).all() == []
+        assert m_thr.query_below(qp_one).all() == [m_one, m_two]
+
+        qp_two = Mapper.query.filter(Mapper.prompt == p_two)
+        assert m_one.query_above(qp_two).all() == [m_thr]
+        assert m_one.query_below(qp_two).all() == []
+        assert m_two.query_above(qp_two).all() == [m_thr]
+        assert m_two.query_below(qp_two).all() == []
+        assert m_thr.query_above(qp_two).all() == []
+        assert m_thr.query_below(qp_two).all() == []
+
+        qs_one = Mapper.query.filter(Mapper.sensor == s_one)
+        assert m_one.query_above(qs_one).all() == []
+        assert m_one.query_below(qs_one).all() == []
+        assert m_two.query_above(qs_one).all() == []
+        assert m_two.query_below(qs_one).all() == [m_one]
+        assert m_thr.query_above(qs_one).all() == []
+        assert m_thr.query_below(qs_one).all() == [m_one]
+
+        qs_two = Mapper.query.filter(Mapper.sensor == s_two)
+        assert m_one.query_above(qs_two).all() == [m_two, m_thr]
+        assert m_one.query_below(qs_two).all() == []
+        assert m_two.query_above(qs_two).all() == [m_thr]
+        assert m_two.query_below(qs_two).all() == []
+        assert m_thr.query_above(qs_two).all() == []
+        assert m_thr.query_below(qs_two).all() == [m_two]
