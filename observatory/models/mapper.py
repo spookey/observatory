@@ -101,3 +101,25 @@ class Mapper(CreatedMixin, BaseModel):
     def query_below(self, query=None):
         query = query if query is not None else self.query
         return self.query_sorted(query.filter(Mapper.sortkey < self.sortkey))
+
+    @staticmethod
+    def __reorder(*elems):
+        return all(
+            mapper.update(sortkey=sortkey)
+            for mapper, sortkey in
+            zip(elems, sorted(uuid4() for _ in elems))
+        )
+
+    def raise_step(self):
+        above = self.query_above().all()
+        if not above:
+            return False
+        sibling, *tail = above
+        return self.__reorder(*self.query_below().all(), sibling, self, *tail)
+
+    def lower_step(self):
+        below = self.query_below().all()
+        if not below:
+            return False
+        *head, sibling = below
+        return self.__reorder(*head, self, sibling, *self.query_above().all())

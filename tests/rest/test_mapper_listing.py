@@ -1,4 +1,5 @@
 from uuid import uuid4
+
 from flask import url_for
 from flask_restful import marshal
 from flask_restful.fields import Boolean, String, Url
