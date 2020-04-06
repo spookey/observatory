@@ -2,7 +2,9 @@ from flask_wtf import FlaskForm
 from wtforms import BooleanField, SelectField, SubmitField
 from wtforms.validators import DataRequired
 
-from observatory.models.mapper import EnumConvert, EnumColor, EnumHorizon, Mapper
+from observatory.models.mapper import (
+    EnumColor, EnumConvert, EnumHorizon, Mapper
+)
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
 

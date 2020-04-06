@@ -1,7 +1,9 @@
 from flask import url_for
 from pytest import mark
 
-from observatory.models.mapper import EnumConvert, EnumColor, EnumHorizon, Mapper
+from observatory.models.mapper import (
+    EnumColor, EnumConvert, EnumHorizon, Mapper
+)
 
 ENDPOINT = 'mgnt.edit_mapper'
 

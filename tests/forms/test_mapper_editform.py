@@ -2,7 +2,9 @@ from pytest import mark
 from werkzeug.datastructures import MultiDict
 
 from observatory.forms.mapper import MapperEditForm
-from observatory.models.mapper import EnumConvert, EnumColor, EnumHorizon, Mapper
+from observatory.models.mapper import (
+    EnumColor, EnumConvert, EnumHorizon, Mapper
+)
 
 GRAY = 9869462
 

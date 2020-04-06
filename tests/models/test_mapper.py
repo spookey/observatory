@@ -2,7 +2,9 @@ from datetime import datetime
 
 from pytest import fixture, mark
 
-from observatory.models.mapper import EnumConvert, EnumColor, EnumHorizon, Mapper
+from observatory.models.mapper import (
+    EnumColor, EnumConvert, EnumHorizon, Mapper
+)
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
 from observatory.start.environment import FMT_STRFTIME
