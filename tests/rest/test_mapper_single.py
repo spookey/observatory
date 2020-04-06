@@ -1,6 +1,6 @@
 from flask import url_for
 from flask_restful import marshal
-from flask_restful.fields import Boolean, DateTime, String
+from flask_restful.fields import Boolean, DateTime, Integer, String
 from pytest import mark
 
 from observatory.models.mapper import Mapper
@@ -28,7 +28,7 @@ class TestMapperSingle:
         created = mdef['created']
         assert isinstance(created, DateTime)
         assert created.dt_format == 'iso8601'
-        assert isinstance(mdef['sortkey'], String)
+        assert isinstance(mdef['sortkey'], Integer)
         assert isinstance(mdef['cast'], String)
         assert isinstance(mdef['color'], String)
         assert isinstance(mdef['horizon'], String)

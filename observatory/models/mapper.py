@@ -1,10 +1,8 @@
 from enum import Enum
-from uuid import uuid4
 
 from sqlalchemy import and_
 
 from observatory.database import BaseModel, CreatedMixin
-from observatory.models.types.dbuuid import DBuuid
 from observatory.start.extensions import DB
 
 
@@ -30,6 +28,10 @@ class EnumHorizon(Enum):
     NORMAL = 1
     INVERT = 2
 
+
+def _next_sortkey():
+    return 1 + Mapper.query.count()
+
 # pylint: disable=no-member
 # pylint: disable=too-many-ancestors
 
@@ -45,7 +47,7 @@ class Mapper(CreatedMixin, BaseModel):
         DB.Boolean(), nullable=False, default=True
     )
     sortkey = DB.Column(
-        DBuuid(), nullable=False, unique=True, default=uuid4
+        DB.Integer(), nullable=False, unique=True, default=_next_sortkey,
     )
     cast = DB.Column(
         DB.Enum(EnumCast), nullable=False, default=EnumCast.NATURAL
@@ -102,24 +104,24 @@ class Mapper(CreatedMixin, BaseModel):
         query = query if query is not None else self.query
         return self.query_sorted(query.filter(Mapper.sortkey < self.sortkey))
 
-    @staticmethod
-    def __reorder(*elems):
-        return all(
-            mapper.update(sortkey=sortkey)
-            for mapper, sortkey in
-            zip(elems, sorted(uuid4() for _ in elems))
-        )
+    def __flip_sortkey(self, that):
+        skey = self.sortkey
+        tkey = that.sortkey
+        self.update(sortkey=_next_sortkey())
+        that.update(sortkey=skey)
+        self.update(sortkey=tkey)
+        return True
 
     def raise_step(self):
         above = self.query_above().all()
         if not above:
             return False
-        sibling, *tail = above
-        return self.__reorder(*self.query_below().all(), sibling, self, *tail)
+        that, *_ = above
+        return self.__flip_sortkey(that)
 
     def lower_step(self):
         below = self.query_below().all()
         if not below:
             return False
-        *head, sibling = below
-        return self.__reorder(*head, self, sibling, *self.query_above().all())
+        *_, that = below
+        return self.__flip_sortkey(that)

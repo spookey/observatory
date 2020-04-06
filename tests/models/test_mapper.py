@@ -1,5 +1,4 @@
 from datetime import datetime
-from uuid import UUID
 
 from pytest import fixture, mark
 
@@ -8,26 +7,19 @@ from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
 from observatory.start.environment import FMT_STRFTIME
 
-U_ONE = UUID('11111111-1111-4111-1111-111111111111')
-U_TWO = UUID('22222222-2222-4222-2222-222222222222')
-U_THR = UUID('33333333-3333-4333-3333-333333333333')
-
 
 @fixture(scope='function')
 def _make_simple(gen_prompt, gen_sensor):
     def res():
         return (
             Mapper.create(
-                sortkey=U_THR,
-                prompt=gen_prompt('thr'), sensor=gen_sensor('thr')
+                sortkey=3, prompt=gen_prompt('thr'), sensor=gen_sensor('thr')
             ),
             Mapper.create(
-                sortkey=U_TWO,
-                prompt=gen_prompt('two'), sensor=gen_sensor('two')
+                sortkey=2, prompt=gen_prompt('two'), sensor=gen_sensor('two')
             ),
             Mapper.create(
-                sortkey=U_ONE,
-                prompt=gen_prompt('one'), sensor=gen_sensor('one')
+                sortkey=1, prompt=gen_prompt('one'), sensor=gen_sensor('one')
             ),
         )
 
@@ -45,9 +37,9 @@ def _make_nested(gen_prompt, gen_sensor):
         return (
             p_one, p_two,
             s_one, s_two,
-            Mapper.create(sortkey=U_ONE, prompt=p_one, sensor=s_one),
-            Mapper.create(sortkey=U_TWO, prompt=p_one, sensor=s_two),
-            Mapper.create(sortkey=U_THR, prompt=p_two, sensor=s_two),
+            Mapper.create(sortkey=1, prompt=p_one, sensor=s_one),
+            Mapper.create(sortkey=2, prompt=p_one, sensor=s_two),
+            Mapper.create(sortkey=3, prompt=p_two, sensor=s_two),
         )
 
     yield res
@@ -72,8 +64,6 @@ class TestMapper:
         assert mapper.cast == EnumCast.NATURAL
         assert mapper.color == EnumColor.GRAY
         assert mapper.horizon == EnumHorizon.NORMAL
-
-        assert isinstance(mapper.sortkey, UUID)
 
     @staticmethod
     def test_by_commons(gen_prompt, gen_sensor):

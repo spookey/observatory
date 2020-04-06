@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 from flask import url_for
 from flask_restful import marshal
 from flask_restful.fields import Boolean, String, Url
@@ -36,15 +34,12 @@ class TestMapperListing:
 
     @staticmethod
     def test_get_listing(visitor, gen_prompt, gen_sensor):
-        u_one, u_two = sorted((uuid4(), uuid4()))  # query is ordered
         mappers = [
             Mapper.create(
-                prompt=gen_prompt('one'), sensor=gen_sensor('one'),
-                sortkey=u_one,
+                sortkey=1, prompt=gen_prompt('one'), sensor=gen_sensor('one'),
             ),
             Mapper.create(
-                prompt=gen_prompt('two'), sensor=gen_sensor('two'),
-                sortkey=u_two,
+                sortkey=2, prompt=gen_prompt('two'), sensor=gen_sensor('two'),
             )
         ]
         res = visitor(ENDPOINT)

@@ -80,7 +80,7 @@ def mapper_single():
         sensor_url=SlugUrl(
             attribute='sensor', endpoint='api.sensor.single', absolute=True,
         ),
-        sortkey=String(),
+        sortkey=Integer(),
     )
 
 
