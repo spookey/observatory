@@ -18,7 +18,7 @@ class EnumColor(Enum):
     BROWN = 0xa3685a
 
 
-class EnumCast(Enum):
+class EnumConvert(Enum):
     NATURAL = 1
     INTEGER = 2
     BOOLEAN = 4
@@ -49,11 +49,11 @@ class Mapper(CreatedMixin, BaseModel):
     sortkey = DB.Column(
         DB.Integer(), nullable=False, unique=True, default=_next_sortkey,
     )
-    cast = DB.Column(
-        DB.Enum(EnumCast), nullable=False, default=EnumCast.NATURAL
-    )
     color = DB.Column(
         DB.Enum(EnumColor), nullable=False, default=EnumColor.GRAY
+    )
+    convert = DB.Column(
+        DB.Enum(EnumConvert), nullable=False, default=EnumConvert.NATURAL
     )
     horizon = DB.Column(
         DB.Enum(EnumHorizon), nullable=False, default=EnumHorizon.NORMAL

@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import BooleanField, SelectField, SubmitField
 from wtforms.validators import DataRequired
 
-from observatory.models.mapper import EnumCast, EnumColor, EnumHorizon, Mapper
+from observatory.models.mapper import EnumConvert, EnumColor, EnumHorizon, Mapper
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
 
@@ -25,18 +25,18 @@ class MapperEditForm(FlaskForm):
         default=True,
         description='Set active',
     )
-    cast_sel = SelectField(
-        'Cast',
-        coerce=int,
-        validators=[DataRequired()],
-        description='Select cast',
-    )
     color_sel = SelectField(
         'Color',
         coerce=int,
         validators=[DataRequired()],
         description='Select color',
         render_kw={'data_colorize': 'option'},
+    )
+    convert_sel = SelectField(
+        'Convert',
+        coerce=int,
+        validators=[DataRequired()],
+        description='Select conversion',
     )
     horizon_sel = SelectField(
         'Horizon',
@@ -70,8 +70,8 @@ class MapperEditForm(FlaskForm):
         self.prompt_sel.choices = self._comm_choices(Prompt)
         self.sensor_sel.choices = self._comm_choices(Sensor)
 
-        self.cast_sel.choices = self._enum_choices(EnumCast)
         self.color_sel.choices = self._enum_choices(EnumColor)
+        self.convert_sel.choices = self._enum_choices(EnumConvert)
         self.horizon_sel.choices = self._enum_choices(EnumHorizon)
 
     def set_selections(self):
@@ -80,8 +80,8 @@ class MapperEditForm(FlaskForm):
         self.prompt_sel.data = self.mapper.prompt_prime
         self.sensor_sel.data = self.mapper.sensor_prime
 
-        self.cast_sel.data = self.mapper.cast.value
         self.color_sel.data = self.mapper.color.value
+        self.convert_sel.data = self.mapper.convert.value
         self.horizon_sel.data = self.mapper.horizon.value
 
     def validate(self):
@@ -123,7 +123,7 @@ class MapperEditForm(FlaskForm):
             )
 
         self.populate_obj(self.mapper)
-        self.mapper.cast = EnumCast(self.cast_sel.data)
         self.mapper.color = EnumColor(self.color_sel.data)
+        self.mapper.convert = EnumConvert(self.convert_sel.data)
         self.mapper.horizon = EnumHorizon(self.horizon_sel.data)
         return self.mapper.save()

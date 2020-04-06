@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pytest import fixture, mark
 
-from observatory.models.mapper import EnumCast, EnumColor, EnumHorizon, Mapper
+from observatory.models.mapper import EnumConvert, EnumColor, EnumHorizon, Mapper
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
 from observatory.start.environment import FMT_STRFTIME
@@ -61,8 +61,8 @@ class TestMapper:
         assert mapper.sensor == sensor
         assert mapper.active is True
         assert mapper.sortkey is not None
-        assert mapper.cast == EnumCast.NATURAL
         assert mapper.color == EnumColor.GRAY
+        assert mapper.convert == EnumConvert.NATURAL
         assert mapper.horizon == EnumHorizon.NORMAL
 
     @staticmethod

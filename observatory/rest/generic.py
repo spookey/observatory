@@ -70,8 +70,8 @@ def mapper_listing():
 def mapper_single():
     return dict(
         MAPPER_BASE,
-        cast=String(attribute='cast.name'),
         color=String(attribute='color.name'),
+        convert=String(attribute='convert.name'),
         created=DateTime(dt_format=DT_FORMAT),
         horizon=String(attribute='horizon.name'),
         prompt_url=SlugUrl(

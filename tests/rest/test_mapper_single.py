@@ -29,8 +29,8 @@ class TestMapperSingle:
         assert isinstance(created, DateTime)
         assert created.dt_format == 'iso8601'
         assert isinstance(mdef['sortkey'], Integer)
-        assert isinstance(mdef['cast'], String)
         assert isinstance(mdef['color'], String)
+        assert isinstance(mdef['convert'], String)
         assert isinstance(mdef['horizon'], String)
         prompt_url = mdef['prompt_url']
         assert isinstance(prompt_url, SlugUrl)

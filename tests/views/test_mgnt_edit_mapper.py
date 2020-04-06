@@ -1,7 +1,7 @@
 from flask import url_for
 from pytest import mark
 
-from observatory.models.mapper import EnumCast, EnumColor, EnumHorizon, Mapper
+from observatory.models.mapper import EnumConvert, EnumColor, EnumHorizon, Mapper
 
 ENDPOINT = 'mgnt.edit_mapper'
 
@@ -48,8 +48,8 @@ class TestMgntEditMapper:
             ('prompt_sel', '_sl_', '_cl_'),
             ('sensor_sel', '_sl_', '_cl_'),
             ('active', 'checkbox', '_cl_'),
-            ('cast_sel', '_sl_', '_cl_'),
             ('color_sel', '_sl_', 'option'),
+            ('convert_sel', '_sl_', '_cl_'),
             ('horizon_sel', '_sl_', '_cl_'),
             ('submit', 'submit', '_cl_'),
         ]
@@ -60,7 +60,7 @@ class TestMgntEditMapper:
 
         res = visitor(ENDPOINT, method='post', data={
             'prompt_sel': 23, 'sensor_sel': 42,
-            'active': True, 'cast_sel': 99, 'color_sel': 99,
+            'active': True, 'convert_sel': 99, 'color_sel': 99,
             'horizon_sel': 99, 'submit': True,
         })
 
@@ -69,8 +69,8 @@ class TestMgntEditMapper:
         assert form.select('#sensor_sel option') == []
         assert form.select('#active')[-1].attrs['value'] == 'True'
         for sel in [
-                '#cast_sel option',
                 '#color_sel option',
+                '#convert_sel option',
                 '#horizon_sel option'
         ]:
             for opt in form.select(sel):
@@ -82,15 +82,16 @@ class TestMgntEditMapper:
         gen_user_loggedin()
         prompt = gen_prompt()
         sensor = gen_sensor()
-        cast = EnumCast.INTEGER
         color = EnumColor.YELLOW
+        convert = EnumConvert.INTEGER
         horizon = EnumHorizon.NORMAL
         view_url = url_for('mgnt.view_mapper', _external=True)
 
         res = visitor(ENDPOINT, method='post', data={
             'prompt_sel': prompt.prime, 'sensor_sel': sensor.prime,
-            'active': True, 'cast_sel': cast.value, 'color_sel': color.value,
-            'horizon_sel': horizon.value, 'submit': True,
+            'active': True, 'color_sel': color.value,
+            'convert_sel': convert.value, 'horizon_sel': horizon.value,
+            'submit': True,
         }, code=302)
 
         assert res.request.headers['LOCATION'] == view_url
@@ -98,7 +99,7 @@ class TestMgntEditMapper:
         assert mapper.prompt == prompt
         assert mapper.sensor == sensor
         assert mapper.active is True
-        assert mapper.cast == cast
+        assert mapper.convert == convert
         assert mapper.color == color
         assert mapper.horizon == horizon
 
@@ -109,7 +110,8 @@ class TestMgntEditMapper:
         gen_user_loggedin()
         mapper = Mapper.create(
             prompt=gen_prompt(), sensor=gen_sensor(),
-            cast=EnumCast.BOOLEAN, color=EnumColor.GREEN,
+            color=EnumColor.GREEN,
+            convert=EnumConvert.BOOLEAN,
             horizon=EnumHorizon.INVERT
         )
 
@@ -125,8 +127,8 @@ class TestMgntEditMapper:
 
         _check('#prompt_sel', mapper.prompt.prime)
         _check('#sensor_sel', mapper.sensor.prime)
-        _check('#cast_sel', mapper.cast.value)
         _check('#color_sel', mapper.color.value)
+        _check('#convert_sel', mapper.convert.value)
         _check('#horizon_sel', mapper.horizon.value)
 
     @staticmethod
@@ -136,22 +138,23 @@ class TestMgntEditMapper:
         sensor = gen_sensor()
         original = Mapper.create(prompt=prompt, sensor=sensor)
 
-        cast = EnumCast.BOOLEAN
         color = EnumColor.PURPLE
+        convert = EnumConvert.BOOLEAN
         horizon = EnumHorizon.INVERT
 
         visitor(ENDPOINT, params={
             'prompt_slug': prompt.slug, 'sensor_slug': sensor.slug,
         }, method='post', data={
             'prompt_sel': prompt.prime, 'sensor_sel': sensor.prime,
-            'active': True, 'cast_sel': cast.value, 'color_sel': color.value,
-            'horizon_sel': horizon.value, 'submit': True,
+            'active': True, 'color_sel': color.value,
+            'convert_sel': convert.value, 'horizon_sel': horizon.value,
+            'submit': True,
         }, code=302)
 
         changed = Mapper.query.first()
         assert changed == original
         assert changed.prompt == prompt
         assert changed.sensor == sensor
-        assert changed.cast == cast
         assert changed.color == color
+        assert changed.convert == convert
         assert changed.horizon == horizon
