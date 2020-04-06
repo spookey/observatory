@@ -1,20 +1,11 @@
 import Color from "color";
 
-const WHITE: Color = Color('#ffffff');
+const WHITE: Color = Color(0xffffff);
 
-
-function create(value: string): (Color | null) {
-  const num: number = parseInt(value, 10);
-  if (Number.isNaN(num)) { return null; }
-  return Color(num);
+function parse(value: string): (Color | null) {
+  try { return Color(value); }
+  catch(err) { return null; }
 }
-
-function assign(element: HTMLElement, color: (Color | null)): void {
-  if (!color) { return; }
-  element.style.color = WHITE.string();
-  element.style.backgroundColor = color.string();
-}
-
 
 /* set background color of select options */
 export function colorizeSO(): void {
@@ -24,7 +15,11 @@ export function colorizeSO(): void {
       if (!(element instanceof HTMLOptionElement)) { return; }
       if (!element.value) { return; }
 
-      assign(element, create(element.value));
+      const color: (Color | null) = parse(element.value);
+      if (!color) { return; }
+
+      element.style.backgroundColor = color.string();
+      element.style.color = WHITE.string();
     }
 
     for (const element of document.querySelectorAll('select') as any) {
@@ -33,23 +28,6 @@ export function colorizeSO(): void {
           colorize(elem);
         }
       }
-    }
-  });
-}
-
-
-/* set background color of span texts */
-export function colorizeTX(): void {
-  document.addEventListener("DOMContentLoaded", (): void => {
-
-    function colorize(element: HTMLElement): void {
-      if (!element.dataset.value) { return; }
-
-      assign(element, create(element.dataset.value));
-    }
-
-    for (const element of document.getElementsByClassName("colorize") as any) {
-      colorize(element);
     }
   });
 }

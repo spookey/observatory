@@ -29,7 +29,7 @@ class MapperEditForm(FlaskForm):
     )
     color_sel = SelectField(
         'Color',
-        coerce=int,
+        coerce=str,
         validators=[DataRequired()],
         description='Select color',
         render_kw={'data_colorize': 'option'},
@@ -65,6 +65,13 @@ class MapperEditForm(FlaskForm):
             for en in enum
         ]
 
+    @staticmethod
+    def _enum_color_choices(enum):
+        return [
+            (en.color, en.name)
+            for en in enum
+        ]
+
     def __init__(self, *args, obj=None, **kwargs):
         super().__init__(*args, obj=obj, **kwargs)
         self.mapper = obj
@@ -72,7 +79,7 @@ class MapperEditForm(FlaskForm):
         self.prompt_sel.choices = self._comm_choices(Prompt)
         self.sensor_sel.choices = self._comm_choices(Sensor)
 
-        self.color_sel.choices = self._enum_choices(EnumColor)
+        self.color_sel.choices = self._enum_color_choices(EnumColor)
         self.convert_sel.choices = self._enum_choices(EnumConvert)
         self.horizon_sel.choices = self._enum_choices(EnumHorizon)
 
@@ -82,7 +89,7 @@ class MapperEditForm(FlaskForm):
         self.prompt_sel.data = self.mapper.prompt_prime
         self.sensor_sel.data = self.mapper.sensor_prime
 
-        self.color_sel.data = self.mapper.color.value
+        self.color_sel.data = self.mapper.color.color
         self.convert_sel.data = self.mapper.convert.value
         self.horizon_sel.data = self.mapper.horizon.value
 
@@ -125,7 +132,7 @@ class MapperEditForm(FlaskForm):
             )
 
         self.populate_obj(self.mapper)
-        self.mapper.color = EnumColor(self.color_sel.data)
+        self.mapper.color = EnumColor.from_color(self.color_sel.data)
         self.mapper.convert = EnumConvert(self.convert_sel.data)
         self.mapper.horizon = EnumHorizon(self.horizon_sel.data)
         return self.mapper.save()

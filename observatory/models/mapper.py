@@ -17,6 +17,17 @@ class EnumColor(Enum):
     PURPLE = 0x8959a8
     BROWN = 0xa3685a
 
+    @property
+    def color(self):
+        return f'#{self.value:6x}'
+
+    @classmethod
+    def from_color(cls, val):
+        try:
+            return cls(int(val.lstrip('#'), 16))
+        except (AttributeError, ValueError):
+            return cls.GRAY
+
 
 class EnumConvert(Enum):
     NATURAL = 1

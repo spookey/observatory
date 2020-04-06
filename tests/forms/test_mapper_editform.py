@@ -6,8 +6,6 @@ from observatory.models.mapper import (
     EnumColor, EnumConvert, EnumHorizon, Mapper
 )
 
-GRAY = 9869462
-
 
 @mark.usefixtures('session', 'ctx_app')
 class TestMapperEditForm:
@@ -58,7 +56,7 @@ class TestMapperEditForm:
     def test_enum_choices():
         form = MapperEditForm()
         assert form.color_sel.choices == [
-            (en.value, en.name) for en in EnumColor
+            (en.color, en.name) for en in EnumColor
         ]
         assert form.convert_sel.choices == [
             (en.value, en.name) for en in EnumConvert
@@ -82,7 +80,8 @@ class TestMapperEditForm:
         form = MapperEditForm(
             prompt_sel=mapper.prompt.prime,
             sensor_sel=mapper.sensor.prime,
-            color_sel=GRAY, convert_sel=1, horizon_sel=1,
+            color_sel=EnumColor.GRAY.color,
+            convert_sel=1, horizon_sel=1,
         )
         assert form.validate() is False
         assert 'already present' in form.prompt_sel.errors[-1].lower()
@@ -100,7 +99,8 @@ class TestMapperEditForm:
             obj=edit, formdata=MultiDict({
                 'prompt_sel': orig.prompt.prime,
                 'sensor_sel': orig.sensor.prime,
-                'color_sel': GRAY, 'convert_sel': 1, 'horizon_sel': 1,
+                'color_sel': EnumColor.GRAY.color,
+                'convert_sel': 1, 'horizon_sel': 1,
             }),
         )
         assert form.validate() is False
@@ -122,7 +122,7 @@ class TestMapperEditForm:
                 'prompt_sel': mapper.prompt.prime,
                 'sensor_sel': mapper.sensor.prime,
                 'active': False,
-                'color_sel': color.value,
+                'color_sel': color.color,
                 'convert_sel': convert.value,
                 'horizon_sel': horizon.value,
             }),
@@ -150,14 +150,14 @@ class TestMapperEditForm:
         ))
         assert form.prompt_sel.data != prompt.prime
         assert form.sensor_sel.data != sensor.prime
-        assert form.color_sel.data != color.value
+        assert form.color_sel.data != color.color
         assert form.convert_sel.data != convert.value
         assert form.horizon_sel.data != horizon.value
 
         form.set_selections()
         assert form.prompt_sel.data == prompt.prime
         assert form.sensor_sel.data == sensor.prime
-        assert form.color_sel.data == color.value
+        assert form.color_sel.data == color.color
         assert form.convert_sel.data == convert.value
         assert form.horizon_sel.data == horizon.value
 
@@ -173,7 +173,7 @@ class TestMapperEditForm:
             prompt_sel=prompt.prime,
             sensor_sel=sensor.prime,
             active=True,
-            color_sel=color.value,
+            color_sel=color.color,
             convert_sel=convert.value,
             horizon_sel=horizon.value,
         )

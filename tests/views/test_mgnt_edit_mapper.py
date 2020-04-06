@@ -91,7 +91,7 @@ class TestMgntEditMapper:
 
         res = visitor(ENDPOINT, method='post', data={
             'prompt_sel': prompt.prime, 'sensor_sel': sensor.prime,
-            'active': True, 'color_sel': color.value,
+            'active': True, 'color_sel': color.color,
             'convert_sel': convert.value, 'horizon_sel': horizon.value,
             'submit': True,
         }, code=302)
@@ -129,7 +129,7 @@ class TestMgntEditMapper:
 
         _check('#prompt_sel', mapper.prompt.prime)
         _check('#sensor_sel', mapper.sensor.prime)
-        _check('#color_sel', mapper.color.value)
+        _check('#color_sel', mapper.color.color)
         _check('#convert_sel', mapper.convert.value)
         _check('#horizon_sel', mapper.horizon.value)
 
@@ -148,7 +148,7 @@ class TestMgntEditMapper:
             'prompt_slug': prompt.slug, 'sensor_slug': sensor.slug,
         }, method='post', data={
             'prompt_sel': prompt.prime, 'sensor_sel': sensor.prime,
-            'active': True, 'color_sel': color.value,
+            'active': True, 'color_sel': color.color,
             'convert_sel': convert.value, 'horizon_sel': horizon.value,
             'submit': True,
         }, code=302)

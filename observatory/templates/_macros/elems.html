@@ -12,8 +12,8 @@
 {% endmacro %}
 
 
-{% macro text_color(value, text) %}
-<span class="colorize" data-value="{{ value }}">{{ text }}</span>
+{% macro text_color(text, value) %}
+<span style="background-color: {{ value }}; color: #ffffff;">{{ text }}</span>
 {% endmacro %}
 
 
