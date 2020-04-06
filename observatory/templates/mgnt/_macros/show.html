@@ -1,6 +1,6 @@
-{% from '_macros/color.html' import text_col %}
-{% from '_macros/time.html' import time_abs %}
-{% from '_macros/time.html' import time_rel %}
+{% from '_macros/elems.html' import text_color %}
+{% from '_macros/elems.html' import time_abs %}
+{% from '_macros/elems.html' import time_rel %}
 
 {% macro create_button(endpoint) %}
 <div class="content has-text-right">
@@ -211,7 +211,7 @@
           </div>
           <div class="level-right">
             <div class="level-item has-text-centered">
-              {{ text_col(mapper.color.value, mapper.color.name) }}
+              {{ text_color(mapper.color.value, mapper.color.name) }}
             </div>
           </div>
         </div>
