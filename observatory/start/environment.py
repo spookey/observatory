@@ -43,6 +43,18 @@ TAGLINES = [
     getenv('TAGLINE_06', 'Rage against the virtual machine.'),
 ]
 
+ICON = {
+    '__fallback': getenv('ICON___FALLBACK', 'fire'),
+    'glob_error': getenv('ICON_GLOB_ERROR', 'flashlight'),
+    'glob_index': getenv('ICON_GLOB_INDEX', 'home'),
+    'obj_mapper': getenv('ICON_OBJ_MAPPER', 'guide'),
+    'obj_prompt': getenv('ICON_OBJ_PROMPT', 'newspaper'),
+    'obj_sensor': getenv('ICON_OBJ_SENSOR', 'radar'),
+    'user_basic': getenv('ICON_USER_BASIC', 'user'),
+    'user_enter': getenv('ICON_USER_ENTER', 'login-box'),
+    'user_leave': getenv('ICON_USER_LEAVE', 'logout-box-r'),
+}
+
 ERROR_CODES = (
     400, 401, 403, 404, 418,
     500, 501, 502, 503, 504,

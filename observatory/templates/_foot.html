@@ -1,3 +1,5 @@
+{% from '_macros/elems.html' import text_icon %}
+
 <footer class="footer">
   <div class="container">
     <div class="level">
@@ -17,6 +19,7 @@
       <div class="level-right">
         <div class="level-item">
           <p class="subtitle is-5">
+            {{ text_icon('user_basic', 'small') }}
             <strong>{{ current_user.username }}</strong>
           </p>
         </div>
@@ -26,7 +29,8 @@
               class="button is-small is-light is-inverted is-outlined"
               href="{{ url_for('user.logout') }}"
             >
-              Logout
+              {{ text_icon('user_leave') }}
+              <span>Logout</span>
             </a>
           </p>
         </div>

@@ -1,22 +1,30 @@
 {% extends '_base.html' %}
+{% from '_macros/elems.html' import text_icon %}
 
 {% block content %}
 <section class="section">
   <div class="container">
     <article class="message is-dark">
       <div class="message-header">
-        <p>{{ error.code }}</p>
+        <p>
+          {{ text_icon('glob_error') }}
+          <span>{{ error.code }}</span>
+        </p>
       </div>
       <div class="message-body">
         {{ error.description }}
       </div>
     </article>
     {% if error.code == 401 %}
-    <article class="message is-light">
-      <div class="message-body">
-        <a href="{{ url_for('user.login', next=request.url) }}">Login</a>
-      </div>
-    </article>
+    <div class="content has-text-centered">
+      <a
+        class="button is-light is-inverted is-outlined"
+        href="{{ url_for('user.login', next=request.url) }}"
+      >
+        {{ text_icon('user_enter', 'medium') }}
+        <span>Login</span>
+      </a>
+    </div>
     {% endif %}
   </div>
 </section>

@@ -114,3 +114,20 @@ def test_taglines(monkeypatch):
         reload(environment)
 
         assert environment.TAGLINES[num] == '*️⃣'
+
+
+def test_icons(monkeypatch):
+    def _check(elems, expect=None):
+        for key, val in elems.items():
+            value = expect if expect is not None else val
+            assert value
+            assert isinstance(value, str)
+            assert elems[key] == value
+
+    _check(environment.ICON)
+
+    for key in environment.ICON:
+        monkeypatch.setenv(f'ICON_{key.upper()}', '🌭')
+    reload(environment)
+
+    _check(environment.ICON, '🌭')

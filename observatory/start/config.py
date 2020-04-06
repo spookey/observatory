@@ -2,7 +2,7 @@ from os import path, urandom
 
 from observatory.start.environment import (
     APP_NAME, BCRYPT_LOG_ROUNDS, CSRF_STRICT, DATABASE, DATABASE_DEV, FAVICON,
-    HTML_LANG, SECRET_BASE, SECRET_FILE, TITLE
+    HTML_LANG, ICON, SECRET_BASE, SECRET_FILE, TITLE
 )
 
 
@@ -26,6 +26,7 @@ class BaseConfig:
     DEBUG = False
     FAVICON = FAVICON
     HTML_LANG = HTML_LANG
+    ICON = ICON
     SECRET_KEY = secret_key()
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TESTING = False
