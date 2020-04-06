@@ -31,16 +31,15 @@ class TestMgntViewMapper:
         gen_user_loggedin()
 
         res = visitor(ENDPOINT)
-        tabs = res.soup.select('.tabs li')
-        *elements, main = tabs
+        idx, sns, mpp, prp = res.soup.select('.tabs li')
 
-        assert 'is-active' in main.attrs.get('class')
-        assert main.a['href'] == url_for(ENDPOINT)
+        assert 'is-active' in mpp.attrs.get('class')
+        assert mpp.a['href'] == url_for(ENDPOINT)
 
-        for elem in elements:
-            assert 'is-active' not in elem.attrs.get('class')
-            assert elem.a['href'] in [
-                url_for('mgnt.index'),
-                url_for('mgnt.view_prompt'),
-                url_for('mgnt.view_sensor'),
-            ]
+        for elem, href in (
+                (idx, url_for('mgnt.index')),
+                (sns, url_for('mgnt.view_sensor')),
+                (prp, url_for('mgnt.view_prompt')),
+        ):
+            assert not elem.has_attr('class')
+            assert elem.a['href'] == href

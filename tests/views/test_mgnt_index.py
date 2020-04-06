@@ -44,16 +44,15 @@ class TestMgntIndex:
         gen_user_loggedin()
 
         res = visitor(ENDPOINT)
-        tabs = res.soup.select('.tabs li')
-        main, *elements = tabs
+        idx, sns, mpp, prp = res.soup.select('.tabs li')
 
-        assert 'is-active' in main.attrs.get('class')
-        assert main.a['href'] == url_for(ENDPOINT)
+        assert 'is-active' in idx.attrs.get('class')
+        assert idx.a['href'] == url_for(ENDPOINT)
 
-        for elem in elements:
-            assert 'is-active' not in elem.attrs.get('class')
-            assert elem.a['href'] in [
-                url_for('mgnt.view_prompt'),
-                url_for('mgnt.view_sensor'),
-                url_for('mgnt.view_mapper'),
-            ]
+        for elem, href in (
+                (sns, url_for('mgnt.view_sensor')),
+                (mpp, url_for('mgnt.view_mapper')),
+                (prp, url_for('mgnt.view_prompt')),
+        ):
+            assert not elem.has_attr('class')
+            assert elem.a['href'] == href
