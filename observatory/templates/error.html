@@ -16,9 +16,9 @@
       </div>
     </article>
     {% if error.code == 401 %}
-    <div class="content has-text-centered">
+    <div class="content has-text-right">
       <a
-        class="button is-light is-inverted is-outlined"
+        class="button is-dark"
         href="{{ url_for('user.login', next=request.url) }}"
       >
         {{ text_icon('user_enter', 'medium') }}
