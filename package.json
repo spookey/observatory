@@ -13,7 +13,8 @@
     "bulma": "^0.8.1",
     "chart.js": "^2.9.3",
     "color": "^3.1.2",
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "remixicon": "^2.3.0"
   },
   "devDependencies": {
     "@rollup/plugin-json": "^4.0.2",
@@ -21,6 +22,7 @@
     "@types/color": "^3.0.1",
     "autoprefixer": "^9.7.5",
     "postcss-import": "^12.0.1",
+    "postcss-url": "^8.0.0",
     "rollup": "^2.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
