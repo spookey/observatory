@@ -98,13 +98,15 @@ class Mapper(CreatedMixin, BaseModel):
 
     def query_above(self, query=None):
         query = query if query is not None else self.query
-        return self.query_sorted(query.filter(Mapper.sortkey > self.sortkey))
+        return query.filter(Mapper.sortkey > self.sortkey)
 
     def query_below(self, query=None):
         query = query if query is not None else self.query
-        return self.query_sorted(query.filter(Mapper.sortkey < self.sortkey))
+        return query.filter(Mapper.sortkey < self.sortkey)
 
     def __flip_sortkey(self, that):
+        if not that:
+            return False
         skey = self.sortkey
         tkey = that.sortkey
         self.update(sortkey=_next_sortkey())
@@ -113,15 +115,11 @@ class Mapper(CreatedMixin, BaseModel):
         return True
 
     def raise_step(self):
-        above = self.query_above().all()
-        if not above:
-            return False
-        that, *_ = above
-        return self.__flip_sortkey(that)
+        return self.__flip_sortkey(self.query_above(
+            Mapper.query.order_by(Mapper.sortkey.asc())
+        ).first())
 
     def lower_step(self):
-        below = self.query_below().all()
-        if not below:
-            return False
-        *_, that = below
-        return self.__flip_sortkey(that)
+        return self.__flip_sortkey(self.query_below(
+            Mapper.query.order_by(Mapper.sortkey.desc())
+        ).first())
