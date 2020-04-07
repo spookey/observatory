@@ -1,37 +1,17 @@
 {% extends '_base.html' %}
+{% from 'mgnt/_macros/level.html' import link_head_title %}
+{% from 'mgnt/_macros/level.html' import linking_level %}
 {% from 'mgnt/_macros/nav.html' import inner_navigation %}
 {% from 'mgnt/_macros/show.html' import create_button %}
 
 {% macro _level(title, amount, endpoint) %}
 <div class="content">
-  <div class="level">
-    <div class="level-left">
-      <div class="level-item has-text-left-tablet has-text-centered">
-        <div>
-          <div class="heading">Type</div>
-          <a
-            href="{{ url_for(endpoint, slug=None) }}"
-            class="title is-3"
-          >
-            {{ title }}
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="level-right">
-      <div class="level-item has-text-right-tablet has-text-centered">
-        <div>
-          <div class="heading">Amount</div>
-          <a
-            href="{{ url_for(endpoint, slug=None) }}"
-            class="subtitle is-3"
-          >
-            {{ amount }}
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
+  {{ linking_level(
+    'Type',
+    link_head_title(title, url_for(endpoint, slug=None), sub=false),
+    'Amount',
+    link_head_title(amount, url_for(endpoint, slug=None), sub=true),
+  ) }}
 </div>
 {% endmacro %}
 

@@ -1,0 +1,47 @@
+{% macro link_head_code(text, href, sub=true) %}
+<code class="{{ 'subtitle' if sub else 'title' }} is-3">
+  <a href="{{ href }}">{{ text }}</a>
+</code>
+{% endmacro %}
+{% macro link_head_title(text, href, sub=true) %}
+<a href="{{ href }}" class="{{ 'subtitle' if sub else 'title' }} is-3">
+  {{ text }}
+</a>
+{% endmacro %}
+
+{% macro linking_level(left_heading, left_link, right_heading, right_link) %}
+<div class="level">
+  <div class="level-left">
+    <div class="level-item has-text-left-tablet has-text-centered">
+      <div>
+        <div class="heading">{{ left_heading }}</div>
+        {{ left_link }}
+      </div>
+    </div>
+  </div>
+  <div class="level-right">
+    <div class="level-item has-text-right-tablet has-text-centered">
+      <div>
+        <div class="heading">{{ right_heading }}</div>
+        {{ right_link }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+
+{% macro key_val_level(label, value) %}
+<div class="level">
+  <div class="level-left">
+    <div class="level-item has-text-centered">
+      <strong>{{ label }}</strong>
+    </div>
+  </div>
+  <div class="level-right">
+    <div class="level-item has-text-centered">
+      {{ value }}
+    </div>
+  </div>
+</div>
+{% endmacro %}
