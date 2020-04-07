@@ -1,4 +1,5 @@
 import commonjs from '@rollup/plugin-commonjs';
+import cssdiscard from 'postcss-discard-comments';
 import cssimport from 'postcss-import';
 import cssprefixer from 'autoprefixer';
 import cssurl from 'postcss-url';
@@ -47,6 +48,9 @@ const assetStyle = {
           url: (asset) => path.relative(STATIC, asset.url),
         }),
         cssprefixer(),
+        cssdiscard({
+          removeAll: true,
+        }),
       ],
       extract: true,
       minimize: !DEVEL,
