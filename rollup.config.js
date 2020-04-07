@@ -36,7 +36,11 @@ const assetStyle = {
         cssurl({
           url: 'copy',
           useHash: true,
-          basePath: path.join(NODE_M, 'remixicon', 'fonts'),
+          basePath: [
+            path.join(NODE_M, 'remixicon', 'fonts'),
+            path.join(NODE_M, 'source-code-pro'),
+            path.join(NODE_M, 'source-sans-pro'),
+          ],
           assetsPath: path.join(STATIC, 'fonts'),
         }),
         cssurl({

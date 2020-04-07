@@ -1,5 +1,11 @@
 @charset "utf-8";
 
+@import "~source-sans-pro/source-sans-pro";
+@import "~source-code-pro/source-code-pro";
+
+$family-sans-serif: "Source Sans Pro" sans-serif;
+$family-monospace: "Source Code Pro" monospace;
+
 $footer-padding: 3rem 1.5rem;
 
 @import "~bulma/bulma";
