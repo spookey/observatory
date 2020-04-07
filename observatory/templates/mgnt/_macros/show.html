@@ -1,3 +1,4 @@
+{% from '_macros/elem.html' import bool_icon %}
 {% from '_macros/elem.html' import text_color %}
 {% from '_macros/elem.html' import time_abs %}
 {% from '_macros/elem.html' import time_rel %}
@@ -79,7 +80,7 @@
         ) }}
         {{ key_val_level(
           'Active',
-          'Yes' if mapper.active else 'No',
+          bool_icon(mapper.active),
         ) }}
         {{ key_val_level(
           'Color',
