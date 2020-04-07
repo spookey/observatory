@@ -1,17 +1,16 @@
 {% extends '_base.html' %}
 {% from 'mgnt/_macros/nav.html' import inner_navigation %}
 {% from 'mgnt/_macros/show.html' import create_button %}
-{% from 'mgnt/_macros/show.html' import show_common %}
 {% from 'mgnt/_macros/show.html' import show_mapper %}
+{% from 'mgnt/_macros/show.html' import show_prompt %}
 {% from 'mgnt/_macros/show.html' import show_sensor %}
 
 
-{% macro _show(heading, function, things, endpoint) %}
+{% macro _show(heading, function, things) %}
 <h3 class="title">{{ heading }}</h3>
 {% for thing in things %}
-  {{ function(thing, endpoint) }}
+  {{ function(thing) }}
 {% endfor %}
-{{ create_button(endpoint) }}
 {% endmacro %}
 
 
@@ -20,13 +19,16 @@
   <div class="container">
     {{ inner_navigation() }}
     {% if mapping is defined %}
-      {{ _show('Mapping', show_mapper, mapping, 'mgnt.edit_mapper') }}
+      {{ _show('Mapping', show_mapper, mapping) }}
+      {{ create_button('mgnt.edit_mapper') }}
     {% endif %}
     {% if prompts is defined %}
-      {{ _show('Prompts', show_common, prompts, 'mgnt.edit_prompt') }}
+      {{ _show('Prompts', show_prompt, prompts) }}
+      {{ create_button('mgnt.edit_prompt') }}
     {% endif %}
     {% if sensors is defined %}
-      {{ _show('Sensors', show_sensor, sensors, 'mgnt.edit_sensor') }}
+      {{ _show('Sensors', show_sensor, sensors) }}
+      {{ create_button('mgnt.edit_sensor') }}
     {% endif %}
   </div>
 </section>

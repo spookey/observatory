@@ -16,7 +16,7 @@
 {% endmacro %}
 
 
-{% macro show_common(thing, endpoint) %}
+{% macro _common_info(thing, endpoint) %}
 {% if thing %}
 <div class="content">
   <div class="level">
@@ -68,7 +68,7 @@
             </div>
           </div>
         </div>
-        {{ caller() if caller }}
+        {{ caller() }}
       </div>
     </div>
   </div>
@@ -77,8 +77,8 @@
 {% endmacro %}
 
 
-{% macro show_sensor(sensor, endpoint) %}
-{% call() show_common(sensor, endpoint) %}
+{% macro show_sensor(sensor) %}
+{% call() _common_info(sensor, 'mgnt.edit_sensor') %}
 {% with amount = sensor.length %}
 <div class="level">
   <div class="level-left">
@@ -116,8 +116,12 @@
 {% endcall %}
 {% endmacro %}
 
+{% macro show_prompt(prompt) %}
+{% call() _common_info(prompt, 'mgnt.edit_prompt') %}
+{% endcall %}
+{% endmacro %}
 
-{% macro show_mapper(mapper, endpoint) %}
+{% macro show_mapper(mapper) %}
 {% if mapper %}
 <div class="content">
   <div class="level">
@@ -128,7 +132,7 @@
           <code class="subtitle is-3">
             <a title="Edit" href="{{
               url_for(
-                endpoint,
+                'mgnt.edit_mapper',
                 prompt_slug=mapper.prompt.slug,
                 sensor_slug=mapper.sensor.slug,
               )
@@ -146,7 +150,7 @@
           <code class="subtitle is-3">
             <a title="Edit" href="{{
               url_for(
-                endpoint,
+                'mgnt.edit_mapper',
                 prompt_slug=mapper.prompt.slug,
                 sensor_slug=mapper.sensor.slug,
               )
@@ -231,7 +235,6 @@
             </div>
           </div>
         </div>
-        {{ caller() if caller }}
       </div>
     </div>
   </div>
