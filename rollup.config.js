@@ -12,11 +12,18 @@ const DEVEL = [
     'dev', 'devel', 'development'
 ].includes(process.env.BUILD);
 
+const ASSETS = path.normalize(path.join(
+  __dirname, 'assets'
+));
+const STATIC = path.normalize(path.join(
+  __dirname, 'observatory', 'static'
+));
+
 
 const assetStyle = {
-  input: 'assets/style.css',
+  input: path.join(ASSETS, 'style.css'),
   output: {
-    file: 'observatory/static/style.css',
+    file: path.join(STATIC, 'style.css'),
     format: 'system',
   },
   plugins: [
@@ -26,10 +33,10 @@ const assetStyle = {
         cssurl({
           url: 'copy',
           useHash: true,
-          assetsPath: 'observatory/static/fonts',
+          assetsPath: path.join(STATIC, 'fonts'),
         }),
         cssurl({
-          url: (asset) => path.relative('observatory/static', asset.url),
+          url: (asset) => path.relative(STATIC, asset.url),
         }),
         cssprefixer(),
       ],
@@ -42,9 +49,9 @@ const assetStyle = {
 
 
 const assetScript = {
-  input: 'assets/script.ts',
+  input: path.join(ASSETS, 'script.ts'),
   output: {
-    file: 'observatory/static/script.js',
+    file: path.join(STATIC, 'script.js'),
     format: 'iife',
   },
   plugins: [
