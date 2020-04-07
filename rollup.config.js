@@ -12,6 +12,9 @@ const DEVEL = [
     'dev', 'devel', 'development'
 ].includes(process.env.BUILD);
 
+const NODE_M = path.normalize(path.join(
+  __dirname, 'node_modules'
+));
 const ASSETS = path.normalize(path.join(
   __dirname, 'assets'
 ));
@@ -21,7 +24,7 @@ const STATIC = path.normalize(path.join(
 
 
 const assetStyle = {
-  input: path.join(ASSETS, 'style.css'),
+  input: path.join(ASSETS, 'style.scss'),
   output: {
     file: path.join(STATIC, 'style.css'),
     format: 'system',
@@ -33,6 +36,7 @@ const assetStyle = {
         cssurl({
           url: 'copy',
           useHash: true,
+          basePath: path.join(NODE_M, 'remixicon', 'fonts'),
           assetsPath: path.join(STATIC, 'fonts'),
         }),
         cssurl({
