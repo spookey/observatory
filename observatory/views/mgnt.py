@@ -10,18 +10,7 @@ from observatory.models.sensor import Sensor
 BLUEPRINT_MGNT = Blueprint('mgnt', __name__)
 
 
-@BLUEPRINT_MGNT.route('/manage')
-@login_required
-def index():
-    return render_template(
-        'mgnt/index.html',
-        title='Management',
-        mapping=Mapper.query.count(),
-        prompts=Prompt.query.count(),
-        sensors=Sensor.query.count(),
-    )
-
-
+@BLUEPRINT_MGNT.route('/manage', endpoint='index')
 @BLUEPRINT_MGNT.route('/manage/mapper/view')
 @login_required
 def view_mapper():

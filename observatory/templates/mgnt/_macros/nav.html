@@ -1,9 +1,9 @@
 {% from '_macros/elem.html' import text_icon %}
 
 {% macro inner_navigation() %}
-  {% macro _li(ep, text, icon) %}
-  <li {%- if request.endpoint == ep %} class="is-active"{% endif %}>
-    <a href="{{ url_for(ep) }}">
+  {% macro _li(text, icon, endpoints) %}
+  <li {%- if request.endpoint in endpoints %} class="is-active"{% endif %}>
+    <a href="{{ url_for(endpoints|first) }}">
       {{ text_icon(icon) }}
       <span>{{ text }}</span>
     </a>
@@ -11,10 +11,9 @@
   {% endmacro %}
   <div class="tabs is-centered is-boxed">
     <ul>
-      {{ _li('mgnt.index', 'Index', 'glob_index') }}
-      {{ _li('mgnt.view_sensor', 'Sensor', 'obj_sensor') }}
-      {{ _li('mgnt.view_mapper', 'Mapper', 'obj_mapper') }}
-      {{ _li('mgnt.view_prompt', 'Prompt', 'obj_prompt') }}
+      {{ _li('Sensor', 'obj_sensor', ['mgnt.view_sensor']) }}
+      {{ _li('Mapper', 'obj_mapper', ['mgnt.view_mapper', 'mgnt.index']) }}
+      {{ _li('Prompt', 'obj_prompt', ['mgnt.view_prompt']) }}
     </ul>
   </div>
 {% endmacro %}

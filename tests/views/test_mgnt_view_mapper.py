@@ -2,6 +2,7 @@ from flask import url_for
 from pytest import mark
 
 ENDPOINT = 'mgnt.view_mapper'
+ENDINDEX = 'mgnt.index'
 
 
 @mark.usefixtures('session')
@@ -11,6 +12,7 @@ class TestMgntViewMapper:
     @mark.usefixtures('ctx_app')
     def test_url():
         assert url_for(ENDPOINT) == '/manage/mapper/view'
+        assert url_for(ENDINDEX) == '/manage'
 
     @staticmethod
     def test_no_user(visitor):
@@ -31,13 +33,12 @@ class TestMgntViewMapper:
         gen_user_loggedin()
 
         res = visitor(ENDPOINT)
-        idx, sns, mpp, prp = res.soup.select('.tabs li')
+        sns, mpp, prp = res.soup.select('.tabs li')
 
         assert 'is-active' in mpp.attrs.get('class')
         assert mpp.a['href'] == url_for(ENDPOINT)
 
         for elem, href in (
-                (idx, url_for('mgnt.index')),
                 (sns, url_for('mgnt.view_sensor')),
                 (prp, url_for('mgnt.view_prompt')),
         ):

@@ -60,14 +60,10 @@ class TestMgntViewCommon:
         _comm.login()
 
         res = _comm.visitor(_comm.endpoint)
-        idx, sns, mpp, prp = res.soup.select('.tabs li')
+        sns, mpp, prp = res.soup.select('.tabs li')
 
-        for elem, href in (
-                (idx, url_for('mgnt.index')),
-                (mpp, url_for('mgnt.view_mapper')),
-        ):
-            assert not elem.has_attr('class')
-            assert elem.a['href'] == href
+        assert not mpp.has_attr('class')
+        assert mpp.a['href'] == url_for('mgnt.view_mapper')
 
         for elem, href in (
                 (sns, url_for('mgnt.view_sensor')),

@@ -46,7 +46,6 @@ TAGLINES = [
 ICON = {
     '__fallback': getenv('ICON___FALLBACK', 'fire'),
     'glob_error': getenv('ICON_GLOB_ERROR', 'flashlight'),
-    'glob_index': getenv('ICON_GLOB_INDEX', 'home'),
     'obj_mapper': getenv('ICON_OBJ_MAPPER', 'guide'),
     'obj_prompt': getenv('ICON_OBJ_PROMPT', 'newspaper'),
     'obj_sensor': getenv('ICON_OBJ_SENSOR', 'radar'),
