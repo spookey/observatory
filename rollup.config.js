@@ -2,7 +2,6 @@ import commonjs from 'rollup-plugin-commonjs';
 import cssimport from 'postcss-import';
 import cssprefixer from 'autoprefixer';
 import cssurl from 'postcss-url';
-import json from '@rollup/plugin-json';
 import path from 'path';
 import postcss from 'rollup-plugin-postcss';
 import resolve from 'rollup-plugin-node-resolve';
@@ -53,7 +52,6 @@ const assetScript = {
       browser: true,
     }),
     commonjs(),
-    json(),
     typescript(),
     (devel() ? null : terser()),
   ],

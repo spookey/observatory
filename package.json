@@ -17,7 +17,6 @@
     "remixicon": "^2.3.0"
   },
   "devDependencies": {
-    "@rollup/plugin-json": "^4.0.2",
     "@types/chart.js": "^2.9.18",
     "@types/color": "^3.0.1",
     "autoprefixer": "^9.7.5",
