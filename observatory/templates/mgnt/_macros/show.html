@@ -1,20 +1,17 @@
 {% from '_macros/elem.html' import text_color %}
 {% from '_macros/elem.html' import time_abs %}
 {% from '_macros/elem.html' import time_rel %}
+{% from 'mgnt/_macros/level.html' import head_level %}
 {% from 'mgnt/_macros/level.html' import key_val_level %}
-{% from 'mgnt/_macros/level.html' import link_head_code %}
-{% from 'mgnt/_macros/level.html' import link_head_title %}
-{% from 'mgnt/_macros/level.html' import linking_level %}
 
 
 {% macro _common_info(thing, endpoint) %}
 {% if thing %}
 <div class="content">
-  {{ linking_level(
-    'Title',
-    link_head_title(thing.title, url_for(endpoint, slug=thing.slug), sub=false),
-    'Slug',
-    link_head_code(thing.slug, url_for(endpoint, slug=thing.slug), sub=true),
+  {{ head_level(
+    'Title', thing.title,
+    'Slug', thing.slug,
+    url_for(endpoint, slug=thing.slug),
   ) }}
   <div class="box">
     <div class="media">
@@ -63,18 +60,16 @@
 {% macro show_mapper(mapper) %}
 {% if mapper %}
 <div class="content">
-  {% with href = url_for(
-    'mgnt.edit_mapper',
-    prompt_slug=mapper.prompt.slug,
-    sensor_slug=mapper.sensor.slug,
-  ) %}
-  {{ linking_level(
-    'Prompt',
-    link_head_code(mapper.prompt.slug, href, sub=true),
-    'Sensor',
-    link_head_code(mapper.sensor.slug, href, sub=true),
+  {{ head_level(
+    'Prompt', mapper.prompt.slug,
+    'Sensor', mapper.sensor.slug,
+    url_for(
+      'mgnt.edit_mapper',
+      prompt_slug=mapper.prompt.slug,
+      sensor_slug=mapper.sensor.slug,
+    ),
+    both_code=true,
   ) }}
-  {% endwith %}
   <div class="box">
     <div class="media">
       <div class="media-content">

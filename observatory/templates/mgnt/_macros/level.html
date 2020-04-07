@@ -1,29 +1,31 @@
-{% macro link_head_code(text, href, sub=true) %}
-<code class="{{ 'subtitle' if sub else 'title' }} is-3">
-  <a href="{{ href }}">{{ text }}</a>
-</code>
-{% endmacro %}
-{% macro link_head_title(text, href, sub=true) %}
-<a href="{{ href }}" class="{{ 'subtitle' if sub else 'title' }} is-3">
-  {{ text }}
-</a>
-{% endmacro %}
+{% macro head_level(
+  ll_heading, ll_title, rr_heading, rr_title,
+  href, both_code=false
+) %}
+  {% macro _code(text) %}
+  <div class="title is-3">
+    <code><a href="{{ href }}">{{ text }}</a></code>
+  </div>
+  {% endmacro %}
 
-{% macro linking_level(left_heading, left_link, right_heading, right_link) %}
 <div class="level">
   <div class="level-left">
     <div class="level-item has-text-left-tablet has-text-centered">
       <div>
-        <div class="heading">{{ left_heading }}</div>
-        {{ left_link }}
+        <div class="heading">{{ ll_heading }}</div>
+        {% if both_code %}
+        {{ _code(ll_title) }}
+        {% else %}
+        <a href="{{ href }}" class="title is-3">{{ ll_title }}</a>
+        {% endif %}
       </div>
     </div>
   </div>
   <div class="level-right">
     <div class="level-item has-text-right-tablet has-text-centered">
       <div>
-        <div class="heading">{{ right_heading }}</div>
-        {{ right_link }}
+        <div class="heading">{{ rr_heading }}</div>
+        {{ _code(rr_title) }}
       </div>
     </div>
   </div>
