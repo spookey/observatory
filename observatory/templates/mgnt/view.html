@@ -1,33 +1,51 @@
 {% extends '_base.html' %}
-{% from 'mgnt/_macros/nav.html' import inner_navigation %}
+{% from '_macros/elem.html' import text_icon %}
 {% from 'mgnt/_macros/show.html' import create_button %}
 {% from 'mgnt/_macros/show.html' import show_mapper %}
 {% from 'mgnt/_macros/show.html' import show_prompt %}
 {% from 'mgnt/_macros/show.html' import show_sensor %}
 
 
-{% macro _show(heading, function, things) %}
+{% macro _display(heading, function, things) %}
 <h3 class="title">{{ heading }}</h3>
 {% for thing in things %}
   {{ function(thing) }}
 {% endfor %}
 {% endmacro %}
 
+{% macro _inner_navigation() %}
+  {% macro _nav_li(text, icon, endpoints) %}
+  <li {%- if request.endpoint in endpoints %} class="is-active"{% endif %}>
+    <a href="{{ url_for(endpoints|first) }}">
+      {{ text_icon(icon) }}
+      <span>{{ text }}</span>
+    </a>
+  </li>
+  {% endmacro %}
+  <div class="tabs is-centered is-boxed">
+    <ul>
+      {{ _nav_li('Sensor', 'obj_sensor', ['mgnt.view_sensor']) }}
+      {{ _nav_li('Mapper', 'obj_mapper', ['mgnt.view_mapper', 'mgnt.index']) }}
+      {{ _nav_li('Prompt', 'obj_prompt', ['mgnt.view_prompt']) }}
+    </ul>
+  </div>
+{% endmacro %}
+
 
 {% block content %}
 <section class="section">
   <div class="container">
-    {{ inner_navigation() }}
+    {{ _inner_navigation() }}
     {% if prompts is defined %}
-      {{ _show('Prompt', show_prompt, prompts) }}
+      {{ _display('Prompt', show_prompt, prompts) }}
       {{ create_button('mgnt.edit_prompt') }}
     {% endif %}
     {% if mapping is defined %}
-      {{ _show('Mapper', show_mapper, mapping) }}
+      {{ _display('Mapper', show_mapper, mapping) }}
       {{ create_button('mgnt.edit_mapper') }}
     {% endif %}
     {% if sensors is defined %}
-      {{ _show('Sensor', show_sensor, sensors) }}
+      {{ _display('Sensor', show_sensor, sensors) }}
       {{ create_button('mgnt.edit_sensor') }}
     {% endif %}
   </div>
