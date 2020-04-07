@@ -8,7 +8,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
 import { terser } from 'rollup-plugin-terser';
 
-const devel = () => [
+const DEVEL = [
     'dev', 'devel', 'development'
 ].includes(process.env.BUILD);
 
@@ -34,8 +34,8 @@ const assetStyle = {
         cssprefixer(),
       ],
       extract: true,
-      minimize: !devel(),
-      sourceMap: (devel() ? 'inline' : false),
+      minimize: !DEVEL,
+      sourceMap: (DEVEL ? 'inline' : false),
     }),
   ],
 };
@@ -53,7 +53,7 @@ const assetScript = {
     }),
     commonjs(),
     typescript(),
-    (devel() ? null : terser()),
+    (DEVEL ? null : terser()),
   ],
 };
 
