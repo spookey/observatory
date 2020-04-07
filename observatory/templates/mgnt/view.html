@@ -31,6 +31,18 @@
   </div>
 {% endmacro %}
 
+{% macro _create_button(endpoint) %}
+<div class="content has-text-right">
+  <a
+    class="button is-dark"
+    href="{{ url_for(endpoint, slug=None) }}"
+  >
+    {{ text_icon('ops_create') }}
+    <span>Create new</span>
+  </a>
+</div>
+{% endmacro %}
+
 
 {% block content %}
 <section class="section">
@@ -38,15 +50,15 @@
     {{ _inner_navigation() }}
     {% if prompts is defined %}
       {{ _display('Prompt', show_prompt, prompts) }}
-      {{ create_button('mgnt.edit_prompt') }}
+      {{ _create_button('mgnt.edit_prompt') }}
     {% endif %}
     {% if mapping is defined %}
       {{ _display('Mapper', show_mapper, mapping) }}
-      {{ create_button('mgnt.edit_mapper') }}
+      {{ _create_button('mgnt.edit_mapper') }}
     {% endif %}
     {% if sensors is defined %}
       {{ _display('Sensor', show_sensor, sensors) }}
-      {{ create_button('mgnt.edit_sensor') }}
+      {{ _create_button('mgnt.edit_sensor') }}
     {% endif %}
   </div>
 </section>

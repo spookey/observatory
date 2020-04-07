@@ -1,23 +1,10 @@
 {% from '_macros/elem.html' import text_color %}
-{% from '_macros/elem.html' import text_icon %}
 {% from '_macros/elem.html' import time_abs %}
 {% from '_macros/elem.html' import time_rel %}
 {% from 'mgnt/_macros/level.html' import key_val_level %}
 {% from 'mgnt/_macros/level.html' import link_head_code %}
 {% from 'mgnt/_macros/level.html' import link_head_title %}
 {% from 'mgnt/_macros/level.html' import linking_level %}
-
-{% macro create_button(endpoint) %}
-<div class="content has-text-right">
-  <a
-    class="button is-dark"
-    href="{{ url_for(endpoint, slug=None) }}"
-  >
-    {{ text_icon('ops_create') }}
-    <span>Create new</span>
-  </a>
-</div>
-{% endmacro %}
 
 
 {% macro _common_info(thing, endpoint) %}
