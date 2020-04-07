@@ -25,8 +25,8 @@ class TestMgntViewMapper:
         res = visitor(ENDPOINT)
         subtitle = res.soup.select('h2 a.subtitle')[-1]
         heading = res.soup.select('h3.title')[-1]
-        assert subtitle.text.strip() == 'View mapping'
-        assert heading.text.strip() == 'Mapping'
+        assert subtitle.text.strip() == 'View mapper'
+        assert heading.text.strip() == 'Mapper'
 
     @staticmethod
     def test_inner_nav(visitor, gen_user_loggedin):

@@ -18,16 +18,16 @@
 <section class="section">
   <div class="container">
     {{ inner_navigation() }}
-    {% if mapping is defined %}
-      {{ _show('Mapping', show_mapper, mapping) }}
-      {{ create_button('mgnt.edit_mapper') }}
-    {% endif %}
     {% if prompts is defined %}
-      {{ _show('Prompts', show_prompt, prompts) }}
+      {{ _show('Prompt', show_prompt, prompts) }}
       {{ create_button('mgnt.edit_prompt') }}
     {% endif %}
+    {% if mapping is defined %}
+      {{ _show('Mapper', show_mapper, mapping) }}
+      {{ create_button('mgnt.edit_mapper') }}
+    {% endif %}
     {% if sensors is defined %}
-      {{ _show('Sensors', show_sensor, sensors) }}
+      {{ _show('Sensor', show_sensor, sensors) }}
       {{ create_button('mgnt.edit_sensor') }}
     {% endif %}
   </div>

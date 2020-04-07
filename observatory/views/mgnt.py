@@ -16,7 +16,7 @@ BLUEPRINT_MGNT = Blueprint('mgnt', __name__)
 def view_mapper():
     return render_template(
         'mgnt/view.html',
-        title='View mapping',
+        title='View mapper',
         mapping=Mapper.query_sorted().all(),
     )
 
@@ -26,7 +26,7 @@ def view_mapper():
 def view_prompt():
     return render_template(
         'mgnt/view.html',
-        title='View prompts',
+        title='View prompt',
         prompts=Prompt.query_sorted().all(),
     )
 
@@ -36,7 +36,7 @@ def view_prompt():
 def view_sensor():
     return render_template(
         'mgnt/view.html',
-        title='View sensors',
+        title='View sensor',
         sensors=Sensor.query_sorted().all(),
     )
 
