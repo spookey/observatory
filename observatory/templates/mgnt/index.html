@@ -20,12 +20,12 @@
   <div class="container">
     {{ inner_navigation() }}
     <h3 class="title">Overview</h3>
-    {{ _level('Prompts', prompts, 'mgnt.view_prompt') }}
-    {{ create_button('mgnt.edit_prompt') }}
-    {{ _level('Sensors', sensors, 'mgnt.view_sensor') }}
+    {{ _level('Sensor', sensors, 'mgnt.view_sensor') }}
     {{ create_button('mgnt.edit_sensor') }}
-    {{ _level('Mapping', mapping, 'mgnt.view_mapper') }}
+    {{ _level('Mapper', mapping, 'mgnt.view_mapper') }}
     {{ create_button('mgnt.edit_mapper') }}
+    {{ _level('Prompt', prompts, 'mgnt.view_prompt') }}
+    {{ create_button('mgnt.edit_prompt') }}
   </div>
 </section>
 {% endblock %}
