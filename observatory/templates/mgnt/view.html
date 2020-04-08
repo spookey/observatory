@@ -10,6 +10,7 @@
 <h3 class="title">{{ heading }}</h3>
 {% for thing in things %}
   {{ function(thing) }}
+  {% if not loop.last %}<hr>{% endif %}
 {% endfor %}
 {% endmacro %}
 
@@ -22,13 +23,13 @@
     </a>
   </li>
   {% endmacro %}
-  <div class="tabs is-centered is-boxed">
-    <ul>
-      {{ _nav_li('Sensor', 'obj_sensor', ['mgnt.view_sensor']) }}
-      {{ _nav_li('Mapper', 'obj_mapper', ['mgnt.view_mapper', 'mgnt.index']) }}
-      {{ _nav_li('Prompt', 'obj_prompt', ['mgnt.view_prompt']) }}
-    </ul>
-  </div>
+<div class="tabs is-centered is-boxed">
+  <ul>
+    {{ _nav_li('Sensor', 'obj_sensor', ['mgnt.view_sensor']) }}
+    {{ _nav_li('Mapper', 'obj_mapper', ['mgnt.view_mapper', 'mgnt.index']) }}
+    {{ _nav_li('Prompt', 'obj_prompt', ['mgnt.view_prompt']) }}
+  </ul>
+</div>
 {% endmacro %}
 
 {% macro _create_button(name, endpoint) %}

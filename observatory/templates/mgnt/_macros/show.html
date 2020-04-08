@@ -8,31 +8,23 @@
 
 {% macro _common_info(thing, endpoint) %}
 {% if thing %}
+{{ head_level(
+  'Title', thing.title,
+  'Slug', thing.slug,
+  url_for(endpoint, slug=thing.slug),
+) }}
 <div class="content">
-  {{ head_level(
-    'Title', thing.title,
-    'Slug', thing.slug,
-    url_for(endpoint, slug=thing.slug),
+  {% if thing.description %}
+  <p>
+    <strong>Description</strong>
+    <blockquote>{{ thing.description }}</blockquote>
+  </p>
+  {% endif %}
+  {{ key_val_level(
+    'Created',
+    time_abs(thing.created_epoch_ms, thing.created_fmt),
   ) }}
-  <div class="box">
-    <div class="media">
-      <div class="media-content">
-        {% if thing.description %}
-        <div class="content">
-          <p>
-            <strong>Description</strong>
-            <blockquote>{{ thing.description }}</blockquote>
-          </p>
-        </div>
-        {% endif %}
-        {{ key_val_level(
-          'Created',
-          time_abs(thing.created_epoch_ms, thing.created_fmt),
-        ) }}
-        {{ caller() }}
-      </div>
-    </div>
-  </div>
+  {{ caller() }}
 </div>
 {% endif %}
 {% endmacro %}
@@ -60,43 +52,37 @@
 
 {% macro show_mapper(mapper) %}
 {% if mapper %}
+{{ head_level(
+  'Prompt', mapper.prompt.slug,
+  'Sensor', mapper.sensor.slug,
+  url_for(
+    'mgnt.edit_mapper',
+    prompt_slug=mapper.prompt.slug,
+    sensor_slug=mapper.sensor.slug,
+  ),
+  both_code=true,
+) }}
 <div class="content">
-  {{ head_level(
-    'Prompt', mapper.prompt.slug,
-    'Sensor', mapper.sensor.slug,
-    url_for(
-      'mgnt.edit_mapper',
-      prompt_slug=mapper.prompt.slug,
-      sensor_slug=mapper.sensor.slug,
-    ),
-    both_code=true,
+  {{ key_val_level(
+    'Created',
+    time_abs(mapper.created_epoch_ms, mapper.created_fmt),
   ) }}
-  <div class="box">
-    <div class="media">
-      <div class="media-content">
-        {{ key_val_level(
-          'Created',
-          time_abs(mapper.created_epoch_ms, mapper.created_fmt),
-        ) }}
-        {{ key_val_level(
-          'Active',
-          bool_icon(mapper.active),
-        ) }}
-        {{ key_val_level(
-          'Color',
-          text_color(mapper.color.name, mapper.color.color),
-        ) }}
-        {{ key_val_level(
-          'Convert',
-          mapper.convert.name,
-        ) }}
-        {{ key_val_level(
-          'Horizon',
-          mapper.horizon.name,
-        ) }}
-      </div>
-    </div>
-  </div>
+  {{ key_val_level(
+    'Active',
+    bool_icon(mapper.active),
+  ) }}
+  {{ key_val_level(
+    'Color',
+    text_color(mapper.color.name, mapper.color.color),
+  ) }}
+  {{ key_val_level(
+    'Convert',
+    mapper.convert.name,
+  ) }}
+  {{ key_val_level(
+    'Horizon',
+    mapper.horizon.name,
+  ) }}
 </div>
 {% endif %}
 {% endmacro %}
