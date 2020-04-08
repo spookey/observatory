@@ -3,6 +3,7 @@ from datetime import datetime
 from flask_login import current_user
 from pytest import mark
 
+from observatory.forms.extra.widgets import SubmitIconInput
 from observatory.forms.user import LoginForm
 from tests.conftest import USER_NAME, USER_PASS
 
@@ -17,6 +18,13 @@ class TestLoginForm:
         assert form.password is not None
         assert form.remember is not None
         assert form.submit is not None
+
+    @staticmethod
+    def test_submit_icon():
+        form = LoginForm()
+        assert form.submit.widget is not None
+        assert isinstance(form.submit.widget, SubmitIconInput)
+        assert form.submit.widget.icon == 'user_enter'
 
     @staticmethod
     def test_empty_user():

@@ -52,6 +52,7 @@ ICON = {
     'obj_prompt': getenv('ICON_OBJ_PROMPT', 'newspaper'),
     'obj_sensor': getenv('ICON_OBJ_SENSOR', 'radar'),
     'ops_create': getenv('ICON_OPS_CREATE', 'add'),
+    'ops_submit': getenv('ICON_OPS_SUBMIT', 'check-double'),
     'user_basic': getenv('ICON_USER_BASIC', 'user'),
     'user_enter': getenv('ICON_USER_ENTER', 'login-box'),
     'user_leave': getenv('ICON_USER_LEAVE', 'logout-box-r'),

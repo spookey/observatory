@@ -5,6 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import BooleanField, PasswordField, StringField, SubmitField
 from wtforms.validators import DataRequired
 
+from observatory.forms.extra.widgets import SubmitIconInput
 from observatory.models.user import User
 
 LOG = getLogger(__name__)
@@ -14,20 +15,21 @@ class LoginForm(FlaskForm):
     username = StringField(
         'Username',
         validators=[DataRequired()],
-        description='The name'
+        description='The name',
     )
     password = PasswordField(
         'Password',
         validators=[DataRequired()],
-        description='The secret'
+        description='The secret',
     )
     remember = BooleanField(
         'Remember',
-        description='Set cookie'
+        description='Set cookie',
     )
     submit = SubmitField(
         'Login',
-        description='Submit'
+        description='Submit',
+        widget=SubmitIconInput(icon='user_enter'),
     )
 
     def __init__(self, *args, **kwargs):

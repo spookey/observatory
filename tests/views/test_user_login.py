@@ -28,7 +28,7 @@ class TestUserLogin:
         form = res.soup.select('form')[-1]
         fields = [
             (inpt.attrs.get('name'), inpt.attrs.get('type'))
-            for inpt in form.select('input')
+            for inpt in form.select('input,button')
         ]
         assert fields == [
             ('username', 'text'),

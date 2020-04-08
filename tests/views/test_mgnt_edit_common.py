@@ -53,7 +53,7 @@ class TestMgntEditCommon:
         form = res.soup.select('form')[-1]
         fields = [
             (inp.attrs.get('name'), inp.attrs.get('type', '_ta_'))
-            for inp in form.select('input,textarea')
+            for inp in form.select('input,textarea,button')
         ]
         assert fields == [
             ('slug', 'text'),

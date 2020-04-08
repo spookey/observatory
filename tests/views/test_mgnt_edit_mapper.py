@@ -44,7 +44,7 @@ class TestMgntEditMapper:
                 inp.attrs.get('type', '_sl_'),
                 inp.attrs.get('data-colorize', '_cl_')
             )
-            for inp in form.select('input,select')
+            for inp in form.select('input,select,button')
         ]
         assert fields == [
             ('prompt_sel', '_sl_', '_cl_'),

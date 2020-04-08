@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField
 
-from observatory.forms.validators import SafeSlug
+from observatory.forms.extra.validators import SafeSlug
 
 MESSAGE = 'Test Message'
 

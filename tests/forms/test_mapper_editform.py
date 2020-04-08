@@ -1,6 +1,7 @@
 from pytest import mark
 from werkzeug.datastructures import MultiDict
 
+from observatory.forms.extra.widgets import SubmitIconInput
 from observatory.forms.mapper import MapperEditForm
 from observatory.models.mapper import (
     EnumColor, EnumConvert, EnumHorizon, Mapper
@@ -20,6 +21,13 @@ class TestMapperEditForm:
         assert form.convert_sel is not None
         assert form.horizon_sel is not None
         assert form.submit is not None
+
+    @staticmethod
+    def test_submit_icon():
+        form = MapperEditForm()
+        assert form.submit.widget is not None
+        assert isinstance(form.submit.widget, SubmitIconInput)
+        assert form.submit.widget.icon == 'ops_submit'
 
     @staticmethod
     def test_empty_mapper():

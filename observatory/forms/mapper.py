@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import BooleanField, SelectField, SubmitField
 from wtforms.validators import DataRequired
 
+from observatory.forms.extra.widgets import SubmitIconInput
 from observatory.models.mapper import (
     EnumColor, EnumConvert, EnumHorizon, Mapper
 )
@@ -49,6 +50,7 @@ class MapperEditForm(FlaskForm):
     submit = SubmitField(
         'Save',
         description='Submit',
+        widget=SubmitIconInput(icon='ops_submit'),
     )
 
     @staticmethod
