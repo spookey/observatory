@@ -60,7 +60,7 @@ class TestMgntViewCommon:
         _comm.login()
 
         res = _comm.visitor(_comm.endpoint)
-        sns, mpp, prp = res.soup.select('.tabs li')
+        prp, mpp, sns = res.soup.select('.tabs li')
 
         assert not mpp.has_attr('class')
         assert mpp.a['href'] == url_for('mgnt.view_mapper')

@@ -33,7 +33,7 @@ class TestMgntViewMapper:
         gen_user_loggedin()
 
         res = visitor(ENDPOINT)
-        sns, mpp, prp = res.soup.select('.tabs li')
+        prp, mpp, sns = res.soup.select('.tabs li')
 
         assert 'is-active' in mpp.attrs.get('class')
         assert mpp.a['href'] == url_for(ENDPOINT)
