@@ -1,12 +1,9 @@
-from pytest import mark
-
 from observatory.start.environment import MIGR_DIR
 from observatory.start.extensions import (
     BCRYPT, CSRF_PROTECT, DB, LOGIN_MANAGER, MIGRATE, REST
 )
 
 
-@mark.usefixtures('app')
 class TestExtensions:
 
     @staticmethod
@@ -21,8 +18,9 @@ class TestExtensions:
         assert app.config['WTF_CSRF_CHECK_DEFAULT'] is True
 
     @staticmethod
-    def test_for_db():
+    def test_for_db(app):
         assert DB is not None
+        assert DB == app.extensions['sqlalchemy'].db
         assert DB.engine.url.database is None  # memory db
 
     @staticmethod
