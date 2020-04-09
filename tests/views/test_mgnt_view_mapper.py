@@ -33,6 +33,15 @@ class TestMgntViewMapper:
         assert heading.text.strip() == 'Mapper'
 
     @staticmethod
+    def test_empty(visitor, gen_user_loggedin):
+        gen_user_loggedin()
+
+        res = visitor(ENDPOINT)
+        text = res.soup.text
+
+        assert 'nothing there' in text.lower()
+
+    @staticmethod
     def test_view(visitor, gen_user_loggedin, gen_prompt, gen_sensor):
         gen_user_loggedin()
 

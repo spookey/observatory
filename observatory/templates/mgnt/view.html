@@ -1,5 +1,6 @@
 {% extends '_base.html' %}
 {% from '_macros/elem.html' import text_icon %}
+{% from '_macros/page.html' import nothing_there %}
 {% from 'mgnt/_macros/show.html' import create_button %}
 {% from 'mgnt/_macros/show.html' import show_mapper %}
 {% from 'mgnt/_macros/show.html' import show_prompt %}
@@ -8,10 +9,14 @@
 
 {% macro _display(heading, function, things) %}
 <h3 class="title">{{ heading }}</h3>
+{% if not things %}
+{{ nothing_there() }}
+{% else %}
 {% for thing in things %}
   {{ function(thing) }}
   {% if not loop.last %}<hr>{% endif %}
 {% endfor %}
+{% endif %}
 {% endmacro %}
 
 {% macro _inner_navigation() %}
@@ -34,10 +39,7 @@
 
 {% macro _create_button(name, endpoint) %}
 <div class="content has-text-right">
-  <a
-    class="button is-dark"
-    href="{{ url_for(endpoint, slug=None) }}"
-  >
+  <a class="button is-dark" href="{{ url_for(endpoint, slug=None) }}">
     {{ text_icon('ops_create') }}
     <span>New {{ name }}</span>
   </a>

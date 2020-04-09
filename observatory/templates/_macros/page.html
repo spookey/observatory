@@ -1,0 +1,12 @@
+{% from '_macros/elem.html' import text_icon %}
+
+{% macro nothing_there(text='Nothing there!', icon='glob_empty') %}
+<div class="content">
+  <div class="level">
+    <div class="level-item has-text-centered">
+    {{ text_icon(icon, 'large') }}
+    <div class="title">{{ text }}</div>
+    </div>
+  </div>
+</div>
+{% endmacro %}

@@ -45,6 +45,15 @@ class TestMgntViewCommon:
         assert heading.text.strip() == _comm.heading
 
     @staticmethod
+    def test_empty(_comm):
+        _comm.login()
+
+        res = _comm.visitor(_comm.endpoint)
+        text = res.soup.text
+
+        assert 'nothing there' in text.lower()
+
+    @staticmethod
     def test_view(_comm):
         _comm.login()
         thing = _comm.gen_common()

@@ -27,3 +27,10 @@ class TestMainIndex:
         res = visitor(ENDPOINT)
         footer = res.soup.select('footer')[-1]
         assert TITLE in footer.text
+
+    @staticmethod
+    def test_empty(visitor):
+        res = visitor(ENDPOINT)
+        text = res.soup.text
+
+        assert 'nothing there' in text.lower()

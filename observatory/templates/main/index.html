@@ -1,4 +1,10 @@
 {% extends '_base.html' %}
+{% from '_macros/page.html' import nothing_there %}
 
 {% block content %}
+<section class="section">
+  <div class="container">
+  {{ nothing_there() }}
+  </div>
+</section>
 {% endblock %}
