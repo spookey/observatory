@@ -1,6 +1,10 @@
 from flask import url_for
 from pytest import mark
 
+from observatory.models.mapper import (
+    EnumColor, EnumConvert, EnumHorizon, Mapper
+)
+
 ENDPOINT = 'mgnt.view_mapper'
 ENDINDEX = 'mgnt.index'
 
@@ -29,18 +33,41 @@ class TestMgntViewMapper:
         assert heading.text.strip() == 'Mapper'
 
     @staticmethod
+    def test_view(visitor, gen_user_loggedin, gen_prompt, gen_sensor):
+        gen_user_loggedin()
+        prompt = gen_prompt()
+        sensor = gen_sensor()
+        color = EnumColor.RED
+        horizon = EnumHorizon.NORMAL
+        convert = EnumConvert.BOOLEAN
+
+        Mapper.create(
+            prompt=prompt, sensor=sensor,
+            color=color, convert=convert, horizon=horizon,
+        )
+
+        res = visitor(ENDPOINT)
+        text = res.soup.text
+
+        assert prompt.slug in text
+        assert sensor.slug in text
+        assert color.name in text
+        assert convert.name in text
+        assert horizon.name in text
+
+    @staticmethod
     def test_inner_nav(visitor, gen_user_loggedin):
         gen_user_loggedin()
 
         res = visitor(ENDPOINT)
-        prp, mpp, sns = res.soup.select('.tabs li')
+        prompt, mapper, sensor = res.soup.select('.tabs li')
 
-        assert 'is-active' in mpp.attrs.get('class')
-        assert mpp.a['href'] == url_for(ENDPOINT)
+        assert 'is-active' in mapper.attrs.get('class')
+        assert mapper.a['href'] == url_for(ENDPOINT)
 
         for elem, href in (
-                (sns, url_for('mgnt.view_sensor')),
-                (prp, url_for('mgnt.view_prompt')),
+                (sensor, url_for('mgnt.view_sensor')),
+                (prompt, url_for('mgnt.view_prompt')),
         ):
             assert not elem.has_attr('class')
             assert elem.a['href'] == href
