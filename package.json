@@ -38,7 +38,6 @@
   "scripts": {
     "dev": "rollup -c --environment BUILD:dev",
     "dist": "rollup -c --environment BUILD:dist",
-    "watch": "npm run dev -- --watch",
-    "watchdist": "npm run dist -- --watch"
+    "watch": "npm run dev -- --watch"
   }
 }
