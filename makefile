@@ -23,7 +23,7 @@ DIR_OBVTY	:=	observatory
 DIR_STUFF	:=	stuff
 DIR_TESTS	:=	tests
 
-DIR_STATIC	:=	$(DIR_OBSVTY)/static
+DIR_STATIC	:=	$(DIR_OBVTY)/static
 
 DIR_NODEM	:=	node_modules
 CMD_NPM		:=	npm
