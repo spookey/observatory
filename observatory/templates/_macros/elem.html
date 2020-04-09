@@ -1,3 +1,9 @@
+{% macro merge(items) %}
+{% for item in items %}
+{{ item }}
+{% endfor %}
+{% endmacro %}
+
 {% macro _momentize(value, fallback, variant) %}
 <span class="moment {{ variant }}" data-value="{{ value }}">
   {{ fallback }}
@@ -13,8 +19,17 @@
 {% endmacro %}
 
 
+{% macro text_code(text) %}
+<code>{{ text }}</code>
+{% endmacro %}
+
+
 {% macro text_color(text, value) %}
 <span style="background-color: {{ value }}; color: #ffffff;">{{ text }}</span>
+{% endmacro %}
+
+{% macro code_color(text, value) %}
+<code style="background-color: {{ value }}; color: #ffffff;">{{ text }}</code>
 {% endmacro %}
 
 

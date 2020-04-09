@@ -35,25 +35,40 @@ class TestMgntViewMapper:
     @staticmethod
     def test_view(visitor, gen_user_loggedin, gen_prompt, gen_sensor):
         gen_user_loggedin()
-        prompt = gen_prompt()
-        sensor = gen_sensor()
-        color = EnumColor.RED
-        horizon = EnumHorizon.NORMAL
-        convert = EnumConvert.BOOLEAN
 
-        Mapper.create(
-            prompt=prompt, sensor=sensor,
-            color=color, convert=convert, horizon=horizon,
+        mapper = Mapper.create(
+            prompt=gen_prompt(), sensor=gen_sensor(),
+            color=EnumColor.BLUE, convert=EnumConvert.INTEGER,
+            horizon=EnumHorizon.INVERT,
         )
 
         res = visitor(ENDPOINT)
         text = res.soup.text
 
-        assert prompt.slug in text
-        assert sensor.slug in text
-        assert color.name in text
-        assert convert.name in text
-        assert horizon.name in text
+        assert mapper.prompt.slug in text
+        assert mapper.sensor.slug in text
+        assert mapper.color.name in text
+        assert mapper.convert.name in text
+        assert mapper.horizon.name in text
+
+    @staticmethod
+    def test_view_map_box(visitor, gen_user_loggedin, gen_prompt, gen_sensor):
+        gen_user_loggedin()
+
+        mapper = Mapper.create(
+            prompt=gen_prompt(), sensor=gen_sensor(),
+            color=EnumColor.BLUE, convert=EnumConvert.INTEGER,
+            horizon=EnumHorizon.INVERT,
+        )
+
+        res = visitor(ENDPOINT)
+        box = res.soup.select('.box')[-1]
+        text = box.text
+
+        assert mapper.prompt.slug in text
+        assert mapper.sensor.slug in text
+        assert mapper.convert.name in text
+        assert mapper.horizon.name in text
 
     @staticmethod
     def test_inner_nav(visitor, gen_user_loggedin):

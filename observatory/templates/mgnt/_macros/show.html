@@ -1,10 +1,42 @@
 {% from '_macros/elem.html' import bool_icon %}
+{% from '_macros/elem.html' import code_color %}
+{% from '_macros/elem.html' import merge %}
+{% from '_macros/elem.html' import text_code %}
 {% from '_macros/elem.html' import text_color %}
+{% from '_macros/elem.html' import text_icon %}
 {% from '_macros/elem.html' import time_abs %}
 {% from '_macros/elem.html' import time_rel %}
 {% from 'mgnt/_macros/level.html' import head_level %}
 {% from 'mgnt/_macros/level.html' import key_val_level %}
+{% from 'mgnt/_macros/level.html' import single_level %}
 
+
+{% macro _mapper_info(mapping) %}
+{% if mapping %}
+<div class="content">
+{% for mapper in mapping %}
+<div class="box">
+  {{ single_level((
+    merge((
+      text_icon('obj_prompt'),
+      code_color(mapper.prompt.slug, mapper.color.color),
+    )),
+    text_icon('obj_mapper'),
+    merge((
+      text_icon('obj_sensor'),
+      code_color(mapper.sensor.slug, mapper.color.color)
+    )),
+  )) }}
+  {{ single_level((
+    text_code(mapper.horizon.name),
+    bool_icon(mapper.active),
+    text_code(mapper.convert.name),
+  )) }}
+</div>
+{% endfor %}
+</div>
+{% endif %}
+{% endmacro %}
 
 {% macro _common_info(thing, endpoint) %}
 {% if thing %}
@@ -16,8 +48,9 @@
 <div class="content">
   {% if thing.description %}
   <p>
-    <strong>Description</strong>
-    <blockquote>{{ thing.description }}</blockquote>
+    <blockquote class="has-text-centered-mobile">
+    {{ thing.description }}
+    </blockquote>
   </p>
   {% endif %}
   {{ key_val_level(
@@ -26,6 +59,7 @@
   ) }}
   {{ caller() }}
 </div>
+{{ _mapper_info(thing.mapping) }}
 {% endif %}
 {% endmacro %}
 
@@ -73,16 +107,17 @@
   ) }}
   {{ key_val_level(
     'Color',
-    text_color(mapper.color.name, mapper.color.color),
+    code_color(mapper.color.name, mapper.color.color),
   ) }}
   {{ key_val_level(
     'Convert',
-    mapper.convert.name,
+    text_code(mapper.convert.name),
   ) }}
   {{ key_val_level(
     'Horizon',
-    mapper.horizon.name,
+    text_code(mapper.horizon.name),
   ) }}
 </div>
+{{ _mapper_info([mapper]) }}
 {% endif %}
 {% endmacro %}

@@ -1,6 +1,8 @@
 from flask import url_for
 from pytest import fixture, mark
 
+from observatory.models.mapper import Mapper
+
 
 @fixture(scope='function', params=['prompt', 'sensor'])
 def _comm(request, visitor, gen_prompt, gen_sensor, gen_user_loggedin):
@@ -54,6 +56,20 @@ class TestMgntViewCommon:
         assert thing.title in text
         assert thing.description in text
         assert thing.created_fmt in text
+
+    @staticmethod
+    def test_view_map_box(_comm, gen_prompt, gen_sensor):
+        _comm.login()
+
+        mapper = Mapper.create(prompt=gen_prompt(), sensor=gen_sensor())
+        res = _comm.visitor(_comm.endpoint)
+        box = res.soup.select('.box')[-1]
+        text = box.text
+
+        assert mapper.prompt.slug in text
+        assert mapper.sensor.slug in text
+        assert mapper.convert.name in text
+        assert mapper.horizon.name in text
 
     @staticmethod
     def test_inner_nav(_comm):
