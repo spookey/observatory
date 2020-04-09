@@ -27,6 +27,8 @@ def create_app(config_obj):
     register_blueprints(app)
     register_template_functions(app)
 
+    configure_jinja(app)
+
     return app
 
 
@@ -60,3 +62,8 @@ def register_template_functions(app):
         moment_config=moment_config,
         tagline=tagline,
     )
+
+
+def configure_jinja(app):
+    app.jinja_env.lstrip_blocks = True
+    app.jinja_env.trim_blocks = True

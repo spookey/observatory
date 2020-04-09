@@ -48,3 +48,8 @@ class TestApp:
     def test_template_functions(app):
         assert app.jinja_env.globals['moment_config'] is moment_config
         assert app.jinja_env.globals['tagline'] is tagline
+
+    @staticmethod
+    def test_jinja_config(app):
+        assert app.jinja_env.lstrip_blocks is True
+        assert app.jinja_env.trim_blocks is True
