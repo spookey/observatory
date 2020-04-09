@@ -28,8 +28,8 @@ DIR_STATIC	:=	$(DIR_OBVTY)/static
 DIR_NODEM	:=	node_modules
 CMD_NPM		:=	npm
 
-OUT_STYLE	:=	$(DIR_STATIC)/style.css
-OUT_SCRIPT	:=	$(DIR_STATIC)/script.js
+OUT_CODE	:=	$(DIR_STATIC)/script.js
+OUT_VIEW	:=	$(DIR_STATIC)/style.css
 
 
 .PHONY: help
@@ -95,9 +95,11 @@ $(DIR_NODEM):
 	$(CMD_NPM) install
 
 .PHONY: static
-static: $(OUT_STYLE) $(OUT_SCRIPT)
-$(OUT_STYLE) $(OUT_SCRIPT): $(DIR_NODEM)
-	$(CMD_NPM) run dist
+static: $(OUT_CODE) $(OUT_VIEW)
+$(OUT_CODE): $(DIR_NODEM)
+	$(CMD_NPM) run distCode
+$(OUT_VIEW): $(DIR_NODEM)
+	$(CMD_NPM) run distView
 
 
 ###
@@ -212,7 +214,7 @@ define _flask
 endef
 
 .PHONY: run shell routes
-run: $(CMD_FLASK) $(OUT_STYLE) $(OUT_SCRIPT)
+run: $(CMD_FLASK) static
 	$(call _flask,run --host "$(_HOST)" --port "$(_PORT)")
 shell: $(CMD_FLASK)
 	$(call _flask,shell)

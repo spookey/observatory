@@ -9,9 +9,10 @@ import resolve from '@rollup/plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
 import { terser } from 'rollup-plugin-terser';
 
-const DEVEL = [
-    'dev', 'devel', 'development'
-].includes(process.env.BUILD);
+const DEVEL = process.env.BUILD === 'dev';
+const VIEW = process.env.TARGET === 'view';
+const CODE = process.env.TARGET === 'code';
+const _ALL = (!VIEW && !CODE);
 
 const NODE_M = path.normalize(path.join(
   __dirname, 'node_modules'
@@ -24,7 +25,7 @@ const STATIC = path.normalize(path.join(
 ));
 
 
-const assetStyle = {
+const assetView = {
   input: path.join(ASSETS, 'style.scss'),
   output: {
     file: path.join(STATIC, 'style.css'),
@@ -60,7 +61,7 @@ const assetStyle = {
 };
 
 
-const assetScript = {
+const assetCode = {
   input: path.join(ASSETS, 'script.ts'),
   output: {
     file: path.join(STATIC, 'script.js'),
@@ -77,7 +78,7 @@ const assetScript = {
 };
 
 
-export default [
-  assetStyle,
-  assetScript,
-];
+const jobs = [];
+if (VIEW || _ALL) { jobs.push(assetView); }
+if (CODE || _ALL) { jobs.push(assetCode); }
+export default jobs;

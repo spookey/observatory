@@ -37,7 +37,13 @@
   },
   "scripts": {
     "dev": "rollup -c --environment BUILD:dev",
+    "devCode": "npm run dev -- --environment TARGET:code",
+    "devView": "npm run dev -- --environment TARGET:view",
     "dist": "rollup -c --environment BUILD:dist",
-    "watch": "npm run dev -- --watch"
+    "distCode": "npm run dist -- --environment TARGET:code",
+    "distView": "npm run dist -- --environment TARGET:view",
+    "watch": "npm run dev -- --watch",
+    "watchCode": "npm run devCode -- --watch",
+    "watchView": "npm run devView -- --watch"
   }
 }
