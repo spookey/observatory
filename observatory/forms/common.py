@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField
+from wtforms import HiddenField, StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired
 
 from observatory.forms.extra.validators import SafeSlug
@@ -28,7 +28,7 @@ class CommonEditForm(FlaskForm):
     submit = SubmitField(
         'Save',
         description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit')
+        widget=SubmitButtonInput(icon='ops_submit'),
     )
 
     def __init__(self, *args, obj=None, **kwargs):
@@ -62,9 +62,51 @@ class CommonEditForm(FlaskForm):
         return self.thing.save()
 
 
+class PromptEditForm(CommonEditForm):
+    Model = Prompt
+
+
 class SensorEditForm(CommonEditForm):
     Model = Sensor
 
 
-class PromptEditForm(CommonEditForm):
+class CommonDropForm(FlaskForm):
+    Model = None
+
+    slug = HiddenField(
+        'Slug',
+        validators=[DataRequired()],
+        description='Slug of endpoint',
+    )
+    submit = SubmitField(
+        'Delete',
+        description='Submit',
+        widget=SubmitButtonInput(
+            icon='ops_delete',
+            classreplace_kw={'is-dark': 'is-danger'},
+        ),
+    )
+
+    def __init__(self, *args, obj=None, **kwargs):
+        super().__init__(*args, obj=obj, **kwargs)
+        self.thing = obj
+
+    def validate(self):
+        if not super().validate():
+            return False
+
+        return bool(self.thing)
+
+    def action(self):
+        if not self.validate():
+            return None
+
+        return self.thing.delete()
+
+
+class PromptDropForm(CommonDropForm):
+    Model = Prompt
+
+
+class SensorDropForm(CommonDropForm):
     Model = Prompt
