@@ -73,11 +73,6 @@ class SensorEditForm(CommonEditForm):
 class CommonDropForm(FlaskForm):
     Model = None
 
-    slug = HiddenField(
-        'Slug',
-        validators=[DataRequired()],
-        description='Slug of endpoint',
-    )
     submit = SubmitField(
         'Delete',
         description='Submit',

@@ -27,7 +27,6 @@ class TestCommonDropForm:
     def test_basic_fields(_comm):
         form = _comm.form()
         assert form.Model == _comm.model
-        assert form.slug is not None
         assert form.submit is not None
 
     @staticmethod
