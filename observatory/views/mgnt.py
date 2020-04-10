@@ -1,7 +1,11 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import (
+    Blueprint, abort, flash, redirect, render_template, request, url_for
+)
 from flask_login import login_required
 
-from observatory.forms.common import PromptEditForm, SensorEditForm
+from observatory.forms.common import (
+    PromptDropForm, PromptEditForm, SensorDropForm, SensorEditForm
+)
 from observatory.forms.mapper import MapperEditForm
 from observatory.models.mapper import Mapper
 from observatory.models.prompt import Prompt
@@ -130,5 +134,43 @@ def edit_prompt(slug=None):
 def edit_sensor(slug=None):
     return _edit_common(
         SensorEditForm(obj=Sensor.by_slug(slug)),
+        'mgnt.view_sensor',
+    )
+
+
+def _drop_common(form, redirect_ep):
+    name = form.Model.__name__.lower()
+
+    if not form.thing:
+        abort(500, f'No such {name}!')
+
+    if request.method == 'POST' and form.validate_on_submit():
+        slug = form.thing.slug
+        if form.action():
+            flash(f'Deleted {name} {slug}!', 'warning')
+
+    return redirect(url_for(redirect_ep))
+
+
+@BLUEPRINT_MGNT.route(
+    '/manage/prompt/drop/<string:slug>',
+    methods=['POST'],
+)
+@login_required
+def drop_prompt(slug):
+    return _drop_common(
+        PromptDropForm(obj=Prompt.by_slug(slug)),
+        'mgnt.view_prompt',
+    )
+
+
+@BLUEPRINT_MGNT.route(
+    '/manage/sensor/drop/<string:slug>',
+    methods=['POST'],
+)
+@login_required
+def drop_sensor(slug):
+    return _drop_common(
+        SensorDropForm(obj=Sensor.by_slug(slug)),
         'mgnt.view_sensor',
     )
