@@ -1,19 +1,26 @@
 from pytest import fixture, mark
 
 from observatory.forms.common import PromptDropForm, SensorDropForm
-from observatory.shared import form_drop_prompt, form_drop_sensor
+from observatory.forms.mapper import MapperDropForm
+from observatory.models.mapper import Mapper
+from observatory.shared import (
+    form_drop_mapper, form_drop_prompt, form_drop_sensor
+)
 
 
-@fixture(scope='function', params=['prompt', 'sensor'])
+@fixture(scope='function', params=['prompt', 'sensor', 'mapper'])
 def _comm(request, gen_prompt, gen_sensor):
     def res():
         pass
 
-    res.func, res.form, res.gen_common = (
-        form_drop_prompt, PromptDropForm, gen_prompt,
-    ) if request.param == 'prompt' else (
-        form_drop_sensor, SensorDropForm, gen_sensor,
-    )
+    res.func, res.form, res.gen_common = {
+        'prompt': (form_drop_prompt, PromptDropForm, gen_prompt),
+        'sensor': (form_drop_sensor, SensorDropForm, gen_sensor),
+        'mapper': (
+            form_drop_mapper, MapperDropForm,
+            lambda: Mapper.create(prompt=gen_prompt(), sensor=gen_sensor())
+        ),
+    }.get(request.param)
 
     yield res
 

@@ -4,6 +4,7 @@ from flask import render_template, request
 from jinja2 import Markup
 
 from observatory.forms.common import PromptDropForm, SensorDropForm
+from observatory.forms.mapper import MapperDropForm
 from observatory.lib.text import random_line
 from observatory.start.environment import FMT_MOMENT, TAGLINES
 
@@ -36,6 +37,10 @@ def moment_config():
 </script>
     '''
     return Markup(''.join(line.strip() for line in script.splitlines()))
+
+
+def form_drop_mapper(mapper):
+    return MapperDropForm(obj=mapper)
 
 
 def form_drop_prompt(prompt):
