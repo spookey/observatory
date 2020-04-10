@@ -6,6 +6,7 @@ _HOST		:=	::1
 _PORT		:=	5000
 
 CMD_GIT		:=	git
+CMD_MAKE	:=	make
 CMD_VENV	:=	virtualenv
 DIR_VENV	:=	venv
 VER_PY		:=	3.7
@@ -18,6 +19,7 @@ CMD_PUDB	:=	$(DIR_VENV)/bin/pudb3
 CMD_PYLINT	:=	$(DIR_VENV)/bin/pylint
 CMD_PYREV	:=	$(DIR_VENV)/bin/pyreverse
 CMD_PYTEST	:=	$(DIR_VENV)/bin/pytest
+CMD_WATCH	:=	$(DIR_VENV)/bin/watchmedo
 
 DIR_OBVTY	:=	observatory
 DIR_STUFF	:=	stuff
@@ -75,13 +77,13 @@ $(DIR_VENV):
 .PHONY: requirements requirements-dev requirements-debug
 requirements: $(CMD_FLASK)
 requirements-dev: $(CMD_ISORT) $(CMD_PYLINT) $(CMD_PYREV) $(CMD_PYTEST)
-requirements-debug: $(CMD_PTPY) $(CMD_PUDB)
+requirements-debug: $(CMD_PTPY) $(CMD_PUDB) $(CMD_WATCH)
 
 $(CMD_FLASK): $(DIR_VENV)
 	$(CMD_PIP) install -r "requirements.txt"
 $(CMD_ISORT) $(CMD_PYLINT) $(CMD_PYREV) $(CMD_PYTEST): $(DIR_VENV)
 	$(CMD_PIP) install -r "requirements-dev.txt"
-$(CMD_PTPY) $(CMD_PUDB): $(DIR_VENV)
+$(CMD_PTPY) $(CMD_PUDB) $(CMD_WATCH): $(DIR_VENV)
 	$(CMD_PIP) install -r "requirements-debug.txt"
 	@echo
 	@echo "import pudb; pudb.set_trace()"
@@ -170,7 +172,7 @@ endef
 
 HTMLCOV		:=	htmlcov
 
-.PHONY: test tcov tcovh tcovh-open
+.PHONY: test tcov tcovh tcovh-open tcovh-watch
 test: $(CMD_PYTEST)
 	$(call _test,--durations=5)
 tcov: $(CMD_PYTEST)
@@ -180,7 +182,13 @@ tcovh: $(CMD_PYTEST)
 
 tcovh-open: tcovh
 	$(CMD_PY) -m webbrowser -t "$(HTMLCOV)/index.html"
-
+tcovh-watch: $(CMD_WATCH) tcovh
+	@$(CMD_WATCH) shell-command . \
+		--recursive \
+		--ignore-directories \
+		--drop \
+		--patterns="*.py" \
+		--command="$(CMD_MAKE) tcovh"
 
 ###
 # cleanup
@@ -259,7 +267,6 @@ travis: $(CMD_PYTEST)
 
 
 CMD_MKTMP	:=	mktemp
-CMD_MAKE	:=	make
 CMD_RM		:=	rm
 
 .PHONY: travis-phony

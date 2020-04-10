@@ -2,3 +2,4 @@
 flask-shell-ptpython
 pudb
 pytest-pudb
+watchdog[watchmedo]
