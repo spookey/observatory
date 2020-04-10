@@ -2,26 +2,31 @@ from pytest import fixture, mark
 
 from observatory.forms.common import PromptDropForm, SensorDropForm
 from observatory.forms.extra.widgets import SubmitButtonInput
+from observatory.forms.mapper import MapperDropForm
+from observatory.models.mapper import Mapper
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
 
 
-@fixture(scope='function', params=['prompt', 'sensor'])
+@fixture(scope='function', params=['prompt', 'sensor', 'mapper'])
 def _comm(request, gen_prompt, gen_sensor):
     def res():
         pass
 
-    res.form, res.model, res.gen_common = (
-        PromptDropForm, Prompt, gen_prompt,
-    ) if request.param == 'prompt' else (
-        SensorDropForm, Sensor, gen_sensor,
-    )
+    res.form, res.model, res.gen_common = {
+        'prompt': (PromptDropForm, Prompt, gen_prompt),
+        'sensor': (SensorDropForm, Sensor, gen_sensor),
+        'mapper': (
+            MapperDropForm, Mapper,
+            lambda: Mapper.create(prompt=gen_prompt(), sensor=gen_sensor())
+        ),
+    }.get(request.param)
 
     yield res
 
 
 @mark.usefixtures('session', 'ctx_app')
-class TestCommonDropForm:
+class TestGenericDropForm:
 
     @staticmethod
     def test_basic_fields(_comm):

@@ -3,6 +3,7 @@ from wtforms import BooleanField, SelectField, SubmitField
 from wtforms.validators import DataRequired
 
 from observatory.forms.extra.widgets import SubmitButtonInput
+from observatory.forms.generic import GenericDropForm
 from observatory.models.mapper import (
     EnumColor, EnumConvert, EnumHorizon, Mapper
 )
@@ -138,3 +139,7 @@ class MapperEditForm(FlaskForm):
         self.mapper.convert = EnumConvert(self.convert_sel.data)
         self.mapper.horizon = EnumHorizon(self.horizon_sel.data)
         return self.mapper.save()
+
+
+class MapperDropForm(GenericDropForm):
+    Model = Mapper

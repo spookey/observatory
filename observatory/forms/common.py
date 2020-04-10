@@ -1,9 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import HiddenField, StringField, SubmitField, TextAreaField
+from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired
 
 from observatory.forms.extra.validators import SafeSlug
 from observatory.forms.extra.widgets import SubmitButtonInput
+from observatory.forms.generic import GenericDropForm
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
 
@@ -70,38 +71,9 @@ class SensorEditForm(CommonEditForm):
     Model = Sensor
 
 
-class CommonDropForm(FlaskForm):
-    Model = None
-
-    submit = SubmitField(
-        'Delete',
-        description='Submit',
-        widget=SubmitButtonInput(
-            icon='ops_delete',
-            classreplace_kw={'is-dark': 'is-danger is-small'},
-        ),
-    )
-
-    def __init__(self, *args, obj=None, **kwargs):
-        super().__init__(*args, obj=obj, **kwargs)
-        self.thing = obj
-
-    def validate(self):
-        if not super().validate():
-            return False
-
-        return bool(self.thing)
-
-    def action(self):
-        if not self.validate():
-            return None
-
-        return self.thing.delete()
-
-
-class PromptDropForm(CommonDropForm):
+class PromptDropForm(GenericDropForm):
     Model = Prompt
 
 
-class SensorDropForm(CommonDropForm):
+class SensorDropForm(GenericDropForm):
     Model = Sensor
