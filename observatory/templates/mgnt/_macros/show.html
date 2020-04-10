@@ -6,6 +6,7 @@
 {% from '_macros/elem.html' import text_icon %}
 {% from '_macros/elem.html' import time_abs %}
 {% from '_macros/elem.html' import time_rel %}
+{% from '_macros/form.html' import render_form %}
 {% from 'mgnt/_macros/level.html' import head_level %}
 {% from 'mgnt/_macros/level.html' import key_val_level %}
 {% from 'mgnt/_macros/level.html' import single_level %}
@@ -38,12 +39,12 @@
 {% endif %}
 {% endmacro %}
 
-{% macro _common_info(thing, endpoint) %}
+{% macro _common_info(thing, edit_ep, drop_ep) %}
 {% if thing %}
 {{ head_level(
   'Title', thing.title,
   'Slug', thing.slug,
-  url_for(endpoint, slug=thing.slug),
+  url_for(edit_ep, slug=thing.slug),
 ) }}
 <div class="content">
   {% if thing.description %}
@@ -60,12 +61,16 @@
   {{ caller() }}
 </div>
 {{ _mapper_info(thing.mapping) }}
+{{ render_form(
+  form_drop_prompt(thing),
+  action=url_for(drop_ep, slug=thing.slug, _external=True),
+) }}
 {% endif %}
 {% endmacro %}
 
 
 {% macro show_sensor(sensor) %}
-{% call() _common_info(sensor, 'mgnt.edit_sensor') %}
+{% call() _common_info(sensor, 'mgnt.edit_sensor', 'mgnt.drop_sensor') %}
 {{ key_val_level(
   'Points',
   sensor.length,
@@ -80,7 +85,7 @@
 {% endmacro %}
 
 {% macro show_prompt(prompt) %}
-{% call() _common_info(prompt, 'mgnt.edit_prompt') %}
+{% call() _common_info(prompt, 'mgnt.edit_prompt', 'mgnt.drop_prompt') %}
 {% endcall %}
 {% endmacro %}
 

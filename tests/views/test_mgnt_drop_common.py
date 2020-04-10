@@ -38,6 +38,33 @@ class TestMgntDropCommon:
         }, code=401)
 
     @staticmethod
+    def test_form_params(_comm):
+        _comm.login()
+        thing = _comm.gen_common()
+        res = _comm.visitor(_comm.view_ep)
+
+        form = res.soup.select('form')[-1]
+        assert form['method'] == 'POST'
+        assert form['action'] == url_for(
+            _comm.endpoint, slug=thing.slug, _external=True
+        )
+
+    @staticmethod
+    def test_form_fields(_comm):
+        _comm.login()
+        _comm.gen_common()
+        res = _comm.visitor(_comm.view_ep)
+
+        form = res.soup.select('form')[-1]
+        fields = [
+            (inp.attrs.get('name'), inp.attrs.get('type'))
+            for inp in form.select('button')
+        ]
+        assert fields == [
+            ('submit', 'submit'),
+        ]
+
+    @staticmethod
     def test_form_no_slug(_comm):
         _comm.login()
         slug = '🐢'
