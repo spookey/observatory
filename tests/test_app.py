@@ -2,7 +2,9 @@ from observatory.lib.cli import BP_CLI
 from observatory.rest.mapper import BP_REST_MAPPER
 from observatory.rest.prompt import BP_REST_PROMPT
 from observatory.rest.sensor import BP_REST_SENSOR
-from observatory.shared import errorhandler, moment_config, tagline
+from observatory.shared import (
+    errorhandler, form_drop_prompt, form_drop_sensor, moment_config, tagline
+)
 from observatory.start.environment import ERROR_CODES
 from observatory.start.extensions import CSRF_PROTECT, DB, MIGRATE
 from observatory.views.main import BLUEPRINT_MAIN
@@ -46,8 +48,13 @@ class TestApp:
 
     @staticmethod
     def test_template_functions(app):
-        assert app.jinja_env.globals['moment_config'] is moment_config
-        assert app.jinja_env.globals['tagline'] is tagline
+        for func in (
+                form_drop_prompt,
+                form_drop_sensor,
+                moment_config,
+                tagline,
+        ):
+            assert app.jinja_env.globals[func.__name__] is func
 
     @staticmethod
     def test_jinja_config(app):
