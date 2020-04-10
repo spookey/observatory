@@ -6,7 +6,7 @@ from flask_login import login_required
 from observatory.forms.common import (
     PromptDropForm, PromptEditForm, SensorDropForm, SensorEditForm
 )
-from observatory.forms.mapper import MapperEditForm
+from observatory.forms.mapper import MapperDropForm, MapperEditForm
 from observatory.models.mapper import Mapper
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
@@ -138,18 +138,40 @@ def edit_sensor(slug=None):
     )
 
 
-def _drop_common(form, redirect_ep):
+def _drop_generic(form, redirect_ep):
     name = form.Model.__name__.lower()
 
     if not form.thing:
         abort(500, f'No such {name}!')
 
     if request.method == 'POST' and form.validate_on_submit():
-        slug = form.thing.slug
+        slug = getattr(form.thing, 'slug', '')
+        for elem in ('prompt', 'sensor'):
+            thing = getattr(form.thing, elem, None)
+            if thing:
+                slug = f'{slug} {thing.slug}'.strip()
+
         if form.action():
             flash(f'Deleted {name} {slug}!', 'success')
 
     return redirect(url_for(redirect_ep))
+
+
+@BLUEPRINT_MGNT.route(
+    '/manage/mapper/drop'
+    '/prompt/<string:prompt_slug>'
+    '/sensor/<string:sensor_slug>',
+    methods=['POST'],
+)
+@login_required
+def drop_mapper(prompt_slug, sensor_slug):
+    return _drop_generic(
+        MapperDropForm(obj=Mapper.by_commons(
+            prompt=Prompt.by_slug(prompt_slug),
+            sensor=Sensor.by_slug(sensor_slug),
+        )),
+        'mgnt.view_mapper',
+    )
 
 
 @BLUEPRINT_MGNT.route(
@@ -158,7 +180,7 @@ def _drop_common(form, redirect_ep):
 )
 @login_required
 def drop_prompt(slug):
-    return _drop_common(
+    return _drop_generic(
         PromptDropForm(obj=Prompt.by_slug(slug)),
         'mgnt.view_prompt',
     )
@@ -170,7 +192,7 @@ def drop_prompt(slug):
 )
 @login_required
 def drop_sensor(slug):
-    return _drop_common(
+    return _drop_generic(
         SensorDropForm(obj=Sensor.by_slug(slug)),
         'mgnt.view_sensor',
     )
