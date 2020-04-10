@@ -147,7 +147,7 @@ def _drop_common(form, redirect_ep):
     if request.method == 'POST' and form.validate_on_submit():
         slug = form.thing.slug
         if form.action():
-            flash(f'Deleted {name} {slug}!', 'warning')
+            flash(f'Deleted {name} {slug}!', 'success')
 
     return redirect(url_for(redirect_ep))
 

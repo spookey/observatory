@@ -35,7 +35,9 @@ class TestCommonDropForm:
         assert form.submit.widget is not None
         assert isinstance(form.submit.widget, SubmitButtonInput)
         assert form.submit.widget.icon == 'ops_delete'
-        assert form.submit.widget.classreplace_kw == {'is-dark': 'is-danger'}
+        assert form.submit.widget.classreplace_kw == {
+            'is-dark': 'is-danger is-small'
+        }
 
     @staticmethod
     def test_empty_thing(_comm):

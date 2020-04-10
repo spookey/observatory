@@ -1,0 +1,36 @@
+{% macro split_level(left, right) %}
+<div class="level">
+  <div class="level-left">
+    {% if left %}
+    <div class="level-item has-text-centered">
+      {{ left }}
+    </div>
+    {% endif %}
+  </div>
+  <div class="level-right">
+    {% if right %}
+    <div class="level-item has-text-centered">
+      {{ right }}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro key_val_level(label, value) %}
+  {% macro _st(text) %}
+  <strong>{{ text }}</strong>
+  {% endmacro %}
+{{ split_level(_st(label), value) }}
+{% endmacro %}
+
+
+{% macro single_level(items) %}
+<div class="level">
+{% for item in items %}
+  <div class="level-item has-text-centered">
+  {{ item }}
+  </div>
+{% endfor %}
+</div>
+{% endmacro %}

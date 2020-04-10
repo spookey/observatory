@@ -31,30 +31,3 @@
   </div>
 </div>
 {% endmacro %}
-
-
-{% macro key_val_level(label, value) %}
-<div class="level">
-  <div class="level-left">
-    <div class="level-item has-text-centered">
-      <strong>{{ label }}</strong>
-    </div>
-  </div>
-  <div class="level-right">
-    <div class="level-item has-text-centered">
-      {{ value }}
-    </div>
-  </div>
-</div>
-{% endmacro %}
-
-
-{% macro single_level(items) %}
-<div class="level">
-{% for item in items %}
-  <div class="level-item has-text-centered">
-  {{ item }}
-  </div>
-{% endfor %}
-</div>
-{% endmacro %}

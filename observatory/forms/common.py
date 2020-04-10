@@ -78,7 +78,7 @@ class CommonDropForm(FlaskForm):
         description='Submit',
         widget=SubmitButtonInput(
             icon='ops_delete',
-            classreplace_kw={'is-dark': 'is-danger'},
+            classreplace_kw={'is-dark': 'is-danger is-small'},
         ),
     )
 

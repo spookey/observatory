@@ -7,9 +7,10 @@
 {% from '_macros/elem.html' import time_abs %}
 {% from '_macros/elem.html' import time_rel %}
 {% from '_macros/form.html' import render_form %}
+{% from '_macros/level.html' import key_val_level %}
+{% from '_macros/level.html' import single_level %}
+{% from '_macros/level.html' import split_level %}
 {% from 'mgnt/_macros/level.html' import head_level %}
-{% from 'mgnt/_macros/level.html' import key_val_level %}
-{% from 'mgnt/_macros/level.html' import single_level %}
 
 
 {% macro _mapper_info(mapping) %}
@@ -61,9 +62,12 @@
   {{ caller() }}
 </div>
 {{ _mapper_info(thing.mapping) }}
-{{ render_form(
-  form_drop_prompt(thing),
-  action=url_for(drop_ep, slug=thing.slug, _external=True),
+{{ split_level(
+  render_form(
+    form_drop_prompt(thing),
+    action=url_for(drop_ep, slug=thing.slug, _external=True),
+  ),
+  none,
 ) }}
 {% endif %}
 {% endmacro %}

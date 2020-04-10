@@ -1,5 +1,6 @@
 {% extends '_base.html' %}
 {% from '_macros/elem.html' import text_icon %}
+{% from '_macros/level.html' import split_level %}
 {% from '_macros/page.html' import nothing_there %}
 {% from 'mgnt/_macros/show.html' import create_button %}
 {% from 'mgnt/_macros/show.html' import show_mapper %}
@@ -53,15 +54,15 @@
     {{ _inner_navigation() }}
     {% if prompts is defined %}
       {{ _display('Prompt', show_prompt, prompts) }}
-      {{ _create_button('prompt', 'mgnt.edit_prompt') }}
+      {{ split_level(none, _create_button('prompt', 'mgnt.edit_prompt')) }}
     {% endif %}
     {% if mapping is defined %}
       {{ _display('Mapper', show_mapper, mapping) }}
-      {{ _create_button('mapper', 'mgnt.edit_mapper') }}
+      {{ split_level(none, _create_button('mapper', 'mgnt.edit_mapper')) }}
     {% endif %}
     {% if sensors is defined %}
       {{ _display('Sensor', show_sensor, sensors) }}
-      {{ _create_button('sensor', 'mgnt.edit_sensor') }}
+      {{ split_level(none, _create_button('sensor', 'mgnt.edit_sensor')) }}
     {% endif %}
   </div>
 </section>
