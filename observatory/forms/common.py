@@ -3,7 +3,7 @@ from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired
 
 from observatory.forms.extra.validators import SafeSlug
-from observatory.forms.extra.widgets import SubmitIconInput
+from observatory.forms.extra.widgets import SubmitButtonInput
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
 
@@ -28,7 +28,7 @@ class CommonEditForm(FlaskForm):
     submit = SubmitField(
         'Save',
         description='Submit',
-        widget=SubmitIconInput(icon='ops_submit')
+        widget=SubmitButtonInput(icon='ops_submit')
     )
 
     def __init__(self, *args, obj=None, **kwargs):

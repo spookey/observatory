@@ -2,7 +2,7 @@ from pytest import fixture, mark
 from werkzeug.datastructures import MultiDict
 
 from observatory.forms.common import PromptEditForm, SensorEditForm
-from observatory.forms.extra.widgets import SubmitIconInput
+from observatory.forms.extra.widgets import SubmitButtonInput
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
 
@@ -33,10 +33,10 @@ class TestCommonEditForm:
         assert form.submit is not None
 
     @staticmethod
-    def test_submit_icon(_comm):
+    def test_submit_button(_comm):
         form = _comm.form()
         assert form.submit.widget is not None
-        assert isinstance(form.submit.widget, SubmitIconInput)
+        assert isinstance(form.submit.widget, SubmitButtonInput)
         assert form.submit.widget.icon == 'ops_submit'
 
     @staticmethod

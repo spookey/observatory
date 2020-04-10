@@ -1,28 +1,51 @@
-from jinja2 import Markup
-from wtforms.widgets import SubmitInput
-
-from observatory.start.environment import ICON
-
-# pylint: disable=too-few-public-methods
+from flask import render_template_string
+from wtforms.widgets import HTMLString, html_params
+from wtforms.widgets.core import escape_html
 
 
-class SubmitIconInput(SubmitInput):
-    def __init__(self, *args, icon, **kwargs):
-        super().__init__(*args, **kwargs)
+class SubmitButtonInput:
+    input_type = 'submit'
+
+    def __init__(self, icon=None, classreplace_kw=None):
         self.icon = icon
+        self.classreplace_kw = classreplace_kw
 
-    @property
-    def ri_icon(self):
-        icon = ICON.get(self.icon, ICON['__fallback'])
-        return f'ri-{icon}-line'
+    def render_icon(self):
+        if self.icon is None:
+            return ''
+
+        return render_template_string('''
+{% from '_macros/elem.html' import text_icon %}{{ text_icon(icon) }}
+        '''.strip(), icon=self.icon)
+
+    def replace_class(self, **kwargs):
+        if self.classreplace_kw is None:
+            return kwargs
+
+        class_ = ' '.join((
+            kwargs.setdefault('class', ''),
+            kwargs.setdefault('class_', ''),
+            kwargs.setdefault('class__', '')
+        )).strip()
+        del kwargs['class']
+        del kwargs['class__']
+
+        for orig, repl in self.classreplace_kw.items():
+            class_ = class_.replace(orig, repl)
+        kwargs['class_'] = class_.strip()
+
+        return kwargs
 
     def __call__(self, field, **kwargs):
-        mkup = super().__call__(field, **kwargs)
-        return Markup(f'''
-{mkup.replace('<input ', '<button ')}
-  <span class="icon">
-    <i class="{self.ri_icon}" aria-hidden="true"></i>
-  </span>
-  <span>{field.label.text}</span>
-</button>
-        '''.strip())
+        kwargs.setdefault('id', field.id)
+        kwargs.setdefault('type', self.input_type)
+        kwargs.setdefault('value', field.label.text)
+        kwargs = self.replace_class(**kwargs)
+
+        return HTMLString('''
+<button {params}>{icon}<span>{text}</span></button>
+        '''.strip().format(
+            params=html_params(name=field.name, **kwargs),
+            icon=self.render_icon(),
+            text=escape_html(field.label.text),
+        ))
