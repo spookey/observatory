@@ -216,7 +216,7 @@ endef
 .PHONY: run shell routes
 run: $(CMD_FLASK) static
 	$(call _flask,run --host "$(_HOST)" --port "$(_PORT)")
-shell: $(CMD_FLASK)
+shell: $(CMD_FLASK) $(CMD_PTPY)
 	$(call _flask,shell)
 routes: $(CMD_FLASK)
 	$(call _flask,routes)
