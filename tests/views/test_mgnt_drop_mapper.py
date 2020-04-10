@@ -26,6 +26,33 @@ class TestMgntDropMapper:
         }, code=401)
 
     @staticmethod
+    def test_form_fields(visitor, gen_user_loggedin, gen_prompt, gen_sensor):
+        gen_user_loggedin()
+        Mapper.create(prompt=gen_prompt(), sensor=gen_sensor())
+        res = visitor(VIEW_EP)
+
+        form = res.soup.select('form')[-1]
+        fields = [
+            (inp.attrs.get('name'), inp.attrs.get('type'))
+            for inp in form.select('button')
+        ]
+        assert fields == [
+            ('submit', 'submit')
+        ]
+
+    @staticmethod
+    def test_form_no_slug(visitor, gen_user_loggedin):
+        gen_user_loggedin()
+        slug = '🦔'
+
+        res = visitor(ENDPOINT, method='post', params={
+            'sensor_slug': slug,
+            'prompt_slug': slug,
+        }, code=500)
+
+        assert 'no such mapper' in res.soup.text.lower()
+
+    @staticmethod
     def test_form_deletes(visitor, gen_user_loggedin, gen_prompt, gen_sensor):
         gen_user_loggedin()
         prompt = gen_prompt()

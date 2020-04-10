@@ -128,5 +128,17 @@
   ) }}
 </div>
 {{ _mapper_info([mapper]) }}
+{{ split_level(
+  render_form(
+    form_drop_mapper(mapper),
+    action=url_for(
+      'mgnt.drop_mapper',
+      prompt_slug=mapper.prompt.slug,
+      sensor_slug=mapper.sensor.slug,
+      _external=True,
+    ),
+  ),
+  none,
+) }}
 {% endif %}
 {% endmacro %}
