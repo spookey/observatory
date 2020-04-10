@@ -27,6 +27,7 @@ class TestCommonEditForm:
     @staticmethod
     def test_basic_fields(_comm):
         form = _comm.form()
+        assert form.Model == _comm.model
         assert form.slug is not None
         assert form.title is not None
         assert form.description is not None

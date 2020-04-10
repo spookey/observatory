@@ -109,4 +109,4 @@ class PromptDropForm(CommonDropForm):
 
 
 class SensorDropForm(CommonDropForm):
-    Model = Prompt
+    Model = Sensor
