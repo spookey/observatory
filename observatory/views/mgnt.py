@@ -7,6 +7,7 @@ from observatory.forms.common import (
     PromptDropForm, PromptEditForm, SensorDropForm, SensorEditForm
 )
 from observatory.forms.mapper import MapperDropForm, MapperEditForm
+from observatory.lib.text import extract_slug
 from observatory.models.mapper import Mapper
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
@@ -76,10 +77,8 @@ def edit_mapper(prompt_slug=None, sensor_slug=None):
     if request.method == 'POST' and form.validate_on_submit():
         mapper = form.action()
         if mapper is not None:
-            flash(
-                f'Saved mapper {mapper.prompt.slug} {mapper.sensor.slug}!',
-                'success'
-            )
+            slug = extract_slug(mapper)
+            flash(f'Saved mapper {slug}!', 'success')
             return redirect(url_for('mgnt.view_mapper'))
 
     return render_template(
@@ -145,12 +144,7 @@ def _drop_generic(form, redirect_ep):
         abort(500, f'No such {name}!')
 
     if request.method == 'POST' and form.validate_on_submit():
-        slug = getattr(form.thing, 'slug', '')
-        for elem in ('prompt', 'sensor'):
-            thing = getattr(form.thing, elem, None)
-            if thing:
-                slug = f'{slug} {thing.slug}'.strip()
-
+        slug = extract_slug(form.thing)
         if form.action():
             flash(f'Deleted {name} {slug}!', 'success')
 

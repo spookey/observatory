@@ -1,4 +1,24 @@
-from observatory.lib.text import is_slugable, random_line
+from observatory.lib.text import extract_slug, is_slugable, random_line
+
+
+def test_random_line():
+    pool = ['abc', 'def', 'ghi']
+    for _ in range(42):
+        assert random_line(pool) in pool
+
+
+def test_random_line_fallback():
+    assert random_line(None) == ''
+    assert random_line(None, 'test') == 'test'
+    assert random_line(None, None) is None
+
+    assert random_line([]) == ''
+    assert random_line([], fallback='demo') == 'demo'
+
+    assert random_line(['']) == ''
+    assert random_line([None]) == ''
+
+    assert random_line([None, False, True, 42]) == ''
 
 
 def test_is_slugable():
@@ -21,21 +41,60 @@ def test_is_slugable():
     assert is_slugable('💣') is False
 
 
-def test_random_line():
-    pool = ['abc', 'def', 'ghi']
-    for _ in range(42):
-        assert random_line(pool) in pool
+class TestExtractSlug:
 
+    @staticmethod
+    def __call__(slug=None, p_slug=None, s_slug=None):
+        def res():
+            pass
 
-def test_random_line_fallback():
-    assert random_line(None) == ''
-    assert random_line(None, 'test') == 'test'
-    assert random_line(None, None) is None
+        def prompt():
+            pass
 
-    assert random_line([]) == ''
-    assert random_line([], fallback='demo') == 'demo'
+        def sensor():
+            pass
 
-    assert random_line(['']) == ''
-    assert random_line([None]) == ''
+        if slug is not None:
+            setattr(res, 'slug', slug)
 
-    assert random_line([None, False, True, 42]) == ''
+        if p_slug is not None:
+            res.prompt = prompt
+            setattr(res.prompt, 'slug', p_slug)
+
+        if s_slug is not None:
+            res.sensor = sensor
+            setattr(res.sensor, 'slug', s_slug)
+
+        return res
+
+    def test_common(self):
+        assert extract_slug(self(slug='slug')) == 'slug'
+        assert extract_slug(self(slug='    ')) == ''
+
+    def test_mapper(self):
+        assert extract_slug(
+            self(p_slug='prompt', s_slug='sensor')
+        ) == 'prompt sensor'
+        assert extract_slug(
+            self(p_slug='      ', s_slug='sensor')
+        ) == 'sensor'
+        assert extract_slug(
+            self(p_slug='prompt', s_slug='      ')
+        ) == 'prompt'
+        assert extract_slug(
+            self(p_slug='      ', s_slug='      ')
+        ) == ''
+
+    def test_both(self):
+        assert extract_slug(
+            self(slug='slug', p_slug='prompt', s_slug='sensor')
+        ) == 'slug'
+        assert extract_slug(
+            self(slug='slug', p_slug='      ', s_slug='sensor')
+        ) == 'slug'
+        assert extract_slug(
+            self(slug='slug', p_slug='prompt', s_slug='      ')
+        ) == 'slug'
+        assert extract_slug(
+            self(slug='    ', p_slug='prompt', s_slug='sensor')
+        ) == ''
