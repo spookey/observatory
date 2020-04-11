@@ -24,7 +24,7 @@
   <section class="section">
     <div class="container">
     {% for category, message in flashed %}
-      <div class="notification{{ ' is-' ~ category|lower if category in (
+      <div class="notification{{ ' is-' ~ category|lower if category|lower in (
         'info', 'success', 'warning', 'danger', 'dark', 'black', 'light', 'primary',
       ) }}">
         <button class="delete click"></button>
