@@ -34,13 +34,12 @@ class TestMapperListing:
 
     @staticmethod
     def test_get_listing(visitor, gen_prompt, gen_sensor):
-        mappers = [
-            Mapper.create(
-                sortkey=1, prompt=gen_prompt('one'), sensor=gen_sensor('one'),
-            ),
-            Mapper.create(
-                sortkey=2, prompt=gen_prompt('two'), sensor=gen_sensor('two'),
-            )
-        ]
+        one = Mapper.create(
+            sortkey=1, prompt=gen_prompt('one'), sensor=gen_sensor('one'),
+        )
+        two = Mapper.create(
+            sortkey=2, prompt=gen_prompt('two'), sensor=gen_sensor('two'),
+        )
+        mappers = [two, one]  # highest first, query is sorted
         res = visitor(ENDPOINT)
         assert res.json == marshal(mappers, MapperListing.LISTING_GET)

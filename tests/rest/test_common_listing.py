@@ -49,6 +49,6 @@ class TestCommonListing:
     def test_get_listing(_comm, visitor):
         one = _comm.gen(slug='one')
         two = _comm.gen(slug='two')
-        commons = [two, one]  # newest first, query is ordered
+        commons = [two, one]  # newest first, query is sorted
         res = visitor(_comm.endpoint)
         assert res.json == marshal(commons, _comm.impl.LISTING_GET)

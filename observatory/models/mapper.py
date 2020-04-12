@@ -75,7 +75,7 @@ class Mapper(CreatedMixin, BaseModel):
         primaryjoin='Mapper.prompt_prime == Prompt.prime',
         backref=DB.backref(
             'mapping',
-            order_by='Mapper.sortkey.asc()',
+            order_by='Mapper.sortkey.desc()',
             cascade='all,delete-orphan',
             lazy=True,
         ),
@@ -87,7 +87,7 @@ class Mapper(CreatedMixin, BaseModel):
         primaryjoin='Mapper.sensor_prime == Sensor.prime',
         backref=DB.backref(
             'mapping',
-            order_by='Mapper.sortkey.asc()',
+            order_by='Mapper.sortkey.desc()',
             cascade='all,delete-orphan',
             lazy=True,
         ),
@@ -105,7 +105,7 @@ class Mapper(CreatedMixin, BaseModel):
     @classmethod
     def query_sorted(cls, query=None):
         query = query if query is not None else cls.query
-        return query.order_by(cls.sortkey.asc())
+        return query.order_by(cls.sortkey.desc())
 
     def query_above(self, query=None):
         query = query if query is not None else self.query
