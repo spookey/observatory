@@ -4,7 +4,7 @@ from observatory.rest.prompt import BP_REST_PROMPT
 from observatory.rest.sensor import BP_REST_SENSOR
 from observatory.shared import (
     errorhandler, form_drop_mapper, form_drop_prompt, form_drop_sensor,
-    moment_config, tagline
+    form_sort_mapper, moment_config, tagline
 )
 from observatory.start.environment import ERROR_CODES
 from observatory.start.extensions import CSRF_PROTECT, DB, MIGRATE
@@ -53,6 +53,7 @@ class TestApp:
                 form_drop_mapper,
                 form_drop_prompt,
                 form_drop_sensor,
+                form_sort_mapper,
                 moment_config,
                 tagline,
         ):

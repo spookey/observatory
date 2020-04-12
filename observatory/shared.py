@@ -4,7 +4,7 @@ from flask import render_template, request
 from jinja2 import Markup
 
 from observatory.forms.common import PromptDropForm, SensorDropForm
-from observatory.forms.mapper import MapperDropForm
+from observatory.forms.mapper import MapperDropForm, MapperSortForm
 from observatory.lib.text import random_line
 from observatory.start.environment import FMT_MOMENT, TAGLINES
 
@@ -49,3 +49,7 @@ def form_drop_prompt(prompt):
 
 def form_drop_sensor(sensor):
     return SensorDropForm(obj=sensor)
+
+
+def form_sort_mapper(mapper, lift):
+    return MapperSortForm(obj=mapper, lift=lift)
