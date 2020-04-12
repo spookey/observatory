@@ -52,6 +52,8 @@ ICON = {
     'obj_mapper': getenv('ICON_OBJ_MAPPER', 'guide'),
     'obj_prompt': getenv('ICON_OBJ_PROMPT', 'newspaper'),
     'obj_sensor': getenv('ICON_OBJ_SENSOR', 'radar'),
+    'ops_arr_dn': getenv('ICON_OPS_ARR_DN', 'arrow-down-s'),
+    'ops_arr_up': getenv('ICON_OPS_ARR_UP', 'arrow-up-s'),
     'ops_create': getenv('ICON_OPS_CREATE', 'add'),
     'ops_delete': getenv('ICON_OPS_DELETE', 'delete-bin'),
     'ops_submit': getenv('ICON_OPS_SUBMIT', 'check-double'),
