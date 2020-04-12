@@ -21,7 +21,7 @@ class GenericDropForm(FlaskForm):
         self.thing = obj
 
     def validate(self):
-        return super().validate() and bool(self.thing)
+        return super().validate() and self.thing is not None
 
     def action(self):
         if not self.validate():
