@@ -6,7 +6,9 @@ from flask_login import login_required
 from observatory.forms.common import (
     PromptDropForm, PromptEditForm, SensorDropForm, SensorEditForm
 )
-from observatory.forms.mapper import MapperDropForm, MapperEditForm
+from observatory.forms.mapper import (
+    MapperDropForm, MapperEditForm, MapperSortForm
+)
 from observatory.lib.text import extract_slug
 from observatory.models.mapper import Mapper
 from observatory.models.prompt import Prompt
@@ -190,3 +192,29 @@ def drop_sensor(slug):
         SensorDropForm(obj=Sensor.by_slug(slug)),
         'mgnt.view_sensor',
     )
+
+
+@BLUEPRINT_MGNT.route(
+    '/manage/mapper/sort'
+    '/prompt/<string:prompt_slug>'
+    '/sensor/<string:sensor_slug>'
+    '/<any(raise,lower):direction>',
+    methods=['POST'],
+)
+@login_required
+def sort_mapper(prompt_slug, sensor_slug, direction):
+    form = MapperSortForm(obj=Mapper.by_commons(
+        prompt=Prompt.by_slug(prompt_slug),
+        sensor=Sensor.by_slug(sensor_slug),
+    ), lift=direction == 'raise')
+
+    if not form.mapper:
+        abort(500, 'No such mapper!')
+
+    if request.method == 'POST' and form.validate_on_submit():
+        slug = extract_slug(form.mapper)
+        text = 'Raised' if form.lift else 'Lowered'
+        if form.action():
+            flash(f'{text} mapper {slug}!', 'success')
+
+    return redirect(url_for('mgnt.view_mapper'))
