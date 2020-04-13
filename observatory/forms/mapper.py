@@ -151,7 +151,7 @@ class MapperSortForm(FlaskForm):
         description='Submit',
         widget=SubmitButtonInput(
             icon='glob_error',
-            classreplace_kw={'is-dark': 'is-link is-small'},
+            classreplace_kw={'is-dark': 'is-dark is-small'},
         ),
     )
 

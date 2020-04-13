@@ -34,6 +34,9 @@ class TestMapperSortForm:
         assert form.submit.widget is not None
         assert isinstance(form.submit.widget, SubmitButtonInput)
         assert form.submit.widget.icon == icon
+        assert form.submit.widget.classreplace_kw == {
+            'is-dark': 'is-dark is-small'
+        }
 
     @staticmethod
     def test_empty_mapper_and_lift():
