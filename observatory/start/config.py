@@ -41,6 +41,7 @@ class BaseConfig:
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = DATABASE_DEV
+    TEMPLATES_AUTO_RELOAD = True
 
 
 class TestingConfig(BaseConfig):

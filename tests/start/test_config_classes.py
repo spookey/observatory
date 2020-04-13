@@ -28,6 +28,7 @@ def test_devel_config():
 
     assert conf.DEBUG is True
     assert conf.SQLALCHEMY_DATABASE_URI.startswith('sqlite:////')
+    assert conf.TEMPLATES_AUTO_RELOAD is True
     assert conf.TESTING is False
     assert conf.TITLE == TITLE
 
