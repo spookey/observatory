@@ -1,7 +1,15 @@
 {% macro _render_field(field) %}
-  {% if field.type in ['CSRFTokenField', 'HiddenField'] %}
-    {{ field() }}
-  {% elif field.type in ['StringField', 'PasswordField'] %}
+  {% macro _errors() %}
+  {% for error in field.errors %}
+    <p class="help is-danger">{{ error }}</p>
+  {% endfor %}
+  {% endmacro %}
+{% if field.type in ['CSRFTokenField', 'HiddenField'] %}
+  {{ field() }}
+  {{ _errors() }}
+{% else %}
+<div class="field">
+  {% if field.type in ['StringField', 'PasswordField'] %}
     <div class="control">
       {{ field.label(class='label') }}
       {{ field(
@@ -10,18 +18,17 @@
       ) }}
     </div>
   {% elif field.type in ['TextAreaField'] %}
-    {{ field.label(class='label') }}
-    {{ field(
-      class='textarea' ~ (' is-danger' if field.errors),
-      placeholder=field.description,
-    ) }}
+    <div class="control">
+      {{ field.label(class='label') }}
+      {{ field(
+        class='textarea' ~ (' is-danger' if field.errors),
+        placeholder=field.description,
+      ) }}
+    </div>
   {% elif field.type in ['BooleanField'] %}
     <div class="control">
       {{ field(class='checkbox') }}
-      {{ field.label(
-        class='checkbox',
-        title=field.description,
-      ) }}
+      {{ field.label(class='checkbox', title=field.description) }}
     </div>
   {% elif field.type in ['SelectField'] %}
     <div class="control">
@@ -38,30 +45,29 @@
       ) }}
     </div>
   {% endif %}
-  {% for error in field.errors %}
-    <p class="help is-danger">
-      {{ error }}
-    </p>
-  {% endfor %}
+  {{ _errors() }}
+</div>
+{% endif %}
 {% endmacro %}
 
+
 {% macro render_form(form, action=request.url, method='POST') %}
-  {% if form %}
-  <form action="{{ action }}" method="{{ method }}">
-  {% for field in form %}
-    <div class="field">
-      {{ _render_field(field) }}
-    </div>
-  {% endfor %}
-  </form>
-  {% endif %}
+{% if form %}
+<form action="{{ action }}" method="{{ method }}">
+{% for field in form %}
+  {{ _render_field(field) }}
+{% endfor %}
+</form>
+{% endif %}
 {% endmacro %}
 
 
 {% macro render_page_form(form, action=request.url, method='POST') %}
+{% if form %}
 <div class="columns is-mobile is-centered">
   <div class="column is-three-quarters-mobile is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
-  {{ render_form(form, action, method) }}
+  {{ render_form(form, action=action, method=method) }}
   </div>
 </div>
+{% endif %}
 {% endmacro %}
