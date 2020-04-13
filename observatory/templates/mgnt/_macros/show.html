@@ -127,6 +127,28 @@
     text_code(mapper.horizon.name),
   ) }}
 </div>
+{{ split_level(
+  render_form(
+    form_sort_mapper(mapper, lift=true),
+    action=url_for(
+      'mgnt.sort_mapper',
+      prompt_slug=mapper.prompt.slug,
+      sensor_slug=mapper.sensor.slug,
+      direction='raise',
+      _external=true,
+    ),
+  ),
+  render_form(
+    form_sort_mapper(mapper, lift=false),
+    action=url_for(
+      'mgnt.sort_mapper',
+      prompt_slug=mapper.prompt.slug,
+      sensor_slug=mapper.sensor.slug,
+      direction='lower',
+      _external=true,
+    ),
+  ),
+) }}
 {{ _mapper_info([mapper]) }}
 {{ split_level(
   render_form(

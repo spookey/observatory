@@ -30,6 +30,22 @@ class TestMgntSortMapper:
         }, code=401)
 
     @staticmethod
+    def test_buttonforms_and_field(
+            visitor, gen_user_loggedin, gen_prompt, gen_sensor,
+    ):
+        gen_user_loggedin()
+        Mapper.create(prompt=gen_prompt(), sensor=gen_sensor())
+        res = visitor(VIEW_EP)
+
+        for form in res.soup.select('form'):
+            assert [
+                (inp.attrs.get('name'), inp.attrs.get('type'))
+                for inp in form.select('button')
+            ] == [
+                ('submit', 'submit')
+            ]
+
+    @staticmethod
     def test_form_no_slug(visitor, gen_user_loggedin):
         gen_user_loggedin()
         slug = '🐁'
