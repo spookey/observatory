@@ -61,25 +61,6 @@ class TestMgntViewMapper:
         assert mapper.horizon.name in text
 
     @staticmethod
-    def test_view_map_box(visitor, gen_user_loggedin, gen_prompt, gen_sensor):
-        gen_user_loggedin()
-
-        mapper = Mapper.create(
-            prompt=gen_prompt(), sensor=gen_sensor(),
-            color=EnumColor.BLUE, convert=EnumConvert.INTEGER,
-            horizon=EnumHorizon.INVERT,
-        )
-
-        res = visitor(ENDPOINT)
-        box = res.soup.select('.box')[-1]
-        text = box.text
-
-        assert mapper.prompt.slug in text
-        assert mapper.sensor.slug in text
-        assert mapper.convert.name in text
-        assert mapper.horizon.name in text
-
-    @staticmethod
     def test_inner_nav(visitor, gen_user_loggedin):
         gen_user_loggedin()
 
