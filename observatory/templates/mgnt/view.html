@@ -40,7 +40,7 @@
 
 {% macro _create_button(name, endpoint) %}
 <div class="content has-text-right">
-  <a class="button is-dark" href="{{ url_for(endpoint, slug=None) }}">
+  <a class="button is-dark" href="{{ url_for(endpoint, slug=none) }}">
     {{ text_icon('ops_create') }}
     <span>New {{ name }}</span>
   </a>

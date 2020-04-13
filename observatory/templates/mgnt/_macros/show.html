@@ -65,7 +65,7 @@
 {{ split_level(
   render_form(
     form_drop_prompt(thing),
-    action=url_for(drop_ep, slug=thing.slug, _external=True),
+    action=url_for(drop_ep, slug=thing.slug, _external=true),
   ),
   none,
 ) }}
@@ -135,7 +135,7 @@
       'mgnt.drop_mapper',
       prompt_slug=mapper.prompt.slug,
       sensor_slug=mapper.sensor.slug,
-      _external=True,
+      _external=true,
     ),
   ),
   none,
