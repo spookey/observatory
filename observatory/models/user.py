@@ -3,8 +3,8 @@ from logging import getLogger
 
 from flask_login import UserMixin
 
-from observatory.database import Model
 from observatory.lib.clock import time_format
+from observatory.database import CreatedMixin, Model
 from observatory.start.extensions import BCRYPT, DB
 
 LOG = getLogger(__name__)
@@ -13,14 +13,11 @@ LOG = getLogger(__name__)
 # pylint: disable=too-many-ancestors
 
 
-class User(UserMixin, Model):
+class User(UserMixin, CreatedMixin, Model):
     username = DB.Column(DB.String(length=128), unique=True, nullable=False)
     pw_hash = DB.Column(DB.LargeBinary(length=128), nullable=True)
     active = DB.Column(DB.Boolean(), nullable=False, default=True)
     last_login = DB.Column(DB.DateTime(), nullable=True)
-    created = DB.Column(
-        DB.DateTime(), nullable=False, default=datetime.utcnow
-    )
 
     def __init__(self, username, password, **kwargs):
         Model.__init__(self, username=username, **kwargs)
@@ -38,10 +35,6 @@ class User(UserMixin, Model):
     def is_active(self):
         '''required by flask-login'''
         return self.active
-
-    @property
-    def created_fmt(self):
-        return time_format(self.created)
 
     @property
     def last_login_fmt(self):

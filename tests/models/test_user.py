@@ -72,6 +72,14 @@ class TestUser:
         assert user.created_fmt == user.created.strftime(FMT_STRFTIME)
 
     @staticmethod
+    def test_created_epoch(gen_user):
+        user = gen_user()
+        assert user.created_epoch <= (
+            user.created - datetime.utcfromtimestamp(0)
+        ).total_seconds()
+        assert user.created_epoch_ms == 1000 * user.created_epoch
+
+    @staticmethod
     def test_hash_password():
         assert User.hash_password(None) is None
         pw_text = 'secret'
