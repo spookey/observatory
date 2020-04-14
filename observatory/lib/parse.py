@@ -15,7 +15,7 @@ def parse_int(value, fallback=0, warn=True):
                 'cannot parse "%s" - using fallback "%s"',
                 value, fallback
             )
-        value = fallback
+        return fallback
     return value
 
 
@@ -40,3 +40,10 @@ def parse_str_bool(value, fallback=False, warn=True):
             value, fallback
         )
     return fallback
+
+
+def parse_num_bool(value, fallback=False, warn=True):
+    value = parse_int(value, fallback=fallback, warn=warn)
+    if value == fallback:
+        return fallback
+    return bool(value)
