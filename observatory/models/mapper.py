@@ -1,9 +1,13 @@
 from enum import Enum
+from logging import getLogger
 
 from sqlalchemy import and_
 
 from observatory.database import BaseModel, CreatedMixin
+from observatory.lib.text import extract_slug
 from observatory.start.extensions import DB
+
+LOG = getLogger(__name__)
 
 
 class EnumColor(Enum):
@@ -118,6 +122,12 @@ class Mapper(CreatedMixin, BaseModel):
     def __flip_sortkey(self, that):
         if not that:
             return False
+        LOG.info(
+            'flipping sortkey from "%s" (%d) with "%s" (%d)',
+            extract_slug(self), self.sortkey,
+            extract_slug(that), that.sortkey,
+        )
+
         skey = self.sortkey
         tkey = that.sortkey
         self.update(sortkey=_next_sortkey())

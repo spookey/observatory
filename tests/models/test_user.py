@@ -121,8 +121,7 @@ class TestUser:
 
         assert user.last_login is None
 
-        refreshed = user.refresh(_commit=False)
-        assert user.save()
+        refreshed = user.refresh()
         assert refreshed == user
 
         assert start <= user.last_login

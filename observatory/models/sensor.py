@@ -43,4 +43,6 @@ class Sensor(CommonMixin, CreatedMixin, Model):
 
     def append(self, value):
         self.cleanup()
+        LOG.info('creating new point with "%f" for "%s"', value, self.slug)
+
         return Point.create(sensor=self, value=value)

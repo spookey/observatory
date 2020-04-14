@@ -1,10 +1,13 @@
 from datetime import datetime
+from logging import getLogger
 
 from flask_login import UserMixin
 
 from observatory.database import Model
 from observatory.lib.clock import time_format
 from observatory.start.extensions import BCRYPT, DB
+
+LOG = getLogger(__name__)
 
 # pylint: disable=no-member
 # pylint: disable=too-many-ancestors
@@ -59,6 +62,8 @@ class User(UserMixin, Model):
     def set_password(self, plain):
         self.pw_hash = self.hash_password(plain)
 
-    def refresh(self, _commit=True):
+    def refresh(self):
+        LOG.info('refreshing last_login for "%s"', self.username)
+
         self.last_login = datetime.utcnow()
-        return self.save(_commit=_commit)
+        return self.save()
