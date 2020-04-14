@@ -21,6 +21,6 @@ def is_outdated(stamp, days=BACKLOG_DAYS):
 
 
 def time_format(stamp, fmt=FMT_STRFTIME):
-    if stamp is None:
+    if not isinstance(stamp, datetime):
         return ''
     return stamp.strftime(fmt)

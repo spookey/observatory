@@ -44,6 +44,8 @@ def test_time_format():
     now = datetime.utcnow()
 
     assert time_format(None) == ''
+    assert time_format(1337) == ''
+
     assert time_format(now, fmt='') == ''
     assert time_format(now, fmt='%Y') == f'{now.year}'
     assert time_format(now, fmt='%-m') == f'{now.month}'
