@@ -1,7 +1,7 @@
 from logging import getLogger
 
-TRUTHY = ('true', '1', 'on', 'banana')
-FALSY = ('false', '0', 'off')
+STR_TRUTHY = ('true', '1', 'on', 'banana')
+STR_FALSY = ('false', '0', 'off')
 LOG = getLogger(__name__)
 
 
@@ -19,7 +19,7 @@ def parse_int(value, fallback=0, warn=True):
     return value
 
 
-def parse_bool(value, fallback=False, warn=True):
+def parse_str_bool(value, fallback=False, warn=True):
     try:
         value = value.lower()
     except AttributeError as ex:
@@ -30,9 +30,9 @@ def parse_bool(value, fallback=False, warn=True):
                 value, fallback
             )
         return fallback
-    if value in TRUTHY:
+    if value in STR_TRUTHY:
         return True
-    if value in FALSY:
+    if value in STR_FALSY:
         return False
     if warn:
         LOG.warning(

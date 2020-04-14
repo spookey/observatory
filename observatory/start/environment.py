@@ -1,6 +1,6 @@
 from os import getenv, path
 
-from observatory.lib.parse import parse_bool, parse_int
+from observatory.lib.parse import parse_int, parse_str_bool
 
 APP_NAME = 'observatory'
 MDL_NAME = __name__.split('.')[0]
@@ -23,7 +23,7 @@ SECRET_BASE = getenv('SECRET_BASE', ROOT_DIR)
 
 BCRYPT_LOG_ROUNDS = parse_int(getenv('BCRYPT_LOG_ROUNDS', '13'), fallback=13)
 
-CSRF_STRICT = parse_bool(getenv('CSRF_STRICT', 'true'), fallback=True)
+CSRF_STRICT = parse_str_bool(getenv('CSRF_STRICT', 'true'), fallback=True)
 
 BACKLOG_DAYS = parse_int(getenv('BACKLOG_DAYS', '14'), fallback=True)
 
