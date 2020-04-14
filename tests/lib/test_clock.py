@@ -6,7 +6,13 @@ from observatory.lib.clock import (
 from observatory.start.environment import FMT_STRFTIME
 
 
-def test_epoch_from_ts():
+def test_epoch_for_invalid():
+    for value in (None, 0, [], object):
+        assert epoch_seconds(value) is None
+        assert epoch_milliseconds(value) is None
+
+
+def test_epoch_for_timestamp():
     for value in (60 * num for num in range(60)):
         stamp = datetime.utcfromtimestamp(value)
 
