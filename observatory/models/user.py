@@ -3,8 +3,10 @@ from logging import getLogger
 
 from flask_login import UserMixin
 
-from observatory.lib.clock import time_format
 from observatory.database import CreatedMixin, Model
+from observatory.lib.clock import (
+    epoch_milliseconds, epoch_seconds, time_format
+)
 from observatory.start.extensions import BCRYPT, DB
 
 LOG = getLogger(__name__)
@@ -39,6 +41,14 @@ class User(UserMixin, CreatedMixin, Model):
     @property
     def last_login_fmt(self):
         return time_format(self.last_login)
+
+    @property
+    def last_login_epoch(self):
+        return epoch_seconds(self.last_login)
+
+    @property
+    def last_login_epoch_ms(self):
+        return epoch_milliseconds(self.last_login)
 
     def check_password(self, plain):
         if plain is None:

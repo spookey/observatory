@@ -141,3 +141,14 @@ class TestUser:
         assert user.last_login_fmt == ''
         user.refresh()
         assert user.last_login_fmt == user.last_login.strftime(FMT_STRFTIME)
+
+    @staticmethod
+    def test_last_login_epoch(gen_user):
+        user = gen_user()
+        assert user.last_login_epoch is None
+        assert user.last_login_epoch_ms is None
+        user.refresh()
+        assert user.last_login_epoch <= (
+            user.last_login - datetime.utcfromtimestamp(0)
+        ).total_seconds()
+        assert user.last_login_epoch_ms == 1000 * user.last_login_epoch
