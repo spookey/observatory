@@ -4,7 +4,8 @@ from flask import (
 from flask_login import login_required
 
 from observatory.forms.common import (
-    PromptDropForm, PromptEditForm, SensorDropForm, SensorEditForm
+    PromptDropForm, PromptEditForm, PromptSortForm, SensorDropForm,
+    SensorEditForm, SensorSortForm
 )
 from observatory.forms.mapper import (
     MapperDropForm, MapperEditForm, MapperSortForm
@@ -149,6 +150,8 @@ def _drop_generic(form, redirect_ep):
         slug = extract_slug(form.thing)
         if form.action():
             flash(f'Deleted {name} {slug}!', 'success')
+        else:
+            flash(f'Can not delete {name} {slug}!', 'error')
 
     return redirect(url_for(redirect_ep))
 
@@ -194,6 +197,23 @@ def drop_sensor(slug):
     )
 
 
+def _sort_generic(form, redirect_ep):
+    name = form.Model.__name__.lower()
+
+    if not form.thing:
+        abort(500, f'No such {name}!')
+
+    if request.method == 'POST' and form.validate_on_submit():
+        slug = extract_slug(form.thing)
+        verb = 'Raised' if form.lift else 'Lowered'
+        if form.action():
+            flash(f'{verb} {name} {slug}!', 'success')
+        else:
+            flash(f'Can not move {name} {slug}!', 'error')
+
+    return redirect(url_for(redirect_ep))
+
+
 @BLUEPRINT_MGNT.route(
     '/manage/mapper/sort'
     '/prompt/<string:prompt_slug>'
@@ -203,18 +223,34 @@ def drop_sensor(slug):
 )
 @login_required
 def sort_mapper(prompt_slug, sensor_slug, direction):
-    form = MapperSortForm(obj=Mapper.by_commons(
-        prompt=Prompt.by_slug(prompt_slug),
-        sensor=Sensor.by_slug(sensor_slug),
-    ), lift=direction == 'raise')
+    return _sort_generic(
+        MapperSortForm(obj=Mapper.by_commons(
+            prompt=Prompt.by_slug(prompt_slug),
+            sensor=Sensor.by_slug(sensor_slug),
+        ), lift=direction == 'raise'),
+        'mgnt.view_mapper',
+    )
 
-    if not form.thing:
-        abort(500, 'No such mapper!')
 
-    if request.method == 'POST' and form.validate_on_submit():
-        slug = extract_slug(form.thing)
-        text = 'Raised' if form.lift else 'Lowered'
-        if form.action():
-            flash(f'{text} mapper {slug}!', 'success')
+@BLUEPRINT_MGNT.route(
+    '/manage/prompt/sort/<string:slug>/<any(raise,lower):direction>',
+    methods=['POST'],
+)
+@login_required
+def sort_prompt(slug, direction):
+    return _sort_generic(
+        PromptSortForm(obj=Prompt.by_slug(slug), lift=direction == 'raise'),
+        'mgnt.view_prompt',
+    )
 
-    return redirect(url_for('mgnt.view_mapper'))
+
+@BLUEPRINT_MGNT.route(
+    '/manage/sensor/sort/<string:slug>/<any(raise,lower):direction>',
+    methods=['POST'],
+)
+@login_required
+def sort_sensor(slug, direction):
+    return _sort_generic(
+        SensorSortForm(obj=Sensor.by_slug(slug), lift=direction == 'raise'),
+        'mgnt.view_sensor',
+    )
