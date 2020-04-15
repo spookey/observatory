@@ -21,7 +21,7 @@ class Sensor(CommonMixin, CreatedMixin, Model):
 
     @property
     def query_points(self):
-        return Point.query.with_parent(self).order_by(Point.created.desc())
+        return Point.query_sorted(Point.query.with_parent(self))
 
     @property
     def query_points_outdated(self):
