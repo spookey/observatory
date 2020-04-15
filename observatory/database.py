@@ -113,6 +113,62 @@ class CreatedMixin:
         return query.order_by(cls.created.desc())
 
 
+class SortMixin:
+    @declared_attr
+    def sortkey(cls):
+        return DB.Column(
+            DB.Integer(), nullable=False, unique=True,
+            default=cls.sortkey_next,
+        )
+
+    @classmethod
+    def sortkey_next(cls):
+        return 1 + cls.query.count()
+
+    @classmethod
+    def _get_class_sortkey(cls):
+        return cls.sortkey
+
+    @classmethod
+    def query_sorted(cls, query=None):
+        query = query if query is not None else cls.query
+        return query.order_by(cls._get_class_sortkey().desc())
+
+    def query_above(self, query=None):
+        query = query if query is not None else self.query
+        return query.filter(self._get_class_sortkey() > self.sortkey)
+
+    def query_below(self, query=None):
+        query = query if query is not None else self.query
+        return query.filter(self._get_class_sortkey() < self.sortkey)
+
+    def __flip_sortkey(self, that):
+        if not that:
+            return False
+
+        LOG.info(
+            'flipping sortkey %d with %d for "%s"',
+            self.sortkey, that.sortkey, self,
+        )
+        skey = self.sortkey
+        tkey = that.sortkey
+        self.update(sortkey=self.sortkey_next())
+        that.update(sortkey=skey)
+        self.update(sortkey=tkey)
+
+        return True
+
+    def raise_step(self):
+        return self.__flip_sortkey(self.query_above(
+            self.query.order_by(self._get_class_sortkey().asc())
+        ).first())
+
+    def lower_step(self):
+        return self.__flip_sortkey(self.query_below(
+            self.query.order_by(self._get_class_sortkey().desc())
+        ).first())
+
+
 class BaseModel(CRUDMixin, NameMixin, DB.Model):
     __abstract__ = True
 
