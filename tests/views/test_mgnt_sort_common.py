@@ -41,6 +41,20 @@ class TestMgntSortCommon:
         }, code=401)
 
     @staticmethod
+    def test_buttonforms_and_field(_comm):
+        _comm.login()
+        _comm.gen_common()
+
+        res = _comm.visitor(_comm.view_ep)
+        for form in res.soup.select('form'):
+            assert [
+                (inp.attrs.get('name'), inp.attrs.get('type'))
+                for inp in form.select('button')
+            ] == [
+                ('submit', 'submit')
+            ]
+
+    @staticmethod
     def test_form_no_slug(_comm):
         _comm.login()
         slug = '🐇'

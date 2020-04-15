@@ -40,7 +40,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro _common_info(thing, edit_ep, drop_ep) %}
+{% macro _common_info(thing, edit_ep, drop_ep, sort_ep, sort_form_fn) %}
 {% if thing %}
 {{ head_level(
   'Title', thing.title,
@@ -64,6 +64,26 @@
 {{ _mapper_info(thing.mapping) }}
 {{ split_level(
   render_form(
+    sort_form_fn(thing, lift=true),
+    action=url_for(
+      sort_ep,
+      slug=thing.slug,
+      direction='raise',
+      _external=true,
+    ),
+  ),
+  render_form(
+    sort_form_fn(thing, lift=false),
+    action=url_for(
+      sort_ep,
+      slug=thing.slug,
+      direction='lower',
+      _external=true,
+    ),
+  ),
+) }}
+{{ split_level(
+  render_form(
     form_drop_prompt(thing),
     action=url_for(drop_ep, slug=thing.slug, _external=true),
   ),
@@ -74,7 +94,10 @@
 
 
 {% macro show_sensor(sensor) %}
-{% call() _common_info(sensor, 'mgnt.edit_sensor', 'mgnt.drop_sensor') %}
+{% call() _common_info(
+  sensor, 'mgnt.edit_sensor', 'mgnt.drop_sensor',
+  'mgnt.sort_sensor', form_sort_sensor,
+) %}
 {{ key_val_level(
   'Points',
   sensor.length,
@@ -89,7 +112,10 @@
 {% endmacro %}
 
 {% macro show_prompt(prompt) %}
-{% call() _common_info(prompt, 'mgnt.edit_prompt', 'mgnt.drop_prompt') %}
+{% call() _common_info(
+  prompt, 'mgnt.edit_prompt', 'mgnt.drop_prompt',
+  'mgnt.sort_prompt', form_sort_prompt,
+) %}
 {% endcall %}
 {% endmacro %}
 
