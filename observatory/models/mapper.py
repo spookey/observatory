@@ -1,13 +1,9 @@
 from enum import Enum
-from logging import getLogger
 
 from sqlalchemy import and_
 
-from observatory.database import BaseModel, CreatedMixin
-from observatory.lib.text import extract_slug
+from observatory.database import BaseModel, CreatedMixin, SortMixin
 from observatory.start.extensions import DB
-
-LOG = getLogger(__name__)
 
 
 class EnumColor(Enum):
@@ -44,14 +40,11 @@ class EnumHorizon(Enum):
     INVERT = 2
 
 
-def _next_sortkey():
-    return 1 + Mapper.query.count()
-
 # pylint: disable=no-member
 # pylint: disable=too-many-ancestors
 
 
-class Mapper(CreatedMixin, BaseModel):
+class Mapper(SortMixin, CreatedMixin, BaseModel):
     prompt_prime = DB.Column(
         DB.Integer(), DB.ForeignKey('prompt.prime'), primary_key=True
     )
@@ -60,9 +53,6 @@ class Mapper(CreatedMixin, BaseModel):
     )
     active = DB.Column(
         DB.Boolean(), nullable=False, default=True
-    )
-    sortkey = DB.Column(
-        DB.Integer(), nullable=False, unique=True, default=_next_sortkey,
     )
     color = DB.Column(
         DB.Enum(EnumColor), nullable=False, default=EnumColor.GRAY
@@ -105,42 +95,3 @@ class Mapper(CreatedMixin, BaseModel):
             cls.prompt == prompt,
             cls.sensor == sensor,
         )).first()
-
-    @classmethod
-    def query_sorted(cls, query=None):
-        query = query if query is not None else cls.query
-        return query.order_by(cls.sortkey.desc())
-
-    def query_above(self, query=None):
-        query = query if query is not None else self.query
-        return query.filter(Mapper.sortkey > self.sortkey)
-
-    def query_below(self, query=None):
-        query = query if query is not None else self.query
-        return query.filter(Mapper.sortkey < self.sortkey)
-
-    def __flip_sortkey(self, that):
-        if not that:
-            return False
-        LOG.info(
-            'flipping sortkey from "%s" (%d) with "%s" (%d)',
-            extract_slug(self), self.sortkey,
-            extract_slug(that), that.sortkey,
-        )
-
-        skey = self.sortkey
-        tkey = that.sortkey
-        self.update(sortkey=_next_sortkey())
-        that.update(sortkey=skey)
-        self.update(sortkey=tkey)
-        return True
-
-    def raise_step(self):
-        return self.__flip_sortkey(self.query_above(
-            Mapper.query.order_by(Mapper.sortkey.asc())
-        ).first())
-
-    def lower_step(self):
-        return self.__flip_sortkey(self.query_below(
-            Mapper.query.order_by(Mapper.sortkey.desc())
-        ).first())
