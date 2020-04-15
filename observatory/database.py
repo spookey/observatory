@@ -11,6 +11,7 @@ from observatory.start.extensions import DB
 LOG = getLogger(__name__)
 
 # pylint: disable=no-member
+# pylint: disable=no-self-argument
 # pylint: disable=too-few-public-methods
 # pylint: disable=too-many-ancestors
 
@@ -52,8 +53,8 @@ class CRUDMixin:
 
 class NameMixin:
     @declared_attr
-    def __tablename__(self):
-        return self.__name__.lower()
+    def __tablename__(cls):
+        return cls.__name__.lower()
 
 
 class PrimeMixin:
@@ -70,9 +71,17 @@ class PrimeMixin:
 
 
 class CommonMixin:
-    slug = DB.Column(DB.String(length=64), unique=True, nullable=False)
-    title = DB.Column(DB.String(length=512), nullable=False)
-    description = DB.Column(DB.String(length=4096), nullable=False)
+    @declared_attr
+    def slug(_):
+        return DB.Column(DB.String(length=64), unique=True, nullable=False)
+
+    @declared_attr
+    def title(_):
+        return DB.Column(DB.String(length=512), nullable=False)
+
+    @declared_attr
+    def description(_):
+        return DB.Column(DB.String(length=4096), nullable=False)
 
     @classmethod
     def by_slug(cls, slug):
@@ -80,7 +89,11 @@ class CommonMixin:
 
 
 class CreatedMixin:
-    created = DB.Column(DB.DateTime(), nullable=False, default=datetime.utcnow)
+    @declared_attr
+    def created(_):
+        return DB.Column(
+            DB.DateTime(), nullable=False, default=datetime.utcnow
+        )
 
     @property
     def created_fmt(self):
