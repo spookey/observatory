@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired
 
 from observatory.forms.extra.validators import SafeSlug
 from observatory.forms.extra.widgets import SubmitButtonInput
-from observatory.forms.generic import GenericDropForm
+from observatory.forms.generic import GenericDropForm, GenericSortForm
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
 
@@ -76,4 +76,12 @@ class PromptDropForm(GenericDropForm):
 
 
 class SensorDropForm(GenericDropForm):
+    Model = Sensor
+
+
+class PromptSortForm(GenericSortForm):
+    Model = Prompt
+
+
+class SensorSortForm(GenericSortForm):
     Model = Sensor
