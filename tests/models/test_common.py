@@ -40,6 +40,8 @@ class TestCommon:
         assert thing.title == title
         assert thing.description == description
 
+        assert thing.sortkey == 1
+
         assert start <= thing.created
         assert thing.created <= datetime.utcnow()
 

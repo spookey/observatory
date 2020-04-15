@@ -1,6 +1,6 @@
 from logging import getLogger
 
-from observatory.database import CommonMixin, CreatedMixin, Model
+from observatory.database import CommonMixin, CreatedMixin, Model, SortMixin
 from observatory.models.point import Point
 from observatory.start.extensions import DB
 
@@ -10,7 +10,7 @@ LOG = getLogger(__name__)
 # pylint: disable=too-many-ancestors
 
 
-class Sensor(CommonMixin, CreatedMixin, Model):
+class Sensor(CommonMixin, SortMixin, CreatedMixin, Model):
     points = DB.relationship(
         'Point',
         backref=DB.backref('sensor', lazy=True),
