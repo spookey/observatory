@@ -73,7 +73,6 @@ class Mapper(SortMixin, CreatedMixin, BaseModel):
             cascade='all,delete-orphan',
             lazy=True,
         ),
-        order_by='Prompt.created.desc()',
         lazy=True,
     )
     sensor = DB.relationship(
@@ -85,7 +84,6 @@ class Mapper(SortMixin, CreatedMixin, BaseModel):
             cascade='all,delete-orphan',
             lazy=True,
         ),
-        order_by='Sensor.created.desc()',
         lazy=True,
     )
 
