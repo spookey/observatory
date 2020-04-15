@@ -41,21 +41,21 @@ class TestMapperSortForm:
     @staticmethod
     def test_empty_mapper_and_lift():
         form = MapperSortForm(lift=None)
-        assert form.mapper is None
+        assert form.thing is None
         assert form.lift is None
 
     @staticmethod
     def test_obj_mapper():
         obj = '🕊'
         form = MapperSortForm(obj=obj, lift=None)
-        assert form.mapper == obj
+        assert form.thing == obj
 
     @staticmethod
     def test_empty_invalid():
         form = MapperSortForm(lift=None)
         assert form.validate() is False
         assert form.action() is None
-        assert form.mapper is None
+        assert form.thing is None
 
     @staticmethod
     def test_sort(gen_prompt, gen_sensor):

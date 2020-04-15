@@ -3,7 +3,7 @@ from wtforms import BooleanField, SelectField, SubmitField
 from wtforms.validators import DataRequired
 
 from observatory.forms.extra.widgets import SubmitButtonInput
-from observatory.forms.generic import GenericDropForm
+from observatory.forms.generic import GenericDropForm, GenericSortForm
 from observatory.models.mapper import (
     EnumColor, EnumConvert, EnumHorizon, Mapper
 )
@@ -145,35 +145,5 @@ class MapperDropForm(GenericDropForm):
     Model = Mapper
 
 
-class MapperSortForm(FlaskForm):
-    submit = SubmitField(
-        'Sort',
-        description='Submit',
-        widget=SubmitButtonInput(
-            icon='glob_error',
-            classreplace_kw={'is-dark': 'is-dark is-small'},
-        ),
-    )
-
-    def __init__(self, *args, obj=None, lift, **kwargs):
-        super().__init__(*args, obj=obj, **kwargs)
-        self.mapper = obj
-        self.lift = lift
-
-        self.submit.label.text = 'Up' if self.lift else 'Down'
-        self.submit.widget.icon = 'ops_arr_up' if self.lift else 'ops_arr_dn'
-
-    def validate(self):
-        return (
-            super().validate() and
-            self.lift is not None and
-            bool(self.mapper)
-        )
-
-    def action(self):
-        if not self.validate():
-            return None
-
-        if self.lift:
-            return self.mapper.raise_step()
-        return self.mapper.lower_step()
+class MapperSortForm(GenericSortForm):
+    Model = Mapper

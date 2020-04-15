@@ -208,11 +208,11 @@ def sort_mapper(prompt_slug, sensor_slug, direction):
         sensor=Sensor.by_slug(sensor_slug),
     ), lift=direction == 'raise')
 
-    if not form.mapper:
+    if not form.thing:
         abort(500, 'No such mapper!')
 
     if request.method == 'POST' and form.validate_on_submit():
-        slug = extract_slug(form.mapper)
+        slug = extract_slug(form.thing)
         text = 'Raised' if form.lift else 'Lowered'
         if form.action():
             flash(f'{text} mapper {slug}!', 'success')
