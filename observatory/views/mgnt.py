@@ -150,8 +150,6 @@ def _drop_generic(form, redirect_ep):
         slug = extract_slug(form.thing)
         if form.action():
             flash(f'Deleted {name} {slug}!', 'success')
-        else:
-            flash(f'Can not delete {name} {slug}!', 'error')
 
     return redirect(url_for(redirect_ep))
 
