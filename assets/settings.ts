@@ -1,12 +1,14 @@
+import Chart from "chart.js";
 import moment from "moment";
-
-export const config = {};
 
 /* allow configuration from outside */
 export function doSettings(
-  momentDefaultFormat: string,
-  configuration: object
+  momentDefaultFormat: string
 ) : void {
+
   moment.defaultFormat = momentDefaultFormat;
-  Object.assign(config, configuration);
+
+  Chart.defaults.global.defaultFontColor = "#363636";
+  Chart.defaults.global.defaultFontFamily = "'Source Sans Pro', sans-serif";
+  Chart.defaults.global.defaultFontSize = 12;
 };
