@@ -41,28 +41,21 @@ class TestMgntDropCommon:
     def test_form_params(_comm):
         _comm.login()
         thing = _comm.gen_common()
+        url = url_for(_comm.endpoint, slug=thing.slug, _external=True)
         res = _comm.visitor(_comm.view_ep)
-
-        form = res.soup.select('form')[-1]
+        form = res.soup.select(f'form[action="{url}"]')[-1]
         assert form['method'] == 'POST'
-        assert form['action'] == url_for(
-            _comm.endpoint, slug=thing.slug, _external=True
-        )
 
     @staticmethod
     def test_form_fields(_comm):
         _comm.login()
-        _comm.gen_common()
+        thing = _comm.gen_common()
+        url = url_for(_comm.endpoint, slug=thing.slug, _external=True)
         res = _comm.visitor(_comm.view_ep)
-
-        form = res.soup.select('form')[-1]
-        fields = [
-            (inp.attrs.get('name'), inp.attrs.get('type'))
-            for inp in form.select('button')
-        ]
-        assert fields == [
-            ('submit', 'submit'),
-        ]
+        form = res.soup.select(f'form[action="{url}"]')[-1]
+        button = form.select('button')[-1]
+        assert button.attrs.get('name') == 'submit'
+        assert button.attrs.get('type') == 'submit'
 
     @staticmethod
     def test_form_no_slug(_comm):
