@@ -1,11 +1,11 @@
 from jinja2 import Markup
 
-from observatory.shared import moment_config
+from observatory.shared import frontend_config
 from observatory.start.environment import FMT_MOMENT
 
 
-def test_moment_config():
-    config = moment_config()
+def test_frontend_config():
+    config = frontend_config()
     assert isinstance(config, Markup)
 
     text = config.unescape()
@@ -13,5 +13,5 @@ def test_moment_config():
     assert '</script>' in text
     assert 'document.addEventListener' in text
     assert 'DOMContentLoaded' in text
-    assert 'window.momentConfig' in text
-    assert FMT_MOMENT in text
+    assert 'window.configure' in text
+    assert f'"{FMT_MOMENT}"' in text

@@ -30,11 +30,13 @@ def tagline():
     return Markup(random_line(TAGLINES))
 
 
-def moment_config():
+def frontend_config():
     script = f'''
 <script>
   document.addEventListener("DOMContentLoaded", function() {{
-    window.momentConfig("{FMT_MOMENT}");
+    window.configure(
+        "{FMT_MOMENT}"
+    );
   }});
 </script>
     '''

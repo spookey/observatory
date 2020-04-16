@@ -1,10 +1,5 @@
 import moment from "moment";
 
-/* allow moment config from outside */
-(window as any).momentConfig = (format: string) => {
-  moment.defaultFormat = format;
-};
-
 /* convert moment timestamps */
 export function momentTime(): void {
   document.addEventListener("DOMContentLoaded", (): void => {
