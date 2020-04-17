@@ -1,14 +1,14 @@
-{% macro split_level(left, right) %}
+{% macro split_level(left=none, right=none) %}
 <div class="level">
   <div class="level-left">
-    {% if left %}
+    {% if left is not none %}
     <div class="level-item has-text-centered">
       {{ left }}
     </div>
     {% endif %}
   </div>
   <div class="level-right">
-    {% if right %}
+    {% if right is not none %}
     <div class="level-item has-text-centered">
       {{ right }}
     </div>
@@ -21,7 +21,7 @@
   {% macro _st(text) %}
   <strong>{{ text }}</strong>
   {% endmacro %}
-{{ split_level(_st(label), value) }}
+{{ split_level(left=_st(label), right=value) }}
 {% endmacro %}
 
 
