@@ -59,6 +59,10 @@
     'Created',
     time_abs(thing.created_epoch_ms, thing.created_fmt),
   ) }}
+  {{ key_val_level(
+    'Active',
+    bool_icon(thing.active),
+  ) }}
   {{ caller() }}
 </div>
 {{ _mapper_info(thing.mapping) }}

@@ -20,6 +20,10 @@ class Sensor(CommonMixin, SortMixin, CreatedMixin, Model):
     )
 
     @property
+    def active(self):
+        return any(self.mapping_active)
+
+    @property
     def query_points(self):
         return Point.query_sorted(Point.query.with_parent(self))
 

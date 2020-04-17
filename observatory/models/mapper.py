@@ -87,6 +87,35 @@ class Mapper(SortMixin, CreatedMixin, BaseModel):
         lazy=True,
     )
 
+    prompt_active = DB.relationship(
+        'Prompt',
+        primaryjoin='''and_(
+            Mapper.active.is_(True),
+            Mapper.prompt_prime == Prompt.prime
+        )''',
+        backref=DB.backref(
+            'mapping_active',
+            order_by='Mapper.sortkey.desc()',
+            cascade='all,delete-orphan',
+            lazy=True,
+        ),
+        lazy=True,
+    )
+    sensor_active = DB.relationship(
+        'Sensor',
+        primaryjoin='''and_(
+            Mapper.active.is_(True),
+            Mapper.sensor_prime == Sensor.prime
+        )''',
+        backref=DB.backref(
+            'mapping_active',
+            order_by='Mapper.sortkey.desc()',
+            cascade='all,delete-orphan',
+            lazy=True,
+        ),
+        lazy=True,
+    )
+
     @classmethod
     def by_commons(cls, prompt, sensor):
         return cls.query.filter(and_(

@@ -3,6 +3,7 @@ from datetime import datetime
 from pytest import fixture, mark, raises
 from sqlalchemy.exc import IntegrityError
 
+from observatory.models.mapper import Mapper
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
 from observatory.start.environment import FMT_STRFTIME
@@ -40,6 +41,7 @@ class TestCommon:
         assert thing.title == title
         assert thing.description == description
 
+        assert thing.active is not None
         assert thing.sortkey == 1
 
         assert start <= thing.created
@@ -78,3 +80,15 @@ class TestCommon:
             thing.created - datetime.utcfromtimestamp(0)
         ).total_seconds()
         assert thing.created_epoch_ms == 1000 * thing.created_epoch
+
+    @staticmethod
+    def test_mapping_active(_comm, gen_prompt, gen_sensor):
+        mapper = Mapper.create(
+            prompt=gen_prompt(), sensor=gen_sensor(), active=False
+        )
+        thing = _comm.model.query.first()
+        assert thing.mapping_active == []
+        assert thing.active is False
+        mapper.update(active=True)
+        assert thing.mapping_active == [mapper]
+        assert thing.active is True

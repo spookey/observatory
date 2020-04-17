@@ -93,3 +93,39 @@ class TestMapper:
             mapper.created - datetime.utcfromtimestamp(0)
         ).total_seconds()
         assert mapper.created_epoch_ms == 1000 * mapper.created_epoch
+
+    @staticmethod
+    def test_mapping_active(gen_prompt, gen_sensor):
+        p_one, p_two = gen_prompt('one'), gen_prompt('two')
+        s_one, s_two = gen_sensor('one'), gen_sensor('two')
+        one_one = Mapper.create(
+            prompt=p_one, sensor=s_one, sortkey=4, active=True
+        )
+        one_two = Mapper.create(
+            prompt=p_one, sensor=s_two, sortkey=3, active=False
+        )
+        two_one = Mapper.create(
+            prompt=p_two, sensor=s_one, sortkey=2, active=False
+        )
+        two_two = Mapper.create(
+            prompt=p_two, sensor=s_two, sortkey=1, active=True
+        )
+
+        assert p_one.mapping == [one_one, one_two]
+        assert p_two.mapping == [two_one, two_two]
+        assert s_one.mapping == [one_one, two_one]
+        assert s_two.mapping == [one_two, two_two]
+
+        assert p_one.mapping_active == [one_one]
+        assert p_two.mapping_active == [two_two]
+        assert s_one.mapping_active == [one_one]
+        assert s_two.mapping_active == [two_two]
+
+        assert one_one.prompt_active == p_one
+        assert one_one.sensor_active == s_one
+        assert one_two.prompt_active is None
+        assert one_two.sensor_active is None
+        assert two_one.prompt_active is None
+        assert two_one.sensor_active is None
+        assert two_two.prompt_active == p_two
+        assert two_two.sensor_active == s_two
