@@ -2,6 +2,7 @@ from datetime import datetime
 
 from pytest import mark
 
+from observatory.models.mapper import EnumConvert
 from observatory.models.point import Point
 from observatory.models.sensor import Sensor
 from observatory.start.environment import FMT_STRFTIME
@@ -72,3 +73,22 @@ class TestPoint:
 
         assert Point.query.all() == complete
         assert Point.query_outdated().all() == olds
+
+    @staticmethod
+    def test_convert(gen_sensor):
+        sensor = gen_sensor()
+        neg = sensor.append(-23.5)
+        nil = sensor.append(0)
+        pos = sensor.append(13.37)
+
+        for point in (neg, nil, pos):
+            assert point.convert(None) is None
+
+        for point, expect in ((neg, -23.5), (nil, 0.0), (pos, 13.37)):
+            assert point.convert(EnumConvert.NATURAL) == expect
+
+        for point, expect in ((neg, -23), (nil, 0), (pos, 13)):
+            assert point.convert(EnumConvert.INTEGER) == expect
+
+        for point, expect in ((neg, True), (nil, False), (pos, True)):
+            assert point.convert(EnumConvert.BOOLEAN) == expect
