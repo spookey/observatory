@@ -1,10 +1,18 @@
 {% extends '_base.html' %}
 {% from '_macros/page.html' import nothing_there %}
+{% from 'main/_macros/plot.html' import render_graph %}
 
 {% block content %}
 <section class="section">
   <div class="container">
+  {% if prompts is defined and prompts %}
+  {% for prompt in prompts %}
+  {{ render_graph(prompt) }}
+  {% if not loop.last %}<hr>{% endif %}
+  {% endfor %}
+  {% else %}
   {{ nothing_there() }}
+  {% endif %}
   </div>
 </section>
 {% endblock %}

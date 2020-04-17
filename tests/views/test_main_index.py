@@ -1,7 +1,8 @@
 from flask import url_for
 from pytest import mark
 
-from observatory.start.environment import TAGLINES, TITLE
+from observatory.models.mapper import Mapper
+from observatory.start.environment import ICON, TAGLINES, TITLE
 
 ENDPOINT = 'main.index'
 
@@ -34,3 +35,31 @@ class TestMainIndex:
         text = res.soup.text
 
         assert 'nothing there' in text.lower()
+
+    @staticmethod
+    def test_view_info(visitor, gen_prompt, gen_sensor):
+        prompt = gen_prompt('test_prompt')
+        sensor = gen_sensor('test_sensor')
+        mapper = Mapper.create(prompt=prompt, sensor=sensor)
+        point = sensor.append(13.37)
+
+        res = visitor(ENDPOINT)
+        text = res.soup.text
+
+        canvas = res.soup.select('canvas')[-1]
+        assert canvas is not None
+        assert 'chart' in canvas['class']
+        assert canvas['data-slug'] == prompt.slug
+
+        assert ICON['glob_descr'] in str(res.soup)
+
+        assert prompt.slug in text
+        assert prompt.title in text
+        assert prompt.description in text
+
+        assert sensor.slug in text
+        assert sensor.title in text
+        assert sensor.description in text
+
+        assert point.created_fmt in text
+        assert str(point.convert(mapper.convert)) in text

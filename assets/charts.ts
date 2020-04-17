@@ -5,7 +5,7 @@ import moment from "moment";
 export function drawCharts(): void {
   document.addEventListener("DOMContentLoaded", (): void => {
     function getCtx(element: HTMLElement): (CanvasRenderingContext2D | null) {
-      if (!element.dataset.identifier) { return null; }
+      if (!element.dataset.slug) { return null; }
       if (!(element instanceof HTMLCanvasElement)) { return null; }
       return (element as HTMLCanvasElement).getContext("2d");
     }
