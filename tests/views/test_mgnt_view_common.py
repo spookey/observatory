@@ -2,6 +2,7 @@ from flask import url_for
 from pytest import fixture, mark
 
 from observatory.models.mapper import Mapper
+from observatory.start.environment import ICON
 
 
 @fixture(scope='function', params=['prompt', 'sensor'])
@@ -65,6 +66,7 @@ class TestMgntViewCommon:
         assert thing.title in text
         assert thing.description in text
         assert thing.created_fmt in text
+        assert ICON['bool_wrong'] in str(res.soup)
 
     @staticmethod
     def test_view_map_box(_comm, gen_prompt, gen_sensor):
@@ -79,6 +81,8 @@ class TestMgntViewCommon:
         assert mapper.sensor.slug in text
         assert mapper.convert.name in text
         assert mapper.horizon.name in text
+        assert mapper.color.color in str(box)
+        assert ICON['bool_right'] in str(box)
 
     @staticmethod
     def test_inner_nav(_comm):

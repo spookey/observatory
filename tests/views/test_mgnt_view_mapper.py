@@ -4,6 +4,7 @@ from pytest import mark
 from observatory.models.mapper import (
     EnumColor, EnumConvert, EnumHorizon, Mapper
 )
+from observatory.start.environment import ICON
 
 ENDPOINT = 'mgnt.view_mapper'
 ENDINDEX = 'mgnt.index'
@@ -56,9 +57,11 @@ class TestMgntViewMapper:
 
         assert mapper.prompt.slug in text
         assert mapper.sensor.slug in text
-        assert mapper.color.name in text
         assert mapper.convert.name in text
         assert mapper.horizon.name in text
+        assert mapper.color.name in text
+        assert mapper.color.color in str(res.soup)
+        assert ICON['bool_right'] in str(res.soup)
 
     @staticmethod
     def test_inner_nav(visitor, gen_user_loggedin):
