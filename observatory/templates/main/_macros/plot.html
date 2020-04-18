@@ -8,9 +8,9 @@
 <div class="level">
   <div class="level-left">
     <div class="level-item has-text-left-tablet has-text-centered">
-      <div class="title {{ 'is-3' if large else 'is-5' }}">
+      {% if large %}<h3 class="title is-3">{% else %}<div class="title is-5">{% endif %}
       {{ thing.title }}
-      </div>
+      {% if large %}</h3>{% else %}</div>{% endif %}
     </div>
   </div>
   {% if thing.description %}
