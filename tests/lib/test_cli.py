@@ -1,5 +1,7 @@
 from pytest import fixture, mark
 
+from observatory.models.point import Point
+from observatory.models.sensor import Sensor
 from observatory.models.user import User
 
 
@@ -11,7 +13,8 @@ def invoke(ctx_app):
         elems = ['cli']
         elems.extend(args)
         return runner.invoke(args=elems)
-    return run
+
+    yield run
 
 # pylint: disable=redefined-outer-name
 
@@ -114,3 +117,51 @@ class TestCli:
             'setstate', '--username', 'user', '--blocked'
         )
         assert 'not found' in result.output.lower()
+
+    @staticmethod
+    def test_sensorcurve(invoke, gen_sensor):
+        axc = 5
+        num = 1 + 2 * axc
+        sensor = gen_sensor()
+        assert Point.query.count() == 0
+
+        result = invoke(
+            'sensorcurve', '--slug', sensor.slug, '--axc', axc
+        )
+        assert f'created {num}' in result.output.lower()
+
+        assert Point.query.count() == num
+
+    @staticmethod
+    def test_sensorcurve_not_found(invoke):
+        assert Sensor.query.all() == []
+
+        result = invoke(
+            'sensorcurve', '--slug', 'test'
+        )
+        assert 'not present' in result.output.lower()
+
+    @staticmethod
+    def test_sensorclear(invoke, gen_sensor):
+        sensor = gen_sensor()
+        number = 23
+        for num in range(1, 1 + number):
+            sensor.append(num)
+
+        assert Point.query.count() == number
+
+        result = invoke(
+            'sensorclear', '--slug', sensor.slug
+        )
+        assert f'deleted {number}' in result.output.lower()
+
+        assert Point.query.count() == 0
+
+    @staticmethod
+    def test_sensorclear_not_found(invoke):
+        assert Sensor.query.all() == []
+
+        result = invoke(
+            'sensorclear', '--slug', 'test'
+        )
+        assert 'not present' in result.output.lower()

@@ -256,7 +256,11 @@ cli-setstate-active: $(CMD_FLASK)
 	$(call _flask,cli setstate --active)
 cli-setstate-blocked: $(CMD_FLASK)
 	$(call _flask,cli setstate --blocked)
-
+.PHONY: cli-sensorclear cli-sensorcurve
+cli-sensorclear: $(CMD_FLASK)
+	$(call _flask,cli sensorclear)
+cli-sensorcurve: $(CMD_FLASK)
+	$(call _flask,cli sensorcurve)
 
 ###
 # continuous integration

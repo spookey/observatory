@@ -1,10 +1,19 @@
+from datetime import datetime
+from math import pi, sin
+
 import click
 from flask import Blueprint
 
+from observatory.lib.clock import epoch_seconds
 from observatory.lib.text import is_slugable
+from observatory.models.point import Point
+from observatory.models.sensor import Sensor
 from observatory.models.user import User
+from observatory.start.extensions import DB
 
 BP_CLI = Blueprint('cli', __name__)
+
+# pylint: disable=no-member
 
 
 @BP_CLI.cli.command('adduser', help='Add new user')
@@ -51,3 +60,39 @@ def setstate(username, state):
     user.save()
     state = 'active' if state else 'blocked'
     click.secho(f'state changed to {state} for {username}!', fg='green')
+
+
+@BP_CLI.cli.command('sensorclear', help='Remove all points from sensor')
+@click.option('--slug', prompt=True)
+def sensorclear(slug):
+    sensor = Sensor.by_slug(slug)
+    if not sensor:
+        click.secho(f'{slug} not present!', fg='red')
+        return
+
+    number = Point.query.with_parent(sensor).delete()
+    DB.session.commit()
+    click.echo(f'deleted {number} points from {slug}')
+
+
+@BP_CLI.cli.command('sensorcurve', help='Draw a curve of points on sensor')
+@click.option('--slug', prompt=True)
+@click.option('--axc', type=int, default=15)
+def sensorcurve(slug, axc):
+    sensor = Sensor.by_slug(slug)
+    if not sensor:
+        click.secho(f'{slug} not present!', fg='red')
+        return
+
+    num = 1 + 2 * axc
+    sec = epoch_seconds(datetime.utcnow())
+    for pos in range(0, -num, -1):
+        Point.create(
+            sensor=sensor,
+            created=datetime.utcfromtimestamp(sec + pos),
+            value=sin((1 / axc) * pos * pi),
+            _commit=False,
+        )
+
+    DB.session.commit()
+    click.echo(f'created {num} points for {slug}')
