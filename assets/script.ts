@@ -1,4 +1,3 @@
-import axios from "axios";
 import { conf } from "./settings";
 
 import { colorizeSO } from "./colors";
