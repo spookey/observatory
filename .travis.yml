@@ -4,14 +4,18 @@ language: python
 
 cache:
   pip: true
+  npm: true
 
 python:
   - '3.6'
   - '3.7'
   - '3.8'
+node_js:
+  - 'v13.3.0'
 
 install:
   - pip install -r requirements-dev.txt
+  - npm install
 
 before_script:
   - ln -s "$VIRTUAL_ENV" "$TRAVIS_BUILD_DIR/venv"

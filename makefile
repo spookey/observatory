@@ -266,7 +266,7 @@ cli-sensorcurve: $(CMD_FLASK)
 # continuous integration
 
 .PHONY: travis
-travis: $(CMD_PYTEST)
+travis: $(CMD_PYTEST) static
 	$(call _tcov,--durations=10)
 
 
