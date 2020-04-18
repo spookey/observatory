@@ -19,8 +19,10 @@
       <div class="dropdown is-right is-hoverable">
         <div class="dropdown-trigger">{{ text_icon('glob_descr') }}</div>
         <div class="dropdown-menu" role="menu">
-          <div class="dropdown-content">
-            <div class="dropdown-item">{{ text_code(thing.slug) }}</div>
+          <div class="dropdown-content has-text-left">
+            <div class="dropdown-item">
+              {{ text_code(thing.slug) }}
+            </div>
             <hr class="dropdown-divider">
             <div class="dropdown-item">
               <blockquote>{{ thing.description }}</blockquote>
