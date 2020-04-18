@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pytest import mark
 
-from observatory.models.mapper import EnumConvert
+from observatory.models.mapper import EnumConvert, EnumHorizon
 from observatory.models.point import Point
 from observatory.models.sensor import Sensor
 from observatory.start.environment import FMT_STRFTIME
@@ -81,14 +81,28 @@ class TestPoint:
         nil = sensor.append(0)
         pos = sensor.append(13.37)
 
-        for point in (neg, nil, pos):
-            assert point.convert(None) is None
-
-        for point, expect in ((neg, -23.5), (nil, 0.0), (pos, 13.37)):
-            assert point.convert(EnumConvert.NATURAL) == expect
-
-        for point, expect in ((neg, -23), (nil, 0), (pos, 13)):
-            assert point.convert(EnumConvert.INTEGER) == expect
-
-        for point, expect in ((neg, True), (nil, False), (pos, True)):
-            assert point.convert(EnumConvert.BOOLEAN) == expect
+        for horizon, convert, params in [
+                (None, None, (
+                    (neg, -23.5), (nil, 0.0), (pos, 13.37),
+                )),
+                (EnumHorizon.NORMAL, EnumConvert.NATURAL, (
+                    (neg, -23.5), (nil, 0.0), (pos, 13.37),
+                )),
+                (EnumHorizon.INVERT, EnumConvert.NATURAL, (
+                    (neg, 23.5), (nil, 0.0), (pos, -13.37),
+                )),
+                (EnumHorizon.NORMAL, EnumConvert.INTEGER, (
+                    (neg, -23), (nil, 0), (pos, 13),
+                )),
+                (EnumHorizon.INVERT, EnumConvert.INTEGER, (
+                    (neg, 23), (nil, 0), (pos, -13),
+                )),
+                (EnumHorizon.NORMAL, EnumConvert.BOOLEAN, (
+                    (neg, True), (nil, False), (pos, True),
+                )),
+                (EnumHorizon.INVERT, EnumConvert.BOOLEAN, (
+                    (neg, True), (nil, False), (pos, True),
+                )),
+        ]:
+            for point, expect in params:
+                assert point.convert(horizon, convert) == expect

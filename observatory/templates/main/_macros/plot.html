@@ -56,7 +56,7 @@
       {{ key_val_level('Points', sensor.length) }}
       {% with latest, value = (
         time_rel(sensor.latest.created_epoch_ms, sensor.latest.created_fmt),
-        sensor.latest.convert(mapper.convert)
+        sensor.latest.convert(mapper.horizon, mapper.convert)
       ) if sensor.latest else (
         '&mdash;'|safe, '&mdash;'|safe
       ) %}

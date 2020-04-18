@@ -62,4 +62,4 @@ class TestMainIndex:
         assert sensor.description in text
 
         assert point.created_fmt in text
-        assert str(point.convert(mapper.convert)) in text
+        assert str(point.convert(mapper.horizon, mapper.convert)) in text
