@@ -11,16 +11,16 @@ BP_REST_CHARTS = Blueprint('charts', __name__)
 class ChartsPlot(Resource):
 
     @staticmethod
-    def prompt_or_abort(slug):
+    def prompt_active_or_abort(slug):
         prompt = Prompt.by_slug(slug)
         if not prompt:
             abort(404, message=f'Prompt {slug} not present')
+        if not prompt.active:
+            abort(410, message=f'Prompt {slug} not active')
         return prompt
 
     def get(self, slug):
-        prompt = self.prompt_or_abort(slug)
-        if not prompt.active:
-            abort(410, message=f'Prompt {slug} not active')
+        prompt = self.prompt_active_or_abort(slug)
 
         return dict(
             todo=f'output plot data for {prompt.slug}',
