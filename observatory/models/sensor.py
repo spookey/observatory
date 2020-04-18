@@ -45,8 +45,8 @@ class Sensor(CommonMixin, SortMixin, CreatedMixin, Model):
 
         return all(point.delete() for point in query.all())
 
-    def append(self, value):
+    def append(self, value, _commit=True):
         self.cleanup()
         LOG.info('creating new point with "%f" for "%s"', value, self.slug)
 
-        return Point.create(sensor=self, value=value)
+        return Point.create(sensor=self, value=value, _commit=_commit)
