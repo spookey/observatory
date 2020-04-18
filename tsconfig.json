@@ -25,6 +25,6 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "strictPropertyInitialization": true,
-    "target": "ES3"
+    "target": "ES5"
   }
 }
