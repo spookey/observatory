@@ -1,4 +1,5 @@
 from observatory.lib.cli import BP_CLI
+from observatory.rest.charts import BP_REST_CHARTS
 from observatory.rest.mapper import BP_REST_MAPPER
 from observatory.rest.prompt import BP_REST_PROMPT
 from observatory.rest.sensor import BP_REST_SENSOR
@@ -37,10 +38,11 @@ class TestApp:
     @staticmethod
     def test_blueprints(app):
         blueprints = [
-            BP_CLI,
             BLUEPRINT_MAIN, BLUEPRINT_MGNT,
             BLUEPRINT_SIDE, BLUEPRINT_USER,
-            BP_REST_MAPPER, BP_REST_PROMPT, BP_REST_SENSOR,
+            BP_CLI,
+            BP_REST_CHARTS, BP_REST_MAPPER,
+            BP_REST_PROMPT, BP_REST_SENSOR,
         ]
         for blueprint in app.blueprints.values():
             assert blueprint in blueprints
