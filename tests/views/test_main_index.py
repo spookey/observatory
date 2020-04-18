@@ -46,10 +46,10 @@ class TestMainIndex:
         res = visitor(ENDPOINT)
         text = res.soup.text
 
-        canvas = res.soup.select('canvas')[-1]
-        assert canvas is not None
-        assert 'chart' in canvas['class']
-        assert canvas['data-slug'] == prompt.slug
+        plot = res.soup.select('.plot')[-1]
+        assert plot['data-slug'] == prompt.slug
+        assert plot.select('canvas')[-1] is not None
+        assert plot.select('progress')[-1] is not None
 
         assert ICON['glob_descr'] in str(res.soup)
 

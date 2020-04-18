@@ -42,11 +42,9 @@
 <div class="content">
   {{ _common_dropdown_level(prompt, large=true) }}
 
-  <div class="content">
-  <canvas
-    class="chart" data-slug="{{ prompt.slug }}"
-    aria-label="{{ prompt.title }}" role="img"
-  ></canvas>
+  <div class="content plot" data-slug="{{ prompt.slug }}">
+    <canvas aria-label="{{ prompt.title }}" role="img"></canvas>
+    <progress class="progress is-small is-dark" value="" max="100"></progress>
   </div>
   <div class="columns">
   {% for mapper in prompt.mapping_active %}

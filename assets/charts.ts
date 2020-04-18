@@ -4,19 +4,22 @@ import moment from "moment";
 
 export function drawCharts(): void {
   document.addEventListener("DOMContentLoaded", (): void => {
-    function getCtx(element: HTMLElement): (CanvasRenderingContext2D | null) {
-      if (!element.dataset.slug) { return null; }
-      if (!(element instanceof HTMLCanvasElement)) { return null; }
-      return (element as HTMLCanvasElement).getContext("2d");
+    function getCtx(container: HTMLElement): (CanvasRenderingContext2D | null) {
+      for (const element of container.getElementsByTagName("canvas") as any) {
+        if (element instanceof HTMLCanvasElement) {
+          return (element as HTMLCanvasElement).getContext("2d");
+        }
+      }
+      return null;
     }
 
-    function draw(element: HTMLElement): void {
-      const ctx: (CanvasRenderingContext2D | null) = getCtx(element);
+    function plot(container: HTMLElement): void {
+      const ctx: (CanvasRenderingContext2D | null) = getCtx(container);
       if (!ctx) { return; }
     }
 
-    for (const element of document.querySelectorAll(".chart") as any) {
-      draw(element);
+    for (const container of document.querySelectorAll(".plot") as any) {
+      plot(container);
     }
   });
 }
