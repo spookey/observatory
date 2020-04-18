@@ -1,6 +1,6 @@
 from logging import getLogger
 
-from flask import render_template, request
+from flask import render_template, request, url_for
 from jinja2 import Markup
 
 from observatory.forms.common import (
@@ -31,16 +31,16 @@ def tagline():
 
 
 def frontend_config():
-    script = f'''
+    api_plot_base = url_for('api.charts.plot', slug='', _external=True)
+    return Markup(''.join(line.strip() for line in f'''
 <script>
   document.addEventListener("DOMContentLoaded", function() {{
     window.configure(
-        "{FMT_MOMENT}"
+        "{FMT_MOMENT}", "{api_plot_base}"
     );
   }});
 </script>
-    '''
-    return Markup(''.join(line.strip() for line in script.splitlines()))
+    '''.splitlines()))
 
 
 def form_drop_mapper(mapper):
