@@ -182,7 +182,7 @@ tcovh: $(CMD_PYTEST)
 
 tcovh-open: tcovh
 	$(CMD_PY) -m webbrowser -t "$(HTMLCOV)/index.html"
-tcovh-watch: $(CMD_WATCH) tcovh
+tcovh-watch: $(CMD_WATCH)
 	@$(CMD_WATCH) shell-command . \
 		--recursive \
 		--ignore-directories \
