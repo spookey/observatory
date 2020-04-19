@@ -8,7 +8,11 @@ from observatory.forms.common import (
 )
 from observatory.forms.mapper import MapperDropForm, MapperSortForm
 from observatory.lib.text import random_line
-from observatory.start.environment import FMT_MOMENT, TAGLINES
+from observatory.start.environment import (
+    FMT_MOMENT_DAY, FMT_MOMENT_DEFAULT, FMT_MOMENT_HOUR, FMT_MOMENT_MINUTE,
+    FMT_MOMENT_MONTH, FMT_MOMENT_MSECOND, FMT_MOMENT_QUARTER,
+    FMT_MOMENT_SECOND, FMT_MOMENT_WEEK, FMT_MOMENT_YEAR, TAGLINES
+)
 
 LOG = getLogger(__name__)
 
@@ -35,7 +39,16 @@ def script_config_data():
 
     return Markup(' '.join(line.strip() for line in f'''
 data-api-plot-base="{api_plot_base}"
-data-moment-default-format="{FMT_MOMENT}"
+data-moment-default-format="{FMT_MOMENT_DEFAULT}"
+data-moment-msecond-format="{FMT_MOMENT_MSECOND}"
+data-moment-second-format="{FMT_MOMENT_SECOND}"
+data-moment-minute-format="{FMT_MOMENT_MINUTE}"
+data-moment-hour-format="{FMT_MOMENT_HOUR}"
+data-moment-day-format="{FMT_MOMENT_DAY}"
+data-moment-week-format="{FMT_MOMENT_WEEK}"
+data-moment-month-format="{FMT_MOMENT_MONTH}"
+data-moment-quarter-format="{FMT_MOMENT_QUARTER}"
+data-moment-year-format="{FMT_MOMENT_YEAR}"
     '''.splitlines()))
 
 

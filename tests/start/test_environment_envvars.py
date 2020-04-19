@@ -96,14 +96,41 @@ def test_favicon(monkeypatch):
 
 def test_fmt_fields(monkeypatch):
     assert environment.FMT_STRFTIME == '%d.%m.%Y %H:%M:%S UTC'
-    assert environment.FMT_MOMENT == 'DD. MMM YYYY HH:mm:ss'
+    assert environment.FMT_MOMENT_DEFAULT == 'DD. MMM YYYY HH:mm:ss'
+    assert environment.FMT_MOMENT_MSECOND == 'DD. MMM YYYY HH:mm:SS'
+    assert environment.FMT_MOMENT_SECOND == 'DD. MMM YYYY HH:mm:ss'
+    assert environment.FMT_MOMENT_MINUTE == 'DD. MMM YYYY HH:mm:ss'
+    assert environment.FMT_MOMENT_HOUR == 'DD. MMM YYYY HH:mm'
+    assert environment.FMT_MOMENT_DAY == 'DD. MMM YYYY HH:mm'
+    assert environment.FMT_MOMENT_WEEK == 'DD. MMM YYYY'
+    assert environment.FMT_MOMENT_MONTH == 'DD. MMM YYYY'
+    assert environment.FMT_MOMENT_QUARTER == 'MMM YYYY'
+    assert environment.FMT_MOMENT_YEAR == 'MMM YYYY'
 
     monkeypatch.setenv('FMT_STRFTIME', '⏰')
-    monkeypatch.setenv('FMT_MOMENT', '⏱')
+    monkeypatch.setenv('FMT_MOMENT_DEFAULT', '⏱')
+    monkeypatch.setenv('FMT_MOMENT_MSECOND', '⏱ msecond')
+    monkeypatch.setenv('FMT_MOMENT_SECOND', '⏱ second')
+    monkeypatch.setenv('FMT_MOMENT_MINUTE', '⏱ minute')
+    monkeypatch.setenv('FMT_MOMENT_HOUR', '⏱ hour')
+    monkeypatch.setenv('FMT_MOMENT_DAY', '⏱ day')
+    monkeypatch.setenv('FMT_MOMENT_WEEK', '⏱ week')
+    monkeypatch.setenv('FMT_MOMENT_MONTH', '⏱ month')
+    monkeypatch.setenv('FMT_MOMENT_QUARTER', '⏱ quarter')
+    monkeypatch.setenv('FMT_MOMENT_YEAR', '⏱ year')
     reload(environment)
 
     assert environment.FMT_STRFTIME == '⏰'
-    assert environment.FMT_MOMENT == '⏱'
+    assert environment.FMT_MOMENT_DEFAULT == '⏱'
+    assert environment.FMT_MOMENT_MSECOND == '⏱ msecond'
+    assert environment.FMT_MOMENT_SECOND == '⏱ second'
+    assert environment.FMT_MOMENT_MINUTE == '⏱ minute'
+    assert environment.FMT_MOMENT_HOUR == '⏱ hour'
+    assert environment.FMT_MOMENT_DAY == '⏱ day'
+    assert environment.FMT_MOMENT_WEEK == '⏱ week'
+    assert environment.FMT_MOMENT_MONTH == '⏱ month'
+    assert environment.FMT_MOMENT_QUARTER == '⏱ quarter'
+    assert environment.FMT_MOMENT_YEAR == '⏱ year'
 
 
 def test_taglines(monkeypatch):

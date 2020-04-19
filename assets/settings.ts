@@ -10,12 +10,17 @@ class Settings {
     }
   }
 
-  public get apiPlotBase(): string {
-    return this.store.apiPlotBase || "";
-  }
-  public get momentDefaultFormat(): string {
-    return this.store.momentDefaultFormat || "";
-  }
+  public get apiPlotBase(): string { return this.store.apiPlotBase || ""; }
+  public get momentDefaultFormat(): string { return this.store.momentDefaultFormat || ""; }
+  public get momentMsecondFormat(): string { return this.store.momentMsecondFormat || ""; }
+  public get momentSecondFormat(): string { return this.store.momentSecondFormat || ""; }
+  public get momentMinuteFormat(): string { return this.store.momentMinuteFormat || ""; }
+  public get momentHourFormat(): string { return this.store.momentHourFormat || ""; }
+  public get momentDayFormat(): string { return this.store.momentDayFormat || ""; }
+  public get momentWeekFormat(): string { return this.store.momentWeekFormat || ""; }
+  public get momentMonthFormat(): string { return this.store.momentMonthFormat || ""; }
+  public get momentQuarterFormat(): string { return this.store.momentQuarterFormat || ""; }
+  public get momentYearFormat(): string { return this.store.momentYearFormat || ""; }
 
 
   public initialize(): void {
