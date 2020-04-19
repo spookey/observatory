@@ -43,6 +43,10 @@ FMT_MOMENT_MONTH = getenv('FMT_MOMENT_MONTH', 'DD. MMM YYYY')
 FMT_MOMENT_QUARTER = getenv('FMT_MOMENT_QUARTER', 'MMM YYYY')
 FMT_MOMENT_YEAR = getenv('FMT_MOMENT_YEAR', 'MMM YYYY')
 
+API_PLOT_REFRESH_MS = parse_int(
+    getenv('API_PLOT_REFRESH_MS', '1500'), fallback=1500
+)
+
 
 TAGLINES = [
     getenv('TAGLINE_01', 'Hey Peter, what\'s happening?'),

@@ -9,9 +9,10 @@ from observatory.forms.common import (
 from observatory.forms.mapper import MapperDropForm, MapperSortForm
 from observatory.lib.text import random_line
 from observatory.start.environment import (
-    FMT_MOMENT_DAY, FMT_MOMENT_DEFAULT, FMT_MOMENT_HOUR, FMT_MOMENT_MINUTE,
-    FMT_MOMENT_MONTH, FMT_MOMENT_MSECOND, FMT_MOMENT_QUARTER,
-    FMT_MOMENT_SECOND, FMT_MOMENT_WEEK, FMT_MOMENT_YEAR, TAGLINES
+    API_PLOT_REFRESH_MS, FMT_MOMENT_DAY, FMT_MOMENT_DEFAULT, FMT_MOMENT_HOUR,
+    FMT_MOMENT_MINUTE, FMT_MOMENT_MONTH, FMT_MOMENT_MSECOND,
+    FMT_MOMENT_QUARTER, FMT_MOMENT_SECOND, FMT_MOMENT_WEEK, FMT_MOMENT_YEAR,
+    TAGLINES
 )
 
 LOG = getLogger(__name__)
@@ -35,10 +36,11 @@ def tagline():
 
 
 def script_config_data():
-    api_plot_base = url_for('api.charts.plot', slug='', _external=True)
+    api_plot_base_url = url_for('api.charts.plot', slug='', _external=True)
 
     return Markup(' '.join(line.strip() for line in f'''
-data-api-plot-base="{api_plot_base}"
+data-api-plot-base-url="{api_plot_base_url}"
+data-api-plot-refresh-ms"{API_PLOT_REFRESH_MS}"
 data-moment-default-format="{FMT_MOMENT_DEFAULT}"
 data-moment-msecond-format="{FMT_MOMENT_MSECOND}"
 data-moment-second-format="{FMT_MOMENT_SECOND}"

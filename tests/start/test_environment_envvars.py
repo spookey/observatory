@@ -133,6 +133,15 @@ def test_fmt_fields(monkeypatch):
     assert environment.FMT_MOMENT_YEAR == '⏱ year'
 
 
+def test_api_plot_refresh_ms(monkeypatch):
+    assert environment.API_PLOT_REFRESH_MS == 1500
+
+    monkeypatch.setenv('API_PLOT_REFRESH_MS', '23')
+    reload(environment)
+
+    assert environment.API_PLOT_REFRESH_MS == 23
+
+
 def test_taglines(monkeypatch):
     for num, line in enumerate(environment.TAGLINES):
         assert environment.TAGLINES[num] == line
