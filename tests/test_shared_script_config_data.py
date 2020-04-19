@@ -17,7 +17,7 @@ def test_script_config_data():
     text = config.unescape()
 
     assert f'data-api-plot-base-url="{api_plot_base_url}"' in text
-    assert f'data-api-plot-refresh-ms"{API_PLOT_REFRESH_MS}"' in text
+    assert f'data-api-plot-refresh-ms="{API_PLOT_REFRESH_MS}"' in text
     assert f'data-moment-default-format="{FMT_MOMENT_DEFAULT}"' in text
     assert f'data-moment-msecond-format="{FMT_MOMENT_MSECOND}"' in text
     assert f'data-moment-second-format="{FMT_MOMENT_SECOND}"' in text

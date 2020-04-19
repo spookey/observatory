@@ -40,7 +40,7 @@ def script_config_data():
 
     return Markup(' '.join(line.strip() for line in f'''
 data-api-plot-base-url="{api_plot_base_url}"
-data-api-plot-refresh-ms"{API_PLOT_REFRESH_MS}"
+data-api-plot-refresh-ms="{API_PLOT_REFRESH_MS}"
 data-moment-default-format="{FMT_MOMENT_DEFAULT}"
 data-moment-msecond-format="{FMT_MOMENT_MSECOND}"
 data-moment-second-format="{FMT_MOMENT_SECOND}"
