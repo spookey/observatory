@@ -1,7 +1,48 @@
 import axios from "axios";
 import moment from "moment";
 import Chart from "chart.js";
+
 import conf from "./settings";
+
+
+const configuration: Chart.ChartConfiguration = {
+  type: "line",
+  options: {
+    scales: {
+      xAxes: [{
+        type: "time",
+        time: {
+          displayFormats: {
+            millisecond: conf.momentMsecondFormat,
+            second: conf.momentSecondFormat,
+            minute: conf.momentMinuteFormat,
+            hour: conf.momentHourFormat,
+            day: conf.momentDayFormat,
+            week: conf.momentWeekFormat,
+            month: conf.momentMonthFormat,
+            quarter: conf.momentQuarterFormat,
+            year: conf.momentYearFormat,
+          },
+          isoWeekday: true,
+          tooltipFormat: conf.momentDefaultFormat,
+        },
+        ticks: {
+          autoSkip: true,
+          maxRotation: 60,
+        },
+      }],
+      yAxes: [{
+        type: "linear",
+        ticks: {
+          beginAtZero: true,
+        },
+      }],
+    },
+    responsive: true,
+    aspectRatio: 2.0,
+  },
+};
+
 
 class Graph {
   private slug: string;
@@ -15,7 +56,7 @@ class Graph {
   ) {
     this.slug = slug;
     this.bar = bar;
-    this.chart = new Chart(ctx, {});
+    this.chart = new Chart(ctx, configuration);
   }
 
   private showBar(): void { this.bar.classList.remove("is-invisible"); }
