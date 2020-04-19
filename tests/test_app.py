@@ -5,7 +5,7 @@ from observatory.rest.prompt import BP_REST_PROMPT
 from observatory.rest.sensor import BP_REST_SENSOR
 from observatory.shared import (
     errorhandler, form_drop_mapper, form_drop_prompt, form_drop_sensor,
-    form_sort_mapper, form_sort_prompt, form_sort_sensor, frontend_config,
+    form_sort_mapper, form_sort_prompt, form_sort_sensor, script_config_data,
     tagline
 )
 from observatory.start.environment import ERROR_CODES
@@ -59,7 +59,7 @@ class TestApp:
                 form_sort_mapper,
                 form_sort_prompt,
                 form_sort_sensor,
-                frontend_config,
+                script_config_data,
                 tagline,
         ):
             assert app.jinja_env.globals[func.__name__] is func

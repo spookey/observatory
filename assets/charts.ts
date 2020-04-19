@@ -1,8 +1,7 @@
 import axios from "axios";
 import moment from "moment";
 import Chart from "chart.js";
-
-import { conf } from "./settings";
+import conf from "./settings";
 
 class Graph {
   private slug: string;

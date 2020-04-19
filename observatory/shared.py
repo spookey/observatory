@@ -30,16 +30,12 @@ def tagline():
     return Markup(random_line(TAGLINES))
 
 
-def frontend_config():
+def script_config_data():
     api_plot_base = url_for('api.charts.plot', slug='', _external=True)
-    return Markup(''.join(line.strip() for line in f'''
-<script>
-  document.addEventListener("DOMContentLoaded", function() {{
-    window.configure(
-        "{FMT_MOMENT}", "{api_plot_base}"
-    );
-  }});
-</script>
+
+    return Markup(' '.join(line.strip() for line in f'''
+data-api-plot-base="{api_plot_base}"
+data-moment-default-format="{FMT_MOMENT}"
     '''.splitlines()))
 
 

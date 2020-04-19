@@ -7,7 +7,7 @@ from observatory.rest.prompt import BP_REST_PROMPT
 from observatory.rest.sensor import BP_REST_SENSOR
 from observatory.shared import (
     errorhandler, form_drop_mapper, form_drop_prompt, form_drop_sensor,
-    form_sort_mapper, form_sort_prompt, form_sort_sensor, frontend_config,
+    form_sort_mapper, form_sort_prompt, form_sort_sensor, script_config_data,
     tagline
 )
 from observatory.start.environment import ERROR_CODES, MDL_NAME
@@ -71,7 +71,7 @@ def register_template_functions(app):
         form_sort_mapper=form_sort_mapper,
         form_sort_prompt=form_sort_prompt,
         form_sort_sensor=form_sort_sensor,
-        frontend_config=frontend_config,
+        script_config_data=script_config_data,
         tagline=tagline,
     )
 
