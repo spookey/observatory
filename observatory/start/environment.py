@@ -44,7 +44,7 @@ FMT_MOMENT_QUARTER = getenv('FMT_MOMENT_QUARTER', 'MMM YYYY')
 FMT_MOMENT_YEAR = getenv('FMT_MOMENT_YEAR', 'MMM YYYY')
 
 API_PLOT_REFRESH_MS = parse_int(
-    getenv('API_PLOT_REFRESH_MS', '1500'), fallback=1500
+    getenv('API_PLOT_REFRESH_MS', f'{60 * 1000}'), fallback=60 * 1000
 )
 
 

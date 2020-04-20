@@ -11,7 +11,7 @@ class Settings {
   }
 
   public get apiPlotBaseUrl(): string { return this.store.apiPlotBaseUrl || ""; }
-  public get apiPlotRefreshMs(): number { return parseInt(this.store.apiPlotRefreshMs || "0", 10); }
+  public get apiPlotRefreshMs(): number { return parseInt(this.store.apiPlotRefreshMs || "10000", 10); }
   public get momentDefaultFormat(): string { return this.store.momentDefaultFormat || ""; }
   public get momentMsecondFormat(): string { return this.store.momentMsecondFormat || ""; }
   public get momentSecondFormat(): string { return this.store.momentSecondFormat || ""; }

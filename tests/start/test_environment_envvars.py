@@ -134,7 +134,7 @@ def test_fmt_fields(monkeypatch):
 
 
 def test_api_plot_refresh_ms(monkeypatch):
-    assert environment.API_PLOT_REFRESH_MS == 1500
+    assert environment.API_PLOT_REFRESH_MS == 60 * 1000
 
     monkeypatch.setenv('API_PLOT_REFRESH_MS', '23')
     reload(environment)
