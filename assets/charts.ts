@@ -1,11 +1,12 @@
 import axios from "axios";
 import moment from "moment";
 import Chart from "chart.js";
+import { ChartConfiguration } from "chart.js";
 
 import conf from "./settings";
 
 
-const configuration: Chart.ChartConfiguration = {
+const baseChartConfig = (): ChartConfiguration => ({
   type: "line",
   options: {
     scales: {
@@ -41,7 +42,7 @@ const configuration: Chart.ChartConfiguration = {
     responsive: true,
     aspectRatio: 2.0,
   },
-};
+});
 
 
 class Graph {
@@ -56,7 +57,7 @@ class Graph {
   ) {
     this.slug = slug;
     this.bar = bar;
-    this.chart = new Chart(ctx, Object.assign({}, configuration));
+    this.chart = new Chart(ctx, baseChartConfig());
   }
 
   private showBar(): void { this.bar.classList.remove("is-invisible"); }
