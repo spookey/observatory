@@ -81,28 +81,51 @@ class TestPoint:
         nil = sensor.append(0)
         pos = sensor.append(13.37)
 
-        for horizon, convert, params in [
-                (None, None, (
+        for horizon, convert, numeric, params in [
+                (None, None, False, (
                     (neg, -23.5), (nil, 0.0), (pos, 13.37),
                 )),
-                (EnumHorizon.NORMAL, EnumConvert.NATURAL, (
+                (None, None, True, (
                     (neg, -23.5), (nil, 0.0), (pos, 13.37),
                 )),
-                (EnumHorizon.INVERT, EnumConvert.NATURAL, (
+                (EnumHorizon.NORMAL, EnumConvert.NATURAL, False, (
+                    (neg, -23.5), (nil, 0.0), (pos, 13.37),
+                )),
+                (EnumHorizon.NORMAL, EnumConvert.NATURAL, True, (
+                    (neg, -23.5), (nil, 0.0), (pos, 13.37),
+                )),
+                (EnumHorizon.INVERT, EnumConvert.NATURAL, False, (
                     (neg, 23.5), (nil, 0.0), (pos, -13.37),
                 )),
-                (EnumHorizon.NORMAL, EnumConvert.INTEGER, (
+                (EnumHorizon.INVERT, EnumConvert.NATURAL, True, (
+                    (neg, 23.5), (nil, 0.0), (pos, -13.37),
+                )),
+                (EnumHorizon.NORMAL, EnumConvert.INTEGER, False, (
                     (neg, -23), (nil, 0), (pos, 13),
                 )),
-                (EnumHorizon.INVERT, EnumConvert.INTEGER, (
+                (EnumHorizon.NORMAL, EnumConvert.INTEGER, True, (
+                    (neg, -23), (nil, 0), (pos, 13),
+                )),
+                (EnumHorizon.INVERT, EnumConvert.INTEGER, False, (
                     (neg, 23), (nil, 0), (pos, -13),
                 )),
-                (EnumHorizon.NORMAL, EnumConvert.BOOLEAN, (
+                (EnumHorizon.INVERT, EnumConvert.INTEGER, True, (
+                    (neg, 23), (nil, 0), (pos, -13),
+                )),
+                (EnumHorizon.NORMAL, EnumConvert.BOOLEAN, False, (
                     (neg, True), (nil, False), (pos, True),
                 )),
-                (EnumHorizon.INVERT, EnumConvert.BOOLEAN, (
+                (EnumHorizon.NORMAL, EnumConvert.BOOLEAN, True, (
+                    (neg, 1), (nil, 0), (pos, 1),
+                )),
+                (EnumHorizon.INVERT, EnumConvert.BOOLEAN, False, (
                     (neg, True), (nil, False), (pos, True),
+                )),
+                (EnumHorizon.INVERT, EnumConvert.BOOLEAN, True, (
+                    (neg, 1), (nil, 0), (pos, 1),
                 )),
         ]:
             for point, expect in params:
-                assert point.convert(horizon, convert) == expect
+                assert point.convert(
+                    horizon, convert, numeric=numeric
+                ) == expect

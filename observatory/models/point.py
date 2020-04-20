@@ -27,14 +27,17 @@ class Point(CreatedMixin, Model):
         query = query if query is not None else cls.query
         return query.filter(cls.outdated)
 
-    def convert(self, horizon, convert):
+    def convert(self, horizon, convert, numeric=False):
         value = float(self.value)
 
         if horizon == EnumHorizon.INVERT:
             value = -1 * value
 
         if convert == EnumConvert.BOOLEAN:
-            return parse_num_bool(value)
+            value = parse_num_bool(value)
+            if numeric:
+                return 1 if value else 0
+            return value
         if convert == EnumConvert.INTEGER:
             return parse_int(value)
 
