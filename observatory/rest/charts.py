@@ -1,12 +1,28 @@
 from flask import Blueprint
-from flask_restful import Resource, abort
-from flask_restful.fields import Boolean, Float, Integer, String
+from flask_restful import Resource, abort, marshal
+from flask_restful.fields import Boolean, Float, Integer, List, Nested, String
 
 from observatory.models.mapper import EnumConvert
 from observatory.models.prompt import Prompt
 from observatory.start.extensions import REST
 
 BP_REST_CHARTS = Blueprint('charts', __name__)
+
+
+def dataset(value_type, step_type):
+    return dict(
+        borderColor=String(default=None),
+        data=List(Nested(
+            default={},
+            nested=dict(
+                x=Integer(default=0),
+                y=value_type(default=0),
+            ),
+        )),
+        fill=Boolean(default=True),
+        label=String(default=''),
+        steppedLine=step_type(default=False),
+    )
 
 
 def get_value_step_types(mapper):
@@ -63,6 +79,7 @@ class ChartsPlot(Resource):
     def get(self, slug):
         prompt = self.prompt_active_or_abort(slug)
 
-        return dict(
-            todo=f'output plot data for {prompt.slug}',
-        ), 200
+        return [
+            marshal(payload, dataset(value_type, step_type))
+            for payload, value_type, step_type in assemble(prompt)
+        ], 200
