@@ -35,9 +35,11 @@ class Point(CreatedMixin, Model):
 
         if convert == EnumConvert.BOOLEAN:
             value = parse_num_bool(value)
-            if numeric:
-                return 1 if value else 0
-            return value
+            if not numeric:
+                return value
+            if not value:
+                return 0
+            return -1 if horizon == EnumHorizon.INVERT else 1
         if convert == EnumConvert.INTEGER:
             return parse_int(value)
 

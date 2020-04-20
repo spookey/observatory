@@ -122,7 +122,7 @@ class TestPoint:
                     (neg, True), (nil, False), (pos, True),
                 )),
                 (EnumHorizon.INVERT, EnumConvert.BOOLEAN, True, (
-                    (neg, 1), (nil, 0), (pos, 1),
+                    (neg, -1), (nil, 0), (pos, -1),
                 )),
         ]:
             for point, expect in params:
