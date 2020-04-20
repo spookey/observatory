@@ -56,7 +56,7 @@ class Graph {
   ) {
     this.slug = slug;
     this.bar = bar;
-    this.chart = new Chart(ctx, configuration);
+    this.chart = new Chart(ctx, Object.assign({}, configuration));
   }
 
   private showBar(): void { this.bar.classList.remove("is-invisible"); }
