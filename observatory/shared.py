@@ -51,7 +51,7 @@ data-moment-week-format="{FMT_MOMENT_WEEK}"
 data-moment-month-format="{FMT_MOMENT_MONTH}"
 data-moment-quarter-format="{FMT_MOMENT_QUARTER}"
 data-moment-year-format="{FMT_MOMENT_YEAR}"
-    '''.splitlines()))
+    '''.splitlines()).strip())
 
 
 def form_drop_mapper(mapper):

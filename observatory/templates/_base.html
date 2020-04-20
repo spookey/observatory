@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <script
     defer src="{{ url_for('static', filename='script.js') }}"
-    {{ script_config_data()|trim }}
+    {{ script_config_data() }}
   ></script>
 </head>
 <body>
