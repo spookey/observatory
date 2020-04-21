@@ -1,12 +1,15 @@
 import axios from "axios";
 import moment from "moment";
 import Chart from "chart.js";
+import { AxiosError } from "axios";
 import { AxiosRequestConfig } from "axios";
+import { AxiosResponse } from "axios";
 import { ChartConfiguration } from "chart.js";
+import { ChartDataSets } from "chart.js";
 
 import conf from "./settings";
-import { soften } from "./colors";
 import { lighten } from "./colors";
+import { soften } from "./colors";
 
 
 const baseChartConfig = (): ChartConfiguration => ({
@@ -69,11 +72,45 @@ class Graph {
     this.chart = new Chart(ctx, baseChartConfig());
   }
 
+  private attach(payload: ChartDataSets[]): void {
+    if (!this.chart.data || !this.chart.data.datasets) { return; }
+    this.chart.data.datasets = [];
+
+    for (const idx in payload) {
+      if (payload.hasOwnProperty(idx)) {
+        const obj: ChartDataSets = payload[idx];
+        if (obj.borderColor) {
+          obj.borderColor = soften(obj.borderColor as string);
+          obj.backgroundColor = lighten(obj.borderColor as string);
+        }
+        this.chart.data.datasets[idx] = obj;
+      }
+    }
+
+    this.chart.update({duration: 0});
+  }
+
   private showBar(): void { this.bar.classList.remove("is-invisible"); }
   private hideBar(): void { this.bar.classList.add("is-invisible"); }
 
-  public loop(): void {
+  private refresh(): void {
     this.showBar();
+
+    axios.get(this.slug, this.config)
+      .then((res: AxiosResponse): void => {
+        this.attach(res.data as ChartDataSets[]);
+      })
+      .catch((err: AxiosError): void => {
+        // tslint:disable-next-line
+        console.error(err);
+      })
+      .finally((): void => {
+        this.hideBar();
+      });
+  }
+
+  public loop(): void {
+    this.refresh();
   }
 }
 
