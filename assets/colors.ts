@@ -31,3 +31,22 @@ export function colorizeSO(): void {
     }
   });
 }
+
+
+function alpha(value: string, factor: number): (Color | null) {
+  const color: (Color | null) = parse(value);
+  if (!color) { return null; }
+  return color.alpha(factor);
+}
+
+export function soften(value: string): string {
+  const color: (Color | null) = alpha(value, 0.9);
+  if (!color) { return value; }
+  return color.string();
+}
+
+export function lighten(value: string): string {
+  const color: (Color | null) = alpha(value, 0.2);
+  if (!color) { return value; }
+  return color.lighten(0.7).string();
+}

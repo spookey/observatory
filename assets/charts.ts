@@ -4,6 +4,8 @@ import Chart from "chart.js";
 import { ChartConfiguration } from "chart.js";
 
 import conf from "./settings";
+import { soften } from "./colors";
+import { lighten } from "./colors";
 
 
 const baseChartConfig = (): ChartConfiguration => ({
