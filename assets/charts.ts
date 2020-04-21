@@ -1,6 +1,7 @@
 import axios from "axios";
 import moment from "moment";
 import Chart from "chart.js";
+import { AxiosRequestConfig } from "axios";
 import { ChartConfiguration } from "chart.js";
 
 import conf from "./settings";
@@ -51,6 +52,12 @@ class Graph {
   private slug: string;
   private bar: HTMLProgressElement;
   private chart: Chart;
+  private config: AxiosRequestConfig = {
+    baseURL: conf.apiPlotBaseUrl,
+    method: 'get',
+    responseType: "json",
+    timeout: 5000,
+  }
 
   constructor(
     slug: string,
