@@ -56,7 +56,7 @@ class Graph {
     baseURL: conf.apiPlotBaseUrl,
     method: 'get',
     responseType: "json",
-    timeout: 5000,
+    timeout: 10 * 1000,
   }
 
   constructor(
