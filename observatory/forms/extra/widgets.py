@@ -1,6 +1,6 @@
 from flask import render_template_string
-from wtforms.widgets import HTMLString, html_params
-from wtforms.widgets.core import escape_html
+from markupsafe import Markup, escape
+from wtforms.widgets.core import html_params
 
 
 class SubmitButtonInput:
@@ -42,10 +42,10 @@ class SubmitButtonInput:
         kwargs.setdefault('value', field.label.text)
         kwargs = self.replace_class(**kwargs)
 
-        return HTMLString('''
+        return Markup('''
 <button {params}>{icon}<span>{text}</span></button>
         '''.strip().format(
             params=html_params(name=field.name, **kwargs),
             icon=self.render_icon(),
-            text=escape_html(field.label.text),
+            text=escape(field.label.text),
         ))

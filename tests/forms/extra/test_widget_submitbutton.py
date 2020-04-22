@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
+from markupsafe import Markup
 from wtforms import SubmitField
-from wtforms.widgets import HTMLString
 
 from observatory.forms.extra.widgets import SubmitButtonInput
 from observatory.start.environment import ICON
@@ -24,7 +24,7 @@ def test_submitbutton_render():
     field.label.text = 'Some text'
 
     res = SubmitButtonInput()(field)
-    assert isinstance(res, HTMLString)
+    assert isinstance(res, Markup)
 
     assert res.startswith('<button')
     assert res.endswith('button>')
@@ -53,7 +53,7 @@ def test_submitbutton_form():
         )
 
     res = PhonyForm().submit()
-    assert isinstance(res, HTMLString)
+    assert isinstance(res, Markup)
 
     assert res.startswith('<button')
     assert res.endswith('button>')
