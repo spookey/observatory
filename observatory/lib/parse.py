@@ -19,7 +19,7 @@ def parse_int(value, fallback=0, warn=True):
     return value
 
 
-def parse_str_bool(value, fallback=False, warn=True):
+def parse_bool(value, fallback=False, warn=True):
     try:
         value = value.lower()
     except AttributeError as ex:
