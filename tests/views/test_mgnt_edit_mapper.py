@@ -62,8 +62,9 @@ class TestMgntEditMapper:
 
         res = visitor(ENDPOINT, method='post', data={
             'prompt_sel': 23, 'sensor_sel': 42,
-            'active': True, 'convert_sel': 99, 'color_sel': 99,
-            'horizon_sel': 99, 'submit': True,
+            'active': True, 'color_sel': 'stained',
+            'convert_sel': 99, 'horizon_sel': 99,
+            'submit': True,
         })
 
         form = res.soup.select('form')[-1]
