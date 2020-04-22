@@ -2,7 +2,6 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 from observatory.database import CreatedMixin, Model
 from observatory.lib.clock import is_outdated
-from observatory.lib.parse import parse_num_bool
 from observatory.models.mapper import EnumConvert, EnumHorizon
 from observatory.start.environment import BACKLOG_DAYS
 from observatory.start.extensions import DB
@@ -34,7 +33,7 @@ class Point(CreatedMixin, Model):
             value = -1 * value
 
         if convert == EnumConvert.BOOLEAN:
-            value = parse_num_bool(value)
+            value = bool(round(value))
             if not numeric:
                 return value
             if not value:
