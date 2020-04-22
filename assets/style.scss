@@ -2,6 +2,7 @@
 
 @import "~source-sans-pro/source-sans-pro";
 @import "~source-code-pro/source-code-pro";
+@import "~remixicon/fonts/remixicon";
 
 @import "~bulma/sass/utilities/initial-variables";
 
@@ -14,7 +15,5 @@ $footer-padding: 3rem 1.5rem;
 $progress-indeterminate-duration: 1s;
 
 @import "~bulma/bulma";
-
-@import "~remixicon/fonts/remixicon";
 
 .plot canvas { margin-bottom: .5rem; }
