@@ -77,7 +77,7 @@ class TestMgntEditCommon:
         form = res.soup.select('form')[-1]
         assert form.select('#slug')[-1].attrs['value'] == slug
         assert form.select('#title')[-1].attrs['value'] == title
-        assert form.select('#description')[-1].string == description
+        assert form.select('#description')[-1].string.strip() == description
         assert _comm.model.query.all() == []
 
     @staticmethod
