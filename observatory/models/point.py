@@ -2,7 +2,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 from observatory.database import CreatedMixin, Model
 from observatory.lib.clock import is_outdated
-from observatory.lib.parse import parse_int, parse_num_bool
+from observatory.lib.parse import parse_num_bool
 from observatory.models.mapper import EnumConvert, EnumHorizon
 from observatory.start.environment import BACKLOG_DAYS
 from observatory.start.extensions import DB
@@ -40,7 +40,8 @@ class Point(CreatedMixin, Model):
             if not value:
                 return 0
             return -1 if horizon == EnumHorizon.INVERT else 1
+
         if convert == EnumConvert.INTEGER:
-            return parse_int(value)
+            return round(value)
 
         return value

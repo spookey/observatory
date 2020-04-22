@@ -77,28 +77,28 @@ class TestPoint:
     @staticmethod
     def test_convert(gen_sensor):
         sensor = gen_sensor()
-        neg = sensor.append(-23.5)
+        neg = sensor.append(-23.42)
         nil = sensor.append(0)
         pos = sensor.append(13.37)
 
         for horizon, convert, numeric, params in [
                 (None, None, False, (
-                    (neg, -23.5), (nil, 0.0), (pos, 13.37),
+                    (neg, -23.42), (nil, 0.0), (pos, 13.37),
                 )),
                 (None, None, True, (
-                    (neg, -23.5), (nil, 0.0), (pos, 13.37),
+                    (neg, -23.42), (nil, 0.0), (pos, 13.37),
                 )),
                 (EnumHorizon.NORMAL, EnumConvert.NATURAL, False, (
-                    (neg, -23.5), (nil, 0.0), (pos, 13.37),
+                    (neg, -23.42), (nil, 0.0), (pos, 13.37),
                 )),
                 (EnumHorizon.NORMAL, EnumConvert.NATURAL, True, (
-                    (neg, -23.5), (nil, 0.0), (pos, 13.37),
+                    (neg, -23.42), (nil, 0.0), (pos, 13.37),
                 )),
                 (EnumHorizon.INVERT, EnumConvert.NATURAL, False, (
-                    (neg, 23.5), (nil, 0.0), (pos, -13.37),
+                    (neg, 23.42), (nil, 0.0), (pos, -13.37),
                 )),
                 (EnumHorizon.INVERT, EnumConvert.NATURAL, True, (
-                    (neg, 23.5), (nil, 0.0), (pos, -13.37),
+                    (neg, 23.42), (nil, 0.0), (pos, -13.37),
                 )),
                 (EnumHorizon.NORMAL, EnumConvert.INTEGER, False, (
                     (neg, -23), (nil, 0), (pos, 13),
