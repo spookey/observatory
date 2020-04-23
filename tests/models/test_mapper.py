@@ -29,6 +29,7 @@ class TestMapper:
         assert mapper.color == EnumColor.GRAY
         assert mapper.convert == EnumConvert.NATURAL
         assert mapper.horizon == EnumHorizon.NORMAL
+        assert mapper.elevate == 1
 
     @staticmethod
     def test_by_commons(gen_prompt, gen_sensor):

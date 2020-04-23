@@ -46,22 +46,25 @@ class EnumHorizon(Enum):
 
 class Mapper(SortMixin, CreatedMixin, BaseModel):
     prompt_prime = DB.Column(
-        DB.Integer(), DB.ForeignKey('prompt.prime'), primary_key=True
+        DB.Integer(), DB.ForeignKey('prompt.prime'), primary_key=True,
     )
     sensor_prime = DB.Column(
-        DB.Integer(), DB.ForeignKey('sensor.prime'), primary_key=True
+        DB.Integer(), DB.ForeignKey('sensor.prime'), primary_key=True,
     )
     active = DB.Column(
-        DB.Boolean(), nullable=False, default=True
+        DB.Boolean(), nullable=False, default=True,
     )
     color = DB.Column(
-        DB.Enum(EnumColor), nullable=False, default=EnumColor.GRAY
+        DB.Enum(EnumColor), nullable=False, default=EnumColor.GRAY,
     )
     convert = DB.Column(
-        DB.Enum(EnumConvert), nullable=False, default=EnumConvert.NATURAL
+        DB.Enum(EnumConvert), nullable=False, default=EnumConvert.NATURAL,
     )
     horizon = DB.Column(
-        DB.Enum(EnumHorizon), nullable=False, default=EnumHorizon.NORMAL
+        DB.Enum(EnumHorizon), nullable=False, default=EnumHorizon.NORMAL,
+    )
+    elevate = DB.Column(
+        DB.Integer(), nullable=False, default=1,
     )
 
     prompt = DB.relationship(
