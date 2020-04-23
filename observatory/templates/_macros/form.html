@@ -14,7 +14,7 @@
       {{ field.label(class='label') }}
       {{ field(
         class='input' ~ (' is-danger' if field.errors),
-        placeholder=field.description
+        placeholder=field.description,
       ) }}
     </div>
   {% elif field.type in ['TextAreaField'] %}
@@ -22,6 +22,15 @@
       {{ field.label(class='label') }}
       {{ field(
         class='textarea' ~ (' is-danger' if field.errors),
+        placeholder=field.description,
+      ) }}
+    </div>
+  {% elif field.type in ['IntegerField'] %}
+    <div class="control">
+      {{ field.label(class='label') }}
+      {{ field(
+        class='input' ~ (' is-danger' if field.errors),
+        type='number',
         placeholder=field.description,
       ) }}
     </div>

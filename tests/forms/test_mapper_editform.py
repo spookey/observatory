@@ -20,6 +20,7 @@ class TestMapperEditForm:
         assert form.color_sel is not None
         assert form.convert_sel is not None
         assert form.horizon_sel is not None
+        assert form.elevate is not None
         assert form.submit is not None
 
     @staticmethod
@@ -89,7 +90,7 @@ class TestMapperEditForm:
             prompt_sel=mapper.prompt.prime,
             sensor_sel=mapper.sensor.prime,
             color_sel=EnumColor.GRAY.color,
-            convert_sel=1, horizon_sel=1,
+            convert_sel=1, horizon_sel=1, elevate=1,
         )
         assert form.validate() is False
         assert 'already present' in form.prompt_sel.errors[-1].lower()
@@ -108,7 +109,7 @@ class TestMapperEditForm:
                 'prompt_sel': orig.prompt.prime,
                 'sensor_sel': orig.sensor.prime,
                 'color_sel': EnumColor.GRAY.color,
-                'convert_sel': 1, 'horizon_sel': 1,
+                'convert_sel': 1, 'horizon_sel': 1, 'elevate': 1,
             }),
         )
         assert form.validate() is False
@@ -120,6 +121,7 @@ class TestMapperEditForm:
         color = EnumColor.ORANGE
         convert = EnumConvert.BOOLEAN
         horizon = EnumHorizon.INVERT
+        elevate = 23
 
         mapper = Mapper.create(
             prompt=gen_prompt(), sensor=gen_sensor(),
@@ -133,6 +135,7 @@ class TestMapperEditForm:
                 'color_sel': color.color,
                 'convert_sel': convert.value,
                 'horizon_sel': horizon.value,
+                'elevate': elevate,
             }),
         )
         assert form.validate() is True
@@ -143,6 +146,7 @@ class TestMapperEditForm:
         assert edited.color == color
         assert edited.convert == convert
         assert edited.horizon == horizon
+        assert edited.elevate == elevate
 
     @staticmethod
     def test_set_selections(gen_prompt, gen_sensor):
@@ -154,7 +158,7 @@ class TestMapperEditForm:
 
         form = MapperEditForm(obj=Mapper.create(
             prompt=prompt, sensor=sensor,
-            color=color, convert=convert, horizon=horizon
+            color=color, convert=convert, horizon=horizon,
         ))
         assert form.prompt_sel.data != prompt.prime
         assert form.sensor_sel.data != sensor.prime
@@ -176,6 +180,7 @@ class TestMapperEditForm:
         color = EnumColor.TURQUOISE
         convert = EnumConvert.INTEGER
         horizon = EnumHorizon.NORMAL
+        elevate = 5
 
         form = MapperEditForm(
             prompt_sel=prompt.prime,
@@ -184,6 +189,7 @@ class TestMapperEditForm:
             color_sel=color.color,
             convert_sel=convert.value,
             horizon_sel=horizon.value,
+            elevate=elevate,
         )
         assert form.validate() is True
 
@@ -194,5 +200,6 @@ class TestMapperEditForm:
         assert mapper.color == color
         assert mapper.convert == convert
         assert mapper.horizon == horizon
+        assert mapper.elevate == elevate
 
         assert Mapper.query.all() == [mapper]
