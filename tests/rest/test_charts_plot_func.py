@@ -20,7 +20,7 @@ class TestChartsPlotFunc:
         for convert, expected in (
                 (EnumConvert.NATURAL, (Float, Boolean)),
                 (EnumConvert.INTEGER, (Integer, Boolean)),
-                (EnumConvert.BOOLEAN, (Integer, String)),
+                (EnumConvert.BOOLEAN, (Float, String)),
         ):
             mapper.update(convert=convert)
             assert get_value_step_types(mapper) == expected
@@ -80,7 +80,7 @@ class TestChartsPlotFunc:
                     (2000, 13), (1000, 23), (0, 0),
                 ]),
                 (EnumHorizon.NORMAL, EnumConvert.BOOLEAN, [
-                    (2000, 1), (1000, 1), (0, 0),
+                    (2000, 1.0), (1000, 1.0), (0, 0.0),
                 ]),
                 (EnumHorizon.INVERT, EnumConvert.NATURAL, [
                     (2000, -13.37), (1000, -23.0), (0, 0),
@@ -89,7 +89,7 @@ class TestChartsPlotFunc:
                     (2000, -13), (1000, -23), (0, 0),
                 ]),
                 (EnumHorizon.INVERT, EnumConvert.BOOLEAN, [
-                    (2000, -1), (1000, -1), (0, 0),
+                    (2000, -1.0), (1000, -1.0), (0, 0.0),
                 ]),
         ]:
             mapper.update(horizon=horizon, convert=convert)
@@ -121,7 +121,7 @@ class TestChartsPlotFunc:
                     -42, True, False, Integer, Boolean
                 )),
                 (EnumHorizon.INVERT, EnumConvert.BOOLEAN, (
-                    -1, False, 'before', Integer, String
+                    -1.0, False, 'before', Float, String
                 )),
         ]:
             mapper.update(horizon=horizon, convert=convert)

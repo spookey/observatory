@@ -26,7 +26,7 @@ def dataset(value_type, step_type):
 
 
 def get_value_step_types(mapper):
-    value_type = Float if mapper.convert == EnumConvert.NATURAL else Integer
+    value_type = Integer if mapper.convert == EnumConvert.INTEGER else Float
     step_type = String if mapper.convert == EnumConvert.BOOLEAN else Boolean
     return value_type, step_type
 

@@ -60,10 +60,10 @@ class TestChartsPlot:
             'borderColor': m_two.color.color,
             'data': [{
                 'x': p_two_two.created_epoch_ms,
-                'y': 0,
+                'y': 0.0,
             }, {
                 'x': p_two_one.created_epoch_ms,
-                'y': -1,
+                'y': -1.0,
             }],
             'fill': False,
             'label': s_two.title,
