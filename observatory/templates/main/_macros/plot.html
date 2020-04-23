@@ -61,7 +61,7 @@
         '&mdash;'|safe, '&mdash;'|safe
       ) %}
       {{ key_val_level('Latest', latest) }}
-      {{ key_val_level('Value', value) }}
+      {{ key_val_level('Value', text_code(value)) }}
       {% endwith %}
     </div>
   </div>
