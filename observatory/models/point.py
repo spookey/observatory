@@ -26,7 +26,7 @@ class Point(CreatedMixin, Model):
         query = query if query is not None else cls.query
         return query.filter(cls.outdated)
 
-    def convert(self, horizon, convert, numeric=False):
+    def translate(self, *, horizon, convert, numeric=False):
         value = float(self.value)
 
         if horizon == EnumHorizon.INVERT:
@@ -44,3 +44,10 @@ class Point(CreatedMixin, Model):
             return round(value)
 
         return value
+
+    def translate_map(self, mapper, numeric=False):
+        return self.translate(
+            horizon=mapper.horizon,
+            convert=mapper.convert,
+            numeric=numeric,
+        )

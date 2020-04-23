@@ -75,7 +75,7 @@ class TestPoint:
         assert Point.query_outdated().all() == olds
 
     @staticmethod
-    def test_convert(gen_sensor):
+    def test_translate(gen_sensor):
         sensor = gen_sensor()
         neg = sensor.append(-23.42)
         nil = sensor.append(0)
@@ -126,6 +126,8 @@ class TestPoint:
                 )),
         ]:
             for point, expect in params:
-                assert point.convert(
-                    horizon, convert, numeric=numeric
+                assert point.translate(
+                    horizon=horizon,
+                    convert=convert,
+                    numeric=numeric,
                 ) == expect

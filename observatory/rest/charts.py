@@ -43,7 +43,7 @@ def collect_points(mapper, sensor):
         for point in sensor.query_points.all():
             yield dict(
                 x=point.created_epoch_ms,
-                y=point.convert(mapper.horizon, mapper.convert, numeric=True),
+                y=point.translate_map(mapper, numeric=True),
             )
 
 
