@@ -42,7 +42,7 @@
   {% elif field.type in ['SelectField'] %}
     <div class="control">
       {{ field.label(class='label') }}
-      <div class="select{{ ' is-danger' if field.errors }}">
+      <div class="select is-fullwidth{{ ' is-danger' if field.errors }}">
         {{ field(class='select') }}
       </div>
     </div>
