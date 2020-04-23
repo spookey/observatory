@@ -40,10 +40,3 @@ def parse_bool(value, fallback=False, warn=True):
             value, fallback
         )
     return fallback
-
-
-def parse_num_bool(value, fallback=False, warn=True):
-    value = parse_int(value, fallback=fallback, warn=warn)
-    if value == fallback:
-        return fallback
-    return bool(value)

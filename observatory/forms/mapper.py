@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, SelectField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms import BooleanField, IntegerField, SelectField, SubmitField
+from wtforms.validators import DataRequired, NumberRange
 
 from observatory.forms.extra.widgets import SubmitButtonInput
 from observatory.forms.generic import GenericDropForm, GenericSortForm
@@ -47,6 +47,12 @@ class MapperEditForm(FlaskForm):
         coerce=int,
         validators=[DataRequired()],
         description='Select horizon',
+    )
+    elevate = IntegerField(
+        'Elevate',
+        default=1,
+        validators=[NumberRange(min=1)],
+        description='Numeric true value of booleans',
     )
     submit = SubmitField(
         'Save',

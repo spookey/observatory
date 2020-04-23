@@ -53,6 +53,7 @@ class TestMgntEditMapper:
             ('color_sel', '_sl_', 'option'),
             ('convert_sel', '_sl_', '_cl_'),
             ('horizon_sel', '_sl_', '_cl_'),
+            ('elevate', 'number', '_cl_'),
             ('submit', 'submit', '_cl_'),
         ]
 
@@ -64,7 +65,7 @@ class TestMgntEditMapper:
             'prompt_sel': 23, 'sensor_sel': 42,
             'active': True, 'color_sel': 'stained',
             'convert_sel': 99, 'horizon_sel': 99,
-            'submit': True,
+            'elevate': -1, 'submit': True,
         })
 
         form = res.soup.select('form')[-1]
@@ -88,13 +89,14 @@ class TestMgntEditMapper:
         color = EnumColor.YELLOW
         convert = EnumConvert.INTEGER
         horizon = EnumHorizon.NORMAL
+        elevate = 23
         view_url = url_for('mgnt.view_mapper', _external=True)
 
         res = visitor(ENDPOINT, method='post', data={
             'prompt_sel': prompt.prime, 'sensor_sel': sensor.prime,
             'active': True, 'color_sel': color.color,
             'convert_sel': convert.value, 'horizon_sel': horizon.value,
-            'submit': True,
+            'elevate': elevate, 'submit': True,
         }, code=302)
 
         assert res.request.headers['LOCATION'] == view_url
@@ -105,6 +107,7 @@ class TestMgntEditMapper:
         assert mapper.convert == convert
         assert mapper.color == color
         assert mapper.horizon == horizon
+        assert mapper.elevate == elevate
 
     @staticmethod
     def test_form_set_selections(
@@ -115,7 +118,7 @@ class TestMgntEditMapper:
             prompt=gen_prompt(), sensor=gen_sensor(),
             color=EnumColor.GREEN,
             convert=EnumConvert.BOOLEAN,
-            horizon=EnumHorizon.INVERT
+            horizon=EnumHorizon.INVERT,
         )
 
         res = visitor(ENDPOINT, params={
@@ -144,6 +147,7 @@ class TestMgntEditMapper:
         color = EnumColor.PURPLE
         convert = EnumConvert.BOOLEAN
         horizon = EnumHorizon.INVERT
+        elevate = 42
 
         visitor(ENDPOINT, params={
             'prompt_slug': prompt.slug, 'sensor_slug': sensor.slug,
@@ -151,7 +155,7 @@ class TestMgntEditMapper:
             'prompt_sel': prompt.prime, 'sensor_sel': sensor.prime,
             'active': True, 'color_sel': color.color,
             'convert_sel': convert.value, 'horizon_sel': horizon.value,
-            'submit': True,
+            'elevate': elevate, 'submit': True,
         }, code=302)
 
         changed = Mapper.query.first()
@@ -161,3 +165,4 @@ class TestMgntEditMapper:
         assert changed.color == color
         assert changed.convert == convert
         assert changed.horizon == horizon
+        assert changed.elevate == elevate
