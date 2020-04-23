@@ -26,7 +26,7 @@ class Point(CreatedMixin, Model):
         query = query if query is not None else cls.query
         return query.filter(cls.outdated)
 
-    def translate(self, *, horizon, convert, elevate=1, numeric=False):
+    def translate(self, *, horizon, convert, elevate=1.0, numeric=False):
         _flip = -1 if horizon == EnumHorizon.INVERT else +1
         value = _flip * float(self.value)
 

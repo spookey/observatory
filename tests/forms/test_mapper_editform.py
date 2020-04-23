@@ -125,7 +125,7 @@ class TestMapperEditForm:
         color = EnumColor.ORANGE
         convert = EnumConvert.BOOLEAN
         horizon = EnumHorizon.INVERT
-        elevate = 23
+        elevate = 23.42
 
         mapper = Mapper.create(
             prompt=gen_prompt(), sensor=gen_sensor(),
@@ -184,7 +184,7 @@ class TestMapperEditForm:
         color = EnumColor.TURQUOISE
         convert = EnumConvert.INTEGER
         horizon = EnumHorizon.NORMAL
-        elevate = 5
+        elevate = 42.23
 
         form = MapperEditForm(
             prompt_sel=prompt.prime,

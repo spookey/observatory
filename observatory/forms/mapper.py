@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, IntegerField, SelectField, SubmitField
+from wtforms import BooleanField, DecimalField, SelectField, SubmitField
 from wtforms.validators import DataRequired, NumberRange
 
 from observatory.forms.extra.widgets import SubmitButtonInput
@@ -29,6 +29,13 @@ class MapperEditForm(FlaskForm):
         default=True,
         description='Set active',
     )
+    elevate = DecimalField(
+        'Elevate',
+        default=1.0,
+        places=4,
+        validators=[NumberRange(min=0.0)],
+        description='Increase raw value with this factor',
+    )
     color_sel = SelectField(
         'Color',
         coerce=str,
@@ -47,12 +54,6 @@ class MapperEditForm(FlaskForm):
         coerce=int,
         validators=[DataRequired()],
         description='Select horizon',
-    )
-    elevate = IntegerField(
-        'Elevate',
-        default=1,
-        validators=[NumberRange(min=1)],
-        description='Numeric true value of booleans',
     )
     submit = SubmitField(
         'Save',

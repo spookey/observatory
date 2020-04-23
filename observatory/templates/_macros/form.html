@@ -25,12 +25,13 @@
         placeholder=field.description,
       ) }}
     </div>
-  {% elif field.type in ['IntegerField'] %}
+  {% elif field.type in ['DecimalField'] %}
     <div class="control">
       {{ field.label(class='label') }}
       {{ field(
         class='input' ~ (' is-danger' if field.errors),
         type='number',
+        step=(1 / (10 ** field.places))|string,
         placeholder=field.description,
       ) }}
     </div>

@@ -54,6 +54,9 @@ class Mapper(SortMixin, CreatedMixin, BaseModel):
     active = DB.Column(
         DB.Boolean(), nullable=False, default=True,
     )
+    elevate = DB.Column(
+        DB.Float(), nullable=False, default=1.0,
+    )
     color = DB.Column(
         DB.Enum(EnumColor), nullable=False, default=EnumColor.GRAY,
     )
@@ -62,9 +65,6 @@ class Mapper(SortMixin, CreatedMixin, BaseModel):
     )
     horizon = DB.Column(
         DB.Enum(EnumHorizon), nullable=False, default=EnumHorizon.NORMAL,
-    )
-    elevate = DB.Column(
-        DB.Integer(), nullable=False, default=1,
     )
 
     prompt = DB.relationship(

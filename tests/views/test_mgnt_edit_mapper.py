@@ -50,10 +50,10 @@ class TestMgntEditMapper:
             ('prompt_sel', '_sl_', '_cl_'),
             ('sensor_sel', '_sl_', '_cl_'),
             ('active', 'checkbox', '_cl_'),
+            ('elevate', 'number', '_cl_'),
             ('color_sel', '_sl_', 'option'),
             ('convert_sel', '_sl_', '_cl_'),
             ('horizon_sel', '_sl_', '_cl_'),
-            ('elevate', 'number', '_cl_'),
             ('submit', 'submit', '_cl_'),
         ]
 
@@ -65,7 +65,7 @@ class TestMgntEditMapper:
             'prompt_sel': 23, 'sensor_sel': 42,
             'active': True, 'color_sel': 'stained',
             'convert_sel': 99, 'horizon_sel': 99,
-            'elevate': -1, 'submit': True,
+            'elevate': -1.23, 'submit': True,
         })
 
         form = res.soup.select('form')[-1]
@@ -89,7 +89,7 @@ class TestMgntEditMapper:
         color = EnumColor.YELLOW
         convert = EnumConvert.INTEGER
         horizon = EnumHorizon.NORMAL
-        elevate = 23
+        elevate = 23.42
         view_url = url_for('mgnt.view_mapper', _external=True)
 
         res = visitor(ENDPOINT, method='post', data={
@@ -147,7 +147,7 @@ class TestMgntEditMapper:
         color = EnumColor.PURPLE
         convert = EnumConvert.BOOLEAN
         horizon = EnumHorizon.INVERT
-        elevate = 42
+        elevate = 42.23
 
         visitor(ENDPOINT, params={
             'prompt_slug': prompt.slug, 'sensor_slug': sensor.slug,
