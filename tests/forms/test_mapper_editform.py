@@ -89,8 +89,10 @@ class TestMapperEditForm:
         form = MapperEditForm(
             prompt_sel=mapper.prompt.prime,
             sensor_sel=mapper.sensor.prime,
-            color_sel=EnumColor.GRAY.color,
-            convert_sel=1, horizon_sel=1, elevate=1,
+            color_sel=mapper.color.color,
+            convert_sel=mapper.convert.value,
+            horizon_sel=mapper.horizon.value,
+            elevate=mapper.elevate,
         )
         assert form.validate() is False
         assert 'already present' in form.prompt_sel.errors[-1].lower()
@@ -108,8 +110,10 @@ class TestMapperEditForm:
             obj=edit, formdata=MultiDict({
                 'prompt_sel': orig.prompt.prime,
                 'sensor_sel': orig.sensor.prime,
-                'color_sel': EnumColor.GRAY.color,
-                'convert_sel': 1, 'horizon_sel': 1, 'elevate': 1,
+                'color_sel': orig.color.color,
+                'convert_sel': orig.horizon.value,
+                'horizon_sel': orig.horizon.value,
+                'elevate': orig.elevate,
             }),
         )
         assert form.validate() is False

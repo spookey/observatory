@@ -65,7 +65,7 @@ class TestMgntEditMapper:
             'prompt_sel': 23, 'sensor_sel': 42,
             'active': True, 'color_sel': 'stained',
             'convert_sel': 99, 'horizon_sel': 99,
-            'elevate': 0, 'submit': True,
+            'elevate': -1, 'submit': True,
         })
 
         form = res.soup.select('form')[-1]
