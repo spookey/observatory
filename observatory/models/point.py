@@ -34,14 +34,12 @@ class Point(CreatedMixin, Model):
             value = bool(round(value))
             if not numeric:
                 return value
-            if not value:
-                return 0.0
-            return _flip * elevate
+            return (_flip * elevate) if value else 0.0
 
         if convert == EnumConvert.INTEGER:
-            return round(value)
+            return round(elevate * value)
 
-        return value
+        return float(elevate * value)
 
     def translate_map(self, mapper, numeric=False):
         return self.translate(

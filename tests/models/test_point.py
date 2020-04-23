@@ -77,94 +77,94 @@ class TestPoint:
     @staticmethod
     def test_translate(gen_sensor):
         sensor = gen_sensor()
-        neg = sensor.append(-23.42)
+        neg = sensor.append(-23.5)
         nil = sensor.append(0)
         pos = sensor.append(13.37)
 
         for horizon, convert, elevate, numeric, params in [
                 (None, None, 1.0, False, (
-                    (neg, -23.42), (nil, 0.0), (pos, 13.37),
+                    (neg, -23.5), (nil, 0.0), (pos, 13.37),
                 )),
                 (None, None, 1.0, True, (
-                    (neg, -23.42), (nil, 0.0), (pos, 13.37),
+                    (neg, -23.5), (nil, 0.0), (pos, 13.37),
                 )),
                 (None, None, 0.0, False, (
-                    (neg, -23.42), (nil, 0.0), (pos, 13.37),
+                    (neg, 0.0), (nil, 0.0), (pos, 0.0),
                 )),
                 (None, None, 0.0, True, (
-                    (neg, -23.42), (nil, 0.0), (pos, 13.37),
+                    (neg, 0.0), (nil, 0.0), (pos, 0.0),
                 )),
                 (EnumHorizon.NORMAL, EnumConvert.NATURAL, 1.0, False, (
-                    (neg, -23.42), (nil, 0.0), (pos, 13.37),
+                    (neg, -23.5), (nil, 0.0), (pos, 13.37),
                 )),
                 (EnumHorizon.NORMAL, EnumConvert.NATURAL, 1.0, True, (
-                    (neg, -23.42), (nil, 0.0), (pos, 13.37),
+                    (neg, -23.5), (nil, 0.0), (pos, 13.37),
                 )),
                 (EnumHorizon.NORMAL, EnumConvert.NATURAL, 5.0, False, (
-                    (neg, -23.42), (nil, 0.0), (pos, 13.37),
+                    (neg, -117.5), (nil, 0.0), (pos, 66.85),
                 )),
                 (EnumHorizon.NORMAL, EnumConvert.NATURAL, 5.0, True, (
-                    (neg, -23.42), (nil, 0.0), (pos, 13.37),
+                    (neg, -117.5), (nil, 0.0), (pos, 66.85),
                 )),
                 (EnumHorizon.INVERT, EnumConvert.NATURAL, 1.0, False, (
-                    (neg, 23.42), (nil, 0.0), (pos, -13.37),
+                    (neg, 23.5), (nil, 0.0), (pos, -13.37),
                 )),
                 (EnumHorizon.INVERT, EnumConvert.NATURAL, 1.0, True, (
-                    (neg, 23.42), (nil, 0.0), (pos, -13.37),
+                    (neg, 23.5), (nil, 0.0), (pos, -13.37),
                 )),
                 (EnumHorizon.INVERT, EnumConvert.NATURAL, 5.0, False, (
-                    (neg, 23.42), (nil, 0.0), (pos, -13.37),
+                    (neg, 117.5), (nil, 0.0), (pos, -66.85),
                 )),
                 (EnumHorizon.INVERT, EnumConvert.NATURAL, 5.0, True, (
-                    (neg, 23.42), (nil, 0.0), (pos, -13.37),
+                    (neg, 117.5), (nil, 0.0), (pos, -66.85),
                 )),
                 (EnumHorizon.NORMAL, EnumConvert.INTEGER, 1.0, False, (
-                    (neg, -23), (nil, 0), (pos, 13),
+                    (neg, -24), (nil, 0), (pos, 13),
                 )),
                 (EnumHorizon.NORMAL, EnumConvert.INTEGER, 1.0, True, (
-                    (neg, -23), (nil, 0), (pos, 13),
+                    (neg, -24), (nil, 0), (pos, 13),
                 )),
                 (EnumHorizon.NORMAL, EnumConvert.INTEGER, 5.0, False, (
-                    (neg, -23), (nil, 0), (pos, 13),
+                    (neg, -118), (nil, 0), (pos, 67),
                 )),
                 (EnumHorizon.NORMAL, EnumConvert.INTEGER, 5.0, True, (
-                    (neg, -23), (nil, 0), (pos, 13),
+                    (neg, -118), (nil, 0), (pos, 67),
                 )),
                 (EnumHorizon.INVERT, EnumConvert.INTEGER, 1.0, False, (
-                    (neg, 23), (nil, 0), (pos, -13),
+                    (neg, 24), (nil, 0), (pos, -13),
                 )),
                 (EnumHorizon.INVERT, EnumConvert.INTEGER, 1.0, True, (
-                    (neg, 23), (nil, 0), (pos, -13),
+                    (neg, 24), (nil, 0), (pos, -13),
                 )),
                 (EnumHorizon.INVERT, EnumConvert.INTEGER, 5.0, False, (
-                    (neg, 23), (nil, 0), (pos, -13),
+                    (neg, 118), (nil, 0), (pos, -67),
                 )),
                 (EnumHorizon.INVERT, EnumConvert.INTEGER, 5.0, True, (
-                    (neg, 23), (nil, 0), (pos, -13),
+                    (neg, 118), (nil, 0), (pos, -67),
                 )),
                 (EnumHorizon.NORMAL, EnumConvert.BOOLEAN, 1.0, False, (
                     (neg, True), (nil, False), (pos, True),
                 )),
                 (EnumHorizon.NORMAL, EnumConvert.BOOLEAN, 1.0, True, (
-                    (neg, 1), (nil, 0), (pos, 1),
+                    (neg, 1.0), (nil, 0.0), (pos, 1.0),
                 )),
                 (EnumHorizon.NORMAL, EnumConvert.BOOLEAN, 5.0, False, (
                     (neg, True), (nil, False), (pos, True),
                 )),
                 (EnumHorizon.NORMAL, EnumConvert.BOOLEAN, 5.0, True, (
-                    (neg, 5), (nil, 0), (pos, 5),
+                    (neg, 5.0), (nil, 0.0), (pos, 5.0),
                 )),
                 (EnumHorizon.INVERT, EnumConvert.BOOLEAN, 1.0, False, (
                     (neg, True), (nil, False), (pos, True),
                 )),
                 (EnumHorizon.INVERT, EnumConvert.BOOLEAN, 1.0, True, (
-                    (neg, -1), (nil, 0), (pos, -1),
+                    (neg, -1.0), (nil, 0.0), (pos, -1.0),
                 )),
                 (EnumHorizon.INVERT, EnumConvert.BOOLEAN, 5.0, False, (
                     (neg, True), (nil, False), (pos, True),
                 )),
                 (EnumHorizon.INVERT, EnumConvert.BOOLEAN, 5.0, True, (
-                    (neg, -5), (nil, 0), (pos, -5),
+                    (neg, -5.0), (nil, 0.0), (pos, -5.0),
                 )),
         ]:
             for point, expect in params:
