@@ -28,7 +28,7 @@ class Point(CreatedMixin, Model):
 
     def translate(self, *, horizon, convert, elevate=1.0, numeric=False):
         _flip = -1 if horizon == EnumHorizon.INVERT else +1
-        value = float(_flip * self.value)
+        value = float(_flip * self.value) + 0.0
 
         if convert == EnumConvert.BOOLEAN:
             value = bool(round(value))

@@ -87,10 +87,13 @@ def sensorcurve(slug, axc):
     num = 1 + 2 * axc
     sec = epoch_seconds(datetime.utcnow())
     for pos in range(0, -num, -1):
+        value = round(sin((1 / axc) * pos * pi), 8)
+        stamp = datetime.utcfromtimestamp(sec + pos)
+
         Point.create(
             sensor=sensor,
-            created=datetime.utcfromtimestamp(sec + pos),
-            value=sin((1 / axc) * pos * pi),
+            created=stamp,
+            value=value,
             _commit=False,
         )
 
