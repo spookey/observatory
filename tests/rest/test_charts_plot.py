@@ -67,6 +67,7 @@ class TestChartsPlot:
             }],
             'fill': False,
             'label': s_two.title,
+            'lineTension': 0.4,
             'steppedLine': 'before',
         }, {
             'borderColor': m_one.color.color,
@@ -79,5 +80,6 @@ class TestChartsPlot:
             }],
             'fill': True,
             'label': s_one.title,
+            'lineTension': 0.0,
             'steppedLine': False,
         }]

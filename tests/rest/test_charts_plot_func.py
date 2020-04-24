@@ -113,19 +113,22 @@ class TestChartsPlotFunc:
         mapper = Mapper.create(prompt=prompt, sensor=sensor)
         point = Point.create(sensor=sensor, value=42)
 
-        for horizon, convert, (value, fill, stepped, val_t, stp_t) in [
+        for horizon, convert, expect in [
                 (EnumHorizon.NORMAL, EnumConvert.NATURAL, (
-                    42.0, True, False, Float, Boolean
+                    42.0, True, False, 0.4, Float, Boolean
                 )),
                 (EnumHorizon.INVERT, EnumConvert.INTEGER, (
-                    -42, True, False, Integer, Boolean
+                    -42, True, False, 0.0, Integer, Boolean
                 )),
                 (EnumHorizon.INVERT, EnumConvert.BOOLEAN, (
-                    -1.0, False, 'before', Float, String
+                    -1.0, False, 'before', 0.4, Float, String
                 )),
         ]:
+
             mapper.update(horizon=horizon, convert=convert)
-            assert next(assemble(prompt)) == ({
+            value, fill, stepped, tension, val_t, stp_t = expect
+
+            assert list(assemble(prompt)) == [({
                 'borderColor': mapper.color.color,
                 'data': [{
                     'x': point.created_epoch_ms,
@@ -133,5 +136,6 @@ class TestChartsPlotFunc:
                 }],
                 'fill': fill,
                 'label': sensor.title,
+                'lineTension': tension,
                 'steppedLine': stepped,
-            }, val_t, stp_t)
+            }, val_t, stp_t)]

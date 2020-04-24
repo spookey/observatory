@@ -21,6 +21,7 @@ def dataset(value_type, step_type):
         )),
         fill=Boolean(default=True),
         label=String(default=''),
+        lineTension=Float(default=0.4),
         steppedLine=step_type(default=False),
     )
 
@@ -52,14 +53,20 @@ def assemble(prompt):
         points = list(collect_points(mapper, sensor))
         if points:
             value_type, step_type = get_value_step_types(mapper)
-            fill, stepped = (
-                (False, 'before') if step_type == String else (True, False)
-            )
+
+            fill, stepped = True, False
+            if mapper.convert == EnumConvert.BOOLEAN:
+                fill, stepped = False, 'before'
+            tension = 0.4
+            if mapper.convert == EnumConvert.INTEGER:
+                tension = 0.0
+
             yield dict(
                 borderColor=mapper.color.color,
                 data=points,
                 fill=fill,
                 label=sensor.title,
+                lineTension=tension,
                 steppedLine=stepped,
             ), value_type, step_type
 
