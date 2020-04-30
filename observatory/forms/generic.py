@@ -3,6 +3,8 @@ from wtforms import SubmitField
 
 from observatory.forms.extra.widgets import SubmitButtonInput
 
+# pylint: disable=arguments-differ
+
 
 class GenericDropForm(FlaskForm):
     Model = None

@@ -3,6 +3,7 @@ from pytest import mark
 from observatory.database import Model, SortMixin
 from observatory.start.extensions import DB
 
+# pylint: disable=comparison-with-callable
 # pylint: disable=no-member
 # pylint: disable=too-many-ancestors
 

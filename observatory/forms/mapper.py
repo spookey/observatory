@@ -10,6 +10,9 @@ from observatory.models.mapper import (
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
 
+# pylint: disable=arguments-differ
+# pylint: disable=no-member
+
 
 class MapperEditForm(FlaskForm):
     prompt_sel = SelectField(

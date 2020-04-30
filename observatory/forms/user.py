@@ -10,6 +10,8 @@ from observatory.models.user import User
 
 LOG = getLogger(__name__)
 
+# pylint: disable=arguments-differ
+
 
 class LoginForm(FlaskForm):
     username = StringField(

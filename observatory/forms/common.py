@@ -8,6 +8,9 @@ from observatory.forms.generic import GenericDropForm, GenericSortForm
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
 
+# pylint: disable=arguments-differ
+# pylint: disable=no-member
+
 
 class CommonEditForm(FlaskForm):
     Model = None

@@ -10,6 +10,7 @@ from observatory.start.extensions import DB
 
 LOG = getLogger(__name__)
 
+# pylint: disable=comparison-with-callable
 # pylint: disable=no-member
 # pylint: disable=no-self-argument
 # pylint: disable=too-few-public-methods
