@@ -7,6 +7,8 @@ import { AxiosResponse } from "axios";
 import { ChartConfiguration } from "chart.js";
 import { ChartDataSets } from "chart.js";
 
+import "chartjs-plugin-zoom";
+
 import conf from "./settings";
 import { lighten } from "./colors";
 import { soften } from "./colors";
@@ -15,6 +17,8 @@ import { soften } from "./colors";
 const baseChartConfig = (): ChartConfiguration => ({
   type: "line",
   options: {
+    aspectRatio: 2.0,
+    responsive: true,
     scales: {
       xAxes: [{
         type: "time",
@@ -45,8 +49,20 @@ const baseChartConfig = (): ChartConfiguration => ({
         },
       }],
     },
-    responsive: true,
-    aspectRatio: 2.0,
+    plugins: {
+      zoom: {
+        pan: {
+          enabled: true,
+          mode: "x",
+        },
+        zoom: {
+          enabled: true,
+          drag: false,
+          mode: "x",
+          speed: 0.01,
+        },
+      },
+    },
   },
 });
 
@@ -57,7 +73,7 @@ class Graph {
   private chart: Chart;
   private config: AxiosRequestConfig = {
     baseURL: conf.apiPlotBaseUrl,
-    method: 'get',
+    method: "get",
     responseType: "json",
     timeout: 10 * 1000,
   }
