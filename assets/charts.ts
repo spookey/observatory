@@ -1,6 +1,6 @@
 import axios from "axios";
-import moment from "moment";
 import Chart from "chart.js";
+import moment from "moment";
 import { AxiosError } from "axios";
 import { AxiosRequestConfig } from "axios";
 import { AxiosResponse } from "axios";
@@ -12,6 +12,7 @@ import "chartjs-plugin-zoom";
 import conf from "./settings";
 import { lighten } from "./colors";
 import { soften } from "./colors";
+import { dropAttach } from "./dropdowns";
 
 interface DisplayInfo {
   plain: object;
@@ -108,6 +109,7 @@ class Graph {
   private hideBar() { this.bar.classList.add("is-invisible"); }
   private showBucket() { this.bucket.classList.remove("is-hidden"); }
   private hideBucket() { this.bucket.classList.add("is-hidden"); }
+  private dropdownBucket() { dropAttach(this.bucket); }
   private clearBucket() {
     for (const child of this.bucket.children as any) {
       this.bucket.removeChild(child);
@@ -119,14 +121,13 @@ class Graph {
       this.template.cloneNode(true) as HTMLTemplateElement;
 
     function set(sect: string, name: string, value: string): void {
-      const sel: string = `span.${sect}-${name}`
+      const sel: string = `span.${sect}-${name}`;
       for(const elem of clone.content.querySelectorAll(sel) as any) {
         if (elem instanceof HTMLElement) {
           elem.replaceWith(document.createTextNode(value));
         }
       }
     }
-
 
     for (const [name, value] of Object.entries(display.plain) as any) {
       set('plain', name, (value as string));
@@ -174,6 +175,7 @@ class Graph {
       })
       .finally((): void => {
         this.hideBar();
+        this.dropdownBucket();
         this.showBucket();
       });
   }
