@@ -65,6 +65,22 @@ class TestChartsPlot:
                 'x': p_two_one.created_epoch_ms,
                 'y': -1.0,
             }],
+            'display': {
+                'logic': {
+                    'color': m_two.color.color,
+                    'epoch': p_two_two.created_epoch_ms,
+                    'stamp': p_two_two.created_fmt,
+                },
+                'plain': {
+                    'convert': m_two.convert.name,
+                    'description': s_two.description,
+                    'horizon': m_two.horizon.name,
+                    'points': 2,
+                    'slug': s_two.slug,
+                    'title': s_two.title,
+                    'value': 'False',
+                }
+            },
             'fill': False,
             'label': s_two.title,
             'lineTension': 0.4,
@@ -78,6 +94,22 @@ class TestChartsPlot:
                 'x': p_one_two.created_epoch_ms,
                 'y': 23,
             }],
+            'display': {
+                'logic': {
+                    'color': m_one.color.color,
+                    'epoch': p_one_one.created_epoch_ms,
+                    'stamp': p_one_one.created_fmt,
+                },
+                'plain': {
+                    'convert': m_one.convert.name,
+                    'description': s_one.description,
+                    'horizon': m_one.horizon.name,
+                    'points': 2,
+                    'slug': s_one.slug,
+                    'title': s_one.title,
+                    'value': '1337',
+                }
+            },
             'fill': True,
             'label': s_one.title,
             'lineTension': 0.0,

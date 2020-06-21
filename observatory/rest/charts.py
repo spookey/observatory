@@ -19,6 +19,31 @@ def dataset(value_type, step_type):
                 y=value_type(default=0),
             ),
         )),
+        display=Nested(
+            default={},
+            nested=dict(
+                logic=Nested(
+                    default={},
+                    nested=dict(
+                        color=String(default=''),
+                        epoch=Integer(default=0),
+                        stamp=String(default=''),
+                    ),
+                ),
+                plain=Nested(
+                    default={},
+                    nested=dict(
+                        convert=String(default=''),
+                        description=String(default=''),
+                        horizon=String(default=''),
+                        points=Integer(default=0),
+                        slug=String(default=''),
+                        title=String(default=''),
+                        value=String(default=''),
+                    ),
+                ),
+            ),
+        ),
         fill=Boolean(default=True),
         label=String(default=''),
         lineTension=Float(default=0.4),
@@ -51,7 +76,7 @@ def collect_points(mapper, sensor):
 def assemble(prompt):
     for mapper, sensor in collect_generic(prompt):
         points = list(collect_points(mapper, sensor))
-        if points:
+        if points and sensor.latest:
             value_type, step_type = get_value_step_types(mapper)
 
             fill, stepped = True, False
@@ -64,6 +89,22 @@ def assemble(prompt):
             yield dict(
                 borderColor=mapper.color.color,
                 data=points,
+                display=dict(
+                    logic=dict(
+                        color=mapper.color.color,
+                        epoch=sensor.latest.created_epoch_ms,
+                        stamp=sensor.latest.created_fmt,
+                    ),
+                    plain=dict(
+                        convert=mapper.convert.name,
+                        description=sensor.description,
+                        horizon=mapper.horizon.name,
+                        points=len(points),
+                        slug=sensor.slug,
+                        title=sensor.title,
+                        value=sensor.latest.translate_map(mapper),
+                    ),
+                ),
                 fill=fill,
                 label=sensor.title,
                 lineTension=tension,

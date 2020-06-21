@@ -1,3 +1,4 @@
+from collections import namedtuple
 from datetime import datetime
 
 from flask_restful.fields import Boolean, Float, Integer, String
@@ -113,29 +114,56 @@ class TestChartsPlotFunc:
         mapper = Mapper.create(prompt=prompt, sensor=sensor)
         point = Point.create(sensor=sensor, value=42)
 
-        for horizon, convert, expect in [
-                (EnumHorizon.NORMAL, EnumConvert.NATURAL, (
-                    42.0, True, False, 0.4, Float, Boolean
+        expect = namedtuple('ex', (
+            'value', 'd_val',
+            'fill', 'stepped', 'tension',
+            'val_t', 'stp_t',
+        ))
+
+        for horizon, convert, ex in [
+                (EnumHorizon.NORMAL, EnumConvert.NATURAL, expect(
+                    value=42.0, d_val=42.0,
+                    fill=True, stepped=False, tension=0.4,
+                    val_t=Float, stp_t=Boolean
                 )),
-                (EnumHorizon.INVERT, EnumConvert.INTEGER, (
-                    -42, True, False, 0.0, Integer, Boolean
+                (EnumHorizon.INVERT, EnumConvert.INTEGER, expect(
+                    value=-42, d_val=-42,
+                    fill=True, stepped=False, tension=0.0,
+                    val_t=Integer, stp_t=Boolean
                 )),
-                (EnumHorizon.INVERT, EnumConvert.BOOLEAN, (
-                    -1.0, False, 'before', 0.4, Float, String
+                (EnumHorizon.INVERT, EnumConvert.BOOLEAN, expect(
+                    value=-1.0, d_val=True,
+                    fill=False, stepped='before', tension=0.4,
+                    val_t=Float, stp_t=String
                 )),
         ]:
 
             mapper.update(horizon=horizon, convert=convert)
-            value, fill, stepped, tension, val_t, stp_t = expect
 
             assert list(assemble(prompt)) == [({
                 'borderColor': mapper.color.color,
                 'data': [{
                     'x': point.created_epoch_ms,
-                    'y': value,
+                    'y': ex.value,
                 }],
-                'fill': fill,
+                'display': {
+                    'logic': {
+                        'color': mapper.color.color,
+                        'epoch': point.created_epoch_ms,
+                        'stamp': point.created_fmt,
+                    },
+                    'plain': {
+                        'convert': convert.name,
+                        'description': sensor.description,
+                        'horizon': horizon.name,
+                        'points': 1,
+                        'slug': sensor.slug,
+                        'title': sensor.title,
+                        'value': ex.d_val,
+                    },
+                },
+                'fill': ex.fill,
                 'label': sensor.title,
-                'lineTension': tension,
-                'steppedLine': stepped,
-            }, val_t, stp_t)]
+                'lineTension': ex.tension,
+                'steppedLine': ex.stepped,
+            }, ex.val_t, ex.stp_t)]
