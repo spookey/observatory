@@ -41,13 +41,39 @@
 
 {% macro render_graph(prompt) %}
 {% if prompt and prompt.active %}
-<div class="content">
+<div class="content plot" data-slug="{{ prompt.slug }}">
   {{ _common_dropdown_level(prompt, large=true) }}
 
-  <div class="content plot" data-slug="{{ prompt.slug }}">
+  <div class="content">
     <canvas aria-label="{{ prompt.title }}" role="img"></canvas>
     <progress class="progress is-small is-dark" value="" max="100"></progress>
   </div>
+
+  <template>
+  {% macro _t(name, plain=true) %}
+    <span class="{{ 'plain' if plain else 'logic' }}-{{ name }}"></span>
+  {% endmacro %}
+  {% with thing = dict(
+    slug=_t('slug'),
+    title=_t('title'),
+    description=_t('description'),
+  ) %}
+    <div class="column">
+      <div class="box">
+        {{ _common_dropdown_level(thing, large=false) }}
+        {{ key_val_level('Points', _t('points')) }}
+        {{ key_val_level('Latest', '') }}
+        {{ key_val_level('Value', _t('value')) }}
+        {{ split_level(
+          text_code(_t('horizon')),
+          text_code(_t('convert')),
+        ) }}
+      </div>
+    </div>
+  {% endwith %}
+  </template>
+  <div class="columns bucket is-hidden"></div>
+
   <div class="columns">
   {% for mapper in prompt.mapping_active %}
   {% with sensor = mapper.sensor %}
