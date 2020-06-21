@@ -63,7 +63,7 @@
         {{ _common_dropdown_level(thing, large=false) }}
         {{ key_val_level('Points', _t('points')) }}
         {{ key_val_level('Latest', '') }}
-        {{ key_val_level('Value', _t('value')) }}
+        {{ key_val_level('Value', text_code(_t('value'), 'color-value')) }}
         {{ split_level(
           text_code(_t('horizon')),
           text_code(_t('convert')),

@@ -19,8 +19,8 @@
 {% endmacro %}
 
 
-{% macro text_code(text) %}
-<code>{{ text }}</code>
+{% macro text_code(text, cls=none) %}
+<code{% if cls %} class="{{ cls }}"{% endif %}>{{ text }}</code>
 {% endmacro %}
 
 

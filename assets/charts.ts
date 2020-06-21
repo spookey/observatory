@@ -10,13 +10,17 @@ import { ChartDataSets } from "chart.js";
 import "chartjs-plugin-zoom";
 
 import conf from "./settings";
-import { lighten } from "./colors";
-import { soften } from "./colors";
 import { dropAttach } from "./dropdowns";
+import { colorizeFG } from "./colors";
+import { colorLighten } from "./colors";
+import { colorParse } from "./colors";
+import { colorSoften } from "./colors";
 
 interface DisplayInfo {
   plain: object;
-  logic: object;
+  logic: {
+    color: string,
+  };
 }
 
 interface DispChartDataSets extends ChartDataSets {
@@ -133,6 +137,9 @@ class Graph {
       set('plain', name, (value as string));
     }
 
+    for(const elem of clone.content.querySelectorAll('.color-value') as any) {
+      colorizeFG(elem, colorParse(display.logic.color));
+    }
 
     this.bucket.appendChild(clone.content);
     clone.classList.remove("is-hidden");
@@ -146,8 +153,8 @@ class Graph {
       if (payload.hasOwnProperty(idx)) {
         const obj: DispChartDataSets = payload[idx];
         if (obj.borderColor) {
-          obj.borderColor = soften(obj.borderColor as string);
-          obj.backgroundColor = lighten(obj.borderColor as string);
+          obj.borderColor = colorSoften(obj.borderColor as string);
+          obj.backgroundColor = colorLighten(obj.borderColor as string);
         }
         if (obj.display) {
           this.paint(obj.display);
