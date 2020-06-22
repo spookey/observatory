@@ -1,10 +1,7 @@
-{% from '_macros/elem.html' import code_color %}
 {% from '_macros/elem.html' import text_code %}
 {% from '_macros/elem.html' import text_icon %}
-{% from '_macros/elem.html' import time_rel %}
 {% from '_macros/level.html' import key_val_level %}
 {% from '_macros/level.html' import split_level %}
-{% from '_macros/page.html' import nothing_there %}
 
 {% macro _common_dropdown_level(thing, large=true) %}
 <div class="level">
@@ -73,34 +70,6 @@
   {% endwith %}
   </template>
   <div class="columns bucket is-hidden"></div>
-
-  <div class="columns">
-  {% for mapper in prompt.mapping_active %}
-  {% with sensor = mapper.sensor %}
-  {% if mapper.active and sensor %}
-  <div class="column">
-    <div class="box">
-      {{ _common_dropdown_level(sensor, large=false) }}
-      {{ key_val_level('Points', sensor.length) }}
-      {% with stamp, value = (
-        time_rel(sensor.latest.created_epoch_ms, sensor.latest.created_fmt),
-        sensor.latest.translate_map(mapper)
-      ) if sensor.latest else (
-        '—', '—',
-      ) %}
-      {{ key_val_level('Latest', stamp) }}
-      {{ key_val_level('Value', code_color(value, mapper.color.color)) }}
-      {% endwith %}
-      {{ split_level(
-        text_code(mapper.horizon.name),
-        text_code(mapper.convert.name),
-      ) }}
-    </div>
-  </div>
-  {% endif %}
-  {% endwith %}
-  {% endfor %}
-  </div>
 </div>
 {% endif %}
 {% endmacro %}
