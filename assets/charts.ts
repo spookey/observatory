@@ -10,16 +10,19 @@ import { ChartDataSets } from "chart.js";
 import "chartjs-plugin-zoom";
 
 import conf from "./settings";
-import { dropAttach } from "./dropdowns";
 import { colorizeFG } from "./colors";
 import { colorLighten } from "./colors";
 import { colorParse } from "./colors";
 import { colorSoften } from "./colors";
+import { dropAttach } from "./dropdowns";
+import { momentRel } from "./moments";
 
 interface DisplayInfo {
   plain: object;
   logic: {
     color: string,
+    epoch: number,
+    stamp: string,
   };
 }
 
@@ -139,6 +142,9 @@ class Graph {
 
     for(const elem of clone.content.querySelectorAll('.color-value') as any) {
       colorizeFG(elem, colorParse(display.logic.color));
+    }
+    for(const elem of clone.content.querySelectorAll('.moment-value') as any) {
+      momentRel(elem, display.logic.epoch, display.logic.stamp);
     }
 
     this.bucket.appendChild(clone.content);

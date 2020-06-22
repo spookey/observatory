@@ -1,24 +1,52 @@
 import moment from "moment";
 
+export enum MomentMode {
+  none = 0,
+  relative,
+  absolute,
+}
+
+function momentSet(elem: HTMLElement, value: string, title: string) {
+  const span: HTMLElement = document.createElement("span");
+  span.title = title;
+  span.appendChild(document.createTextNode(value));
+  elem.replaceWith(span);
+}
+
+function momentValue(value: number, mode: MomentMode): (string | null) {
+  if (!Number.isNaN(value)) {
+    if (mode === MomentMode.relative) { return moment(value).fromNow(); }
+    if (mode === MomentMode.absolute) { return moment(value).format(); }
+  }
+  return null;
+}
+
+export function momentRel(elem: HTMLElement, value: number, title: string): void {
+  const val: (string | null) = momentValue(value, MomentMode.relative);
+  if (!val) { return; }
+  momentSet(elem, val, title);
+}
+
 /* convert moment timestamps */
 export function momentTime(): void {
   document.addEventListener("DOMContentLoaded", (): void => {
 
+    function getMode(classList: DOMTokenList): MomentMode {
+      if (classList.contains("relative")) { return MomentMode.relative; }
+      if (classList.contains("absolute")) { return MomentMode.absolute; }
+      return MomentMode.none;
+    }
+
     function convert(element: HTMLElement) {
       if (!element.dataset.value || !element.innerHTML) { return; }
-      const value: number = parseInt(element.dataset.value, 10);
-      if (Number.isNaN(value)) { return; }
 
-      function assign(conv: string) {
-        element.title = element.innerHTML.trim();
-        element.innerHTML = conv;
-      }
+      const value: (string | null) = momentValue(
+        parseInt(element.dataset.value, 10),
+        getMode(element.classList)
+      );
+      if (!value) { return; }
 
-      if (element.classList.contains("relative")) {
-        assign(moment(value).fromNow());
-      } else if (element.classList.contains("absolute")) {
-        assign(moment(value).format());
-      }
+      momentSet(element, value, element.innerHTML.trim());
     }
 
     for (const element of document.querySelectorAll(".moment") as any) {
