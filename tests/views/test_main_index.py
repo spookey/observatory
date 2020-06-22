@@ -40,8 +40,8 @@ class TestMainIndex:
     def test_view_info(visitor, gen_prompt, gen_sensor):
         prompt = gen_prompt('test_prompt')
         sensor = gen_sensor('test_sensor')
-        mapper = Mapper.create(prompt=prompt, sensor=sensor)
-        point = sensor.append(13.37)
+        Mapper.create(prompt=prompt, sensor=sensor)
+        sensor.append(13.37)
 
         res = visitor(ENDPOINT)
         text = res.soup.text
@@ -57,9 +57,5 @@ class TestMainIndex:
         assert prompt.title in text
         assert prompt.description in text
 
-        assert sensor.slug in text
-        assert sensor.title in text
-        assert sensor.description in text
-
-        assert point.created_fmt in text
-        assert str(point.translate_map(mapper)) in text
+        assert plot.select('template')[-1] is not None
+        assert plot.select('.bucket')[-1] is not None
