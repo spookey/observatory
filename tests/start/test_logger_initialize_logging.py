@@ -1,7 +1,7 @@
-from logging import DEBUG, INFO, getLogger
+from logging import DEBUG, getLogger, INFO
 
 from observatory.start.environment import MDL_NAME
-from observatory.start.logger import FORMATTER, STREAM, initialize_logging
+from observatory.start.logger import FORMATTER, initialize_logging, STREAM
 
 
 def test_init_basic():

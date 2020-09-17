@@ -151,7 +151,14 @@ plots: $(CMD_PYREV)
 
 
 define _sort
-	$(CMD_ISORT) -cs -fss -m=5 -y -rc $(1)
+	$(CMD_ISORT) \
+		--atomic \
+		--combine-star \
+		--float-to-top \
+		--force-alphabetical-sort-within-sections \
+		--force-sort-within-sections \
+		-m="VERTICAL_GRID_GROUPED" \
+			$(1)
 endef
 
 .PHONY: sort sortt sorts

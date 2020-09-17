@@ -1,5 +1,5 @@
 from logging import (
-    DEBUG, ERROR, INFO, WARNING, Formatter, StreamHandler, getLogger
+    DEBUG, ERROR, Formatter, getLogger, INFO, StreamHandler, WARNING
 )
 
 from observatory.start.environment import LOG_LVL, MDL_NAME

@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, abort, flash, redirect, render_template, request, url_for
+    abort, Blueprint, flash, redirect, render_template, request, url_for
 )
 from flask_login import login_required
 

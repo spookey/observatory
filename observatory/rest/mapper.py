@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask_restful import Resource, abort, marshal
+from flask_restful import abort, marshal, Resource
 
 from observatory.models.mapper import Mapper
 from observatory.models.prompt import Prompt
