@@ -4,8 +4,6 @@ import moment from "moment";
 import { AxiosError } from "axios";
 import { AxiosRequestConfig } from "axios";
 import { AxiosResponse } from "axios";
-import { ChartConfiguration } from "chart.js";
-import { ChartDataSets } from "chart.js";
 
 import "chartjs-plugin-zoom";
 
@@ -17,6 +15,7 @@ import { colorSoften } from "./colors";
 import { dropAttach } from "./dropdowns";
 import { momentRel } from "./moments";
 
+
 interface DisplayInfo {
   plain: object;
   logic: {
@@ -24,14 +23,14 @@ interface DisplayInfo {
     epoch: number,
     stamp: string,
   };
-}
+};
 
-interface DispChartDataSets extends ChartDataSets {
+interface DispChartDataSets extends Chart.ChartDataSets {
   display?: DisplayInfo;
 };
 
 
-const baseChartConfig = (): ChartConfiguration => ({
+const baseChartConfig = (): Chart.ChartConfiguration => ({
   type: "line",
   options: {
     aspectRatio: 2.0,
@@ -127,23 +126,23 @@ class Graph {
     const clone: HTMLTemplateElement =
       this.template.cloneNode(true) as HTMLTemplateElement;
 
-    function set(sect: string, name: string, value: string): void {
+    const set = (sect: string, name: string, value: string): void => {
       const sel: string = `span.${sect}-${name}`;
       for(const elem of clone.content.querySelectorAll(sel) as any) {
         if (elem instanceof HTMLElement) {
           elem.replaceWith(document.createTextNode(value));
         }
       }
-    }
+    };
 
     for (const [name, value] of Object.entries(display.plain) as any) {
-      set('plain', name, (value as string));
+      set("plain", name, (value as string));
     }
 
-    for(const elem of clone.content.querySelectorAll('.color-value') as any) {
+    for(const elem of clone.content.querySelectorAll(".color-value") as any) {
       colorizeFG(elem, colorParse(display.logic.color));
     }
-    for(const elem of clone.content.querySelectorAll('.moment-value') as any) {
+    for(const elem of clone.content.querySelectorAll(".moment-value") as any) {
       momentRel(elem, display.logic.epoch, display.logic.stamp);
     }
 
@@ -199,19 +198,19 @@ class Graph {
 }
 
 
-export function drawCharts(): void {
+export const drawCharts = (): void => {
   document.addEventListener("DOMContentLoaded", (): void => {
-    function getSlug(container: HTMLElement): (string | null) {
+    const getSlug = (
+        container: HTMLElement
+    ): (string | null) => {
       if (!container.dataset.slug) { return null; }
       return container.dataset.slug;
     }
 
-    function getBar(
-      container: HTMLElement): (HTMLProgressElement | null
-    ) {
-      for (
-        const element of container.getElementsByTagName("progress") as any
-      ) {
+    const getBar = (
+        container: HTMLElement
+    ): (HTMLProgressElement | null) => {
+      for (const element of container.getElementsByTagName("progress") as any) {
         if (element instanceof HTMLProgressElement) {
           return element;
         }
@@ -219,12 +218,10 @@ export function drawCharts(): void {
       return null;
     }
 
-    function getTemplate(
-      container: HTMLElement): (HTMLTemplateElement | null
-    ) {
-      for (
-        const element of container.getElementsByTagName("template") as any
-      ) {
+    const getTemplate = (
+        container: HTMLElement
+    ): (HTMLTemplateElement | null) => {
+      for (const element of container.getElementsByTagName("template") as any) {
         if (element instanceof HTMLTemplateElement) {
           return element;
         }
@@ -232,12 +229,10 @@ export function drawCharts(): void {
       return null;
     }
 
-    function getBucket(
-      container: HTMLElement): (HTMLElement | null
-    ) {
-      for (
-        const element of container.getElementsByClassName("bucket") as any
-      ) {
+    const getBucket = (
+        container: HTMLElement
+    ): (HTMLElement | null) => {
+      for (const element of container.getElementsByClassName("bucket") as any) {
         if (element instanceof HTMLElement) {
           return element;
         }
@@ -245,12 +240,10 @@ export function drawCharts(): void {
       return null;
     }
 
-    function getContext(
-      container: HTMLElement): (CanvasRenderingContext2D | null
-    ) {
-      for (
-        const element of container.getElementsByTagName("canvas") as any
-      ) {
+    const getContext = (
+        container: HTMLElement
+    ): (CanvasRenderingContext2D | null) => {
+      for (const element of container.getElementsByTagName("canvas") as any) {
         if (element instanceof HTMLCanvasElement) {
           return (element as HTMLCanvasElement).getContext("2d");
         }
@@ -258,7 +251,7 @@ export function drawCharts(): void {
       return null;
     }
 
-    function plot(container: HTMLElement): void {
+    const plot = (container: HTMLElement): void => {
       const slug: (string | null) = getSlug(container);
       if (!slug) { return; }
       const bar: (HTMLProgressElement | null) = getBar(container);

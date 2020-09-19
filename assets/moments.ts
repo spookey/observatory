@@ -6,14 +6,14 @@ export enum MomentMode {
   absolute,
 }
 
-function momentSet(elem: HTMLElement, value: string, title: string) {
+const momentSet = (elem: HTMLElement, value: string, title: string) => {
   const span: HTMLElement = document.createElement("span");
   span.title = title;
   span.appendChild(document.createTextNode(value));
   elem.replaceWith(span);
 }
 
-function momentValue(value: number, mode: MomentMode): (string | null) {
+const momentValue = (value: number, mode: MomentMode): (string | null) => {
   if (!Number.isNaN(value)) {
     if (mode === MomentMode.relative) { return moment(value).fromNow(); }
     if (mode === MomentMode.absolute) { return moment(value).format(); }
@@ -21,23 +21,25 @@ function momentValue(value: number, mode: MomentMode): (string | null) {
   return null;
 }
 
-export function momentRel(elem: HTMLElement, value: number, title: string): void {
+export const momentRel = (
+  elem: HTMLElement, value: number, title: string
+): void => {
   const val: (string | null) = momentValue(value, MomentMode.relative);
   if (!val) { return; }
   momentSet(elem, val, title);
 }
 
 /* convert moment timestamps */
-export function momentTime(): void {
+export const momentTime = (): void => {
   document.addEventListener("DOMContentLoaded", (): void => {
 
-    function getMode(classList: DOMTokenList): MomentMode {
+    const getMode = (classList: DOMTokenList): MomentMode => {
       if (classList.contains("relative")) { return MomentMode.relative; }
       if (classList.contains("absolute")) { return MomentMode.absolute; }
       return MomentMode.none;
     }
 
-    function convert(element: HTMLElement) {
+    const convert = (element: HTMLElement) => {
       if (!element.dataset.value || !element.innerHTML) { return; }
 
       const value: (string | null) = momentValue(

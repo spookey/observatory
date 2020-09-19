@@ -1,29 +1,29 @@
 /* remove notifications */
-export function flashClose(): void {
+export const flashClose = (): void => {
   document.addEventListener("DOMContentLoaded", (): void => {
 
-    function remove(target: Element): void {
-      const enclose: (Element | null) = target.parentElement;
+    const remove = (target: HTMLElement): void => {
+      const enclose: (HTMLElement | null) = target.parentElement;
       if (!enclose) { return; }
 
       enclose.removeChild(target);
       if (enclose.children.length) { return; }
 
-      const section: (Element | null) = enclose.parentElement;
+      const section: (HTMLElement | null) = enclose.parentElement;
       if (!section) { return; }
 
-      const parent: (Element | null) = section.parentElement;
+      const parent: (HTMLElement | null) = section.parentElement;
       if (!parent) { return; }
 
       parent.removeChild(section);
     }
 
     for (const delButton of document.querySelectorAll(".delete.click") as any) {
-      delButton.addEventListener("click", function(this: Element): void {
+      delButton.addEventListener("click", (): void => {
 
          for (const selector of [".message", ".notification"]) {
 
-          const target: (Element | null) = this.closest(selector);
+          const target: (HTMLElement | null) = delButton.closest(selector);
           if (target) { remove(target); }
 
         }

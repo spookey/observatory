@@ -50,24 +50,22 @@
   {% macro _s(cls) %}<span class="{{ cls }}"></span>{% endmacro %}
   {% macro _p(name) %}{{ _s('plain-' ~ name) }}{% endmacro %}
 
-  {% with thing = dict(
-    slug=_p('slug'),
-    title=_p('title'),
-    description=_p('description'),
-  ) %}
-    <div class="column">
-      <div class="box">
-        {{ _common_dropdown_level(thing, large=false) }}
-        {{ key_val_level('Points', _p('points')) }}
-        {{ key_val_level('Latest', _s('moment-value')) }}
-        {{ key_val_level('Value', text_code(_p('value'), cls='color-value')) }}
-        {{ split_level(
-          text_code(_p('horizon')),
-          text_code(_p('convert')),
-        ) }}
-      </div>
+  <div class="column">
+    <div class="box">
+      {{ _common_dropdown_level(dict(
+        slug=_p('slug'),
+        title=_p('title'),
+        description=_p('description'),
+      ), large=false) }}
+      {{ key_val_level('Points', _p('points')) }}
+      {{ key_val_level('Latest', _s('moment-value')) }}
+      {{ key_val_level('Value', text_code(_p('value'), cls='color-value')) }}
+      {{ split_level(
+        text_code(_p('horizon')),
+        text_code(_p('convert')),
+      ) }}
     </div>
-  {% endwith %}
+  </div>
   </template>
   <div class="columns bucket is-hidden"></div>
 </div>

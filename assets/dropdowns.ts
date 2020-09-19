@@ -1,4 +1,4 @@
-export function dropAttach(base: (HTMLElement | Document)): void {
+export const dropAttach = (base: (HTMLElement | Document)): void => {
   const ACT: string = "is-active";
   const dropdowns: HTMLCollection = base.getElementsByClassName("dropdown");
 
@@ -17,7 +17,7 @@ export function dropAttach(base: (HTMLElement | Document)): void {
 }
 
 /* make dropdown menus clickable */
-export function dropToggle(): void {
+export const dropToggle = (): void => {
   document.addEventListener("DOMContentLoaded", (): void => {
     dropAttach(document);
   });
