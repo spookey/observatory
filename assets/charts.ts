@@ -30,6 +30,36 @@ interface DispChartDataSets extends Chart.ChartDataSets {
 };
 
 
+interface ZoomChart extends Chart {
+  resetZoom: () => void;
+};
+
+interface ZoomConf extends Object {
+  pan: {
+    enabled: boolean;
+    mode: string;
+  };
+  zoom: {
+    enabled: boolean;
+    drag: boolean;
+    mode: string;
+    speed: number;
+  };
+};
+
+const zoomChartConfig = (enabled: boolean): ZoomConf => ({
+  pan: {
+    enabled,
+    mode: "x",
+  },
+  zoom: {
+    enabled,
+    drag: false,
+    mode: "x",
+    speed: 0.01,
+  },
+})
+
 const baseChartConfig = (): Chart.ChartConfiguration => ({
   type: "line",
   options: {
@@ -66,18 +96,7 @@ const baseChartConfig = (): Chart.ChartConfiguration => ({
       }],
     },
     plugins: {
-      zoom: {
-        pan: {
-          enabled: true,
-          mode: "x",
-        },
-        zoom: {
-          enabled: true,
-          drag: false,
-          mode: "x",
-          speed: 0.01,
-        },
-      },
+      zoom: zoomChartConfig(false),
     },
   },
 });
@@ -86,9 +105,10 @@ const baseChartConfig = (): Chart.ChartConfiguration => ({
 class Graph {
   private slug: string;
   private bar: HTMLProgressElement;
+  private buttons: HTMLElement;
   private template: HTMLTemplateElement;
   private bucket: HTMLElement;
-  private chart: Chart;
+  private chart: ZoomChart;
 
   private config: AxiosRequestConfig = {
     baseURL: conf.apiPlotBaseUrl,
@@ -100,15 +120,17 @@ class Graph {
   constructor(
     slug: string,
     bar: HTMLProgressElement,
+    buttons: HTMLElement,
     template: HTMLTemplateElement,
     bucket: HTMLElement,
     context: CanvasRenderingContext2D,
   ) {
     this.slug = slug;
     this.bar = bar;
+    this.buttons = buttons;
     this.template = template;
     this.bucket = bucket;
-    this.chart = new Chart(context, baseChartConfig());
+    this.chart = new Chart(context, baseChartConfig()) as ZoomChart;
   }
 
   private showBar() { this.bar.classList.remove("is-invisible"); }
@@ -120,6 +142,51 @@ class Graph {
     for (const child of this.bucket.children as any) {
       this.bucket.removeChild(child);
     }
+  }
+
+  private register(): void {
+    const fetch = (base: HTMLElement, sel: string): (HTMLElement | null) => {
+      for (const elem of base.querySelectorAll(sel) as any) {
+        if (elem instanceof HTMLElement) {
+          return elem;
+        }
+      }
+      return null;
+    }
+
+    const ctlInit: (HTMLElement | null) = fetch(this.buttons, ".graph-init");
+    if (!ctlInit) { return; }
+    const ctlZoom: (HTMLElement | null) = fetch(this.buttons, ".graph-zoom");
+    if (!ctlZoom) { return; }
+    const btnZoom: (HTMLElement | null) = fetch(ctlZoom, "button");
+    if (!btnZoom) { return; }
+
+    const state = (): boolean => {
+      const zopt: (ZoomConf | null) = this.chart.options?.plugins?.zoom ?? null;
+      if (!zopt) { return false; }
+      return zopt.zoom.enabled || zopt.pan.enabled;
+    }
+
+    const toggle = (target: boolean): void => {
+      const cls: string = "is-active";
+      (this.chart.options?.plugins ?? {}).zoom = zoomChartConfig(target);
+      this.chart.update();
+      if (target) {
+        btnZoom.classList.add(cls);
+      } else {
+        btnZoom.classList.remove(cls);
+      }
+    }
+
+    ctlInit.addEventListener("click", () => {
+      toggle(false);
+      this.chart.resetZoom();
+    });
+    ctlZoom.addEventListener("click", () => {
+      toggle(!state());
+    });
+    toggle(false);
+    this.buttons.classList.remove("is-hidden");
   }
 
   private paint(display: DisplayInfo): void {
@@ -193,6 +260,7 @@ class Graph {
   }
 
   public loop(): void {
+    this.register();
     this.refresh();
   }
 }
@@ -200,16 +268,12 @@ class Graph {
 
 export const drawCharts = (): void => {
   document.addEventListener("DOMContentLoaded", (): void => {
-    const getSlug = (
-        container: HTMLElement
-    ): (string | null) => {
+    const getSlug = (container: HTMLElement): (string | null) => {
       if (!container.dataset.slug) { return null; }
       return container.dataset.slug;
     }
 
-    const getBar = (
-        container: HTMLElement
-    ): (HTMLProgressElement | null) => {
+    const getBar = (container: HTMLElement): (HTMLProgressElement | null) => {
       for (const element of container.getElementsByTagName("progress") as any) {
         if (element instanceof HTMLProgressElement) {
           return element;
@@ -218,9 +282,16 @@ export const drawCharts = (): void => {
       return null;
     }
 
-    const getTemplate = (
-        container: HTMLElement
-    ): (HTMLTemplateElement | null) => {
+    const getButtons = (container: HTMLElement) : (HTMLElement | null) => {
+      for (const element of container.getElementsByClassName("control-buttons") as any) {
+        if (element instanceof HTMLElement) {
+          return element;
+        }
+      }
+      return null;
+    }
+
+    const getTemplate = (container: HTMLElement): (HTMLTemplateElement | null) => {
       for (const element of container.getElementsByTagName("template") as any) {
         if (element instanceof HTMLTemplateElement) {
           return element;
@@ -229,9 +300,7 @@ export const drawCharts = (): void => {
       return null;
     }
 
-    const getBucket = (
-        container: HTMLElement
-    ): (HTMLElement | null) => {
+    const getBucket = (container: HTMLElement): (HTMLElement | null) => {
       for (const element of container.getElementsByClassName("bucket") as any) {
         if (element instanceof HTMLElement) {
           return element;
@@ -240,9 +309,7 @@ export const drawCharts = (): void => {
       return null;
     }
 
-    const getContext = (
-        container: HTMLElement
-    ): (CanvasRenderingContext2D | null) => {
+    const getContext = (container: HTMLElement): (CanvasRenderingContext2D | null) => {
       for (const element of container.getElementsByTagName("canvas") as any) {
         if (element instanceof HTMLCanvasElement) {
           return (element as HTMLCanvasElement).getContext("2d");
@@ -256,6 +323,8 @@ export const drawCharts = (): void => {
       if (!slug) { return; }
       const bar: (HTMLProgressElement | null) = getBar(container);
       if (!bar) { return; }
+      const buttons: (HTMLElement | null) = getButtons(container);
+      if (!buttons) { return; }
       const template: (HTMLTemplateElement | null) = getTemplate(container);
       if (!template) { return; }
       const bucket: (HTMLElement | null) = getBucket(container);
@@ -263,7 +332,7 @@ export const drawCharts = (): void => {
       const context: (CanvasRenderingContext2D | null) = getContext(container);
       if (!context) { return; }
 
-      new Graph(slug, bar, template, bucket, context).loop();
+      new Graph(slug, bar, buttons, template, bucket, context).loop();
     }
 
     for (const container of document.querySelectorAll(".plot") as any) {

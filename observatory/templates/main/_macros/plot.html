@@ -44,6 +44,21 @@
   <div class="content">
     <canvas aria-label="{{ prompt.title }}" role="img"></canvas>
     <progress class="progress is-small is-dark" value="" max="100"></progress>
+
+    <div class="field control-buttons has-addons has-addons-centered is-hidden">
+      <div class="control graph-init">
+        <button class="button">
+          {{ text_icon('graph_init') }}
+          <span>Reset</span>
+        </button>
+      </div>
+      <div class="control graph-zoom">
+        <button class="button">
+          {{ text_icon('graph_zoom') }}
+          <span>Zoom &amp; Pan</span>
+        </button>
+      </div>
+    </div>
   </div>
 
   <template>

@@ -64,6 +64,8 @@ ICON = {
     'glob_descr': getenv('ICON_GLOB_DESCR', 'more'),
     'glob_empty': getenv('ICON_GLOB_EMPTY', 'emotion-sad'),
     'glob_error': getenv('ICON_GLOB_ERROR', 'flashlight'),
+    'graph_init': getenv('ICON_GRAPH_INIT', 'focus-3'),
+    'graph_zoom': getenv('ICON_GRAPH_ZOOM', 'search-eye'),
     'obj_mapper': getenv('ICON_OBJ_MAPPER', 'guide'),
     'obj_prompt': getenv('ICON_OBJ_PROMPT', 'newspaper'),
     'obj_sensor': getenv('ICON_OBJ_SENSOR', 'radar'),
