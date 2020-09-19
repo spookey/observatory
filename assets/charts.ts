@@ -168,13 +168,16 @@ class Graph {
     }
 
     const toggle = (target: boolean): void => {
-      const cls: string = "is-active";
       (this.chart.options?.plugins ?? {}).zoom = zoomChartConfig(target);
       this.chart.update();
+
+      const btnCls = (add: string, del: string): void => {
+        btnZoom.classList.add(add); btnZoom.classList.remove(del);
+      }
       if (target) {
-        btnZoom.classList.add(cls);
+        btnCls("is-info", "is-dark");
       } else {
-        btnZoom.classList.remove(cls);
+        btnCls("is-dark", "is-info");
       }
     }
 
