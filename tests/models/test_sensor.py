@@ -73,14 +73,6 @@ class TestSensor:
         assert Point.query.all() == [keep_point]
 
     @staticmethod
-    def test_query_points_outdated(gen_sensor, gen_points_batch):
-        sensor = gen_sensor()
-        olds, _, complete = gen_points_batch(sensor)
-
-        assert sensor.points == _pointsort(complete)
-        assert sensor.query_points_outdated.all() == _pointsort(olds)
-
-    @staticmethod
     def test_length(gen_sensor):
         sensor = gen_sensor()
         assert sensor.length == 0
@@ -120,6 +112,20 @@ class TestSensor:
         assert sensor.cleanup()
 
         assert sensor.points == []
+
+    @staticmethod
+    def test_cleanup_deletes_all(gen_sensor, gen_points_batch):
+        one = gen_sensor('one')
+        two = gen_sensor('two')
+        _, _, old_one = gen_points_batch(one, old=5, new=0)
+        _, _, old_two = gen_points_batch(two, old=5, new=0)
+
+        assert one.points == _pointsort(old_one)
+        assert two.points == _pointsort(old_two)
+        assert one.cleanup()
+
+        assert one.points == []
+        assert two.points == []
 
     @staticmethod
     def test_append(gen_sensor):

@@ -28,10 +28,6 @@ class Sensor(CommonMixin, SortMixin, CreatedMixin, Model):
         return Point.query_sorted(Point.query.with_parent(self))
 
     @property
-    def query_points_outdated(self):
-        return Point.query_outdated(self.query_points)
-
-    @property
     def length(self):
         return self.query_points.count()
 
@@ -39,8 +35,9 @@ class Sensor(CommonMixin, SortMixin, CreatedMixin, Model):
     def latest(self):
         return self.query_points.first()
 
-    def cleanup(self):
-        query = self.query_points_outdated
+    @staticmethod
+    def cleanup():
+        query = Point.query_outdated()
         LOG.info('cleanup "%d" outdated points', query.count())
 
         return all(point.delete() for point in query.all())
