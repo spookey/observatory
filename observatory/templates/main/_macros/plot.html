@@ -3,13 +3,19 @@
 {% from '_macros/level.html' import key_val_level %}
 {% from '_macros/level.html' import split_level %}
 
-{% macro _common_dropdown_level(thing, large=true) %}
+{% macro _common_dropdown_level(thing, link=false) %}
 <div class="level">
   <div class="level-left">
     <div class="level-item has-text-left-tablet has-text-centered">
-      {% if large %}<h3 class="title is-3">{% else %}<div class="title is-5">{% endif %}
-      {{ thing.title }}
-      {% if large %}</h3>{% else %}</div>{% endif %}
+      {% if link %}
+      <a class="title is-3" href="{{ url_for('main.index', slug=thing.slug) }}">
+        {{ thing.title }}
+      </a>
+      {% else %}
+      <div class="title is-5">
+        {{ thing.title }}
+      </div>
+      {% endif %}
     </div>
   </div>
   {% if thing.description %}
@@ -39,7 +45,7 @@
 {% macro render_graph(prompt) %}
 {% if prompt and prompt.active %}
 <div class="content plot" data-slug="{{ prompt.slug }}">
-  {{ _common_dropdown_level(prompt, large=true) }}
+  {{ _common_dropdown_level(prompt, link=true) }}
 
   <div class="content">
     <canvas aria-label="{{ prompt.title }}" role="img"></canvas>
@@ -71,7 +77,7 @@
         slug=_p('slug'),
         title=_p('title'),
         description=_p('description'),
-      ), large=false) }}
+      ), link=false) }}
       {{ key_val_level('Points', _p('points')) }}
       {{ key_val_level('Latest', _s('moment-value')) }}
       {{ key_val_level('Value', text_code(_p('value'), cls='color-value')) }}
