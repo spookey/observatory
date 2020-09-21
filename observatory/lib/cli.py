@@ -78,11 +78,15 @@ def sensorclear(slug):
 @BP_CLI.cli.command('sensorcurve', help='Draw a curve of points on sensor')
 @click.option('--slug', prompt=True)
 @click.option('--axc', type=int, default=15)
-def sensorcurve(slug, axc):
+@click.option('--keep-old', is_flag=True, default=False)
+def sensorcurve(slug, axc, keep_old):
     sensor = Sensor.by_slug(slug)
     if not sensor:
         click.secho(f'{slug} not present!', fg='red')
         return
+
+    if not keep_old:
+        sensor.cleanup(_commit=False)
 
     num = 1 + 2 * axc
     sec = epoch_seconds(datetime.utcnow())

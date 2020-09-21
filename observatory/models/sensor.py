@@ -36,11 +36,11 @@ class Sensor(CommonMixin, SortMixin, CreatedMixin, Model):
         return self.query_points.first()
 
     @staticmethod
-    def cleanup():
+    def cleanup(_commit=True):
         query = Point.query_outdated()
         LOG.info('cleanup "%d" outdated points', query.count())
 
-        return all(point.delete() for point in query.all())
+        return all(point.delete(_commit=_commit) for point in query.all())
 
     def append(self, value, _commit=True):
         self.cleanup()
