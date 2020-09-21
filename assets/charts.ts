@@ -264,6 +264,8 @@ class Graph {
 
   public loop(): void {
     this.register();
+
+    setInterval((): void => { this.refresh(); }, conf.apiPlotRefreshMs);
     this.refresh();
   }
 }
