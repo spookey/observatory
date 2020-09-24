@@ -17,7 +17,8 @@ def _comm(request, gen_prompt, gen_sensor):
         'prompt': (PromptSortForm, Prompt, gen_prompt),
         'sensor': (SensorSortForm, Sensor, gen_sensor),
         'mapper': (
-            MapperSortForm, Mapper,
+            MapperSortForm,
+            Mapper,
             lambda slug='test': Mapper.create(
                 prompt=gen_prompt(slug=f'm_{slug}'),
                 sensor=gen_sensor(slug=f'm_{slug}'),
@@ -30,7 +31,6 @@ def _comm(request, gen_prompt, gen_sensor):
 
 @mark.usefixtures('session', 'ctx_app')
 class TestGenericSortForm:
-
     @staticmethod
     @mark.parametrize('lift', [True, False])
     def test_basic_fields(_comm, lift):
@@ -39,9 +39,7 @@ class TestGenericSortForm:
         assert form.submit is not None
 
     @staticmethod
-    @mark.parametrize('_lift_text', [
-        (True, 'Up'), (False, 'Down')
-    ])
+    @mark.parametrize('_lift_text', [(True, 'Up'), (False, 'Down')])
     def test_submit_label(_comm, _lift_text):
         lift, text = _lift_text
         form = _comm.form(lift=lift)
@@ -49,9 +47,9 @@ class TestGenericSortForm:
         assert form.submit.label.text == text
 
     @staticmethod
-    @mark.parametrize('_lift_icon', [
-        (True, 'ops_arr_up'), (False, 'ops_arr_dn')
-    ])
+    @mark.parametrize(
+        '_lift_icon', [(True, 'ops_arr_up'), (False, 'ops_arr_dn')]
+    )
     def test_submit_icon(_comm, _lift_icon):
         lift, icon = _lift_icon
         form = _comm.form(lift=lift)

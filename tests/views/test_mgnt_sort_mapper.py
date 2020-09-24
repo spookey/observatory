@@ -9,25 +9,32 @@ VIEW_EP = 'mgnt.view_mapper'
 
 @mark.usefixtures('session')
 class TestMgntSortMapper:
-
     @staticmethod
     @mark.usefixtures('ctx_app')
     @mark.parametrize('direction', ['raise', 'lower'])
     def test_url(direction):
-        assert url_for(
-            ENDPOINT,
-            prompt_slug='test',
-            sensor_slug='demo',
-            direction=direction,
-        ) == f'/manage/mapper/sort/prompt/test/sensor/demo/{direction}'
+        assert (
+            url_for(
+                ENDPOINT,
+                prompt_slug='test',
+                sensor_slug='demo',
+                direction=direction,
+            )
+            == f'/manage/mapper/sort/prompt/test/sensor/demo/{direction}'
+        )
 
     @staticmethod
     def test_no_user(visitor):
-        visitor(ENDPOINT, method='post', params={
-            'prompt_slug': 'prompt',
-            'sensor_slug': 'sensor',
-            'direction': 'lower',
-        }, code=401)
+        visitor(
+            ENDPOINT,
+            method='post',
+            params={
+                'prompt_slug': 'prompt',
+                'sensor_slug': 'sensor',
+                'direction': 'lower',
+            },
+            code=401,
+        )
 
     @staticmethod
     def test_form_params(visitor, gen_user_loggedin, gen_prompt, gen_sensor):
@@ -38,7 +45,7 @@ class TestMgntSortMapper:
             prompt_slug=mapper.prompt.slug,
             sensor_slug=mapper.sensor.slug,
             direction='lower',
-            _external=True
+            _external=True,
         )
         res = visitor(VIEW_EP)
         form = res.soup.select(f'form[action="{url}"]')[-1]
@@ -53,7 +60,7 @@ class TestMgntSortMapper:
             prompt_slug=mapper.prompt.slug,
             sensor_slug=mapper.sensor.slug,
             direction='lower',
-            _external=True
+            _external=True,
         )
         res = visitor(VIEW_EP)
         form = res.soup.select(f'form[action="{url}"]')[-1]
@@ -66,11 +73,16 @@ class TestMgntSortMapper:
         gen_user_loggedin()
         slug = '🐁'
 
-        res = visitor(ENDPOINT, method='post', params={
-            'sensor_slug': slug,
-            'prompt_slug': slug,
-            'direction': 'raise',
-        }, code=500)
+        res = visitor(
+            ENDPOINT,
+            method='post',
+            params={
+                'sensor_slug': slug,
+                'prompt_slug': slug,
+                'direction': 'raise',
+            },
+            code=500,
+        )
 
         assert 'no such mapper' in res.soup.text.lower()
 
@@ -86,11 +98,16 @@ class TestMgntSortMapper:
         view_url = url_for(VIEW_EP, _external=True)
 
         def _order(mapper, lift):
-            res = visitor(ENDPOINT, method='post', params={
-                'sensor_slug': mapper.sensor.slug,
-                'prompt_slug': mapper.prompt.slug,
-                'direction': 'raise' if lift else 'lower',
-            }, code=302)
+            res = visitor(
+                ENDPOINT,
+                method='post',
+                params={
+                    'sensor_slug': mapper.sensor.slug,
+                    'prompt_slug': mapper.prompt.slug,
+                    'direction': 'raise' if lift else 'lower',
+                },
+                code=302,
+            )
 
             assert res.request.headers['LOCATION'] == view_url
             return Mapper.query_sorted().all()

@@ -23,7 +23,6 @@ from observatory.views.user import BLUEPRINT_USER
 
 
 class TestApp:
-
     @staticmethod
     def test_extensions(app):
         assert app.extensions['csrf'] == CSRF_PROTECT
@@ -44,11 +43,15 @@ class TestApp:
     @staticmethod
     def test_blueprints(app):
         blueprints = [
-            BLUEPRINT_MAIN, BLUEPRINT_MGNT,
-            BLUEPRINT_SIDE, BLUEPRINT_USER,
+            BLUEPRINT_MAIN,
+            BLUEPRINT_MGNT,
+            BLUEPRINT_SIDE,
+            BLUEPRINT_USER,
             BP_CLI,
-            BP_REST_CHARTS, BP_REST_MAPPER,
-            BP_REST_PROMPT, BP_REST_SENSOR,
+            BP_REST_CHARTS,
+            BP_REST_MAPPER,
+            BP_REST_PROMPT,
+            BP_REST_SENSOR,
         ]
         for blueprint in app.blueprints.values():
             assert blueprint in blueprints
@@ -59,14 +62,14 @@ class TestApp:
     @staticmethod
     def test_template_functions(app):
         for func in (
-                form_drop_mapper,
-                form_drop_prompt,
-                form_drop_sensor,
-                form_sort_mapper,
-                form_sort_prompt,
-                form_sort_sensor,
-                script_config_data,
-                tagline,
+            form_drop_mapper,
+            form_drop_prompt,
+            form_drop_sensor,
+            form_sort_mapper,
+            form_sort_prompt,
+            form_sort_sensor,
+            script_config_data,
+            tagline,
         ):
             assert app.jinja_env.globals[func.__name__] is func
 

@@ -18,11 +18,12 @@ def test_errorcodes():
 
         return count
 
-    total = sum([
-        _check(400, 401),
-        _check(403, 404),
-        _check(418),
-
-        _check(500, 504),
-    ])
+    total = sum(
+        [
+            _check(400, 401),
+            _check(403, 404),
+            _check(418),
+            _check(500, 504),
+        ]
+    )
     assert len(ERROR_CODES) == total

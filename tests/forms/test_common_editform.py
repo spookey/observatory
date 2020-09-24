@@ -13,9 +13,17 @@ def _comm(request, gen_prompt, gen_sensor):
         pass
 
     res.form, res.model, res.gen_common = (
-        PromptEditForm, Prompt, gen_prompt,
-    ) if request.param == 'prompt' else (
-        SensorEditForm, Sensor, gen_sensor,
+        (
+            PromptEditForm,
+            Prompt,
+            gen_prompt,
+        )
+        if request.param == 'prompt'
+        else (
+            SensorEditForm,
+            Sensor,
+            gen_sensor,
+        )
     )
 
     yield res
@@ -23,7 +31,6 @@ def _comm(request, gen_prompt, gen_sensor):
 
 @mark.usefixtures('session', 'ctx_app')
 class TestCommonEditForm:
-
     @staticmethod
     def test_basic_fields(_comm):
         form = _comm.form()
@@ -75,9 +82,7 @@ class TestCommonEditForm:
     def test_slug_conflict(_comm):
         orig = _comm.gen_common(slug='original')
         edit = _comm.gen_common(slug='editing')
-        form = _comm.form(
-            obj=edit, formdata=MultiDict({'slug': orig.slug})
-        )
+        form = _comm.form(obj=edit, formdata=MultiDict({'slug': orig.slug}))
         assert form.validate() is False
         assert 'slug conflict' in form.slug.errors[-1].lower()
 
@@ -90,9 +95,14 @@ class TestCommonEditForm:
         thing = _comm.gen_common()
         assert _comm.model.query.all() == [thing]
         form = SensorEditForm(
-            obj=thing, formdata=MultiDict({
-                'slug': slug, 'title': title, 'description': description,
-            })
+            obj=thing,
+            formdata=MultiDict(
+                {
+                    'slug': slug,
+                    'title': title,
+                    'description': description,
+                }
+            ),
         )
         assert form.validate() is True
         edited = form.action()

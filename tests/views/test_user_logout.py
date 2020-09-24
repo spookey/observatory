@@ -7,7 +7,6 @@ ENDPOINT = 'user.logout'
 
 @mark.usefixtures('session')
 class TestUserLogout:
-
     @staticmethod
     @mark.usefixtures('ctx_app')
     def test_url():

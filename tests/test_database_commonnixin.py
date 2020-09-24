@@ -17,7 +17,6 @@ class CommonMixinPhony(CommonMixin, Model):
 
 @mark.usefixtures('session')
 class TestCommonMixin:
-
     @staticmethod
     def test_fields():
         cmn = CommonMixinPhony.create(

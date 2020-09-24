@@ -12,12 +12,14 @@ ENDPOINT = 'api.mapper.single'
 
 @mark.usefixtures('session')
 class TestMapperSingle:
-
     @staticmethod
     def test_url():
-        assert url_for(
-            ENDPOINT, prompt_slug='prompt_test', sensor_slug='sensor_test'
-        ) == '/api/mapper/prompt/prompt_test/sensor/sensor_test'
+        assert (
+            url_for(
+                ENDPOINT, prompt_slug='prompt_test', sensor_slug='sensor_test'
+            )
+            == '/api/mapper/prompt/prompt_test/sensor/sensor_test'
+        )
 
     @staticmethod
     def test_marshal():
@@ -43,17 +45,25 @@ class TestMapperSingle:
 
     @staticmethod
     def test_get_empty(visitor):
-        res = visitor(ENDPOINT, params={
-            'prompt_slug': 'prompt_test', 'sensor_slug': 'sensor_test',
-        }, code=404)
+        res = visitor(
+            ENDPOINT,
+            params={
+                'prompt_slug': 'prompt_test',
+                'sensor_slug': 'sensor_test',
+            },
+            code=404,
+        )
         assert 'not present' in res.json['message'].lower()
 
     @staticmethod
     def test_get_listing(visitor, gen_prompt, gen_sensor):
         mapper = Mapper.create(prompt=gen_prompt(), sensor=gen_sensor())
 
-        res = visitor(ENDPOINT, params={
-            'prompt_slug': mapper.prompt.slug,
-            'sensor_slug': mapper.sensor.slug,
-        })
+        res = visitor(
+            ENDPOINT,
+            params={
+                'prompt_slug': mapper.prompt.slug,
+                'sensor_slug': mapper.sensor.slug,
+            },
+        )
         assert res.json == marshal(mapper, MapperSingle.SINGLE_GET)

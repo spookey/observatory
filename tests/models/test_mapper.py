@@ -15,14 +15,14 @@ from observatory.start.environment import FMT_STRFTIME
 
 @mark.usefixtures('session')
 class TestMapper:
-
     @staticmethod
     def test_default_fields(gen_prompt, gen_sensor):
         prompt = gen_prompt()
         sensor = gen_sensor()
 
         mapper = Mapper.create(
-            prompt=prompt, sensor=sensor,
+            prompt=prompt,
+            sensor=sensor,
         )
 
         assert mapper.prompt == prompt
@@ -93,9 +93,10 @@ class TestMapper:
     def test_created_epoch(gen_prompt, gen_sensor):
         mapper = Mapper.create(prompt=gen_prompt(), sensor=gen_sensor())
 
-        assert mapper.created_epoch <= (
-            mapper.created - datetime.utcfromtimestamp(0)
-        ).total_seconds()
+        assert (
+            mapper.created_epoch
+            <= (mapper.created - datetime.utcfromtimestamp(0)).total_seconds()
+        )
         assert mapper.created_epoch_ms == 1000 * mapper.created_epoch
 
     @staticmethod

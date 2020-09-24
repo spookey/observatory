@@ -13,11 +13,21 @@ def _comm(request, visitor, gen_prompt, gen_sensor, gen_user_loggedin):
     res.login = gen_user_loggedin
     res.visitor = visitor
     res.endpoint, res.view_ep, res.model, res.gen_common, res.url = (
-        'mgnt.drop_prompt', 'mgnt.view_prompt',
-        Prompt, gen_prompt, '/manage/prompt/drop',
-    ) if request.param == 'prompt' else (
-        'mgnt.drop_sensor', 'mgnt.view_sensor',
-        Sensor, gen_sensor, '/manage/sensor/drop',
+        (
+            'mgnt.drop_prompt',
+            'mgnt.view_prompt',
+            Prompt,
+            gen_prompt,
+            '/manage/prompt/drop',
+        )
+        if request.param == 'prompt'
+        else (
+            'mgnt.drop_sensor',
+            'mgnt.view_sensor',
+            Sensor,
+            gen_sensor,
+            '/manage/sensor/drop',
+        )
     )
 
     yield res
@@ -25,7 +35,6 @@ def _comm(request, visitor, gen_prompt, gen_sensor, gen_user_loggedin):
 
 @mark.usefixtures('session')
 class TestMgntDropCommon:
-
     @staticmethod
     @mark.usefixtures('ctx_app')
     def test_url(_comm):
@@ -33,9 +42,9 @@ class TestMgntDropCommon:
 
     @staticmethod
     def test_no_user(_comm):
-        _comm.visitor(_comm.endpoint, method='post', params={
-            'slug': 'slug'
-        }, code=401)
+        _comm.visitor(
+            _comm.endpoint, method='post', params={'slug': 'slug'}, code=401
+        )
 
     @staticmethod
     def test_form_params(_comm):
@@ -62,9 +71,14 @@ class TestMgntDropCommon:
         _comm.login()
         slug = '🐢'
 
-        res = _comm.visitor(_comm.endpoint, method='post', params={
-            'slug': slug,
-        }, code=500)
+        res = _comm.visitor(
+            _comm.endpoint,
+            method='post',
+            params={
+                'slug': slug,
+            },
+            code=500,
+        )
 
         message = f'no such {_comm.model.__name__}'
         assert message.lower() in res.soup.text.lower()
@@ -76,9 +90,14 @@ class TestMgntDropCommon:
         view_url = url_for(_comm.view_ep, _external=True)
 
         assert _comm.model.query.all() == [thing]
-        res = _comm.visitor(_comm.endpoint, method='post', params={
-            'slug': thing.slug,
-        }, code=302)
+        res = _comm.visitor(
+            _comm.endpoint,
+            method='post',
+            params={
+                'slug': thing.slug,
+            },
+            code=302,
+        )
 
         assert res.request.headers['LOCATION'] == view_url
         assert _comm.model.query.all() == []

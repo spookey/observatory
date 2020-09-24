@@ -46,8 +46,7 @@ def test_submitbutton_form():
         submit = SubmitField(
             'Submit',
             widget=SubmitButtonInput(
-                icon=icon,
-                classreplace_kw={class_drop: class_add}
+                icon=icon, classreplace_kw={class_drop: class_add}
             ),
             render_kw={'class_': f'{class_} {class_drop}'},
         )

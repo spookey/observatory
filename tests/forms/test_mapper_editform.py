@@ -13,7 +13,6 @@ from observatory.models.mapper import (
 
 @mark.usefixtures('session', 'ctx_app')
 class TestMapperEditForm:
-
     @staticmethod
     def test_basic_fields():
         form = MapperEditForm()
@@ -79,10 +78,14 @@ class TestMapperEditForm:
 
     @staticmethod
     def test_commons_unknown():
-        form = MapperEditForm(formdata=MultiDict({
-            'prompt_sel': 42,
-            'sensor_sel': 23,
-        }))
+        form = MapperEditForm(
+            formdata=MultiDict(
+                {
+                    'prompt_sel': 42,
+                    'sensor_sel': 23,
+                }
+            )
+        )
         assert form.validate() is False
         assert form.mapper is None
 
@@ -104,20 +107,25 @@ class TestMapperEditForm:
     @staticmethod
     def test_commons_conflict(gen_prompt, gen_sensor):
         orig = Mapper.create(
-            prompt=gen_prompt(slug='orig'), sensor=gen_sensor(slug='orig'),
+            prompt=gen_prompt(slug='orig'),
+            sensor=gen_sensor(slug='orig'),
         )
         edit = Mapper.create(
-            prompt=gen_prompt(slug='edit'), sensor=gen_sensor(slug='edit'),
+            prompt=gen_prompt(slug='edit'),
+            sensor=gen_sensor(slug='edit'),
         )
         form = MapperEditForm(
-            obj=edit, formdata=MultiDict({
-                'prompt_sel': orig.prompt.prime,
-                'sensor_sel': orig.sensor.prime,
-                'color_sel': orig.color.color,
-                'convert_sel': orig.horizon.value,
-                'horizon_sel': orig.horizon.value,
-                'elevate': orig.elevate,
-            }),
+            obj=edit,
+            formdata=MultiDict(
+                {
+                    'prompt_sel': orig.prompt.prime,
+                    'sensor_sel': orig.sensor.prime,
+                    'color_sel': orig.color.color,
+                    'convert_sel': orig.horizon.value,
+                    'horizon_sel': orig.horizon.value,
+                    'elevate': orig.elevate,
+                }
+            ),
         )
         assert form.validate() is False
         assert 'combination conflict' in form.prompt_sel.errors[-1].lower()
@@ -131,19 +139,23 @@ class TestMapperEditForm:
         elevate = 23.42
 
         mapper = Mapper.create(
-            prompt=gen_prompt(), sensor=gen_sensor(),
+            prompt=gen_prompt(),
+            sensor=gen_sensor(),
         )
         assert Mapper.query.all() == [mapper]
         form = MapperEditForm(
-            obj=mapper, formdata=MultiDict({
-                'prompt_sel': mapper.prompt.prime,
-                'sensor_sel': mapper.sensor.prime,
-                'active': False,
-                'color_sel': color.color,
-                'convert_sel': convert.value,
-                'horizon_sel': horizon.value,
-                'elevate': elevate,
-            }),
+            obj=mapper,
+            formdata=MultiDict(
+                {
+                    'prompt_sel': mapper.prompt.prime,
+                    'sensor_sel': mapper.sensor.prime,
+                    'active': False,
+                    'color_sel': color.color,
+                    'convert_sel': convert.value,
+                    'horizon_sel': horizon.value,
+                    'elevate': elevate,
+                }
+            ),
         )
         assert form.validate() is True
         edited = form.action()
@@ -163,10 +175,15 @@ class TestMapperEditForm:
         convert = EnumConvert.INTEGER
         horizon = EnumHorizon.INVERT
 
-        form = MapperEditForm(obj=Mapper.create(
-            prompt=prompt, sensor=sensor,
-            color=color, convert=convert, horizon=horizon,
-        ))
+        form = MapperEditForm(
+            obj=Mapper.create(
+                prompt=prompt,
+                sensor=sensor,
+                color=color,
+                convert=convert,
+                horizon=horizon,
+            )
+        )
         assert form.prompt_sel.data != prompt.prime
         assert form.sensor_sel.data != sensor.prime
         assert form.color_sel.data != color.color

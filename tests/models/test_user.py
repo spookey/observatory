@@ -9,7 +9,6 @@ from observatory.start.environment import FMT_STRFTIME
 
 @mark.usefixtures('session')
 class TestUser:
-
     @staticmethod
     def test_default_fields(gen_user):
         start = datetime.utcnow()
@@ -74,9 +73,10 @@ class TestUser:
     @staticmethod
     def test_created_epoch(gen_user):
         user = gen_user()
-        assert user.created_epoch <= (
-            user.created - datetime.utcfromtimestamp(0)
-        ).total_seconds()
+        assert (
+            user.created_epoch
+            <= (user.created - datetime.utcfromtimestamp(0)).total_seconds()
+        )
         assert user.created_epoch_ms == 1000 * user.created_epoch
 
     @staticmethod
@@ -148,7 +148,8 @@ class TestUser:
         assert user.last_login_epoch is None
         assert user.last_login_epoch_ms is None
         user.refresh()
-        assert user.last_login_epoch <= (
-            user.last_login - datetime.utcfromtimestamp(0)
-        ).total_seconds()
+        assert (
+            user.last_login_epoch
+            <= (user.last_login - datetime.utcfromtimestamp(0)).total_seconds()
+        )
         assert user.last_login_epoch_ms == 1000 * user.last_login_epoch

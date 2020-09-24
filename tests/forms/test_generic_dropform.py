@@ -17,8 +17,9 @@ def _comm(request, gen_prompt, gen_sensor):
         'prompt': (PromptDropForm, Prompt, gen_prompt),
         'sensor': (SensorDropForm, Sensor, gen_sensor),
         'mapper': (
-            MapperDropForm, Mapper,
-            lambda: Mapper.create(prompt=gen_prompt(), sensor=gen_sensor())
+            MapperDropForm,
+            Mapper,
+            lambda: Mapper.create(prompt=gen_prompt(), sensor=gen_sensor()),
         ),
     }.get(request.param)
 
@@ -27,7 +28,6 @@ def _comm(request, gen_prompt, gen_sensor):
 
 @mark.usefixtures('session', 'ctx_app')
 class TestGenericDropForm:
-
     @staticmethod
     def test_basic_fields(_comm):
         form = _comm.form()

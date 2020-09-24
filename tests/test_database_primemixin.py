@@ -13,7 +13,6 @@ class PrimeMixinPhony(PrimeMixin, DB.Model):
 
 @mark.usefixtures('session')
 class TestPrimeMixin:
-
     @staticmethod
     def test_primekey_init():
         pri = PrimeMixinPhony()

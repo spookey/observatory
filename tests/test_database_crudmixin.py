@@ -16,7 +16,6 @@ class CRUDMixinPhony(CRUDMixin, DB.Model):
 
 @mark.usefixtures('session')
 class TestCRUDMixin:
-
     @staticmethod
     def test_create_no_commit():
         crud = CRUDMixinPhony.create(value=PAYLOAD, _commit=False)

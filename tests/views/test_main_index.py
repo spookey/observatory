@@ -9,7 +9,6 @@ ENDPOINT = 'main.index'
 
 @mark.usefixtures('session')
 class TestMainIndex:
-
     @staticmethod
     @mark.usefixtures('ctx_app')
     def test_urls():

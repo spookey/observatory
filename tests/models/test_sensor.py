@@ -5,14 +5,11 @@ from observatory.models.sensor import Sensor
 
 
 def _pointsort(points):
-    return list(sorted(
-        points, key=lambda p: p.created, reverse=True
-    ))
+    return list(sorted(points, key=lambda p: p.created, reverse=True))
 
 
 @mark.usefixtures('session')
 class TestSensor:
-
     @staticmethod
     def test_points_field_and_query(gen_sensor):
         sensor = gen_sensor(slug='test')

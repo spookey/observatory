@@ -42,7 +42,6 @@ def test_is_slugable():
 
 
 class TestExtractSlug:
-
     @staticmethod
     def __call__(slug=None, p_slug=None, s_slug=None):
         def res():
@@ -72,29 +71,28 @@ class TestExtractSlug:
         assert extract_slug(self(slug='    ')) == ''
 
     def test_mapper(self):
-        assert extract_slug(
-            self(p_slug='prompt', s_slug='sensor')
-        ) == 'prompt sensor'
-        assert extract_slug(
-            self(p_slug='      ', s_slug='sensor')
-        ) == 'sensor'
-        assert extract_slug(
-            self(p_slug='prompt', s_slug='      ')
-        ) == 'prompt'
-        assert extract_slug(
-            self(p_slug='      ', s_slug='      ')
-        ) == ''
+        assert (
+            extract_slug(self(p_slug='prompt', s_slug='sensor'))
+            == 'prompt sensor'
+        )
+        assert extract_slug(self(p_slug='      ', s_slug='sensor')) == 'sensor'
+        assert extract_slug(self(p_slug='prompt', s_slug='      ')) == 'prompt'
+        assert extract_slug(self(p_slug='      ', s_slug='      ')) == ''
 
     def test_both(self):
-        assert extract_slug(
-            self(slug='slug', p_slug='prompt', s_slug='sensor')
-        ) == 'slug'
-        assert extract_slug(
-            self(slug='slug', p_slug='      ', s_slug='sensor')
-        ) == 'slug'
-        assert extract_slug(
-            self(slug='slug', p_slug='prompt', s_slug='      ')
-        ) == 'slug'
-        assert extract_slug(
-            self(slug='    ', p_slug='prompt', s_slug='sensor')
-        ) == ''
+        assert (
+            extract_slug(self(slug='slug', p_slug='prompt', s_slug='sensor'))
+            == 'slug'
+        )
+        assert (
+            extract_slug(self(slug='slug', p_slug='      ', s_slug='sensor'))
+            == 'slug'
+        )
+        assert (
+            extract_slug(self(slug='slug', p_slug='prompt', s_slug='      '))
+            == 'slug'
+        )
+        assert (
+            extract_slug(self(slug='    ', p_slug='prompt', s_slug='sensor'))
+            == ''
+        )

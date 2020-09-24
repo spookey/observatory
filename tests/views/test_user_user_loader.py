@@ -6,7 +6,6 @@ from observatory.views.user import user_loader
 
 @mark.usefixtures('session')
 class TestUserLoader:
-
     @staticmethod
     def test_user_loader_no_user():
         assert user_loader(23) is None

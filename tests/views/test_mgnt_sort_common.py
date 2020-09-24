@@ -13,11 +13,21 @@ def _comm(request, visitor, gen_prompt, gen_sensor, gen_user_loggedin):
     res.login = gen_user_loggedin
     res.visitor = visitor
     res.endpoint, res.view_ep, res.model, res.gen_common, res.url = (
-        'mgnt.sort_prompt', 'mgnt.view_prompt',
-        Prompt, gen_prompt, '/manage/prompt/sort',
-    ) if request.param == 'prompt' else (
-        'mgnt.sort_sensor', 'mgnt.view_sensor',
-        Sensor, gen_sensor, '/manage/sensor/sort',
+        (
+            'mgnt.sort_prompt',
+            'mgnt.view_prompt',
+            Prompt,
+            gen_prompt,
+            '/manage/prompt/sort',
+        )
+        if request.param == 'prompt'
+        else (
+            'mgnt.sort_sensor',
+            'mgnt.view_sensor',
+            Sensor,
+            gen_sensor,
+            '/manage/sensor/sort',
+        )
     )
 
     yield res
@@ -25,20 +35,26 @@ def _comm(request, visitor, gen_prompt, gen_sensor, gen_user_loggedin):
 
 @mark.usefixtures('session')
 class TestMgntSortCommon:
-
     @staticmethod
     @mark.usefixtures('ctx_app')
     @mark.parametrize('direction', ['raise', 'lower'])
     def test_url(_comm, direction):
-        assert url_for(
-            _comm.endpoint, slug='test', direction=direction
-        ) == f'{_comm.url}/test/{direction}'
+        assert (
+            url_for(_comm.endpoint, slug='test', direction=direction)
+            == f'{_comm.url}/test/{direction}'
+        )
 
     @staticmethod
     def test_no_user(_comm):
-        _comm.visitor(_comm.endpoint, method='post', params={
-            'slug': 'slug', 'direction': 'lower',
-        }, code=401)
+        _comm.visitor(
+            _comm.endpoint,
+            method='post',
+            params={
+                'slug': 'slug',
+                'direction': 'lower',
+            },
+            code=401,
+        )
 
     @staticmethod
     def test_form_params(_comm):
@@ -69,9 +85,15 @@ class TestMgntSortCommon:
         _comm.login()
         slug = '🐇'
 
-        res = _comm.visitor(_comm.endpoint, method='post', params={
-            'slug': slug, 'direction': 'raise',
-        }, code=500)
+        res = _comm.visitor(
+            _comm.endpoint,
+            method='post',
+            params={
+                'slug': slug,
+                'direction': 'raise',
+            },
+            code=500,
+        )
 
         name = _comm.model.__name__.lower()
         assert f'no such {name}' in res.soup.text.lower()
@@ -85,10 +107,15 @@ class TestMgntSortCommon:
         view_url = url_for(_comm.view_ep, _external=True)
 
         def _order(thing, lift):
-            res = _comm.visitor(_comm.endpoint, method='post', params={
-                'slug': thing.slug,
-                'direction': 'raise' if lift else 'lower',
-            }, code=302)
+            res = _comm.visitor(
+                _comm.endpoint,
+                method='post',
+                params={
+                    'slug': thing.slug,
+                    'direction': 'raise' if lift else 'lower',
+                },
+                code=302,
+            )
 
             assert res.request.headers['LOCATION'] == view_url
             return _comm.model.query_sorted().all()

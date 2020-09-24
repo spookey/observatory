@@ -14,7 +14,6 @@ def make_obj(**kwargs):
 
 
 class TestSlugUrl:
-
     @staticmethod
     def test_empty():
         obj = make_obj()
@@ -50,7 +49,6 @@ class TestSlugUrl:
 
 
 class TestMapperSlugUrl:
-
     @staticmethod
     def test_empty():
         obj = make_obj()

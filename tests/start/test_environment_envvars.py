@@ -5,9 +5,9 @@ from observatory.start import environment
 
 
 def test_database(monkeypatch):
-    db_path = path.abspath(path.join(
-        environment.ROOT_DIR, 'database_dev.sqlite'
-    ))
+    db_path = path.abspath(
+        path.join(environment.ROOT_DIR, 'database_dev.sqlite')
+    )
     assert environment.DATABASE == 'sqlite://'
     assert environment.DATABASE_DEV == f'sqlite:///{db_path}'
 

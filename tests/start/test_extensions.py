@@ -10,7 +10,6 @@ from observatory.start.extensions import (
 
 
 class TestExtensions:
-
     @staticmethod
     def test_for_bcrypt(app):
         assert BCRYPT is not None

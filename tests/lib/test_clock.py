@@ -26,9 +26,7 @@ def test_epoch_for_timestamp():
 def test_epoch_now():
     start = datetime.utcnow()
     res = epoch_seconds(start)
-    assert res <= (
-        start - datetime.utcfromtimestamp(0)
-    ).total_seconds()
+    assert res <= (start - datetime.utcfromtimestamp(0)).total_seconds()
 
 
 def test_is_outdated():

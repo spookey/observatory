@@ -13,14 +13,16 @@ ENDPOINT = 'mgnt.edit_mapper'
 
 @mark.usefixtures('session')
 class TestMgntEditMapper:
-
     @staticmethod
     @mark.usefixtures('ctx_app')
     def test_url():
         assert url_for(ENDPOINT) == '/manage/mapper/edit'
-        assert url_for(
-            ENDPOINT, prompt_slug='the_prompt', sensor_slug='the_sensor'
-        ) == '/manage/mapper/edit/prompt/the_prompt/sensor/the_sensor'
+        assert (
+            url_for(
+                ENDPOINT, prompt_slug='the_prompt', sensor_slug='the_sensor'
+            )
+            == '/manage/mapper/edit/prompt/the_prompt/sensor/the_sensor'
+        )
 
     @staticmethod
     def test_no_user(visitor):
@@ -45,7 +47,7 @@ class TestMgntEditMapper:
             (
                 inp.attrs.get('name'),
                 inp.attrs.get('type', '_sl_'),
-                inp.attrs.get('data-colorize', '_cl_')
+                inp.attrs.get('data-colorize', '_cl_'),
             )
             for inp in form.select('input,select,button')
         ]
@@ -64,21 +66,29 @@ class TestMgntEditMapper:
     def test_form_wrong(visitor, gen_user_loggedin):
         gen_user_loggedin()
 
-        res = visitor(ENDPOINT, method='post', data={
-            'prompt_sel': 23, 'sensor_sel': 42,
-            'active': True, 'color_sel': 'stained',
-            'convert_sel': 99, 'horizon_sel': 99,
-            'elevate': -1.23, 'submit': True,
-        })
+        res = visitor(
+            ENDPOINT,
+            method='post',
+            data={
+                'prompt_sel': 23,
+                'sensor_sel': 42,
+                'active': True,
+                'color_sel': 'stained',
+                'convert_sel': 99,
+                'horizon_sel': 99,
+                'elevate': -1.23,
+                'submit': True,
+            },
+        )
 
         form = res.soup.select('form')[-1]
         assert form.select('#prompt_sel option') == []
         assert form.select('#sensor_sel option') == []
         assert form.select('#active')[-1].attrs['value'] == 'True'
         for sel in [
-                '#color_sel option',
-                '#convert_sel option',
-                '#horizon_sel option'
+            '#color_sel option',
+            '#convert_sel option',
+            '#horizon_sel option',
         ]:
             for opt in form.select(sel):
                 assert opt.get('selected') is None
@@ -95,12 +105,21 @@ class TestMgntEditMapper:
         elevate = 23.42
         view_url = url_for('mgnt.view_mapper', _external=True)
 
-        res = visitor(ENDPOINT, method='post', data={
-            'prompt_sel': prompt.prime, 'sensor_sel': sensor.prime,
-            'active': True, 'color_sel': color.color,
-            'convert_sel': convert.value, 'horizon_sel': horizon.value,
-            'elevate': elevate, 'submit': True,
-        }, code=302)
+        res = visitor(
+            ENDPOINT,
+            method='post',
+            data={
+                'prompt_sel': prompt.prime,
+                'sensor_sel': sensor.prime,
+                'active': True,
+                'color_sel': color.color,
+                'convert_sel': convert.value,
+                'horizon_sel': horizon.value,
+                'elevate': elevate,
+                'submit': True,
+            },
+            code=302,
+        )
 
         assert res.request.headers['LOCATION'] == view_url
         mapper = Mapper.query.first()
@@ -114,25 +133,30 @@ class TestMgntEditMapper:
 
     @staticmethod
     def test_form_set_selections(
-            visitor, gen_prompt, gen_sensor, gen_user_loggedin
+        visitor, gen_prompt, gen_sensor, gen_user_loggedin
     ):
         gen_user_loggedin()
         mapper = Mapper.create(
-            prompt=gen_prompt(), sensor=gen_sensor(),
+            prompt=gen_prompt(),
+            sensor=gen_sensor(),
             color=EnumColor.GREEN,
             convert=EnumConvert.BOOLEAN,
             horizon=EnumHorizon.INVERT,
         )
 
-        res = visitor(ENDPOINT, params={
-            'prompt_slug': mapper.prompt.slug,
-            'sensor_slug': mapper.sensor.slug,
-        })
+        res = visitor(
+            ENDPOINT,
+            params={
+                'prompt_slug': mapper.prompt.slug,
+                'sensor_slug': mapper.sensor.slug,
+            },
+        )
 
         def _check(elem_id, expected):
-            assert res.soup.select(
-                f'{elem_id} > option[selected]'
-            )[-1]['value'] == f'{expected}'
+            assert (
+                res.soup.select(f'{elem_id} > option[selected]')[-1]['value']
+                == f'{expected}'
+            )
 
         _check('#prompt_sel', mapper.prompt.prime)
         _check('#sensor_sel', mapper.sensor.prime)
@@ -152,14 +176,25 @@ class TestMgntEditMapper:
         horizon = EnumHorizon.INVERT
         elevate = 42.23
 
-        visitor(ENDPOINT, params={
-            'prompt_slug': prompt.slug, 'sensor_slug': sensor.slug,
-        }, method='post', data={
-            'prompt_sel': prompt.prime, 'sensor_sel': sensor.prime,
-            'active': True, 'color_sel': color.color,
-            'convert_sel': convert.value, 'horizon_sel': horizon.value,
-            'elevate': elevate, 'submit': True,
-        }, code=302)
+        visitor(
+            ENDPOINT,
+            params={
+                'prompt_slug': prompt.slug,
+                'sensor_slug': sensor.slug,
+            },
+            method='post',
+            data={
+                'prompt_sel': prompt.prime,
+                'sensor_sel': sensor.prime,
+                'active': True,
+                'color_sel': color.color,
+                'convert_sel': convert.value,
+                'horizon_sel': horizon.value,
+                'elevate': elevate,
+                'submit': True,
+            },
+            code=302,
+        )
 
         changed = Mapper.query.first()
         assert changed == original

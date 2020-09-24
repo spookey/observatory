@@ -13,18 +13,18 @@ def invoke(ctx_app):
     runner = ctx_app.test_cli_runner()
 
     def run(*args):
-        return runner.invoke(args=[
-            'cli', *(arg for arg in args if arg is not None)
-        ])
+        return runner.invoke(
+            args=['cli', *(arg for arg in args if arg is not None)]
+        )
 
     yield run
+
 
 # pylint: disable=redefined-outer-name
 
 
 @mark.usefixtures('session')
 class TestCli:
-
     @staticmethod
     def test_adduser(invoke):
         username = 'user'
@@ -32,7 +32,11 @@ class TestCli:
         assert User.query.all() == []
 
         result = invoke(
-            'adduser', '--username', username, '--password', password,
+            'adduser',
+            '--username',
+            username,
+            '--password',
+            password,
         )
         assert 'created' in result.output.lower()
 
@@ -47,7 +51,11 @@ class TestCli:
         assert User.query.all() == [user]
 
         result = invoke(
-            'adduser', '--username', user.username, '--password', 'pass',
+            'adduser',
+            '--username',
+            user.username,
+            '--password',
+            'pass',
         )
         assert 'already present' in result.output.lower()
 
@@ -58,7 +66,11 @@ class TestCli:
         assert User.query.all() == []
 
         result = invoke(
-            'adduser', '--username', '🙋‍♀️', '--password', '🤷‍♀️',
+            'adduser',
+            '--username',
+            '🙋‍♀️',
+            '--password',
+            '🤷‍♀️',
         )
         assert 'invalid name' in result.output
 
@@ -74,7 +86,11 @@ class TestCli:
         assert user.check_password(pass_new) is False
 
         result = invoke(
-            'setpass', '--username', user.username, '--password', pass_new,
+            'setpass',
+            '--username',
+            user.username,
+            '--password',
+            pass_new,
         )
         assert 'password changed' in result.output.lower()
 
@@ -87,7 +103,11 @@ class TestCli:
         assert User.query.all() == []
 
         result = invoke(
-            'setpass', '--username', 'user', '--password', 'pass',
+            'setpass',
+            '--username',
+            'user',
+            '--password',
+            'pass',
         )
         assert 'not found' in result.output.lower()
 
@@ -97,7 +117,10 @@ class TestCli:
         assert user.active is True
 
         result = invoke(
-            'setstate', '--username', user.username, '--blocked',
+            'setstate',
+            '--username',
+            user.username,
+            '--blocked',
         )
         assert 'changed to blocked' in result.output.lower()
 
@@ -105,7 +128,10 @@ class TestCli:
         assert user.active is False
 
         result = invoke(
-            'setstate', '--username', user.username, '--active',
+            'setstate',
+            '--username',
+            user.username,
+            '--active',
         )
         assert 'changed to active' in result.output.lower()
 
@@ -117,7 +143,10 @@ class TestCli:
         assert User.query.all() == []
 
         result = invoke(
-            'setstate', '--username', 'user', '--blocked',
+            'setstate',
+            '--username',
+            'user',
+            '--blocked',
         )
         assert 'not found' in result.output.lower()
 
@@ -129,17 +158,30 @@ class TestCli:
         assert Point.query.count() == 0
 
         result = invoke(
-            'sensorcurve', '--slug', sensor.slug, '--axc', axc,
+            'sensorcurve',
+            '--slug',
+            sensor.slug,
+            '--axc',
+            axc,
         )
         assert f'created {num}' in result.output.lower()
 
         assert Point.query.count() == num
 
     @staticmethod
-    @mark.parametrize('params', [
-        (1, '--keep-old',),
-        (0, None,),
-    ])
+    @mark.parametrize(
+        'params',
+        [
+            (
+                1,
+                '--keep-old',
+            ),
+            (
+                0,
+                None,
+            ),
+        ],
+    )
     def test_sensorcurve_keep_old(invoke, gen_sensor, params):
         plus, flag = params
 
@@ -147,13 +189,19 @@ class TestCli:
         num = 1 + 2 * axc
         sensor = gen_sensor()
         point = Point.create(
-            sensor=sensor, value=42,
+            sensor=sensor,
+            value=42,
             created=datetime.utcnow() - timedelta(days=2 * BACKLOG_DAYS),
         )
         assert Point.query.all() == [point]
 
         invoke(
-            'sensorcurve', '--slug', sensor.slug, '--axc', axc, flag,
+            'sensorcurve',
+            '--slug',
+            sensor.slug,
+            '--axc',
+            axc,
+            flag,
         )
         assert Point.query.count() == plus + num
 
@@ -162,7 +210,9 @@ class TestCli:
         assert Sensor.query.all() == []
 
         result = invoke(
-            'sensorcurve', '--slug', 'test',
+            'sensorcurve',
+            '--slug',
+            'test',
         )
         assert 'not present' in result.output.lower()
 
@@ -176,7 +226,9 @@ class TestCli:
         assert Point.query.count() == number
 
         result = invoke(
-            'sensorclear', '--slug', sensor.slug,
+            'sensorclear',
+            '--slug',
+            sensor.slug,
         )
         assert f'deleted {number}' in result.output.lower()
 
@@ -187,6 +239,8 @@ class TestCli:
         assert Sensor.query.all() == []
 
         result = invoke(
-            'sensorclear', '--slug', 'test',
+            'sensorclear',
+            '--slug',
+            'test',
         )
         assert 'not present' in result.output.lower()

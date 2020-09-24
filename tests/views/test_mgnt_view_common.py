@@ -13,11 +13,21 @@ def _comm(request, visitor, gen_prompt, gen_sensor, gen_user_loggedin):
     res.login = gen_user_loggedin
     res.visitor = visitor
     res.endpoint, res.title, res.heading, res.gen_common, res.url = (
-        'mgnt.view_prompt', 'View prompt', 'Prompt',
-        gen_prompt, '/manage/prompt/view',
-    ) if request.param == 'prompt' else (
-        'mgnt.view_sensor', 'View sensor', 'Sensor',
-        gen_sensor, '/manage/sensor/view',
+        (
+            'mgnt.view_prompt',
+            'View prompt',
+            'Prompt',
+            gen_prompt,
+            '/manage/prompt/view',
+        )
+        if request.param == 'prompt'
+        else (
+            'mgnt.view_sensor',
+            'View sensor',
+            'Sensor',
+            gen_sensor,
+            '/manage/sensor/view',
+        )
     )
 
     yield res
@@ -25,7 +35,6 @@ def _comm(request, visitor, gen_prompt, gen_sensor, gen_user_loggedin):
 
 @mark.usefixtures('session')
 class TestMgntViewCommon:
-
     @staticmethod
     @mark.usefixtures('ctx_app')
     def test_url(_comm):
@@ -95,8 +104,8 @@ class TestMgntViewCommon:
         assert mapper.a['href'] == url_for('mgnt.view_mapper')
 
         for elem, href in (
-                (sensor, url_for('mgnt.view_sensor')),
-                (prompt, url_for('mgnt.view_prompt')),
+            (sensor, url_for('mgnt.view_sensor')),
+            (prompt, url_for('mgnt.view_prompt')),
         ):
             if elem.a['href'] == _comm.url:
                 assert 'is-active' in elem.attrs.get('class')

@@ -27,8 +27,9 @@ def _drop(request, gen_prompt, gen_sensor):
         'prompt': (form_drop_prompt, PromptDropForm, gen_prompt),
         'sensor': (form_drop_sensor, SensorDropForm, gen_sensor),
         'mapper': (
-            form_drop_mapper, MapperDropForm,
-            lambda: Mapper.create(prompt=gen_prompt(), sensor=gen_sensor())
+            form_drop_mapper,
+            MapperDropForm,
+            lambda: Mapper.create(prompt=gen_prompt(), sensor=gen_sensor()),
         ),
     }.get(request.param)
 
@@ -44,8 +45,9 @@ def _sort(request, gen_prompt, gen_sensor):
         'prompt': (form_sort_prompt, PromptSortForm, gen_prompt),
         'sensor': (form_sort_sensor, SensorSortForm, gen_sensor),
         'mapper': (
-            form_sort_mapper, MapperSortForm,
-            lambda: Mapper.create(prompt=gen_prompt(), sensor=gen_sensor())
+            form_sort_mapper,
+            MapperSortForm,
+            lambda: Mapper.create(prompt=gen_prompt(), sensor=gen_sensor()),
         ),
     }.get(request.param)
 
@@ -54,7 +56,6 @@ def _sort(request, gen_prompt, gen_sensor):
 
 @mark.usefixtures('session')
 class TestSharedForms:
-
     @staticmethod
     def test_drop_generic_empty(_drop):
         form = _drop.func(None)

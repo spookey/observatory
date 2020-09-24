@@ -15,7 +15,6 @@ class SortMixinPhony(SortMixin, Model):
 
 @mark.usefixtures('session')
 class TestSortMixin:
-
     @staticmethod
     def test_sortkey():
         srt = SortMixinPhony.create()

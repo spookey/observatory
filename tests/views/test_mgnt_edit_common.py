@@ -13,11 +13,21 @@ def _comm(request, visitor, gen_prompt, gen_sensor, gen_user_loggedin):
     res.login = gen_user_loggedin
     res.visitor = visitor
     res.endpoint, res.view_ep, res.model, res.gen_common, res.url = (
-        'mgnt.edit_prompt', 'mgnt.view_prompt',
-        Prompt, gen_prompt, '/manage/prompt/edit',
-    ) if request.param == 'prompt' else (
-        'mgnt.edit_sensor', 'mgnt.view_sensor',
-        Sensor, gen_sensor, '/manage/sensor/edit',
+        (
+            'mgnt.edit_prompt',
+            'mgnt.view_prompt',
+            Prompt,
+            gen_prompt,
+            '/manage/prompt/edit',
+        )
+        if request.param == 'prompt'
+        else (
+            'mgnt.edit_sensor',
+            'mgnt.view_sensor',
+            Sensor,
+            gen_sensor,
+            '/manage/sensor/edit',
+        )
     )
 
     yield res
@@ -25,7 +35,6 @@ def _comm(request, visitor, gen_prompt, gen_sensor, gen_user_loggedin):
 
 @mark.usefixtures('session')
 class TestMgntEditCommon:
-
     @staticmethod
     @mark.usefixtures('ctx_app')
     def test_url(_comm):
@@ -69,10 +78,16 @@ class TestMgntEditCommon:
         title = ''
         description = 'Wrong!'
 
-        res = _comm.visitor(_comm.endpoint, method='post', data={
-            'slug': slug, 'title': title,
-            'description': description, 'submit': True,
-        })
+        res = _comm.visitor(
+            _comm.endpoint,
+            method='post',
+            data={
+                'slug': slug,
+                'title': title,
+                'description': description,
+                'submit': True,
+            },
+        )
 
         form = res.soup.select('form')[-1]
         assert form.select('#slug')[-1].attrs['value'] == slug
@@ -88,10 +103,17 @@ class TestMgntEditCommon:
         description = 'This is my common!'
         view_url = url_for(_comm.view_ep, _external=True)
 
-        res = _comm.visitor(_comm.endpoint, method='post', data={
-            'slug': slug, 'title': title,
-            'description': description, 'submit': True,
-        }, code=302)
+        res = _comm.visitor(
+            _comm.endpoint,
+            method='post',
+            data={
+                'slug': slug,
+                'title': title,
+                'description': description,
+                'submit': True,
+            },
+            code=302,
+        )
 
         assert res.request.headers['LOCATION'] == view_url
         thing = _comm.model.query.first()
@@ -108,12 +130,18 @@ class TestMgntEditCommon:
         title = 'My common'
         description = 'This is my common!'
 
-        _comm.visitor(_comm.endpoint, params={
-            'slug': original.slug
-        }, method='post', data={
-            'slug': slug, 'title': title,
-            'description': description, 'submit': True
-        }, code=302)
+        _comm.visitor(
+            _comm.endpoint,
+            params={'slug': original.slug},
+            method='post',
+            data={
+                'slug': slug,
+                'title': title,
+                'description': description,
+                'submit': True,
+            },
+            code=302,
+        )
 
         changed = _comm.model.query.first()
         assert changed == original

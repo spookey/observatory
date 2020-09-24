@@ -10,7 +10,6 @@ from tests.conftest import USER_NAME, USER_PASS
 
 @mark.usefixtures('session', 'ctx_app')
 class TestLoginForm:
-
     @staticmethod
     def test_basic_fields():
         form = LoginForm()

@@ -15,7 +15,6 @@ ENDINDEX = 'mgnt.index'
 
 @mark.usefixtures('session')
 class TestMgntViewMapper:
-
     @staticmethod
     @mark.usefixtures('ctx_app')
     def test_url():
@@ -50,8 +49,10 @@ class TestMgntViewMapper:
         gen_user_loggedin()
 
         mapper = Mapper.create(
-            prompt=gen_prompt(), sensor=gen_sensor(),
-            color=EnumColor.BLUE, convert=EnumConvert.INTEGER,
+            prompt=gen_prompt(),
+            sensor=gen_sensor(),
+            color=EnumColor.BLUE,
+            convert=EnumConvert.INTEGER,
             horizon=EnumHorizon.INVERT,
         )
 
@@ -77,8 +78,8 @@ class TestMgntViewMapper:
         assert mapper.a['href'] == url_for(ENDPOINT)
 
         for elem, href in (
-                (sensor, url_for('mgnt.view_sensor')),
-                (prompt, url_for('mgnt.view_prompt')),
+            (sensor, url_for('mgnt.view_sensor')),
+            (prompt, url_for('mgnt.view_prompt')),
         ):
             assert not elem.has_attr('class')
             assert elem.a['href'] == href

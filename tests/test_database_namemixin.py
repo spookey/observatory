@@ -13,7 +13,6 @@ class NameMixinPhony(NameMixin, DB.Model):
 
 @mark.usefixtures('session')
 class TestNameMixin:
-
     @staticmethod
     def test_tablename():
         nme = NameMixinPhony()

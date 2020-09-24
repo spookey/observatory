@@ -10,7 +10,6 @@ from observatory.start.environment import FMT_STRFTIME
 
 @mark.usefixtures('session')
 class TestPoint:
-
     @staticmethod
     def test_default_fields(gen_sensor):
         value = 23.5
@@ -32,9 +31,10 @@ class TestPoint:
     def test_epochs(gen_sensor):
         point = Point.create(sensor=gen_sensor(), value=0)
 
-        assert point.created_epoch <= (
-            point.created - datetime.utcfromtimestamp(0)
-        ).total_seconds()
+        assert (
+            point.created_epoch
+            <= (point.created - datetime.utcfromtimestamp(0)).total_seconds()
+        )
         assert point.created_epoch_ms == 1000 * point.created_epoch
 
     @staticmethod
@@ -82,95 +82,322 @@ class TestPoint:
         pos = sensor.append(13.37)
 
         for horizon, convert, elevate, numeric, params in [
-                (None, None, 1.0, False, (
-                    (neg, -23.5), (nil, 0.0), (pos, 13.37),
-                )),
-                (None, None, 1.0, True, (
-                    (neg, -23.5), (nil, 0.0), (pos, 13.37),
-                )),
-                (None, None, 0.0, False, (
-                    (neg, 0.0), (nil, 0.0), (pos, 0.0),
-                )),
-                (None, None, 0.0, True, (
-                    (neg, 0.0), (nil, 0.0), (pos, 0.0),
-                )),
-                (EnumHorizon.NORMAL, EnumConvert.NATURAL, 1.0, False, (
-                    (neg, -23.5), (nil, 0.0), (pos, 13.37),
-                )),
-                (EnumHorizon.NORMAL, EnumConvert.NATURAL, 1.0, True, (
-                    (neg, -23.5), (nil, 0.0), (pos, 13.37),
-                )),
-                (EnumHorizon.NORMAL, EnumConvert.NATURAL, 5.0, False, (
-                    (neg, -117.5), (nil, 0.0), (pos, 66.85),
-                )),
-                (EnumHorizon.NORMAL, EnumConvert.NATURAL, 5.0, True, (
-                    (neg, -117.5), (nil, 0.0), (pos, 66.85),
-                )),
-                (EnumHorizon.INVERT, EnumConvert.NATURAL, 1.0, False, (
-                    (neg, 23.5), (nil, 0.0), (pos, -13.37),
-                )),
-                (EnumHorizon.INVERT, EnumConvert.NATURAL, 1.0, True, (
-                    (neg, 23.5), (nil, 0.0), (pos, -13.37),
-                )),
-                (EnumHorizon.INVERT, EnumConvert.NATURAL, 5.0, False, (
-                    (neg, 117.5), (nil, 0.0), (pos, -66.85),
-                )),
-                (EnumHorizon.INVERT, EnumConvert.NATURAL, 5.0, True, (
-                    (neg, 117.5), (nil, 0.0), (pos, -66.85),
-                )),
-                (EnumHorizon.NORMAL, EnumConvert.INTEGER, 1.0, False, (
-                    (neg, -24), (nil, 0), (pos, 13),
-                )),
-                (EnumHorizon.NORMAL, EnumConvert.INTEGER, 1.0, True, (
-                    (neg, -24), (nil, 0), (pos, 13),
-                )),
-                (EnumHorizon.NORMAL, EnumConvert.INTEGER, 5.0, False, (
-                    (neg, -118), (nil, 0), (pos, 67),
-                )),
-                (EnumHorizon.NORMAL, EnumConvert.INTEGER, 5.0, True, (
-                    (neg, -118), (nil, 0), (pos, 67),
-                )),
-                (EnumHorizon.INVERT, EnumConvert.INTEGER, 1.0, False, (
-                    (neg, 24), (nil, 0), (pos, -13),
-                )),
-                (EnumHorizon.INVERT, EnumConvert.INTEGER, 1.0, True, (
-                    (neg, 24), (nil, 0), (pos, -13),
-                )),
-                (EnumHorizon.INVERT, EnumConvert.INTEGER, 5.0, False, (
-                    (neg, 118), (nil, 0), (pos, -67),
-                )),
-                (EnumHorizon.INVERT, EnumConvert.INTEGER, 5.0, True, (
-                    (neg, 118), (nil, 0), (pos, -67),
-                )),
-                (EnumHorizon.NORMAL, EnumConvert.BOOLEAN, 1.0, False, (
-                    (neg, True), (nil, False), (pos, True),
-                )),
-                (EnumHorizon.NORMAL, EnumConvert.BOOLEAN, 1.0, True, (
-                    (neg, 1.0), (nil, 0.0), (pos, 1.0),
-                )),
-                (EnumHorizon.NORMAL, EnumConvert.BOOLEAN, 5.0, False, (
-                    (neg, True), (nil, False), (pos, True),
-                )),
-                (EnumHorizon.NORMAL, EnumConvert.BOOLEAN, 5.0, True, (
-                    (neg, 5.0), (nil, 0.0), (pos, 5.0),
-                )),
-                (EnumHorizon.INVERT, EnumConvert.BOOLEAN, 1.0, False, (
-                    (neg, True), (nil, False), (pos, True),
-                )),
-                (EnumHorizon.INVERT, EnumConvert.BOOLEAN, 1.0, True, (
-                    (neg, -1.0), (nil, 0.0), (pos, -1.0),
-                )),
-                (EnumHorizon.INVERT, EnumConvert.BOOLEAN, 5.0, False, (
-                    (neg, True), (nil, False), (pos, True),
-                )),
-                (EnumHorizon.INVERT, EnumConvert.BOOLEAN, 5.0, True, (
-                    (neg, -5.0), (nil, 0.0), (pos, -5.0),
-                )),
+            (
+                None,
+                None,
+                1.0,
+                False,
+                (
+                    (neg, -23.5),
+                    (nil, 0.0),
+                    (pos, 13.37),
+                ),
+            ),
+            (
+                None,
+                None,
+                1.0,
+                True,
+                (
+                    (neg, -23.5),
+                    (nil, 0.0),
+                    (pos, 13.37),
+                ),
+            ),
+            (
+                None,
+                None,
+                0.0,
+                False,
+                (
+                    (neg, 0.0),
+                    (nil, 0.0),
+                    (pos, 0.0),
+                ),
+            ),
+            (
+                None,
+                None,
+                0.0,
+                True,
+                (
+                    (neg, 0.0),
+                    (nil, 0.0),
+                    (pos, 0.0),
+                ),
+            ),
+            (
+                EnumHorizon.NORMAL,
+                EnumConvert.NATURAL,
+                1.0,
+                False,
+                (
+                    (neg, -23.5),
+                    (nil, 0.0),
+                    (pos, 13.37),
+                ),
+            ),
+            (
+                EnumHorizon.NORMAL,
+                EnumConvert.NATURAL,
+                1.0,
+                True,
+                (
+                    (neg, -23.5),
+                    (nil, 0.0),
+                    (pos, 13.37),
+                ),
+            ),
+            (
+                EnumHorizon.NORMAL,
+                EnumConvert.NATURAL,
+                5.0,
+                False,
+                (
+                    (neg, -117.5),
+                    (nil, 0.0),
+                    (pos, 66.85),
+                ),
+            ),
+            (
+                EnumHorizon.NORMAL,
+                EnumConvert.NATURAL,
+                5.0,
+                True,
+                (
+                    (neg, -117.5),
+                    (nil, 0.0),
+                    (pos, 66.85),
+                ),
+            ),
+            (
+                EnumHorizon.INVERT,
+                EnumConvert.NATURAL,
+                1.0,
+                False,
+                (
+                    (neg, 23.5),
+                    (nil, 0.0),
+                    (pos, -13.37),
+                ),
+            ),
+            (
+                EnumHorizon.INVERT,
+                EnumConvert.NATURAL,
+                1.0,
+                True,
+                (
+                    (neg, 23.5),
+                    (nil, 0.0),
+                    (pos, -13.37),
+                ),
+            ),
+            (
+                EnumHorizon.INVERT,
+                EnumConvert.NATURAL,
+                5.0,
+                False,
+                (
+                    (neg, 117.5),
+                    (nil, 0.0),
+                    (pos, -66.85),
+                ),
+            ),
+            (
+                EnumHorizon.INVERT,
+                EnumConvert.NATURAL,
+                5.0,
+                True,
+                (
+                    (neg, 117.5),
+                    (nil, 0.0),
+                    (pos, -66.85),
+                ),
+            ),
+            (
+                EnumHorizon.NORMAL,
+                EnumConvert.INTEGER,
+                1.0,
+                False,
+                (
+                    (neg, -24),
+                    (nil, 0),
+                    (pos, 13),
+                ),
+            ),
+            (
+                EnumHorizon.NORMAL,
+                EnumConvert.INTEGER,
+                1.0,
+                True,
+                (
+                    (neg, -24),
+                    (nil, 0),
+                    (pos, 13),
+                ),
+            ),
+            (
+                EnumHorizon.NORMAL,
+                EnumConvert.INTEGER,
+                5.0,
+                False,
+                (
+                    (neg, -118),
+                    (nil, 0),
+                    (pos, 67),
+                ),
+            ),
+            (
+                EnumHorizon.NORMAL,
+                EnumConvert.INTEGER,
+                5.0,
+                True,
+                (
+                    (neg, -118),
+                    (nil, 0),
+                    (pos, 67),
+                ),
+            ),
+            (
+                EnumHorizon.INVERT,
+                EnumConvert.INTEGER,
+                1.0,
+                False,
+                (
+                    (neg, 24),
+                    (nil, 0),
+                    (pos, -13),
+                ),
+            ),
+            (
+                EnumHorizon.INVERT,
+                EnumConvert.INTEGER,
+                1.0,
+                True,
+                (
+                    (neg, 24),
+                    (nil, 0),
+                    (pos, -13),
+                ),
+            ),
+            (
+                EnumHorizon.INVERT,
+                EnumConvert.INTEGER,
+                5.0,
+                False,
+                (
+                    (neg, 118),
+                    (nil, 0),
+                    (pos, -67),
+                ),
+            ),
+            (
+                EnumHorizon.INVERT,
+                EnumConvert.INTEGER,
+                5.0,
+                True,
+                (
+                    (neg, 118),
+                    (nil, 0),
+                    (pos, -67),
+                ),
+            ),
+            (
+                EnumHorizon.NORMAL,
+                EnumConvert.BOOLEAN,
+                1.0,
+                False,
+                (
+                    (neg, True),
+                    (nil, False),
+                    (pos, True),
+                ),
+            ),
+            (
+                EnumHorizon.NORMAL,
+                EnumConvert.BOOLEAN,
+                1.0,
+                True,
+                (
+                    (neg, 1.0),
+                    (nil, 0.0),
+                    (pos, 1.0),
+                ),
+            ),
+            (
+                EnumHorizon.NORMAL,
+                EnumConvert.BOOLEAN,
+                5.0,
+                False,
+                (
+                    (neg, True),
+                    (nil, False),
+                    (pos, True),
+                ),
+            ),
+            (
+                EnumHorizon.NORMAL,
+                EnumConvert.BOOLEAN,
+                5.0,
+                True,
+                (
+                    (neg, 5.0),
+                    (nil, 0.0),
+                    (pos, 5.0),
+                ),
+            ),
+            (
+                EnumHorizon.INVERT,
+                EnumConvert.BOOLEAN,
+                1.0,
+                False,
+                (
+                    (neg, True),
+                    (nil, False),
+                    (pos, True),
+                ),
+            ),
+            (
+                EnumHorizon.INVERT,
+                EnumConvert.BOOLEAN,
+                1.0,
+                True,
+                (
+                    (neg, -1.0),
+                    (nil, 0.0),
+                    (pos, -1.0),
+                ),
+            ),
+            (
+                EnumHorizon.INVERT,
+                EnumConvert.BOOLEAN,
+                5.0,
+                False,
+                (
+                    (neg, True),
+                    (nil, False),
+                    (pos, True),
+                ),
+            ),
+            (
+                EnumHorizon.INVERT,
+                EnumConvert.BOOLEAN,
+                5.0,
+                True,
+                (
+                    (neg, -5.0),
+                    (nil, 0.0),
+                    (pos, -5.0),
+                ),
+            ),
         ]:
             for point, expect in params:
-                assert point.translate(
-                    horizon=horizon,
-                    convert=convert,
-                    elevate=elevate,
-                    numeric=numeric,
-                ) == expect
+                assert (
+                    point.translate(
+                        horizon=horizon,
+                        convert=convert,
+                        elevate=elevate,
+                        numeric=numeric,
+                    )
+                    == expect
+                )

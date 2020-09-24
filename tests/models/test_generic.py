@@ -28,7 +28,6 @@ def _comm(request, gen_prompt, gen_sensor):
 
 @mark.usefixtures('session')
 class TestGeneric:
-
     @staticmethod
     def test_sortkey_and_next(_comm):
         for num in range(1, 1 + 5):

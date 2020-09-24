@@ -15,9 +15,15 @@ def _comm(request, gen_prompt, gen_sensor):
         pass
 
     res.gen_common, res.model = (
-        gen_prompt, Prompt,
-    ) if request.param == 'prompt' else (
-        gen_sensor, Sensor,
+        (
+            gen_prompt,
+            Prompt,
+        )
+        if request.param == 'prompt'
+        else (
+            gen_sensor,
+            Sensor,
+        )
     )
 
     yield res
@@ -25,7 +31,6 @@ def _comm(request, gen_prompt, gen_sensor):
 
 @mark.usefixtures('session')
 class TestCommon:
-
     @staticmethod
     def test_default_fields(_comm):
         start = datetime.utcnow()
@@ -76,9 +81,10 @@ class TestCommon:
     @staticmethod
     def test_created_epoch(_comm):
         thing = _comm.gen_common()
-        assert thing.created_epoch <= (
-            thing.created - datetime.utcfromtimestamp(0)
-        ).total_seconds()
+        assert (
+            thing.created_epoch
+            <= (thing.created - datetime.utcfromtimestamp(0)).total_seconds()
+        )
         assert thing.created_epoch_ms == 1000 * thing.created_epoch
 
     @staticmethod

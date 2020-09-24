@@ -13,11 +13,19 @@ def _comm(request, gen_prompt, gen_sensor):
         pass
 
     res.endpoint, res.url, res.gen, res.impl = (
-        'api.prompt.single', '/api/prompt',
-        gen_prompt, PromptSingle,
-    ) if request.param == 'prompt' else (
-        'api.sensor.single', '/api/sensor',
-        gen_sensor, SensorSingle,
+        (
+            'api.prompt.single',
+            '/api/prompt',
+            gen_prompt,
+            PromptSingle,
+        )
+        if request.param == 'prompt'
+        else (
+            'api.sensor.single',
+            '/api/sensor',
+            gen_sensor,
+            SensorSingle,
+        )
     )
 
     yield res
@@ -25,7 +33,6 @@ def _comm(request, gen_prompt, gen_sensor):
 
 @mark.usefixtures('session')
 class TestCommonSingle:
-
     @staticmethod
     def test_url(_comm):
         assert url_for(_comm.endpoint, slug='test') == f'{_comm.url}/test'

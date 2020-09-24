@@ -75,14 +75,14 @@ def client(ctx_app):
 
 def _visitor(client):
     def make(
-            endpoint,
-            *,
-            code=200,
-            data=None,
-            headers=None,
-            method='get',
-            params=None,
-            query_string=None,
+        endpoint,
+        *,
+        code=200,
+        data=None,
+        headers=None,
+        method='get',
+        params=None,
+        query_string=None,
     ):
         params = params if params is not None else {}
         url = url_for(endpoint, **params)
@@ -129,16 +129,13 @@ def visitor(client):
 @fixture(scope='function')
 def gen_sensor():
     def make(
-            slug=SENSOR_SLUG,
-            title=SENSOR_TITLE,
-            description=SENSOR_DESCRIPTION,
-            **kwargs
+        slug=SENSOR_SLUG,
+        title=SENSOR_TITLE,
+        description=SENSOR_DESCRIPTION,
+        **kwargs,
     ):
         return Sensor.create(
-            slug=slug,
-            title=title,
-            description=description,
-            **kwargs
+            slug=slug, title=title, description=description, **kwargs
         )
 
     yield make
@@ -147,16 +144,13 @@ def gen_sensor():
 @fixture(scope='function')
 def gen_prompt():
     def make(
-            slug=PROMPT_SLUG,
-            title=PROMPT_TITLE,
-            description=PROMPT_DESCRIPTION,
-            **kwargs,
+        slug=PROMPT_SLUG,
+        title=PROMPT_TITLE,
+        description=PROMPT_DESCRIPTION,
+        **kwargs,
     ):
         return Prompt.create(
-            slug=slug,
-            title=title,
-            description=description,
-            **kwargs
+            slug=slug, title=title, description=description, **kwargs
         )
 
     yield make
@@ -165,11 +159,7 @@ def gen_prompt():
 @fixture(scope='function')
 def gen_user():
     def make(username=USER_NAME, password=USER_PASS, **kwargs):
-        return User.create(
-            username=username,
-            password=password,
-            **kwargs
-        )
+        return User.create(username=username, password=password, **kwargs)
 
     yield make
     logout_user()
@@ -185,7 +175,7 @@ def gen_user_loggedin(gen_user, client):
                 'username': username,
                 'password': password,
                 'remember': False,
-                'submit': True
+                'submit': True,
             },
             follow_redirects=True,
         )

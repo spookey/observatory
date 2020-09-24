@@ -19,7 +19,9 @@ def test_basedir():
 
 
 def test_thisdir():
-    assert THIS_DIR == path.join(path.dirname(TEST_DIR), 'observatory', 'start')
+    assert THIS_DIR == path.join(
+        path.dirname(TEST_DIR), 'observatory', 'start'
+    )
 
 
 def test_migratedir():

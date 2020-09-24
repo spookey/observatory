@@ -13,7 +13,6 @@ ENDPOINT = 'api.sensor.single'
 
 @mark.usefixtures('session')
 class TestSensorSingle:
-
     @staticmethod
     def test_get_marshal():
         mdef = SensorSingle.SINGLE_GET
@@ -76,16 +75,17 @@ class TestSensorSingle:
     def test_post_not_logged_in(visitor, gen_sensor):
         sensor = gen_sensor()
         visitor(
-            ENDPOINT, params={'slug': sensor.slug},
-            method='post', code=401
+            ENDPOINT, params={'slug': sensor.slug}, method='post', code=401
         )
 
     @staticmethod
     def test_post_empty(visitor, gen_user_loggedin):
         gen_user_loggedin()
         res = visitor(
-            ENDPOINT, params={'slug': 'test'},
-            method='post', code=400,
+            ENDPOINT,
+            params={'slug': 'test'},
+            method='post',
+            code=400,
         )
         assert res.json.get('message', None) is not None
 
@@ -94,13 +94,16 @@ class TestSensorSingle:
         gen_user_loggedin()
         sensor = gen_sensor()
         for data, expect in (
-                ({'some': 'thing'}, 'missing required parameter'),
-                ({'value': None}, 'missing required parameter'),
-                ({'value': 'error'}, 'could not convert string to float'),
+            ({'some': 'thing'}, 'missing required parameter'),
+            ({'value': None}, 'missing required parameter'),
+            ({'value': 'error'}, 'could not convert string to float'),
         ):
             res = visitor(
-                ENDPOINT, params={'slug': sensor.slug},
-                method='post', data=data, code=400,
+                ENDPOINT,
+                params={'slug': sensor.slug},
+                method='post',
+                data=data,
+                code=400,
             )
             assert expect in res.json['message']['value'].lower()
 
@@ -110,8 +113,11 @@ class TestSensorSingle:
         sensor = gen_sensor()
         setattr(sensor, 'append', lambda _: False)  # crazy monkeypatch
         res = visitor(
-            ENDPOINT, params={'slug': sensor.slug},
-            method='post', data={'value': 23}, code=500,
+            ENDPOINT,
+            params={'slug': sensor.slug},
+            method='post',
+            data={'value': 23},
+            code=500,
         )
         assert 'could not add' in res.json['message'].lower()
 
@@ -123,8 +129,11 @@ class TestSensorSingle:
         assert Point.query.all() == []
 
         res = visitor(
-            ENDPOINT, params={'slug': sensor.slug},
-            method='post', data={'value': _value}, code=201,
+            ENDPOINT,
+            params={'slug': sensor.slug},
+            method='post',
+            data={'value': _value},
+            code=201,
         )
 
         point = Point.query.first()
