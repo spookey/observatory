@@ -14,9 +14,12 @@ LOG_LVL = getenv('LOG_LVL', 'info')
 MIGR_DIR = path.abspath(path.join(ROOT_DIR, 'migrate'))
 
 DATABASE = getenv('DATABASE', 'sqlite://')
-DATABASE_DEV = getenv('DATABASE_DEV', 'sqlite:///{}'.format(
-    path.abspath(path.join(ROOT_DIR, 'database_dev.sqlite'))
-))
+DATABASE_DEV = getenv(
+    'DATABASE_DEV',
+    'sqlite:///{}'.format(
+        path.abspath(path.join(ROOT_DIR, 'database_dev.sqlite'))
+    ),
+)
 
 SECRET_FILE = getenv('SECRET_FILE', 'secret.key')
 SECRET_BASE = getenv('SECRET_BASE', ROOT_DIR)
@@ -80,6 +83,14 @@ ICON = {
 }
 
 ERROR_CODES = (
-    400, 401, 403, 404, 418,
-    500, 501, 502, 503, 504,
+    400,
+    401,
+    403,
+    404,
+    418,
+    500,
+    501,
+    502,
+    503,
+    504,
 )

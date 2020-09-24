@@ -79,13 +79,15 @@ def view_sensor():
 )
 @login_required
 def edit_mapper(prompt_slug=None, sensor_slug=None):
-    title = 'Edit mapper' if (
-        prompt_slug and sensor_slug
-    ) else 'Create new mapper'
-    form = MapperEditForm(obj=Mapper.by_commons(
-        prompt=Prompt.by_slug(prompt_slug),
-        sensor=Sensor.by_slug(sensor_slug),
-    ))
+    title = (
+        'Edit mapper' if (prompt_slug and sensor_slug) else 'Create new mapper'
+    )
+    form = MapperEditForm(
+        obj=Mapper.by_commons(
+            prompt=Prompt.by_slug(prompt_slug),
+            sensor=Sensor.by_slug(sensor_slug),
+        )
+    )
 
     if request.method != 'POST':
         form.set_selections()
@@ -175,10 +177,12 @@ def _drop_generic(form, redirect_ep):
 @login_required
 def drop_mapper(prompt_slug, sensor_slug):
     return _drop_generic(
-        MapperDropForm(obj=Mapper.by_commons(
-            prompt=Prompt.by_slug(prompt_slug),
-            sensor=Sensor.by_slug(sensor_slug),
-        )),
+        MapperDropForm(
+            obj=Mapper.by_commons(
+                prompt=Prompt.by_slug(prompt_slug),
+                sensor=Sensor.by_slug(sensor_slug),
+            )
+        ),
         'mgnt.view_mapper',
     )
 
@@ -234,10 +238,13 @@ def _sort_generic(form, redirect_ep):
 @login_required
 def sort_mapper(prompt_slug, sensor_slug, direction):
     return _sort_generic(
-        MapperSortForm(obj=Mapper.by_commons(
-            prompt=Prompt.by_slug(prompt_slug),
-            sensor=Sensor.by_slug(sensor_slug),
-        ), lift=direction == 'raise'),
+        MapperSortForm(
+            obj=Mapper.by_commons(
+                prompt=Prompt.by_slug(prompt_slug),
+                sensor=Sensor.by_slug(sensor_slug),
+            ),
+            lift=direction == 'raise',
+        ),
         'mgnt.view_mapper',
     )
 

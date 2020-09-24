@@ -14,19 +14,24 @@ class SubmitButtonInput:
         if self.icon is None:
             return ''
 
-        return render_template_string('''
+        return render_template_string(
+            '''
 {% from '_macros/elem.html' import text_icon %}{{ text_icon(icon) }}
-        '''.strip(), icon=self.icon)
+        '''.strip(),
+            icon=self.icon,
+        )
 
     def replace_class(self, **kwargs):
         if self.classreplace_kw is None:
             return kwargs
 
-        class_ = ' '.join((
-            kwargs.setdefault('class', ''),
-            kwargs.setdefault('class_', ''),
-            kwargs.setdefault('class__', '')
-        )).strip()
+        class_ = ' '.join(
+            (
+                kwargs.setdefault('class', ''),
+                kwargs.setdefault('class_', ''),
+                kwargs.setdefault('class__', ''),
+            )
+        ).strip()
         del kwargs['class']
         del kwargs['class__']
 
@@ -42,10 +47,12 @@ class SubmitButtonInput:
         kwargs.setdefault('value', field.label.text)
         kwargs = self.replace_class(**kwargs)
 
-        return Markup('''
+        return Markup(
+            '''
 <button {params}>{icon}<span>{text}</span></button>
         '''.strip().format(
-            params=html_params(name=field.name, **kwargs),
-            icon=self.render_icon(),
-            text=escape(field.label.text),
-        ))
+                params=html_params(name=field.name, **kwargs),
+                icon=self.render_icon(),
+                text=escape(field.label.text),
+            )
+        )

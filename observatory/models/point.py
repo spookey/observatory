@@ -14,7 +14,9 @@ class Point(CreatedMixin, Model):
     value = DB.Column(DB.Float(), nullable=False)
 
     sensor_prime = DB.Column(
-        DB.Integer(), DB.ForeignKey('sensor.prime'), nullable=False,
+        DB.Integer(),
+        DB.ForeignKey('sensor.prime'),
+        nullable=False,
     )
 
     @hybrid_property

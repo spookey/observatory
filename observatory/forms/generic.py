@@ -54,9 +54,7 @@ class GenericSortForm(FlaskForm):
 
     def validate(self):
         return (
-            super().validate() and
-            self.lift is not None and
-            bool(self.thing)
+            super().validate() and self.lift is not None and bool(self.thing)
         )
 
     def action(self):

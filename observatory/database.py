@@ -20,7 +20,6 @@ LOG = getLogger(__name__)
 
 
 class CRUDMixin:
-
     @classmethod
     def create(cls, _commit=True, **kwargs):
         LOG.info('creating model "%s"', cls.__name__)
@@ -65,10 +64,12 @@ class PrimeMixin:
 
     @classmethod
     def by_prime(cls, value):
-        if any([
+        if any(
+            [
                 isinstance(value, (bytes, str)) and value.isdigit(),
-                isinstance(value, (float, int))
-        ]):
+                isinstance(value, (float, int)),
+            ]
+        ):
             return cls.query.get(int(value))
         return None
 
@@ -120,7 +121,9 @@ class SortMixin:
     @declared_attr
     def sortkey(cls):
         return DB.Column(
-            DB.Integer(), nullable=False, unique=True,
+            DB.Integer(),
+            nullable=False,
+            unique=True,
             default=cls.sortkey_next,
         )
 
@@ -151,7 +154,9 @@ class SortMixin:
 
         LOG.info(
             'flipping sortkey %d with %d for "%s"',
-            self.sortkey, that.sortkey, self,
+            self.sortkey,
+            that.sortkey,
+            self,
         )
         skey = self.sortkey
         tkey = that.sortkey
@@ -162,14 +167,18 @@ class SortMixin:
         return True
 
     def raise_step(self):
-        return self.__flip_sortkey(self.query_above(
-            self.query.order_by(self._get_class_sortkey().asc())
-        ).first())
+        return self.__flip_sortkey(
+            self.query_above(
+                self.query.order_by(self._get_class_sortkey().asc())
+            ).first()
+        )
 
     def lower_step(self):
-        return self.__flip_sortkey(self.query_below(
-            self.query.order_by(self._get_class_sortkey().desc())
-        ).first())
+        return self.__flip_sortkey(
+            self.query_below(
+                self.query.order_by(self._get_class_sortkey().desc())
+            ).first()
+        )
 
 
 class BaseModel(CRUDMixin, NameMixin, DB.Model):

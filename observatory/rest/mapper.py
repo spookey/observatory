@@ -41,7 +41,9 @@ class MapperSingle(Resource):
         return obj
 
     def get(self, prompt_slug, sensor_slug):
-        return marshal(
-            self.object_or_abort(prompt_slug, sensor_slug),
-            self.SINGLE_GET
-        ), 200
+        return (
+            marshal(
+                self.object_or_abort(prompt_slug, sensor_slug), self.SINGLE_GET
+            ),
+            200,
+        )

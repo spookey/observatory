@@ -32,14 +32,20 @@ LOG = getLogger(__name__)
 def errorhandler(error):
     LOG.error(
         'handling error "%s" - "%s" for "%s %s"',
-        error.code, error.description, request.method, request.url
+        error.code,
+        error.description,
+        request.method,
+        request.url,
     )
 
-    return render_template(
-        'error.html',
-        error=error,
-        title=error.code,
-    ), error.code
+    return (
+        render_template(
+            'error.html',
+            error=error,
+            title=error.code,
+        ),
+        error.code,
+    )
 
 
 def tagline():
@@ -49,7 +55,10 @@ def tagline():
 def script_config_data():
     api_plot_base_url = url_for('api.charts.plot', slug='', _external=True)
 
-    return Markup(' '.join(line.strip() for line in f'''
+    return Markup(
+        ' '.join(
+            line.strip()
+            for line in f'''
 data-api-plot-base-url="{api_plot_base_url}"
 data-api-plot-refresh-ms="{API_PLOT_REFRESH_MS}"
 data-moment-default-format="{FMT_MOMENT_DEFAULT}"
@@ -62,7 +71,9 @@ data-moment-week-format="{FMT_MOMENT_WEEK}"
 data-moment-month-format="{FMT_MOMENT_MONTH}"
 data-moment-quarter-format="{FMT_MOMENT_QUARTER}"
 data-moment-year-format="{FMT_MOMENT_YEAR}"
-    '''.splitlines()).strip())
+    '''.splitlines()
+        ).strip()
+    )
 
 
 def form_drop_mapper(mapper):

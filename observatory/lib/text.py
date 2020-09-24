@@ -14,11 +14,7 @@ def random_line(lines, fallback=''):
 
 
 def is_slugable(text):
-    if (
-            not isinstance(text, str) or
-            not text or
-            '/' in text
-    ):
+    if not isinstance(text, str) or not text or '/' in text:
         return False
 
     return text == quote(text)

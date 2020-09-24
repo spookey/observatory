@@ -76,17 +76,11 @@ class MapperEditForm(FlaskForm):
 
     @staticmethod
     def _enum_choices(enum):
-        return [
-            (en.value, en.name)
-            for en in enum
-        ]
+        return [(en.value, en.name) for en in enum]
 
     @staticmethod
     def _enum_color_choices(enum):
-        return [
-            (en.color, en.name)
-            for en in enum
-        ]
+        return [(en.color, en.name) for en in enum]
 
     def __init__(self, *args, obj=None, **kwargs):
         super().__init__(*args, obj=obj, **kwargs)
@@ -127,9 +121,8 @@ class MapperEditForm(FlaskForm):
                 return False
 
             if (
-                    self.mapper.prompt.prime != mapper.prompt.prime
-                    and
-                    self.mapper.sensor.prime != mapper.sensor.prime
+                self.mapper.prompt.prime != mapper.prompt.prime
+                and self.mapper.sensor.prime != mapper.sensor.prime
             ):
                 comm_err('Combination conflict!')
                 return False

@@ -8,14 +8,14 @@ from observatory.start.extensions import DB
 
 class EnumColor(Enum):
     GRAY = 0x969896
-    RED = 0xc82829
-    ORANGE = 0xf5871f
-    YELLOW = 0xeab700
-    GREEN = 0x718c00
-    TURQUOISE = 0x3e999f
-    BLUE = 0x4271ae
-    PURPLE = 0x8959a8
-    BROWN = 0xa3685a
+    RED = 0xC82829
+    ORANGE = 0xF5871F
+    YELLOW = 0xEAB700
+    GREEN = 0x718C00
+    TURQUOISE = 0x3E999F
+    BLUE = 0x4271AE
+    PURPLE = 0x8959A8
+    BROWN = 0xA3685A
 
     @property
     def color(self):
@@ -46,25 +46,39 @@ class EnumHorizon(Enum):
 
 class Mapper(SortMixin, CreatedMixin, BaseModel):
     prompt_prime = DB.Column(
-        DB.Integer(), DB.ForeignKey('prompt.prime'), primary_key=True,
+        DB.Integer(),
+        DB.ForeignKey('prompt.prime'),
+        primary_key=True,
     )
     sensor_prime = DB.Column(
-        DB.Integer(), DB.ForeignKey('sensor.prime'), primary_key=True,
+        DB.Integer(),
+        DB.ForeignKey('sensor.prime'),
+        primary_key=True,
     )
     active = DB.Column(
-        DB.Boolean(), nullable=False, default=True,
+        DB.Boolean(),
+        nullable=False,
+        default=True,
     )
     elevate = DB.Column(
-        DB.Float(), nullable=False, default=1.0,
+        DB.Float(),
+        nullable=False,
+        default=1.0,
     )
     color = DB.Column(
-        DB.Enum(EnumColor), nullable=False, default=EnumColor.GRAY,
+        DB.Enum(EnumColor),
+        nullable=False,
+        default=EnumColor.GRAY,
     )
     convert = DB.Column(
-        DB.Enum(EnumConvert), nullable=False, default=EnumConvert.NATURAL,
+        DB.Enum(EnumConvert),
+        nullable=False,
+        default=EnumConvert.NATURAL,
     )
     horizon = DB.Column(
-        DB.Enum(EnumHorizon), nullable=False, default=EnumHorizon.NORMAL,
+        DB.Enum(EnumHorizon),
+        nullable=False,
+        default=EnumHorizon.NORMAL,
     )
 
     prompt = DB.relationship(
@@ -121,7 +135,9 @@ class Mapper(SortMixin, CreatedMixin, BaseModel):
 
     @classmethod
     def by_commons(cls, prompt, sensor):
-        return cls.query.filter(and_(
-            cls.prompt == prompt,
-            cls.sensor == sensor,
-        )).first()
+        return cls.query.filter(
+            and_(
+                cls.prompt == prompt,
+                cls.sensor == sensor,
+            )
+        ).first()

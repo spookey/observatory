@@ -10,11 +10,13 @@ from logging import (
 
 from observatory.start.environment import LOG_LVL, MDL_NAME
 
-FORMATTER = Formatter('''
+FORMATTER = Formatter(
+    '''
 %(levelname)s - %(asctime)s | %(name)s | %(processName)s %(threadName)s
 %(module)s.%(funcName)s [%(pathname)s:%(lineno)d]
   %(message)s
-'''.lstrip())
+'''.lstrip()
+)
 
 STREAM = StreamHandler(stream=None)
 

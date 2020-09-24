@@ -12,13 +12,15 @@ BP_REST_CHARTS = Blueprint('charts', __name__)
 def dataset(value_type, step_type):
     return dict(
         borderColor=String(default=None),
-        data=List(Nested(
-            default={},
-            nested=dict(
-                x=Integer(default=0),
-                y=value_type(default=0),
-            ),
-        )),
+        data=List(
+            Nested(
+                default={},
+                nested=dict(
+                    x=Integer(default=0),
+                    y=value_type(default=0),
+                ),
+            )
+        ),
         display=Nested(
             default={},
             nested=dict(
@@ -114,7 +116,6 @@ def assemble(prompt):
 
 @REST.resource('/charts/<string:slug>', endpoint='api.charts.plot')
 class ChartsPlot(Resource):
-
     @staticmethod
     def prompt_active_or_abort(slug):
         prompt = Prompt.by_slug(slug)

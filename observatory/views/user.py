@@ -45,12 +45,8 @@ def login():
         user = form.action()
         if user is not None:
             flash(f'Welcome {user.username}!', 'dark')
-            return redirect(
-                request.args.get('next') or url_for('main.index')
-            )
+            return redirect(request.args.get('next') or url_for('main.index'))
 
     return render_template(
-        'user/login.html',
-        title='Tickets, please!',
-        form=form
+        'user/login.html', title='Tickets, please!', form=form
     )

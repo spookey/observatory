@@ -81,10 +81,14 @@ def mapper_single():
         created=DateTime(dt_format=DT_FORMAT),
         horizon=String(attribute='horizon.name'),
         prompt_url=SlugUrl(
-            attribute='prompt', endpoint='api.prompt.single', absolute=True,
+            attribute='prompt',
+            endpoint='api.prompt.single',
+            absolute=True,
         ),
         sensor_url=SlugUrl(
-            attribute='sensor', endpoint='api.sensor.single', absolute=True,
+            attribute='sensor',
+            endpoint='api.sensor.single',
+            absolute=True,
         ),
         sortkey=Integer(),
     )

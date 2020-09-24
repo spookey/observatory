@@ -12,8 +12,7 @@ def parse_int(value, fallback=0, warn=True):
         if warn:
             LOG.exception(ex)
             LOG.warning(
-                'cannot parse "%s" - using fallback "%s"',
-                value, fallback
+                'cannot parse "%s" - using fallback "%s"', value, fallback
             )
         return fallback
     return value
@@ -26,8 +25,7 @@ def parse_bool(value, fallback=False, warn=True):
         if warn:
             LOG.exception(ex)
             LOG.warning(
-                'cannot parse "%s" - using fallback "%s"',
-                value, fallback
+                'cannot parse "%s" - using fallback "%s"', value, fallback
             )
         return fallback
     if value in STR_TRUTHY:
@@ -36,7 +34,6 @@ def parse_bool(value, fallback=False, warn=True):
         return False
     if warn:
         LOG.warning(
-            'unknown value "%s" - using fallback "%s"',
-            value, fallback
+            'unknown value "%s" - using fallback "%s"', value, fallback
         )
     return fallback

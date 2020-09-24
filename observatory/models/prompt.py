@@ -4,7 +4,6 @@ from observatory.database import CommonMixin, CreatedMixin, Model, SortMixin
 
 
 class Prompt(CommonMixin, SortMixin, CreatedMixin, Model):
-
     @property
     def active(self):
         return any(self.mapping_active)
