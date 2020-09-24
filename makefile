@@ -13,6 +13,7 @@ VER_PY		:=	3.8
 CMD_PIP		:=	$(DIR_VENV)/bin/pip$(VER_PY)
 CMD_PY		:=	$(DIR_VENV)/bin/python$(VER_PY)
 CMD_FLASK	:=	$(DIR_VENV)/bin/flask
+CMD_BLACK	:=	$(DIR_VENV)/bin/black
 CMD_ISORT	:=	$(DIR_VENV)/bin/isort
 CMD_PTPY	:=	$(DIR_VENV)/bin/ptpython
 CMD_PUDB	:=	$(DIR_VENV)/bin/pudb3
@@ -47,6 +48,7 @@ help:
 	@echo "lint             run pylint"
 	@echo "plot             run pyreverse"
 	@echo "sort             run isort"
+	@echo "black            run black"
 	@echo "test             run pytest"
 	@echo "tcov, tcovh      run test coverage (html)"
 	@echo
@@ -76,12 +78,12 @@ $(DIR_VENV):
 
 .PHONY: requirements requirements-dev requirements-debug
 requirements: $(CMD_FLASK)
-requirements-dev: $(CMD_ISORT) $(CMD_PYLINT) $(CMD_PYREV) $(CMD_PYTEST)
+requirements-dev: $(CMD_BLACK) $(CMD_ISORT) $(CMD_PYLINT) $(CMD_PYREV) $(CMD_PYTEST)
 requirements-debug: $(CMD_PTPY) $(CMD_PUDB) $(CMD_WATCH)
 
 $(CMD_FLASK): $(DIR_VENV)
 	$(CMD_PIP) install -r "requirements.txt"
-$(CMD_ISORT) $(CMD_PYLINT) $(CMD_PYREV) $(CMD_PYTEST): $(DIR_VENV)
+$(CMD_BLACK) $(CMD_ISORT) $(CMD_PYLINT) $(CMD_PYREV) $(CMD_PYTEST): $(DIR_VENV)
 	$(CMD_PIP) install -r "requirements-dev.txt"
 $(CMD_PTPY) $(CMD_PUDB) $(CMD_WATCH): $(DIR_VENV)
 	$(CMD_PIP) install -r "requirements-debug.txt"
@@ -171,6 +173,23 @@ sortt: $(CMD_ISORT)
 	$(call _sort,"$(DIR_TESTS)")
 sorts: $(CMD_ISORT)
 	$(call _sort,"$(DIR_STUFF)")
+
+
+define _black
+	$(CMD_BLACK) \
+		--skip-string-normalization \
+		--target-version "py$(subst .,,$(VER_PY))" \
+		--line-length 79 \
+			$(1)
+endef
+
+.PHONY: black blackt blacks
+black: $(CMD_BLACK)
+	$(call _black,"$(DIR_OBVTY)" "$(FLASK)")
+blackt: $(CMD_BLACK)
+	$(call _black,"$(DIR_TESTS)")
+blacks: $(CMD_BLACK)
+	$(call _black,"$(DIR_STUFF)")
 
 
 define _test
