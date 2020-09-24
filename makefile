@@ -124,7 +124,7 @@ endef
 
 .PHONY: lint lintt lints
 lint: $(CMD_PYLINT)
-	$(call _lint,"$(DIR_OBVTY)")
+	$(call _lint,"$(DIR_OBVTY)" "$(FLASK)")
 lintt: $(CMD_PYLINT)
 	$(call _lint,"$(DIR_TESTS)")
 lints: $(CMD_PYLINT)
@@ -166,7 +166,7 @@ endef
 
 .PHONY: sort sortt sorts
 sort: $(CMD_ISORT)
-	$(call _sort,"$(DIR_OBVTY)")
+	$(call _sort,"$(DIR_OBVTY)" "$(FLASK)")
 sortt: $(CMD_ISORT)
 	$(call _sort,"$(DIR_TESTS)")
 sorts: $(CMD_ISORT)
