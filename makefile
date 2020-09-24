@@ -152,12 +152,15 @@ plots: $(CMD_PYREV)
 
 define _sort
 	$(CMD_ISORT) \
-		--atomic \
 		--combine-star \
-		--float-to-top \
-		--force-alphabetical-sort-within-sections \
 		--force-sort-within-sections \
-		-m="VERTICAL_GRID_GROUPED" \
+		--py "$(subst .,,$(VER_PY))" \
+		--line-width="79" \
+		--multi-line "VERTICAL_HANGING_INDENT" \
+		--trailing-comma \
+		--force-grid-wrap 0 \
+		--use-parentheses \
+		--ensure-newline-before-comments \
 			$(1)
 endef
 
