@@ -1,7 +1,10 @@
 from os import path
 
 from observatory.start.environment import (
-    BASE_DIR, MIGR_DIR, ROOT_DIR, THIS_DIR
+    BASE_DIR,
+    MIGR_DIR,
+    ROOT_DIR,
+    THIS_DIR,
 )
 
 TEST_DIR = path.abspath(path.dirname(path.dirname(__file__)))

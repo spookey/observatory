@@ -1,13 +1,20 @@
 from pytest import fixture, mark
 
 from observatory.forms.common import (
-    PromptDropForm, PromptSortForm, SensorDropForm, SensorSortForm
+    PromptDropForm,
+    PromptSortForm,
+    SensorDropForm,
+    SensorSortForm,
 )
 from observatory.forms.mapper import MapperDropForm, MapperSortForm
 from observatory.models.mapper import Mapper
 from observatory.shared import (
-    form_drop_mapper, form_drop_prompt, form_drop_sensor, form_sort_mapper,
-    form_sort_prompt, form_sort_sensor
+    form_drop_mapper,
+    form_drop_prompt,
+    form_drop_sensor,
+    form_sort_mapper,
+    form_sort_prompt,
+    form_sort_sensor,
 )
 
 

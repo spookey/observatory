@@ -1,5 +1,8 @@
 from observatory.start.config import (
-    BaseConfig, DevelopmentConfig, ProductionConfig, TestingConfig
+    BaseConfig,
+    DevelopmentConfig,
+    ProductionConfig,
+    TestingConfig,
 )
 from observatory.start.environment import APP_NAME, FAVICON, HTML_LANG, TITLE
 

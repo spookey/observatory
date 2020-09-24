@@ -4,7 +4,10 @@ from werkzeug.datastructures import MultiDict
 from observatory.forms.extra.widgets import SubmitButtonInput
 from observatory.forms.mapper import MapperEditForm
 from observatory.models.mapper import (
-    EnumColor, EnumConvert, EnumHorizon, Mapper
+    EnumColor,
+    EnumConvert,
+    EnumHorizon,
+    Mapper,
 )
 
 

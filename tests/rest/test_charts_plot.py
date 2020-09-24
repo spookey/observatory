@@ -2,7 +2,10 @@ from flask import url_for
 from pytest import mark
 
 from observatory.models.mapper import (
-    EnumColor, EnumConvert, EnumHorizon, Mapper
+    EnumColor,
+    EnumConvert,
+    EnumHorizon,
+    Mapper,
 )
 from observatory.models.point import Point
 

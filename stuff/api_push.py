@@ -4,8 +4,12 @@ from argparse import ArgumentParser
 from json import dumps, loads
 from sys import exit as _exit
 from urllib.request import (
-    HTTPBasicAuthHandler, HTTPPasswordMgrWithDefaultRealm, Request,
-    build_opener, install_opener, urlopen
+    HTTPBasicAuthHandler,
+    HTTPPasswordMgrWithDefaultRealm,
+    Request,
+    build_opener,
+    install_opener,
+    urlopen,
 )
 
 

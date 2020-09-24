@@ -7,7 +7,10 @@ from pytest import mark
 from observatory.models.mapper import EnumConvert, EnumHorizon, Mapper
 from observatory.models.point import Point
 from observatory.rest.charts import (
-    assemble, collect_generic, collect_points, get_value_step_types
+    assemble,
+    collect_generic,
+    collect_points,
+    get_value_step_types,
 )
 
 

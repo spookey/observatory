@@ -1,7 +1,10 @@
 from datetime import datetime, timedelta
 
 from observatory.lib.clock import (
-    epoch_milliseconds, epoch_seconds, is_outdated, time_format
+    epoch_milliseconds,
+    epoch_seconds,
+    is_outdated,
+    time_format,
 )
 from observatory.start.environment import FMT_STRFTIME
 

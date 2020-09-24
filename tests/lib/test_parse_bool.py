@@ -1,4 +1,4 @@
-from observatory.lib.parse import parse_bool, STR_FALSY, STR_TRUTHY
+from observatory.lib.parse import STR_FALSY, STR_TRUTHY, parse_bool
 
 STR_UNKNOWN = ('', '_', '🛒')
 STR_WRONG = (23, None, Exception)
