@@ -6,13 +6,24 @@ from observatory.rest.mapper import BP_REST_MAPPER
 from observatory.rest.prompt import BP_REST_PROMPT
 from observatory.rest.sensor import BP_REST_SENSOR
 from observatory.shared import (
-    errorhandler, form_drop_mapper, form_drop_prompt, form_drop_sensor,
-    form_sort_mapper, form_sort_prompt, form_sort_sensor, script_config_data,
-    tagline
+    errorhandler,
+    form_drop_mapper,
+    form_drop_prompt,
+    form_drop_sensor,
+    form_sort_mapper,
+    form_sort_prompt,
+    form_sort_sensor,
+    script_config_data,
+    tagline,
 )
 from observatory.start.environment import ERROR_CODES, MDL_NAME
 from observatory.start.extensions import (
-    BCRYPT, CSRF_PROTECT, DB, LOGIN_MANAGER, MIGRATE, REST
+    BCRYPT,
+    CSRF_PROTECT,
+    DB,
+    LOGIN_MANAGER,
+    MIGRATE,
+    REST,
 )
 from observatory.start.logger import initialize_logging
 from observatory.views.main import BLUEPRINT_MAIN

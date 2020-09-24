@@ -5,7 +5,9 @@ from flask_login import UserMixin
 
 from observatory.database import CreatedMixin, Model
 from observatory.lib.clock import (
-    epoch_milliseconds, epoch_seconds, time_format
+    epoch_milliseconds,
+    epoch_seconds,
+    time_format,
 )
 from observatory.start.extensions import BCRYPT, DB
 

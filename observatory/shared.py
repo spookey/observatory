@@ -4,15 +4,26 @@ from flask import render_template, request, url_for
 from jinja2 import Markup
 
 from observatory.forms.common import (
-    PromptDropForm, PromptSortForm, SensorDropForm, SensorSortForm
+    PromptDropForm,
+    PromptSortForm,
+    SensorDropForm,
+    SensorSortForm,
 )
 from observatory.forms.mapper import MapperDropForm, MapperSortForm
 from observatory.lib.text import random_line
 from observatory.start.environment import (
-    API_PLOT_REFRESH_MS, FMT_MOMENT_DAY, FMT_MOMENT_DEFAULT, FMT_MOMENT_HOUR,
-    FMT_MOMENT_MINUTE, FMT_MOMENT_MONTH, FMT_MOMENT_MSECOND,
-    FMT_MOMENT_QUARTER, FMT_MOMENT_SECOND, FMT_MOMENT_WEEK, FMT_MOMENT_YEAR,
-    TAGLINES
+    API_PLOT_REFRESH_MS,
+    FMT_MOMENT_DAY,
+    FMT_MOMENT_DEFAULT,
+    FMT_MOMENT_HOUR,
+    FMT_MOMENT_MINUTE,
+    FMT_MOMENT_MONTH,
+    FMT_MOMENT_MSECOND,
+    FMT_MOMENT_QUARTER,
+    FMT_MOMENT_SECOND,
+    FMT_MOMENT_WEEK,
+    FMT_MOMENT_YEAR,
+    TAGLINES,
 )
 
 LOG = getLogger(__name__)

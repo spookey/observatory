@@ -1,4 +1,4 @@
-from flask import abort, Blueprint, render_template
+from flask import Blueprint, abort, render_template
 
 from observatory.models.prompt import Prompt
 from observatory.shared import tagline

@@ -5,7 +5,10 @@ from wtforms.validators import DataRequired, NumberRange
 from observatory.forms.extra.widgets import SubmitButtonInput
 from observatory.forms.generic import GenericDropForm, GenericSortForm
 from observatory.models.mapper import (
-    EnumColor, EnumConvert, EnumHorizon, Mapper
+    EnumColor,
+    EnumConvert,
+    EnumHorizon,
+    Mapper,
 )
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor

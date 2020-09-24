@@ -1,6 +1,12 @@
-from flask_restful import abort, marshal, Resource
+from flask_restful import Resource, abort, marshal
 from flask_restful.fields import (
-    Boolean, DateTime, Float, Integer, Nested, String, Url
+    Boolean,
+    DateTime,
+    Float,
+    Integer,
+    Nested,
+    String,
+    Url,
 )
 
 

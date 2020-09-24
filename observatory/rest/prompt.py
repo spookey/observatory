@@ -2,7 +2,10 @@ from flask import Blueprint
 
 from observatory.models.prompt import Prompt
 from observatory.rest.generic import (
-    common_listing, common_single, CommonSingle, GenericListing
+    CommonSingle,
+    GenericListing,
+    common_listing,
+    common_single,
 )
 from observatory.start.extensions import REST
 

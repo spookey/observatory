@@ -1,5 +1,5 @@
 from flask import render_template_string
-from markupsafe import escape, Markup
+from markupsafe import Markup, escape
 from wtforms.widgets.core import html_params
 
 

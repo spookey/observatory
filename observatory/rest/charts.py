@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask_restful import abort, marshal, Resource
+from flask_restful import Resource, abort, marshal
 from flask_restful.fields import Boolean, Float, Integer, List, Nested, String
 
 from observatory.models.mapper import EnumConvert

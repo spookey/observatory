@@ -1,8 +1,17 @@
 from os import path, urandom
 
 from observatory.start.environment import (
-    APP_NAME, BCRYPT_LOG_ROUNDS, CSRF_STRICT, DATABASE, DATABASE_DEV, FAVICON,
-    HTML_LANG, ICON, SECRET_BASE, SECRET_FILE, TITLE
+    APP_NAME,
+    BCRYPT_LOG_ROUNDS,
+    CSRF_STRICT,
+    DATABASE,
+    DATABASE_DEV,
+    FAVICON,
+    HTML_LANG,
+    ICON,
+    SECRET_BASE,
+    SECRET_FILE,
+    TITLE,
 )
 
 

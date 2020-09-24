@@ -6,7 +6,10 @@ from flask_restful.reqparse import RequestParser
 
 from observatory.models.sensor import Sensor
 from observatory.rest.generic import (
-    common_listing, CommonSingle, GenericListing, sensor_single
+    CommonSingle,
+    GenericListing,
+    common_listing,
+    sensor_single,
 )
 from observatory.start.extensions import REST
 

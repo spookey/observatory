@@ -1,11 +1,13 @@
 from flask import Blueprint
-from flask_restful import abort, marshal, Resource
+from flask_restful import Resource, abort, marshal
 
 from observatory.models.mapper import Mapper
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
 from observatory.rest.generic import (
-    GenericListing, mapper_listing, mapper_single
+    GenericListing,
+    mapper_listing,
+    mapper_single,
 )
 from observatory.start.extensions import REST
 

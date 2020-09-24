@@ -1,14 +1,26 @@
 from flask import (
-    abort, Blueprint, flash, redirect, render_template, request, url_for
+    Blueprint,
+    abort,
+    flash,
+    redirect,
+    render_template,
+    request,
+    url_for,
 )
 from flask_login import login_required
 
 from observatory.forms.common import (
-    PromptDropForm, PromptEditForm, PromptSortForm, SensorDropForm,
-    SensorEditForm, SensorSortForm
+    PromptDropForm,
+    PromptEditForm,
+    PromptSortForm,
+    SensorDropForm,
+    SensorEditForm,
+    SensorSortForm,
 )
 from observatory.forms.mapper import (
-    MapperDropForm, MapperEditForm, MapperSortForm
+    MapperDropForm,
+    MapperEditForm,
+    MapperSortForm,
 )
 from observatory.lib.text import extract_slug
 from observatory.models.mapper import Mapper
