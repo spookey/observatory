@@ -46,7 +46,7 @@ const assetView = {
           assetsPath: path.join(STATIC, 'fonts'),
         }),
         cssurl({
-          url: (asset) => path.relative(STATIC, asset.url),
+          url: (asset) => path.relative(STATIC, path.join(NODE_M, asset.url)),
         }),
         cssprefixer(),
         cssdiscard({
