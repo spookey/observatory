@@ -35,6 +35,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: x64
 
+      - name: Setup
+        run: |
+          python -m pip install -U pip
+          pip install -U virtualenv
+          pip install -r requirements-dev.txt
+          npm install
+
       - name: Test
         run: |
-          make ci
+          make ci VER_PY="${{ matrix.python-version }}"
