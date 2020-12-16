@@ -294,19 +294,19 @@ cli-sensorcurve: $(CMD_FLASK)
 ###
 # continuous integration
 
-.PHONY: travis
-travis: $(CMD_PYTEST) static
+.PHONY: ci
+ci: $(CMD_PYTEST) static
 	$(call _tcov,--durations=10)
 
 
 CMD_MKTMP	:=	mktemp
 CMD_RM		:=	rm
 
-.PHONY: travis-phony
-travis-phony:
+.PHONY: ci-phony
+ci-phony:
 	tmpdir=$$($(CMD_MKTMP) -d -t "$(DIR_OBVTY).phony") && \
 	echo "=> $$tmpdir" && \
 	$(CMD_GIT) clone . "$$tmpdir" && \
-	$(CMD_MAKE) -C "$$tmpdir" travis && \
+	$(CMD_MAKE) -C "$$tmpdir" ci && \
 	echo "<= $$tmpdir" && \
 	$(CMD_RM) -rf "$$tmpdir"

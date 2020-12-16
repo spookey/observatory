@@ -11,7 +11,7 @@ python:
   - '3.7'
   - '3.8'
 node_js:
-  - 'v13.3.0'
+  - '15'
 
 install:
   - pip install -r requirements-dev.txt
@@ -22,4 +22,4 @@ before_script:
   - export FLASK_APP="$TRAVIS_BUILD_DIR/application.py"
   - export FLASK_DEBUG=1
 
-script: make travis VER_PY="$TRAVIS_PYTHON_VERSION"
+script: make ci VER_PY="$TRAVIS_PYTHON_VERSION"
