@@ -5,6 +5,7 @@ from observatory.rest.charts import BP_REST_CHARTS
 from observatory.rest.mapper import BP_REST_MAPPER
 from observatory.rest.prompt import BP_REST_PROMPT
 from observatory.rest.sensor import BP_REST_SENSOR
+from observatory.rest.sp_api import BP_REST_SP_API
 from observatory.shared import (
     errorhandler,
     form_drop_mapper,
@@ -72,6 +73,7 @@ def register_blueprints(app):
     app.register_blueprint(BP_REST_MAPPER)
     app.register_blueprint(BP_REST_PROMPT)
     app.register_blueprint(BP_REST_SENSOR)
+    app.register_blueprint(BP_REST_SP_API)
 
 
 def register_template_functions(app):
