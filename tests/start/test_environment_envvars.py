@@ -52,10 +52,10 @@ def test_bcrypt_log_rounds(monkeypatch):
 def test_csrf_strict(monkeypatch):
     assert environment.CSRF_STRICT is True
 
-    monkeypatch.setenv('CSRF_STRICT', '🍉')
+    monkeypatch.setenv('CSRF_STRICT', 'off')
     reload(environment)
 
-    assert environment.CSRF_STRICT is True
+    assert environment.CSRF_STRICT is False
 
 
 def test_backlog_days(monkeypatch):
@@ -65,6 +65,15 @@ def test_backlog_days(monkeypatch):
     reload(environment)
 
     assert environment.BACKLOG_DAYS == 1337
+
+
+def test_enable_sp_api(monkeypatch):
+    assert environment.ENABLE_SP_API is True
+
+    monkeypatch.setenv('ENABLE_SP_API', 'off')
+    reload(environment)
+
+    assert environment.ENABLE_SP_API is False
 
 
 def test_title(monkeypatch):

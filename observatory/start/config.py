@@ -6,6 +6,7 @@ from observatory.start.environment import (
     CSRF_STRICT,
     DATABASE,
     DATABASE_DEV,
+    ENABLE_SP_API,
     FAVICON,
     HTML_LANG,
     ICON,
@@ -33,6 +34,7 @@ class BaseConfig:
     APP_NAME = APP_NAME
     BCRYPT_LOG_ROUNDS = BCRYPT_LOG_ROUNDS
     DEBUG = False
+    ENABLE_SP_API = ENABLE_SP_API
     FAVICON = FAVICON
     HTML_LANG = HTML_LANG
     ICON = ICON
@@ -55,6 +57,7 @@ class DevelopmentConfig(BaseConfig):
 
 class TestingConfig(BaseConfig):
     BCRYPT_LOG_ROUNDS = 5
+    ENABLE_SP_API = True
     SQLALCHEMY_DATABASE_URI = 'sqlite://'
     TESTING = True
     WTF_CSRF_ENABLED = False
