@@ -1,6 +1,6 @@
 from enum import Enum
 
-from sqlalchemy import and_
+from sqlalchemy import and_, asc
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from observatory.database import Model
@@ -59,13 +59,23 @@ class Values(Model):
     )
 
     @classmethod
-    def by_key(cls, key, idx=0):
+    def by_key_idx(cls, key, idx=0):
         return cls.query.filter(
             and_(
                 cls.key == key,
                 cls.idx == idx,
             )
         ).first()
+
+    @classmethod
+    def by_key(cls, key):
+        return (
+            cls.query.filter(
+                cls.key == key,
+            )
+            .order_by(asc(cls.idx))
+            .all()
+        )
 
     @hybrid_property
     def value(self):
@@ -78,3 +88,12 @@ class Values(Model):
             box=box,
             **{bx.value: (None if bx != box else val) for bx in EnumBox},
         )
+
+    @classmethod
+    def get(cls, key, idx=0):
+        obj = cls.by_key_idx(key, idx=idx)
+        return obj.value if obj is not None else None
+
+    @classmethod
+    def get_all(cls, key):
+        return [obj.value for obj in cls.by_key(key)]
