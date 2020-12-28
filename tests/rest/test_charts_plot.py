@@ -40,7 +40,8 @@ class TestChartsPlot:
         assert res.json == []
 
     @staticmethod
-    def test_get_plot(visitor, gen_prompt, gen_sensor):
+    def test_get_plot(visitor, gen_prompt, gen_sensor, gen_user):
+        user = gen_user()
         prompt = gen_prompt()
         s_one, s_two = gen_sensor('one'), gen_sensor('two')
         m_one = Mapper.create(
@@ -57,10 +58,10 @@ class TestChartsPlot:
             convert=EnumConvert.BOOLEAN,
             horizon=EnumHorizon.INVERT,
         )
-        p_one_two = Point.create(sensor=s_one, value=23.42)
-        p_one_one = Point.create(sensor=s_one, value=1337)
-        p_two_two = Point.create(sensor=s_two, value=42.23)
-        p_two_one = Point.create(sensor=s_two, value=0)
+        p_one_two = Point.create(sensor=s_one, user=user, value=23.42)
+        p_one_one = Point.create(sensor=s_one, user=user, value=1337)
+        p_two_two = Point.create(sensor=s_two, user=user, value=42.23)
+        p_two_one = Point.create(sensor=s_two, user=user, value=0)
 
         res = visitor(ENDPOINT, params={'slug': prompt.slug})
 

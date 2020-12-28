@@ -64,17 +64,26 @@ class TestChartsPlotFunc:
         assert list(collect_points(mapper, sensor)) == []
 
     @staticmethod
-    def test_collect_points(gen_prompt, gen_sensor):
-        prompt, sensor = gen_prompt(), gen_sensor()
+    def test_collect_points(gen_prompt, gen_sensor, gen_user):
+        prompt, sensor, user = gen_prompt(), gen_sensor(), gen_user()
         mapper = Mapper.create(prompt=prompt, sensor=sensor)
         Point.create(
-            sensor=sensor, created=datetime.utcfromtimestamp(2), value=13.37
+            sensor=sensor,
+            user=user,
+            created=datetime.utcfromtimestamp(2),
+            value=13.37,
         )
         Point.create(
-            sensor=sensor, created=datetime.utcfromtimestamp(1), value=23
+            sensor=sensor,
+            user=user,
+            created=datetime.utcfromtimestamp(1),
+            value=23,
         )
         Point.create(
-            sensor=sensor, created=datetime.utcfromtimestamp(0), value=0
+            sensor=sensor,
+            user=user,
+            created=datetime.utcfromtimestamp(0),
+            value=0,
         )
 
         for horizon, convert, params in [
@@ -149,10 +158,10 @@ class TestChartsPlotFunc:
         assert list(assemble(prompt)) == []
 
     @staticmethod
-    def test_assemble(gen_prompt, gen_sensor):
-        prompt, sensor = gen_prompt(), gen_sensor()
+    def test_assemble(gen_prompt, gen_sensor, gen_user):
+        prompt, sensor, user = gen_prompt(), gen_sensor(), gen_user()
         mapper = Mapper.create(prompt=prompt, sensor=sensor)
-        point = Point.create(sensor=sensor, value=42)
+        point = Point.create(sensor=sensor, user=user, value=42)
 
         expect = namedtuple(
             'ex',

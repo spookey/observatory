@@ -18,6 +18,11 @@ class Point(CreatedMixin, Model):
         DB.ForeignKey('sensor.prime'),
         nullable=False,
     )
+    user_prime = DB.Column(
+        DB.Integer(),
+        DB.ForeignKey('user.prime'),
+        nullable=False,
+    )
 
     @hybrid_property
     def outdated(self):

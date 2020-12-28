@@ -9,6 +9,7 @@ from observatory.lib.clock import (
     epoch_seconds,
     time_format,
 )
+from observatory.models.point import Point
 from observatory.start.extensions import BCRYPT, DB
 
 LOG = getLogger(__name__)
@@ -22,6 +23,13 @@ class User(UserMixin, CreatedMixin, Model):
     pw_hash = DB.Column(DB.LargeBinary(length=128), nullable=True)
     active = DB.Column(DB.Boolean(), nullable=False, default=True)
     last_login = DB.Column(DB.DateTime(), nullable=True)
+    points = DB.relationship(
+        'Point',
+        backref=DB.backref('user', lazy=True),
+        order_by='Point.created.desc()',
+        cascade='all,delete-orphan',
+        lazy=True,
+    )
 
     def __init__(self, username, password, **kwargs):
         Model.__init__(self, username=username, **kwargs)
@@ -72,3 +80,7 @@ class User(UserMixin, CreatedMixin, Model):
 
         self.last_login = datetime.utcnow()
         return self.save()
+
+    @property
+    def query_points(self):
+        return Point.query_sorted(Point.query.with_parent(self))

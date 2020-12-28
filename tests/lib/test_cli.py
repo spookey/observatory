@@ -151,16 +151,19 @@ class TestCli:
         assert 'not found' in result.output.lower()
 
     @staticmethod
-    def test_sensorcurve(invoke, gen_sensor):
+    def test_sensorcurve(invoke, gen_sensor, gen_user):
         axc = 5
         num = 1 + 2 * axc
         sensor = gen_sensor()
+        user = gen_user()
         assert Point.query.count() == 0
 
         result = invoke(
             'sensorcurve',
             '--slug',
             sensor.slug,
+            '--username',
+            user.username,
             '--axc',
             axc,
         )
@@ -182,14 +185,16 @@ class TestCli:
             ),
         ],
     )
-    def test_sensorcurve_keep_old(invoke, gen_sensor, params):
+    def test_sensorcurve_keep_old(invoke, gen_sensor, gen_user, params):
         plus, flag = params
 
         axc = 2
         num = 1 + 2 * axc
         sensor = gen_sensor()
+        user = gen_user()
         point = Point.create(
             sensor=sensor,
+            user=user,
             value=42,
             created=datetime.utcnow() - timedelta(days=2 * BACKLOG_DAYS),
         )
@@ -199,6 +204,8 @@ class TestCli:
             'sensorcurve',
             '--slug',
             sensor.slug,
+            '--username',
+            user.username,
             '--axc',
             axc,
             flag,
@@ -206,22 +213,26 @@ class TestCli:
         assert Point.query.count() == plus + num
 
     @staticmethod
-    def test_sensorcurve_not_found(invoke):
+    def test_sensorcurve_not_found(invoke, gen_user):
+        user = gen_user()
         assert Sensor.query.all() == []
 
         result = invoke(
             'sensorcurve',
             '--slug',
             'test',
+            '--username',
+            user.username,
         )
         assert 'not present' in result.output.lower()
 
     @staticmethod
-    def test_sensorclear(invoke, gen_sensor):
+    def test_sensorclear(invoke, gen_sensor, gen_user):
         sensor = gen_sensor()
+        user = gen_user()
         number = 23
         for num in range(1, 1 + number):
-            sensor.append(num)
+            sensor.append(user, num)
 
         assert Point.query.count() == number
 

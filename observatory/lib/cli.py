@@ -77,12 +77,18 @@ def sensorclear(slug):
 
 @BP_CLI.cli.command('sensorcurve', help='Draw a curve of points on sensor')
 @click.option('--slug', prompt=True)
+@click.option('--username', prompt=True)
 @click.option('--axc', type=int, default=15)
 @click.option('--keep-old', is_flag=True, default=False)
-def sensorcurve(slug, axc, keep_old):
+def sensorcurve(slug, username, axc, keep_old):
     sensor = Sensor.by_slug(slug)
     if not sensor:
         click.secho(f'{slug} not present!', fg='red')
+        return
+
+    user = User.by_username(username)
+    if not user:
+        click.sensor(f'{username} not present', fg='red')
         return
 
     if not keep_old:
@@ -96,6 +102,7 @@ def sensorcurve(slug, axc, keep_old):
 
         Point.create(
             sensor=sensor,
+            user=user,
             created=stamp,
             value=value,
             _commit=False,

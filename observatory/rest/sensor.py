@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask_login import login_required
+from flask_login import current_user, login_required
 from flask_restful import abort, marshal
 from flask_restful.fields import Float, String, Url
 from flask_restful.reqparse import RequestParser
@@ -43,7 +43,7 @@ class SensorSingle(CommonSingle):
     def post(self, slug):
         args = self.parse()
         sensor = self.common_or_abort(slug)
-        if not sensor.append(args.value):
+        if not sensor.append(user=current_user, value=args.value):
             abort(500, message=f'Could not add {args.value} to {slug}')
         return marshal(sensor, self.SINGLE_POST), 201
 

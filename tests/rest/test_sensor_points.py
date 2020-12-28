@@ -44,24 +44,30 @@ class TestSensorSingle:
         assert res.json['points'] == []
 
     @staticmethod
-    def test_get_with_point(visitor, gen_sensor):
-        sensor = gen_sensor()
-        point = Point.create(sensor=sensor, value=23.42)
+    def test_get_with_point(visitor, gen_sensor, gen_user):
+        sensor, user = gen_sensor(), gen_user()
+        point = Point.create(sensor=sensor, user=user, value=23.42)
 
         res = visitor(ENDPOINT, params={'slug': sensor.slug})
         assert res.json == marshal(sensor, SensorPoints.SINGLE_GET)
         assert res.json['points'][-1]['value'] == point.value
 
     @staticmethod
-    def test_points(visitor, gen_sensor):
+    def test_points(visitor, gen_sensor, gen_user):
         now = datetime.utcnow()
-        sensor = gen_sensor()
+        sensor, user = gen_sensor(), gen_user()
 
         old = Point.create(
-            sensor=sensor, value=0, created=(now - timedelta(days=1))
+            sensor=sensor,
+            user=user,
+            value=0,
+            created=(now - timedelta(days=1)),
         )
         new = Point.create(
-            sensor=sensor, value=1, created=(now + timedelta(days=1))
+            sensor=sensor,
+            user=user,
+            value=1,
+            created=(now + timedelta(days=1)),
         )
         assert sensor.points == [new, old]
 

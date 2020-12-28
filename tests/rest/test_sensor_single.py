@@ -45,24 +45,30 @@ class TestSensorSingle:
         assert res.json['latest'] == {}
 
     @staticmethod
-    def test_get_with_point(visitor, gen_sensor):
-        sensor = gen_sensor()
-        point = Point.create(sensor=sensor, value=23.42)
+    def test_get_with_point(visitor, gen_sensor, gen_user):
+        sensor, user = gen_sensor(), gen_user()
+        point = Point.create(sensor=sensor, user=user, value=23.42)
 
         res = visitor(ENDPOINT, params={'slug': sensor.slug})
         assert res.json == marshal(sensor, SensorSingle.SINGLE_GET)
         assert res.json['latest']['value'] == point.value
 
     @staticmethod
-    def test_latest(visitor, gen_sensor):
+    def test_latest(visitor, gen_sensor, gen_user):
         now = datetime.utcnow()
-        sensor = gen_sensor()
+        sensor, user = gen_sensor(), gen_user()
 
         old = Point.create(
-            sensor=sensor, value=0, created=(now - timedelta(days=1))
+            sensor=sensor,
+            user=user,
+            value=0,
+            created=(now - timedelta(days=1)),
         )
         new = Point.create(
-            sensor=sensor, value=1, created=(now + timedelta(days=1))
+            sensor=sensor,
+            user=user,
+            value=1,
+            created=(now + timedelta(days=1)),
         )
         assert sensor.points == [new, old]
         assert sensor.latest == new
@@ -111,7 +117,8 @@ class TestSensorSingle:
     def test_post_no_point(visitor, gen_sensor, gen_user_loggedin):
         gen_user_loggedin()
         sensor = gen_sensor()
-        setattr(sensor, 'append', lambda _: False)  # crazy monkeypatch
+        setattr(sensor, 'append', lambda *_, **__: False)  # crazy monkeypatch
+
         res = visitor(
             ENDPOINT,
             params={'slug': sensor.slug},
@@ -122,9 +129,9 @@ class TestSensorSingle:
         assert 'could not add' in res.json['message'].lower()
 
     @staticmethod
-    @mark.parametrize('_value', [23.42, -1337, 0, float('inf')])
-    def test_post_single(_value, visitor, gen_sensor, gen_user_loggedin):
-        gen_user_loggedin()
+    @mark.parametrize('value', [23.42, -1337, 0, float('inf')])
+    def test_post_single(value, visitor, gen_sensor, gen_user_loggedin):
+        user = gen_user_loggedin()
         sensor = gen_sensor()
         assert Point.query.all() == []
 
@@ -132,15 +139,16 @@ class TestSensorSingle:
             ENDPOINT,
             params={'slug': sensor.slug},
             method='post',
-            data={'value': _value},
+            data={'value': value},
             code=201,
         )
 
         point = Point.query.first()
-        assert point.value == _value
+        assert point.value == value
+        assert point.user == user
 
         assert res.json == marshal(sensor, SensorSingle.SINGLE_POST)
-        assert res.json['value'] == _value
+        assert res.json['value'] == value
         assert res.json['url'] == url_for(
             'api.sensor.single', slug=sensor.slug, _external=True
         )

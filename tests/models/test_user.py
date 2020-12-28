@@ -3,8 +3,13 @@ from datetime import datetime
 from pytest import mark, raises
 from sqlalchemy.exc import IntegrityError
 
+from observatory.models.point import Point
 from observatory.models.user import User
 from observatory.start.environment import FMT_STRFTIME
+
+
+def _pointsort(points):
+    return list(sorted(points, key=lambda p: p.created, reverse=True))
 
 
 @mark.usefixtures('session')
@@ -24,6 +29,11 @@ class TestUser:
 
         assert start <= user.created
         assert user.created <= datetime.utcnow()
+
+        assert user.points == []
+        assert user.query_points.all() == []
+        assert user.query_points.count() == 0
+        assert user.query_points.first() is None
 
     @staticmethod
     def test_name_unique(gen_user):
@@ -153,3 +163,55 @@ class TestUser:
             <= (user.last_login - datetime.utcfromtimestamp(0)).total_seconds()
         )
         assert user.last_login_epoch_ms == 1000 * user.last_login_epoch
+
+    @staticmethod
+    def test_points_ordered(gen_user, gen_points_batch):
+        user = gen_user()
+        _, _, points = gen_points_batch(user=user)
+
+        assert user.points == _pointsort(points)
+        assert user.query_points.all() == _pointsort(points)
+
+    @staticmethod
+    def test_delete_cascade_orphan(gen_user, gen_sensor):
+        sensor = gen_sensor()
+        user = gen_user()
+
+        assert User.query.all() == [user]
+        assert user.points == []
+
+        points = [
+            Point.create(sensor=sensor, user=user, value=23),
+            Point.create(sensor=sensor, user=user, value=42),
+        ]
+
+        assert Point.query.all() == points
+        assert user.points == _pointsort(points)
+
+        assert user.delete()
+
+        assert User.query.all() == []
+        assert Point.query.all() == []
+
+    @staticmethod
+    def test_delete_cascade_keep_others(gen_sensor, gen_user):
+        sensor = gen_sensor()
+        keep_user = gen_user('keep')
+        drop_user = gen_user('drop')
+
+        assert User.query.all() == [keep_user, drop_user]
+        assert keep_user.points == []
+        assert drop_user.points == []
+
+        keep_point = Point.create(sensor=sensor, user=keep_user, value=23)
+        drop_point = Point.create(sensor=sensor, user=drop_user, value=42)
+
+        assert Point.query.all() == [keep_point, drop_point]
+
+        assert drop_user.points == [drop_point]
+        assert keep_user.points == [keep_point]
+
+        assert drop_user.delete()
+
+        assert User.query.all() == [keep_user]
+        assert Point.query.all() == [keep_point]

@@ -41,11 +41,11 @@ class TestMainIndex:
         visitor(ENDPOINT, params={'slug': 'none'}, code=404)
 
     @staticmethod
-    def test_single_view(visitor, gen_prompt, gen_sensor):
+    def test_single_view(visitor, gen_prompt, gen_sensor, gen_user):
         prompt = gen_prompt('test_prompt')
         sensor = gen_sensor('test_sensor')
         Mapper.create(prompt=prompt, sensor=sensor)
-        sensor.append(13.37)
+        sensor.append(user=gen_user(), value=13.37)
 
         res = visitor(ENDPOINT, params={'slug': prompt.slug})
         text = res.soup.text
@@ -55,15 +55,16 @@ class TestMainIndex:
         assert prompt.description in text
 
     @staticmethod
-    def test_view_info(visitor, gen_prompt, gen_sensor):
+    def test_view_info(visitor, gen_prompt, gen_sensor, gen_user):
         prompt_one = gen_prompt('prompt_one')
         prompt_two = gen_prompt('prompt_two')
         sensor_one = gen_sensor('sensor_one')
         sensor_two = gen_sensor('sensor_two')
+        user = gen_user()
         Mapper.create(prompt=prompt_two, sensor=sensor_one)
         Mapper.create(prompt=prompt_one, sensor=sensor_two)
-        sensor_one.append(23)
-        sensor_two.append(42)
+        sensor_one.append(user=user, value=23)
+        sensor_two.append(user=user, value=42)
 
         res = visitor(ENDPOINT)
         text = res.soup.text
