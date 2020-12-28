@@ -88,7 +88,7 @@ def sensorcurve(slug, username, axc, keep_old):
 
     user = User.by_username(username)
     if not user:
-        click.sensor(f'{username} not present', fg='red')
+        click.secho(f'{username} not present', fg='red')
         return
 
     if not keep_old:

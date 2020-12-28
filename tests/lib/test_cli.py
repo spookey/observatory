@@ -213,9 +213,10 @@ class TestCli:
         assert Point.query.count() == plus + num
 
     @staticmethod
-    def test_sensorcurve_not_found(invoke, gen_user):
+    def test_sensorcurve_slug_not_found(invoke, gen_user):
         user = gen_user()
         assert Sensor.query.all() == []
+        assert User.query.all() == [user]
 
         result = invoke(
             'sensorcurve',
@@ -223,6 +224,21 @@ class TestCli:
             'test',
             '--username',
             user.username,
+        )
+        assert 'not present' in result.output.lower()
+
+    @staticmethod
+    def test_sensorcurve_user_not_found(invoke, gen_sensor):
+        sensor = gen_sensor()
+        assert Sensor.query.all() == [sensor]
+        assert User.query.all() == []
+
+        result = invoke(
+            'sensorcurve',
+            '--slug',
+            sensor.slug,
+            '--username',
+            'nobody',
         )
         assert 'not present' in result.output.lower()
 
