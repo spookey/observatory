@@ -215,3 +215,35 @@ class TestUser:
 
         assert User.query.all() == [keep_user]
         assert Point.query.all() == [keep_point]
+
+    @staticmethod
+    def test_length(gen_sensor, gen_user):
+        sensor = gen_sensor()
+        user = gen_user()
+        assert user.length == 0
+
+        points = []
+        for num in range(1, 5):
+            points.append(Point.create(sensor=sensor, user=user, value=num))
+            assert user.length == num
+            assert user.points == _pointsort(points)
+
+        assert all(point.delete() for point in points)
+        assert user.length == 0
+
+    @staticmethod
+    def test_latest_empty(gen_user):
+        user = gen_user()
+
+        assert user.points == []
+        assert user.query_points.all() == []
+        assert user.latest is None
+
+    @staticmethod
+    def test_latest(gen_user, gen_points_batch):
+        user = gen_user()
+        _, _, complete = gen_points_batch(user=user, old=5, new=0)
+
+        assert user.points == _pointsort(complete)
+        assert user.query_points.all() == _pointsort(complete)
+        assert user.latest == _pointsort(complete)[0]

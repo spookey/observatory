@@ -84,3 +84,11 @@ class User(UserMixin, CreatedMixin, Model):
     @property
     def query_points(self):
         return Point.query_sorted(Point.query.with_parent(self))
+
+    @property
+    def length(self):
+        return self.query_points.count()
+
+    @property
+    def latest(self):
+        return self.query_points.first()
