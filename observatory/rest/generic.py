@@ -48,6 +48,10 @@ MAPPER_BASE = dict(
     prompt=String(attribute='prompt.slug'),
     sensor=String(attribute='sensor.slug'),
 )
+USER_BASE = dict(
+    name=String(attribute='username'),
+    active=Boolean(),
+)
 
 
 def common_listing(endpoint):
@@ -94,15 +98,39 @@ def mapper_single():
     )
 
 
-def sensor_single(nest_name, nest_default):
-    res = common_single(length=Integer())
-    res[nest_name] = Nested(
-        default=nest_default,
+def _nest_point(default):
+    return Nested(
+        default=default,
         nested=dict(
-            value=Float(),
+            sensor=String(attribute='sensor.slug'),
+            user=String(attribute='user.username'),
             stamp=DateTime(dt_format=DT_FORMAT, attribute='created'),
+            value=Float(),
         ),
     )
+
+
+def sensor_single(nest_name, nest_default):
+    res = common_single(length=Integer())
+    res[nest_name] = _nest_point(nest_default)
+    return res
+
+
+def user_listing(endpoint):
+    return dict(
+        USER_BASE,
+        url=Url(endpoint=endpoint, absolute=True),
+    )
+
+
+def user_single(nest_name, nest_default):
+    res = dict(
+        USER_BASE,
+        created=DateTime(dt_format=DT_FORMAT),
+        last_login=DateTime(dt_format=DT_FORMAT),
+        length=Integer(),
+    )
+    res[nest_name] = _nest_point(nest_default)
     return res
 
 
@@ -126,3 +154,17 @@ class CommonSingle(Resource):
 
     def get(self, slug):
         return marshal(self.common_or_abort(slug), self.SINGLE_GET), 200
+
+
+class UserSingle(Resource):
+    Model = None
+    SINGLE_GET = None
+
+    def user_or_abort(self, username):
+        obj = self.Model.by_username(username)
+        if not obj:
+            abort(404, message=f'{self.Model.__name__} {username} not present')
+        return obj
+
+    def get(self, username):
+        return marshal(self.user_or_abort(username), self.SINGLE_GET), 200

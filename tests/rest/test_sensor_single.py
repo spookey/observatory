@@ -21,6 +21,8 @@ class TestSensorSingle:
         assert isinstance(latest, Nested)
         assert latest.default == {}
         lnst = latest.nested
+        assert isinstance(lnst['sensor'], String)
+        assert isinstance(lnst['user'], String)
         assert isinstance(lnst['value'], Float)
         stamp = lnst['stamp']
         assert isinstance(stamp, DateTime)
@@ -30,7 +32,8 @@ class TestSensorSingle:
     @staticmethod
     def test_post_marshal():
         mdef = SensorSingle.SINGLE_POST
-        assert isinstance(mdef['slug'], String)
+        assert isinstance(mdef['sensor'], String)
+        assert isinstance(mdef['user'], String)
         assert isinstance(mdef['value'], Float)
         url = mdef['url']
         assert isinstance(url, Url)
@@ -51,7 +54,12 @@ class TestSensorSingle:
 
         res = visitor(ENDPOINT, params={'slug': sensor.slug})
         assert res.json == marshal(sensor, SensorSingle.SINGLE_GET)
-        assert res.json['latest']['value'] == point.value
+        assert res.json['latest'] == dict(
+            sensor=sensor.slug,
+            stamp=point.created.isoformat(),
+            user=user.username,
+            value=point.value,
+        )
 
     @staticmethod
     def test_latest(visitor, gen_sensor, gen_user):
@@ -73,9 +81,13 @@ class TestSensorSingle:
         assert sensor.points == [new, old]
         assert sensor.latest == new
 
-        res = visitor(ENDPOINT, params={'slug': sensor.slug}, code=200)
-        assert res.json['latest']['stamp'] == new.created.isoformat()
-        assert res.json['latest']['value'] == new.value
+        res = visitor(ENDPOINT, params={'slug': sensor.slug})
+        assert res.json['latest'] == dict(
+            sensor=sensor.slug,
+            stamp=new.created.isoformat(),
+            user=user.username,
+            value=new.value,
+        )
 
     @staticmethod
     def test_post_not_logged_in(visitor, gen_sensor):
@@ -145,10 +157,13 @@ class TestSensorSingle:
 
         point = Point.query.first()
         assert point.value == value
+        assert point.sensor == sensor
         assert point.user == user
 
         assert res.json == marshal(sensor, SensorSingle.SINGLE_POST)
-        assert res.json['value'] == value
-        assert res.json['url'] == url_for(
-            'api.sensor.single', slug=sensor.slug, _external=True
+        assert res.json == dict(
+            sensor=sensor.slug,
+            url=url_for('api.sensor.single', slug=sensor.slug, _external=True),
+            user=user.username,
+            value=value,
         )

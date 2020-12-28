@@ -3,6 +3,7 @@ from flask import Flask
 from observatory.lib.cli import BP_CLI
 from observatory.rest.charts import BP_REST_CHARTS
 from observatory.rest.mapper import BP_REST_MAPPER
+from observatory.rest.owners import BP_REST_OWNERS
 from observatory.rest.prompt import BP_REST_PROMPT
 from observatory.rest.sensor import BP_REST_SENSOR
 from observatory.rest.sp_api import BP_REST_SP_API
@@ -73,6 +74,7 @@ def register_blueprints(app):
     app.register_blueprint(BP_REST_MAPPER)
     app.register_blueprint(BP_REST_PROMPT)
     app.register_blueprint(BP_REST_SENSOR)
+    app.register_blueprint(BP_REST_OWNERS)
     app.register_blueprint(BP_REST_SP_API)
 
 

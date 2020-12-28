@@ -34,8 +34,9 @@ class SensorSingle(CommonSingle):
         return parser.parse_args()
 
     SINGLE_POST = dict(
-        slug=String(),
+        sensor=String(attribute='slug'),
         url=Url(endpoint='api.sensor.single', absolute=True),
+        user=String(attribute='latest.user.username'),
         value=Float(attribute='latest.value'),
     )
 

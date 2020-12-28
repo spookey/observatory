@@ -2,24 +2,35 @@ from datetime import datetime, timedelta
 
 from flask import url_for
 from flask_restful import marshal
-from flask_restful.fields import DateTime, Float, Integer, Nested, String
+from flask_restful.fields import (
+    Boolean,
+    DateTime,
+    Float,
+    Integer,
+    Nested,
+    String,
+)
 from pytest import mark
 
 from observatory.models.point import Point
-from observatory.rest.sensor import SensorPoints
+from observatory.rest.owners import OwnersPoints
 
-ENDPOINT = 'api.sensor.points'
+ENDPOINT = 'api.owners.points'
 
 
 @mark.usefixtures('session')
-class TestSensorPoints:
+class TestOwnersPoints:
     @staticmethod
     def test_url():
-        assert url_for(ENDPOINT, slug='test') == '/api/sensor/test/points'
+        assert url_for(ENDPOINT, username='test') == '/api/user/test/points'
 
     @staticmethod
-    def test_get_marshal():
-        mdef = SensorPoints.SINGLE_GET
+    def test_marshal():
+        mdef = OwnersPoints.SINGLE_GET
+        assert isinstance(mdef['name'], String)
+        assert isinstance(mdef['active'], Boolean)
+        assert isinstance(mdef['created'], DateTime)
+        assert isinstance(mdef['last_login'], DateTime)
         assert isinstance(mdef['length'], Integer)
         points = mdef['points']
         assert isinstance(points, Nested)
@@ -35,23 +46,23 @@ class TestSensorPoints:
 
     @staticmethod
     def test_get_empty(visitor):
-        res = visitor(ENDPOINT, params={'slug': 'wrong'}, code=404)
+        res = visitor(ENDPOINT, params={'username': 'wrong'}, code=404)
         assert 'not present' in res.json['message'].lower()
 
     @staticmethod
-    def test_no_point(visitor, gen_sensor):
-        sensor = gen_sensor()
-        res = visitor(ENDPOINT, params={'slug': sensor.slug})
-        assert res.json == marshal(sensor, SensorPoints.SINGLE_GET)
+    def test_no_point(visitor, gen_user):
+        user = gen_user()
+        res = visitor(ENDPOINT, params={'username': user.username})
+        assert res.json == marshal(user, OwnersPoints.SINGLE_GET)
         assert res.json['points'] == []
 
     @staticmethod
-    def test_get_with_point(visitor, gen_sensor, gen_user):
+    def test_with_point(visitor, gen_sensor, gen_user):
         sensor, user = gen_sensor(), gen_user()
         point = Point.create(sensor=sensor, user=user, value=23.42)
 
-        res = visitor(ENDPOINT, params={'slug': sensor.slug})
-        assert res.json == marshal(sensor, SensorPoints.SINGLE_GET)
+        res = visitor(ENDPOINT, params={'username': user.username})
+        assert res.json == marshal(user, OwnersPoints.SINGLE_GET)
         assert res.json['points'] == [
             dict(
                 sensor=sensor.slug,
@@ -80,7 +91,7 @@ class TestSensorPoints:
         )
         assert sensor.points == [new, old]
 
-        res = visitor(ENDPOINT, params={'slug': sensor.slug})
+        res = visitor(ENDPOINT, params={'username': user.username})
         assert res.json['points'] == [
             dict(
                 sensor=sensor.slug,
