@@ -20,6 +20,7 @@ from observatory.start.environment import ERROR_CODES
 from observatory.start.extensions import CSRF_PROTECT, DB, MIGRATE
 from observatory.views.main import BLUEPRINT_MAIN
 from observatory.views.mgnt import BLUEPRINT_MGNT
+from observatory.views.sapi import BLUEPRINT_SAPI
 from observatory.views.side import BLUEPRINT_SIDE
 from observatory.views.user import BLUEPRINT_USER
 
@@ -47,14 +48,15 @@ class TestApp:
         blueprints = [
             BLUEPRINT_MAIN,
             BLUEPRINT_MGNT,
+            BLUEPRINT_SAPI,
             BLUEPRINT_SIDE,
             BLUEPRINT_USER,
             BP_CLI,
             BP_REST_CHARTS,
             BP_REST_MAPPER,
+            BP_REST_OWNERS,
             BP_REST_PROMPT,
             BP_REST_SENSOR,
-            BP_REST_OWNERS,
             BP_REST_SP_API,
         ]
         for blueprint in app.blueprints.values():

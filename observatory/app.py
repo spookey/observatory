@@ -30,6 +30,7 @@ from observatory.start.extensions import (
 from observatory.start.logger import initialize_logging
 from observatory.views.main import BLUEPRINT_MAIN
 from observatory.views.mgnt import BLUEPRINT_MGNT
+from observatory.views.sapi import BLUEPRINT_SAPI
 from observatory.views.side import BLUEPRINT_SIDE
 from observatory.views.user import BLUEPRINT_USER
 
@@ -68,13 +69,14 @@ def register_blueprints(app):
     app.register_blueprint(BP_CLI)
     app.register_blueprint(BLUEPRINT_MAIN)
     app.register_blueprint(BLUEPRINT_MGNT)
+    app.register_blueprint(BLUEPRINT_SAPI)
     app.register_blueprint(BLUEPRINT_SIDE)
     app.register_blueprint(BLUEPRINT_USER)
     app.register_blueprint(BP_REST_CHARTS)
     app.register_blueprint(BP_REST_MAPPER)
+    app.register_blueprint(BP_REST_OWNERS)
     app.register_blueprint(BP_REST_PROMPT)
     app.register_blueprint(BP_REST_SENSOR)
-    app.register_blueprint(BP_REST_OWNERS)
     app.register_blueprint(BP_REST_SP_API)
 
 
