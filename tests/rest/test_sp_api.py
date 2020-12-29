@@ -1,7 +1,7 @@
 from flask import current_app, url_for
 from pytest import mark
 
-ENDPOINT = 'api.space.json'
+ENDPOINT = 'api.sp_api.json'
 
 
 @mark.usefixtures('session')

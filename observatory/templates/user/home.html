@@ -30,6 +30,9 @@
   {{ _link('Mapper', 'obj_mapper', 'api.mapper.listing') }}
   {{ _link('Sensor', 'obj_sensor', 'api.sensor.listing') }}
   {{ _link('User', 'user_basic', 'api.owners.listing') }}
+  {% if config.ENABLE_SP_API %}
+  {{ _link('Space Api', 'obj_sp_api', 'api.sp_api.json') }}
+  {% endif %}
 </nav>
 {% endmacro %}
 

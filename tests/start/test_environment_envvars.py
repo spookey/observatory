@@ -155,7 +155,7 @@ def test_taglines(monkeypatch):
     for num, line in enumerate(environment.TAGLINES):
         assert environment.TAGLINES[num] == line
 
-        monkeypatch.setenv(f'TAGLINE_{1 + num:02d}', '*️⃣')
+        monkeypatch.setenv(f'TAGLINE_{(1 + num):02d}', '*️⃣')
         reload(environment)
 
         assert environment.TAGLINES[num] == '*️⃣'

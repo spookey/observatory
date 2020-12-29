@@ -44,6 +44,7 @@ class TestUser:
             url_for('api.mapper.listing'),
             url_for('api.sensor.listing'),
             url_for('api.owners.listing'),
+            url_for('api.sp_api.json'),
         ]
 
     @staticmethod
