@@ -1,0 +1,95 @@
+{% extends '_base.html' %}
+{% from '_macros/elem.html' import bool_icon %}
+{% from '_macros/elem.html' import text_code %}
+{% from '_macros/elem.html' import text_icon %}
+{% from '_macros/elem.html' import time_abs %}
+{% from '_macros/elem.html' import time_rel %}
+{% from '_macros/level.html' import key_val_level %}
+{% from '_macros/level.html' import split_level %}
+
+{% macro _navigation() %}
+  {% macro _block(text) %}
+  <p class="panel-tabs">
+    <a class="is-active">{{ text }}</a>
+  </p>
+  {% endmacro %}
+  {% macro _link(text, icon, endpoint) %}
+  <a class="panel-block" href="{{ url_for(endpoint) }}">
+    {{ text_icon(icon) }}
+    <span>{{ text }}</span>
+  </a>
+  {% endmacro %}
+<nav class="panel">
+  <p class="panel-heading">Links</p>
+  {{ _block('Management') }}
+  {{ _link('Prompt', 'obj_prompt', 'mgnt.view_prompt') }}
+  {{ _link('Mapper', 'obj_mapper', 'mgnt.view_mapper') }}
+  {{ _link('Sensor', 'obj_sensor', 'mgnt.view_sensor') }}
+  {{ _block('API') }}
+  {{ _link('Prompt', 'obj_prompt', 'api.prompt.listing') }}
+  {{ _link('Mapper', 'obj_mapper', 'api.mapper.listing') }}
+  {{ _link('Sensor', 'obj_sensor', 'api.sensor.listing') }}
+  {{ _link('User', 'user_basic', 'api.owners.listing') }}
+</nav>
+{% endmacro %}
+
+{% macro _content() %}
+  {% macro _heading() %}
+  <h3 class="title">
+    {{ text_icon('user_basic', 'small') }}
+    <span>{{ current_user.username }}</span>
+  </h3>
+  {% endmacro %}
+  {% macro _logout() %}
+  <p>
+    <a
+      class="button is-dark is-outlined"
+      href="{{ url_for('user.logout') }}"
+    >
+      {{ text_icon('user_leave') }}
+      <span>Logout</span>
+    </a>
+  </p>
+  {% endmacro %}
+
+<div class="content">
+  {{ split_level(_heading(), _logout()) }}
+  {{ key_val_level(
+    'Active',
+    bool_icon(current_user.active),
+  ) }}
+  {{ key_val_level(
+    'Created',
+    time_abs(current_user.created_epoch_ms, current_user.created_fmt),
+  ) }}
+  {{ key_val_level(
+    'Last Login',
+    time_abs(current_user.last_login_epoch_ms, current_user.last_login_fmt),
+  ) }}
+  {{ key_val_level(
+    'Points',
+    text_code(current_user.length),
+  ) }}
+  {% if current_user.latest %}
+  {{ key_val_level(
+    'Latest',
+    time_rel(current_user.latest.created_epoch_ms, current_user.latest.created_fmt),
+  ) }}
+  {% endif %}
+</div>
+{% endmacro %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-one-third">
+        {{ _navigation() }}
+      </div>
+      <div class="column is-two-thirds">
+        {{ _content() }}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

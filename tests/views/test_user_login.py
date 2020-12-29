@@ -12,7 +12,7 @@ class TestUserLogin:
     @staticmethod
     @mark.usefixtures('ctx_app')
     def test_url():
-        assert url_for(ENDPOINT) == '/login'
+        assert url_for(ENDPOINT) == '/user/login'
 
     @staticmethod
     def test_basic_form(visitor):
@@ -64,7 +64,7 @@ class TestUserLogin:
     def test_form_login(visitor, gen_user):
         assert current_user.is_authenticated is False
         user = gen_user(password=USER_PASS)
-        home_url = url_for('main.index', _external=True)
+        home_url = url_for('user.home', _external=True)
 
         res = visitor(
             ENDPOINT,

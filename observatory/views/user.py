@@ -28,7 +28,7 @@ def request_loader(req):
     return None
 
 
-@BLUEPRINT_USER.route('/logout')
+@BLUEPRINT_USER.route('/user/logout')
 @login_required
 def logout():
     LOG.info('logout for user "%s"', current_user.username)
@@ -37,7 +37,7 @@ def logout():
     return redirect(url_for('main.index'))
 
 
-@BLUEPRINT_USER.route('/login', methods=['GET', 'POST'])
+@BLUEPRINT_USER.route('/user/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
 
@@ -45,8 +45,14 @@ def login():
         user = form.action()
         if user is not None:
             flash(f'Welcome {user.username}!', 'dark')
-            return redirect(request.args.get('next') or url_for('main.index'))
+            return redirect(request.args.get('next') or url_for('user.home'))
 
     return render_template(
         'user/login.html', title='Tickets, please!', form=form
     )
+
+
+@BLUEPRINT_USER.route('/user')
+@login_required
+def home():
+    return render_template('user/home.html', title='Welcome home!')

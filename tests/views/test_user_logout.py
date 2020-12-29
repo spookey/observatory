@@ -10,7 +10,7 @@ class TestUserLogout:
     @staticmethod
     @mark.usefixtures('ctx_app')
     def test_url():
-        assert url_for(ENDPOINT) == '/logout'
+        assert url_for(ENDPOINT) == '/user/logout'
 
     @staticmethod
     def test_no_user(visitor):
