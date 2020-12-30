@@ -67,13 +67,22 @@ def test_backlog_days(monkeypatch):
     assert environment.BACKLOG_DAYS == 1337
 
 
-def test_enable_sp_api(monkeypatch):
-    assert environment.ENABLE_SP_API is True
+def test_sp_api_enable(monkeypatch):
+    assert environment.SP_API_ENABLE is True
 
-    monkeypatch.setenv('ENABLE_SP_API', 'off')
+    monkeypatch.setenv('SP_API_ENABLE', 'off')
     reload(environment)
 
-    assert environment.ENABLE_SP_API is False
+    assert environment.SP_API_ENABLE is False
+
+
+def test_space_refresh_sec(monkeypatch):
+    assert environment.SP_API_REFRESH == 18000
+
+    monkeypatch.setenv('SP_API_REFRESH', '1337')
+    reload(environment)
+
+    assert environment.SP_API_REFRESH == 1337
 
 
 def test_title(monkeypatch):
@@ -143,7 +152,7 @@ def test_fmt_fields(monkeypatch):
 
 
 def test_api_plot_refresh_ms(monkeypatch):
-    assert environment.API_PLOT_REFRESH_MS == 60 * 1000
+    assert environment.API_PLOT_REFRESH_MS == 60000
 
     monkeypatch.setenv('API_PLOT_REFRESH_MS', '23')
     reload(environment)

@@ -30,7 +30,10 @@ CSRF_STRICT = parse_bool(getenv('CSRF_STRICT', 'true'), fallback=True)
 
 BACKLOG_DAYS = parse_int(getenv('BACKLOG_DAYS', '14'), fallback=True)
 
-ENABLE_SP_API = parse_bool(getenv('ENABLE_SP_API', 'true'), fallback=True)
+SP_API_ENABLE = parse_bool(getenv('SP_API_ENABLE', 'true'), fallback=True)
+SP_API_REFRESH = parse_int(
+    getenv('SP_API_REFRESH', f'{60 * 300}'), fallback=60 * 300
+)
 
 
 TITLE = getenv('TITLE', 'Observatory')

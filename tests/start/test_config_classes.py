@@ -6,9 +6,9 @@ from observatory.start.config import (
 )
 from observatory.start.environment import (
     APP_NAME,
-    ENABLE_SP_API,
     FAVICON,
     HTML_LANG,
+    SP_API_ENABLE,
     TITLE,
 )
 
@@ -19,7 +19,6 @@ def test_base_config():
     assert conf.APP_NAME == APP_NAME
     assert conf.BCRYPT_LOG_ROUNDS == 13
     assert conf.DEBUG is False
-    assert conf.ENABLE_SP_API == ENABLE_SP_API
     assert conf.FAVICON == FAVICON
     assert conf.HTML_LANG == HTML_LANG
     assert conf.HTTP_BASIC_AUTH_REALM == TITLE
@@ -27,6 +26,7 @@ def test_base_config():
     assert conf.RESTFUL_JSON['indent'] is None
     assert conf.RESTFUL_JSON['sort_keys'] is True
     assert conf.SECRET_KEY and isinstance(conf.SECRET_KEY, (str, bytes))
+    assert conf.SP_API_ENABLE == SP_API_ENABLE
     assert conf.TESTING is False
     assert conf.TITLE == TITLE
     assert conf.WTF_CSRF_ENABLED is True
@@ -48,7 +48,7 @@ def test_test_config():
 
     assert conf.BCRYPT_LOG_ROUNDS == 5
     assert conf.DEBUG is False
-    assert conf.ENABLE_SP_API is True
+    assert conf.SP_API_ENABLE is True
     assert conf.SQLALCHEMY_DATABASE_URI == 'sqlite://'
     assert conf.TESTING is True
     assert conf.TITLE == TITLE

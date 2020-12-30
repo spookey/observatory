@@ -10,7 +10,7 @@ BP_REST_SP_API = Blueprint('space_api', __name__)
 class SpaceApi(Resource):
     @staticmethod
     def get():
-        if not current_app.config.get('ENABLE_SP_API', False):
+        if not current_app.config.get('SP_API_ENABLE', False):
             abort(404)
 
         return marshal(

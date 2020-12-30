@@ -12,7 +12,7 @@ class TestSpaceApi:
 
     @staticmethod
     def test_disabled(monkeypatch, visitor):
-        monkeypatch.setitem(current_app.config, 'ENABLE_SP_API', False)
+        monkeypatch.setitem(current_app.config, 'SP_API_ENABLE', False)
 
         res = visitor(ENDPOINT, code=404)
         ctt = res.request.headers.get('content-type', None)

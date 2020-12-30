@@ -18,7 +18,7 @@ class TestMainIndex:
     @staticmethod
     def test_disabled(monkeypatch, visitor, gen_user_loggedin):
         gen_user_loggedin()
-        monkeypatch.setitem(current_app.config, 'ENABLE_SP_API', False)
+        monkeypatch.setitem(current_app.config, 'SP_API_ENABLE', False)
 
         visitor(ENDPOINT, code=404)
 
