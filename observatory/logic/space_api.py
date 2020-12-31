@@ -218,8 +218,10 @@ class SpaceApi:
             'events': self.get_events(),
         }
         self._last = datetime.utcnow()
+        return self.content
 
     def reset(self):
         self._log.info('resetting content')
         self._content = None
-        self.update()
+        self._last = None
+        return self.update()

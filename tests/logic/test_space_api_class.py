@@ -58,7 +58,7 @@ class TestSpaceApiClass:
 
         assert obj.content == content
 
-        obj.update()
+        assert obj.update()
 
         assert obj.content == dict(state=state, events=events, **content)
         last = getattr(obj, '_last', 'error')
@@ -85,7 +85,7 @@ class TestSpaceApiClass:
         assert getattr(obj, '_content', 'error') == content
         assert getattr(obj, '_last', 'error') == past
 
-        obj.reset()
+        assert obj.reset()
 
         assert getattr(obj, '_content', 'error') == dict(
             state=state, events=events, **content

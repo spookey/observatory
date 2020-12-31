@@ -97,3 +97,20 @@ class TestValues:
 
         assert Values.get_all('some') == []
         assert Values.get_all(key) == list(range(1 + 23, 1 + 42))
+
+    @staticmethod
+    def test_set():
+        past = Values.create(key='past', idx=0)
+
+        assert Values.query.all() == [past]
+        assert past.value is None
+
+        past_val = 'past'
+        done_val = 23
+
+        Values.set(key='past', idx=0, value=past_val)
+        done = Values.set(key='done', idx=0, value=done_val)
+
+        assert Values.query.all() == [past, done]
+        assert past.value == past_val
+        assert done.value == done_val

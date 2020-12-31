@@ -97,3 +97,10 @@ class Values(Model):
     @classmethod
     def get_all(cls, key):
         return [obj.value for obj in cls.by_key(key)]
+
+    @classmethod
+    def set(cls, key, idx=0, value=None):
+        obj = cls.by_key_idx(key=key, idx=idx)
+        if obj is None:
+            obj = cls.create(key=key, idx=idx)
+        return obj.update(value=value)
