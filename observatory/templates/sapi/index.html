@@ -1,11 +1,39 @@
 {% extends '_base.html' %}
+{% from '_macros/elem.html' import text_icon %}
+{% from '_macros/level.html' import split_level %}
+
+{% macro _heading(text) %}
+<h4 class="subtitle">{{ text }}</h4>
+{% endmacro %}
+
+{% macro _content_api_button() %}
+<p>
+  <a
+    class="button is-small is-dark is-outlined"
+    href="{{ url_for('api.sp_api.json') }}"
+    target="_blank"
+  >
+    {{ text_icon('obj_sp_api') }}
+    <span>Rendered</span>
+  </a>
+</p>
+{% endmacro %}
 
 
 {% block content %}
 <section class="section">
   <div class="container">
-    <div class="content">
-      <h3 class="title has-text-centered">{{ title }}</h3>
+    <div class="columns">
+      <div class="column is-two-thirds">
+        <div class="content">
+          <h3 class="title">{{ title }}</h3>
+        </div>
+      </div>
+      <div class="column is-one-third">
+        <div class="content">
+          {{ split_level(_heading('Raw Content'), _content_api_button() ) }}
+          <pre><code>{{ space_api.content|tojson(indent=2) }}</code></pre>
+      </div>
     </div>
   </div>
 </section>

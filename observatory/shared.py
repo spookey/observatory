@@ -11,6 +11,7 @@ from observatory.forms.common import (
 )
 from observatory.forms.mapper import MapperDropForm, MapperSortForm
 from observatory.lib.text import random_line
+from observatory.logic.space_api import SpaceApi
 from observatory.start.environment import (
     API_PLOT_REFRESH_MS,
     FMT_MOMENT_DAY,
@@ -27,6 +28,8 @@ from observatory.start.environment import (
 )
 
 LOG = getLogger(__name__)
+
+SPACE_API = SpaceApi()
 
 
 def errorhandler(error):

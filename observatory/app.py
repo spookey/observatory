@@ -8,6 +8,7 @@ from observatory.rest.prompt import BP_REST_PROMPT
 from observatory.rest.sensor import BP_REST_SENSOR
 from observatory.rest.sp_api import BP_REST_SP_API
 from observatory.shared import (
+    SPACE_API,
     errorhandler,
     form_drop_mapper,
     form_drop_prompt,
@@ -89,6 +90,7 @@ def register_template_functions(app):
         form_sort_prompt=form_sort_prompt,
         form_sort_sensor=form_sort_sensor,
         script_config_data=script_config_data,
+        space_api=SPACE_API,
         tagline=tagline,
     )
 

@@ -6,6 +6,7 @@ from observatory.rest.prompt import BP_REST_PROMPT
 from observatory.rest.sensor import BP_REST_SENSOR
 from observatory.rest.sp_api import BP_REST_SP_API
 from observatory.shared import (
+    SPACE_API,
     errorhandler,
     form_drop_mapper,
     form_drop_prompt,
@@ -78,6 +79,8 @@ class TestApp:
             tagline,
         ):
             assert app.jinja_env.globals[func.__name__] is func
+
+        assert app.jinja_env.globals['space_api'] is SPACE_API
 
     @staticmethod
     def test_jinja_config(app):
