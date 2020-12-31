@@ -37,14 +37,21 @@ class TestSpaceApiBuild:
     @staticmethod
     def test_space_logo_url():
         api = SpaceApi()
-        space, logo, url = (
-            'space',
-            'https://example.org/image.gif',
-            'https://example.net',
+        space = (
+            Values.create(key='space_api.space', idx=0)
+            .update(value='space')
+            .value
         )
-        Values.create(key='space', idx=0).update(value=space)
-        Values.create(key='logo', idx=0).update(value=logo)
-        Values.create(key='url', idx=0).update(value=url)
+        logo = (
+            Values.create(key='space_api.logo', idx=0)
+            .update(value='https://example.org/image.gif')
+            .value
+        )
+        url = (
+            Values.create(key='space_api.url', idx=0)
+            .update(value='https://example.net')
+            .value
+        )
 
         res = api.build()
         assert res['space'] == space
@@ -67,16 +74,26 @@ class TestSpaceApiBuild:
     @staticmethod
     def test_location():
         api = SpaceApi()
-        address, lat, lon, timezone = (
-            'Somewhere 23, 12345 FNORD',
-            23.5,
-            133.7,
-            'UTC',
+        address = (
+            Values.create(key='space_api.location.address', idx=0)
+            .update(value='Somewhere 23, 12345 FNORD')
+            .value
         )
-        Values.create(key='location.address', idx=0).update(value=address)
-        Values.create(key='location.lat', idx=0).update(value=lat)
-        Values.create(key='location.lon', idx=0).update(value=lon)
-        Values.create(key='location.timezone', idx=0).update(value=timezone)
+        lat = (
+            Values.create(key='space_api.location.lat', idx=0)
+            .update(value=23.5)
+            .value
+        )
+        lon = (
+            Values.create(key='space_api.location.lon', idx=0)
+            .update(value=133.7)
+            .value
+        )
+        timezone = (
+            Values.create(key='space_api.location.timezone', idx=0)
+            .update(value='UTC')
+            .value
+        )
 
         res = api.build()
         assert res['location']['address'] == address
@@ -98,9 +115,16 @@ class TestSpaceApiBuild:
     @staticmethod
     def test_spacefed():
         api = SpaceApi()
-        spacenet, spacesaml = True, False
-        Values.create(key='spacefed.spacenet', idx=0).update(value=spacenet)
-        Values.create(key='spacefed.spacesaml', idx=0).update(value=spacesaml)
+        spacenet = (
+            Values.create(key='space_api.spacefed.spacenet', idx=0)
+            .update(value=True)
+            .value
+        )
+        spacesaml = (
+            Values.create(key='space_api.spacefed.spacesaml', idx=0)
+            .update(value=False)
+            .value
+        )
 
         res = api.build()
         assert res['spacefed']['spacenet'] == spacenet
@@ -109,12 +133,16 @@ class TestSpaceApiBuild:
     @staticmethod
     def test_cam():
         api = SpaceApi()
-        nil_cam, two_cam = (
-            'https://example.org/cam.mjpg',
-            'https://example.com/webcam',
+        nil_cam = (
+            Values.create(key='space_api.cam', idx=0)
+            .update(value='https://example.org/cam.mjpg')
+            .value
         )
-        Values.create(key='cam', idx=0).update(value=nil_cam)
-        Values.create(key='cam', idx=2).update(value=two_cam)
+        two_cam = (
+            Values.create(key='space_api.cam', idx=2)
+            .update(value='https://example.com/webcam')
+            .value
+        )
 
         res = api.build()
         assert res['cam'] == [nil_cam, two_cam]
@@ -147,9 +175,16 @@ class TestSpaceApiBuild:
     @staticmethod
     def test_contact_telephone():
         api = SpaceApi()
-        phone, sip = '+1 234 567 890', 'sip:space@sip.example.org'
-        Values.create(key='contact.phone', idx=0).update(value=phone)
-        Values.create(key='contact.sip', idx=0).update(value=sip)
+        phone = (
+            Values.create(key='space_api.contact.phone', idx=0)
+            .update(value='+1 234 567 890')
+            .value
+        )
+        sip = (
+            Values.create(key='space_api.contact.sip', idx=0)
+            .update(value='sip:space@sip.example.org')
+            .value
+        )
 
         res = api.build()
         assert res['contact']['phone'] == phone
@@ -158,17 +193,26 @@ class TestSpaceApiBuild:
     @staticmethod
     def test_contact_chats():
         api = SpaceApi()
-        irc, xmpp, matrix, mumble = (
-            'irc://example.org/#space',
-            'chat@conference.example.org',
-            '#chat:example.org',
-            'mumble://mumble.example.org/space?version=0.0.1',
+        irc = (
+            Values.create(key='space_api.contact.irc', idx=0)
+            .update(value='irc://example.org/#space')
+            .value
         )
-
-        Values.create(key='contact.irc', idx=0).update(value=irc)
-        Values.create(key='contact.xmpp', idx=0).update(value=xmpp)
-        Values.create(key='contact.matrix', idx=0).update(value=matrix)
-        Values.create(key='contact.mumble', idx=0).update(value=mumble)
+        xmpp = (
+            Values.create(key='space_api.contact.xmpp', idx=0)
+            .update(value='chat@conference.example.org')
+            .value
+        )
+        matrix = (
+            Values.create(key='space_api.contact.matrix', idx=0)
+            .update(value='#chat:example.org')
+            .value
+        )
+        mumble = (
+            Values.create(key='space_api.contact.mumble', idx=0)
+            .update(value='mumble://mumble.example.org/space?version=0.0.1')
+            .value
+        )
 
         res = api.build()
         assert res['contact']['irc'] == irc
@@ -179,16 +223,26 @@ class TestSpaceApiBuild:
     @staticmethod
     def test_contact_social():
         api = SpaceApi()
-        twitter, mastodon, facebook, identica = (
-            '@space',
-            '@space@example.net',
-            'https://example.com/space',
-            'space@example.org',
+        twitter = (
+            Values.create(key='space_api.contact.twitter', idx=0)
+            .update(value='@space')
+            .value
         )
-        Values.create(key='contact.twitter', idx=0).update(value=twitter)
-        Values.create(key='contact.mastodon', idx=0).update(value=mastodon)
-        Values.create(key='contact.facebook', idx=0).update(value=facebook)
-        Values.create(key='contact.identica', idx=0).update(value=identica)
+        mastodon = (
+            Values.create(key='space_api.contact.mastodon', idx=0)
+            .update(value='@space@example.net')
+            .value
+        )
+        facebook = (
+            Values.create(key='space_api.contact.facebook', idx=0)
+            .update(value='https://example.com/space')
+            .value
+        )
+        identica = (
+            Values.create(key='space_api.contact.identica', idx=0)
+            .update(value='space@example.org')
+            .value
+        )
 
         res = api.build()
         assert res['contact']['twitter'] == twitter
@@ -199,12 +253,16 @@ class TestSpaceApiBuild:
     @staticmethod
     def test_contact_network():
         api = SpaceApi()
-        foursquare, gopher = (
-            '000000000000000000000000',
-            'gopher://gopher.space.example.org',
+        foursquare = (
+            Values.create(key='space_api.contact.foursquare', idx=0)
+            .update(value='000000000000000000000000')
+            .value
         )
-        Values.create(key='contact.foursquare', idx=0).update(value=foursquare)
-        Values.create(key='contact.gopher', idx=0).update(value=gopher)
+        gopher = (
+            Values.create(key='space_api.contact.gopher', idx=0)
+            .update(value='gopher://gopher.space.example.org')
+            .value
+        )
 
         res = api.build()
         assert res['contact']['foursquare'] == foursquare
@@ -213,17 +271,23 @@ class TestSpaceApiBuild:
     @staticmethod
     def test_contact_mail():
         api = SpaceApi()
-        email, mailinglist, issue_mail = (
-            'space@example.org',
-            'list@example.org',
-            'space@example.org',
+        email = (
+            Values.create(key='space_api.contact.email', idx=0)
+            .update(value='space@example.org')
+            .value
         )
-        Values.create(key='contact.email', idx=0).update(value=email)
-        Values.create(key='contact.ml', idx=0).update(value=mailinglist)
-        Values.create(key='contact.issue_mail', idx=0).update(value=issue_mail)
+        mailinglist = (
+            Values.create(key='space_api.contact.ml', idx=0)
+            .update(value='list@example.org')
+            .value
+        )
+        issue_mail = (
+            Values.create(key='space_api.contact.issue_mail', idx=0)
+            .update(value='space@example.org')
+            .value
+        )
 
         res = api.build()
-
         assert res['contact']['email'] == email
         assert res['contact']['ml'] == mailinglist
         assert res['contact']['issue_mail'] == issue_mail
@@ -231,34 +295,42 @@ class TestSpaceApiBuild:
     @staticmethod
     def test_contact_keymasters():
         api = SpaceApi()
-        nil_name, one_name, two_name = 'nil', 'one', 'two'
-        Values.create(key='contact.keymasters.name', idx=0).update(
-            value=nil_name
+        nil_name = (
+            Values.create(key='space_api.contact.keymasters.name', idx=0)
+            .update(value='nil')
+            .value
         )
-        Values.create(key='contact.keymasters.name', idx=1).update(
-            value=one_name
+        one_name = (
+            Values.create(key='space_api.contact.keymasters.name', idx=1)
+            .update(value='one')
+            .value
         )
-        Values.create(key='contact.keymasters.name', idx=2).update(
-            value=two_name
+        Values.create(key='space_api.contact.keymasters.name', idx=2).update(
+            value='two'
         )
 
-        nil_phone, nil_email = ('+1 234 567 890', 'nil@example.org')
-        one_email, one_xmpp = ('one@example.org', 'one@jabber.example.org')
-        two_xmpp = 'two@jabber.example.org'
-        Values.create(key='contact.keymasters.phone', idx=0).update(
-            value=nil_phone
+        nil_phone = (
+            Values.create(key='space_api.contact.keymasters.phone', idx=0)
+            .update(value='+1 234 567 890')
+            .value
         )
-        Values.create(key='contact.keymasters.email', idx=0).update(
-            value=nil_email
+        nil_email = (
+            Values.create(key='space_api.contact.keymasters.email', idx=0)
+            .update(value='nil@example.org')
+            .value
         )
-        Values.create(key='contact.keymasters.email', idx=1).update(
-            value=one_email
+        one_email = (
+            Values.create(key='space_api.contact.keymasters.email', idx=1)
+            .update(value='one@example.org')
+            .value
         )
-        Values.create(key='contact.keymasters.xmpp', idx=1).update(
-            value=one_xmpp
+        one_xmpp = (
+            Values.create(key='space_api.contact.keymasters.xmpp', idx=1)
+            .update(value='one@jabber.example.org')
+            .value
         )
-        Values.create(key='contact.keymasters.xmpp', idx=2).update(
-            value=two_xmpp
+        Values.create(key='space_api.contact.keymasters.xmpp', idx=2).update(
+            value='two@jabber.example.org'
         )
 
         res = api.build()
@@ -330,12 +402,16 @@ class TestSpaceApiBuild:
     @staticmethod
     def test_projects():
         api = SpaceApi()
-        one_pro, two_pro = (
-            'https://example.org/mega',
-            'https://example.net/awesome',
+        one_pro = (
+            Values.create(key='space_api.projects', idx=1)
+            .update(value='https://example.org/mega')
+            .value
         )
-        Values.create(key='projects', idx=1).update(value=one_pro)
-        Values.create(key='projects', idx=2).update(value=two_pro)
+        two_pro = (
+            Values.create(key='space_api.projects', idx=2)
+            .update(value='https://example.net/awesome')
+            .value
+        )
 
         res = api.build()
         assert res['projects'] == [one_pro, two_pro]
@@ -343,22 +419,37 @@ class TestSpaceApiBuild:
     @staticmethod
     def test_links():
         api = SpaceApi()
-
-        nil_name, one_name, two_name = 'nil', 'one', 'two'
-        Values.create(key='links.name', idx=0).update(value=nil_name)
-        Values.create(key='links.name', idx=1).update(value=one_name)
-        Values.create(key='links.name', idx=2).update(value=two_name)
-
-        nil_url, two_url = (
-            'https://example.org',
-            'https://example.net',
+        nil_name = (
+            Values.create(key='space_api.links.name', idx=0)
+            .update(value='nil')
+            .value
         )
-        Values.create(key='links.url', idx=0).update(value=nil_url)
-        Values.create(key='links.url', idx=2).update(value=two_url)
+        Values.create(key='space_api.links.name', idx=1).update(value='one')
+        two_name = (
+            Values.create(key='space_api.links.name', idx=2)
+            .update(value='two')
+            .value
+        )
 
-        nil_desc, one_desc = ('awesome', 'mega')
-        Values.create(key='links.description', idx=0).update(value=nil_desc)
-        Values.create(key='links.description', idx=1).update(value=one_desc)
+        nil_url = (
+            Values.create(key='space_api.links.url', idx=0)
+            .update(value='https://example.org')
+            .value
+        )
+        two_url = (
+            Values.create(key='space_api.links.url', idx=2)
+            .update(value='https://example.net')
+            .value
+        )
+
+        nil_desc = (
+            Values.create(key='space_api.links.description', idx=0)
+            .update(value='awesome')
+            .value
+        )
+        Values.create(key='space_api.links.description', idx=1).update(
+            value='mega'
+        )
 
         res = api.build()
         assert res['links'] == [
@@ -377,54 +468,70 @@ class TestSpaceApiBuild:
     @staticmethod
     def test_membership_plans():
         api = SpaceApi()
-
-        nil_name, one_name, two_name = 'standard', 'premium', 'deluxe'
-        Values.create(key='membership_plans.name', idx=0).update(
-            value=nil_name
+        nil_name = (
+            Values.create(key='space_api.membership_plans.name', idx=0)
+            .update(value='standard')
+            .value
         )
-        Values.create(key='membership_plans.name', idx=1).update(
-            value=one_name
+        Values.create(key='space_api.membership_plans.name', idx=1).update(
+            value='premium'
         )
-        Values.create(key='membership_plans.name', idx=2).update(
-            value=two_name
-        )
-
-        nil_value, one_value, two_value = 23.0, 42.0, 1337.0
-        Values.create(key='membership_plans.value', idx=0).update(
-            value=nil_value
-        )
-        Values.create(key='membership_plans.value', idx=1).update(
-            value=one_value
-        )
-        Values.create(key='membership_plans.value', idx=2).update(
-            value=two_value
+        two_name = (
+            Values.create(key='space_api.membership_plans.name', idx=2)
+            .update(value='deluxe')
+            .value
         )
 
-        nil_curr, one_curr, two_curr = 'EUR', 'GBP', 'RUB'
-        Values.create(key='membership_plans.currency', idx=0).update(
-            value=nil_curr
+        nil_value = (
+            Values.create(key='space_api.membership_plans.value', idx=0)
+            .update(value=23.5)
+            .value
         )
-        Values.create(key='membership_plans.currency', idx=1).update(
-            value=one_curr
+        Values.create(key='space_api.membership_plans.value', idx=1).update(
+            value=42.0
         )
-        Values.create(key='membership_plans.currency', idx=2).update(
-            value=two_curr
-        )
-
-        nil_int, two_int = 'daily', 'hourly'
-        Values.create(key='membership_plans.billing_interval', idx=0).update(
-            value=nil_int
-        )
-        Values.create(key='membership_plans.billing_interval', idx=2).update(
-            value=two_int
+        two_value = (
+            Values.create(key='space_api.membership_plans.value', idx=2)
+            .update(value=1337.0)
+            .value
         )
 
-        one_desc, two_desc = 'premium plan', 'deluxe plan'
-        Values.create(key='membership_plans.description', idx=1).update(
-            value=one_desc
+        nil_curr = (
+            Values.create(key='space_api.membership_plans.currency', idx=0)
+            .update(value='EUR')
+            .value
         )
-        Values.create(key='membership_plans.description', idx=2).update(
-            value=two_desc
+        Values.create(key='space_api.membership_plans.currency', idx=1).update(
+            value='GBP'
+        )
+        two_curr = (
+            Values.create(key='space_api.membership_plans.currency', idx=2)
+            .update(value='RUB')
+            .value
+        )
+
+        nil_int = (
+            Values.create(
+                key='space_api.membership_plans.billing_interval', idx=0
+            )
+            .update(value='daily')
+            .value
+        )
+        two_int = (
+            Values.create(
+                key='space_api.membership_plans.billing_interval', idx=2
+            )
+            .update(value='hourly')
+            .value
+        )
+
+        Values.create(
+            key='space_api.membership_plans.description', idx=1
+        ).update(value='premium plan')
+        two_desc = (
+            Values.create(key='space_api.membership_plans.description', idx=2)
+            .update(value='deluxe plan')
+            .value
         )
 
         res = api.build()

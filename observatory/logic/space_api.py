@@ -4,6 +4,8 @@ from logging import getLogger
 from observatory.models.values import Values
 from observatory.start.environment import SP_API_REFRESH
 
+PREFIX = 'space_api'
+
 
 class SpaceApi:
     def __init__(self):
@@ -12,84 +14,95 @@ class SpaceApi:
         self._last = None
 
     @staticmethod
-    def _contact_keymasters():
+    def _get(key, idx=0):
+        return Values.get(key=f'{PREFIX}.{key}', idx=idx)
+
+    @staticmethod
+    def _get_all(key):
+        return Values.get_all(key=f'{PREFIX}.{key}')
+
+    @staticmethod
+    def _by_key(key):
+        return Values.by_key(key=f'{PREFIX}.{key}')
+
+    def _indices_any(self, *keys):
+        result = set()
+        for key in keys:
+            result = result.union(
+                elem.idx for elem in self._by_key(key=key) if elem is not None
+            )
+        return result
+
+    def _indices_all(self, first, *keys):
+        result = set(
+            elem.idx for elem in self._by_key(key=first) if elem is not None
+        )
+        for key in keys:
+            result = result.intersection(
+                elem.idx for elem in self._by_key(key=key) if elem is not None
+            )
+        return result
+
+    def _contact_keymasters(self):
         '''One of irc_nick, phone, email or twitter must be specified'''
-        indices = (
-            set(
-                elem.idx
-                for elem in Values.by_key('contact.keymasters.irc_nick')
-            )
-            .union(
-                elem.idx for elem in Values.by_key('contact.keymasters.phone')
-            )
-            .union(
-                elem.idx for elem in Values.by_key('contact.keymasters.email')
-            )
-            .union(
-                elem.idx
-                for elem in Values.by_key('contact.keymasters.twitter')
-            )
+        indices = self._indices_any(
+            'contact.keymasters.irc_nick',
+            'contact.keymasters.phone',
+            'contact.keymasters.email',
+            'contact.keymasters.twitter',
         )
         return [
             {
-                'name': Values.get(key='contact.keymasters.name', idx=idx),
-                'irc_nick': Values.get(
+                'name': self._get(key='contact.keymasters.name', idx=idx),
+                'irc_nick': self._get(
                     key='contact.keymasters.irc_nick', idx=idx
                 ),
-                'phone': Values.get(key='contact.keymasters.phone', idx=idx),
-                'email': Values.get(key='contact.keymasters.email', idx=idx),
-                'twitter': Values.get(
+                'phone': self._get(key='contact.keymasters.phone', idx=idx),
+                'email': self._get(key='contact.keymasters.email', idx=idx),
+                'twitter': self._get(
                     key='contact.keymasters.twitter', idx=idx
                 ),
-                'xmpp': Values.get(key='contact.keymasters.xmpp', idx=idx),
-                'matrix': Values.get(key='contact.keymasters.matrix', idx=idx),
-                'mastodon': Values.get(
+                'xmpp': self._get(key='contact.keymasters.xmpp', idx=idx),
+                'matrix': self._get(key='contact.keymasters.matrix', idx=idx),
+                'mastodon': self._get(
                     key='contact.keymasters.mastodon', idx=idx
                 ),
             }
             for idx in sorted(indices)
         ]
 
-    @staticmethod
-    def _links():
-        indices = set(
-            elem.idx for elem in Values.by_key('links.name')
-        ).intersection(elem.idx for elem in Values.by_key('links.url'))
+    def _links(self):
+        indices = self._indices_all(
+            'links.name',
+            'links.url',
+        )
         return [
             {
-                'name': Values.get(key='links.name', idx=idx),
-                'description': Values.get(key='links.description', idx=idx),
-                'url': Values.get(key='links.url', idx=idx),
+                'name': self._get(key='links.name', idx=idx),
+                'description': self._get(key='links.description', idx=idx),
+                'url': self._get(key='links.url', idx=idx),
             }
             for idx in sorted(indices)
         ]
 
-    @staticmethod
-    def _membership_plans():
-        indices = (
-            set(elem.idx for elem in Values.by_key('membership_plans.name'))
-            .intersection(
-                elem.idx for elem in Values.by_key('membership_plans.value')
-            )
-            .intersection(
-                elem.idx for elem in Values.by_key('membership_plans.currency')
-            )
-            .intersection(
-                elem.idx
-                for elem in Values.by_key('membership_plans.billing_interval')
-            )
+    def _membership_plans(self):
+        indices = self._indices_all(
+            'membership_plans.name',
+            'membership_plans.value',
+            'membership_plans.currency',
+            'membership_plans.billing_interval',
         )
         return [
             {
-                'name': Values.get(key='membership_plans.name', idx=idx),
-                'value': Values.get(key='membership_plans.value', idx=idx),
-                'currency': Values.get(
+                'name': self._get(key='membership_plans.name', idx=idx),
+                'value': self._get(key='membership_plans.value', idx=idx),
+                'currency': self._get(
                     key='membership_plans.currency', idx=idx
                 ),
-                'billing_interval': Values.get(
+                'billing_interval': self._get(
                     key='membership_plans.billing_interval', idx=idx
                 ),
-                'description': Values.get(
+                'description': self._get(
                     key='membership_plans.description', idx=idx
                 ),
             }
@@ -99,39 +112,39 @@ class SpaceApi:
     def build(self):
         return {
             'api_compatibility': ['14'],
-            'space': Values.get('space'),
-            'logo': Values.get('logo'),
-            'url': Values.get('url'),
+            'space': self._get('space'),
+            'logo': self._get('logo'),
+            'url': self._get('url'),
             'location': {
-                'address': Values.get('location.address'),
-                'lat': Values.get('location.lat'),
-                'lon': Values.get('location.lon'),
-                'timezone': Values.get('location.timezone'),
+                'address': self._get('location.address'),
+                'lat': self._get('location.lat'),
+                'lon': self._get('location.lon'),
+                'timezone': self._get('location.timezone'),
             },
             'spacefed': {
-                'spacenet': Values.get('spacefed.spacenet'),
-                'spacesaml': Values.get('spacefed.spacesaml'),
+                'spacenet': self._get('spacefed.spacenet'),
+                'spacesaml': self._get('spacefed.spacesaml'),
             },
-            'cam': Values.get_all('cam'),
+            'cam': self._get_all('cam'),
             'state': {},
             'events': [],
             'contact': {
-                'phone': Values.get('contact.phone'),
-                'sip': Values.get('contact.sip'),
+                'phone': self._get('contact.phone'),
+                'sip': self._get('contact.sip'),
                 'keymasters': self._contact_keymasters(),
-                'irc': Values.get('contact.irc'),
-                'twitter': Values.get('contact.twitter'),
-                'mastodon': Values.get('contact.mastodon'),
-                'facebook': Values.get('contact.facebook'),
-                'identica': Values.get('contact.identica'),
-                'foursquare': Values.get('contact.foursquare'),
-                'email': Values.get('contact.email'),
-                'ml': Values.get('contact.ml'),
-                'xmpp': Values.get('contact.xmpp'),
-                'issue_mail': Values.get('contact.issue_mail'),
-                'gopher': Values.get('contact.gopher'),
-                'matrix': Values.get('contact.matrix'),
-                'mumble': Values.get('contact.mumble'),
+                'irc': self._get('contact.irc'),
+                'twitter': self._get('contact.twitter'),
+                'mastodon': self._get('contact.mastodon'),
+                'facebook': self._get('contact.facebook'),
+                'identica': self._get('contact.identica'),
+                'foursquare': self._get('contact.foursquare'),
+                'email': self._get('contact.email'),
+                'ml': self._get('contact.ml'),
+                'xmpp': self._get('contact.xmpp'),
+                'issue_mail': self._get('contact.issue_mail'),
+                'gopher': self._get('contact.gopher'),
+                'matrix': self._get('contact.matrix'),
+                'mumble': self._get('contact.mumble'),
             },
             'sensors': {
                 'temperature': [],
@@ -150,23 +163,23 @@ class SpaceApi:
             },
             'feeds': {
                 'blog': {
-                    'type': Values.get('feeds.blog.type'),
-                    'url': Values.get('feeds.blog.url'),
+                    'type': self._get('feeds.blog.type'),
+                    'url': self._get('feeds.blog.url'),
                 },
                 'wiki': {
-                    'type': Values.get('feeds.wiki.type'),
-                    'url': Values.get('feeds.wiki.url'),
+                    'type': self._get('feeds.wiki.type'),
+                    'url': self._get('feeds.wiki.url'),
                 },
                 'calendar': {
-                    'type': Values.get('feeds.calendar.type'),
-                    'url': Values.get('feeds.calendar.url'),
+                    'type': self._get('feeds.calendar.type'),
+                    'url': self._get('feeds.calendar.url'),
                 },
                 'flickr': {
-                    'type': Values.get('feeds.calendar.type'),
-                    'url': Values.get('feeds.calendar.url'),
+                    'type': self._get('feeds.calendar.type'),
+                    'url': self._get('feeds.calendar.url'),
                 },
             },
-            'projects': Values.get_all('projects'),
+            'projects': self._get_all('projects'),
             'links': self._links(),
             'membership_plans': self._membership_plans(),
         }
