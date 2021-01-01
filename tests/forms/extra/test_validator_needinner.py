@@ -2,6 +2,7 @@ from random import choice
 from string import digits, hexdigits
 
 from flask_wtf import FlaskForm
+from pytest import mark
 from wtforms import StringField
 
 from observatory.forms.extra.validators import NeedInner
@@ -20,18 +21,21 @@ class PhonyForm(FlaskForm):
     )
 
 
-def test_need_inner_valid():
-    form = PhonyForm(
-        exclusive=''.join(choice(digits) for _ in range(5)),
-        inclusive=''.join(choice(hexdigits) for _ in range(5)),
-    )
-    assert form.validate() is True
-    assert form.exclusive.errors == []
-    assert form.inclusive.errors == []
+@mark.usefixtures('ctx_app')
+class TestNeedInner:
+    @staticmethod
+    def test_valid():
+        form = PhonyForm(
+            exclusive=''.join(choice(digits) for _ in range(5)),
+            inclusive=''.join(choice(hexdigits) for _ in range(5)),
+        )
+        assert form.validate() is True
+        assert form.exclusive.errors == []
+        assert form.inclusive.errors == []
 
-
-def test_need_start_invalid():
-    form = PhonyForm(exclusive='📽', inclusive='🎥')
-    assert form.validate() is False
-    assert form.exclusive.errors == [MESSAGE]
-    assert form.inclusive.errors == [MESSAGE]
+    @staticmethod
+    def test_invalid():
+        form = PhonyForm(exclusive='📽', inclusive='🎥')
+        assert form.validate() is False
+        assert form.exclusive.errors == [MESSAGE]
+        assert form.inclusive.errors == [MESSAGE]

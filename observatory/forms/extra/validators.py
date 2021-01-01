@@ -17,22 +17,18 @@ class SafeSlug:
 
 
 class NeedStart:
-    def __init__(self, chars, message=None):
-        self.chars = chars
+    def __init__(self, *symbols, message=None):
+        self.symbols = symbols
 
-        disp = '", "'.join(self.chars)
+        disp = '", "'.join(self.symbols)
         self.message = (
             message
             if message is not None
-            else (
-                f'The prefix symbol "{disp}" is missing'
-                if len(self.chars) == 1
-                else f'One of the prefix symbols "{disp}" is missing'
-            )
+            else f'One of the prefixes "{disp}" is missing'
         )
 
     def __call__(self, _, field):
-        if not any(field.data.startswith(char) for char in self.chars):
+        if not any(field.data.startswith(char) for char in self.symbols):
             raise ValidationError(self.message)
 
 
@@ -46,8 +42,8 @@ class NeedInner:
             message
             if message is not None
             else (
-                f'The symbol "{disp}" is missing'
-                if len(self.chars) == 1
+                f'Only the symbols "{disp}" are permitted'
+                if self.only
                 else f'One of the symbols "{disp}" is missing'
             )
         )
