@@ -15,7 +15,7 @@ CMD_PY		:=	$(DIR_VENV)/bin/python$(VER_PY)
 CMD_FLASK	:=	$(DIR_VENV)/bin/flask
 CMD_BLACK	:=	$(DIR_VENV)/bin/black
 CMD_ISORT	:=	$(DIR_VENV)/bin/isort
-CMD_PTPY	:=	$(DIR_VENV)/bin/ptpython
+CMD_BPY		:=	$(DIR_VENV)/bin/bpython
 CMD_PUDB	:=	$(DIR_VENV)/bin/pudb3
 CMD_PYLINT	:=	$(DIR_VENV)/bin/pylint
 CMD_PYREV	:=	$(DIR_VENV)/bin/pyreverse
@@ -75,17 +75,20 @@ help:
 
 $(DIR_VENV):
 	$(CMD_VENV) -p "python$(VER_PY)" "$(DIR_VENV)"
+	$(CMD_PIP) install -U pip
 
-.PHONY: requirements requirements-dev requirements-debug
+.PHONY: requirements
 requirements: $(CMD_FLASK)
+.PHONY: requirements-dev
 requirements-dev: $(CMD_BLACK) $(CMD_ISORT) $(CMD_PYLINT) $(CMD_PYREV) $(CMD_PYTEST)
-requirements-debug: $(CMD_PTPY) $(CMD_PUDB) $(CMD_WATCH)
+.PHONY: requirements-debug
+requirements-debug: $(CMD_BPY) $(CMD_PUDB) $(CMD_WATCH)
 
-$(CMD_FLASK): $(DIR_VENV)
+$(CMD_FLASK): | $(DIR_VENV)
 	$(CMD_PIP) install -r "requirements.txt"
-$(CMD_BLACK) $(CMD_ISORT) $(CMD_PYLINT) $(CMD_PYREV) $(CMD_PYTEST): $(DIR_VENV)
+$(CMD_BLACK) $(CMD_ISORT) $(CMD_PYLINT) $(CMD_PYREV) $(CMD_PYTEST): | $(DIR_VENV)
 	$(CMD_PIP) install -r "requirements-dev.txt"
-$(CMD_PTPY) $(CMD_PUDB) $(CMD_WATCH): $(DIR_VENV)
+$(CMD_BPY) $(CMD_PUDB) $(CMD_WATCH): | $(DIR_VENV)
 	$(CMD_PIP) install -r "requirements-debug.txt"
 	@echo
 	@echo "import pudb; pudb.set_trace()"
@@ -100,9 +103,9 @@ $(DIR_NODEM):
 
 .PHONY: static
 static: $(OUT_CODE) $(OUT_VIEW)
-$(OUT_CODE): $(DIR_NODEM)
+$(OUT_CODE): | $(DIR_NODEM)
 	$(CMD_NPM) run distCode
-$(OUT_VIEW): $(DIR_NODEM)
+$(OUT_VIEW): | $(DIR_NODEM)
 	$(CMD_NPM) run distView
 
 
@@ -124,11 +127,13 @@ define _lint
 			$(1)
 endef
 
-.PHONY: lint lintt lints
+.PHONY: lint
 lint: $(CMD_PYLINT)
 	$(call _lint,"$(DIR_OBVTY)" "$(FLASK)")
+.PHONY: lintt
 lintt: $(CMD_PYLINT)
 	$(call _lint,"$(DIR_TESTS)")
+.PHONY: lints
 lints: $(CMD_PYLINT)
 	$(call _lint,"$(DIR_STUFF)")
 
@@ -143,11 +148,13 @@ define _reverse
 			$(1)
 endef
 
-.PHONY: plot plott plots
+.PHONY: plot
 plot: $(CMD_PYREV)
 	$(call _reverse,$(DIR_OBVTY))
+.PHONY: plott
 plott: $(CMD_PYREV)
 	$(call _reverse,$(DIR_TESTS),_$(DIR_OBVTY))
+.PHONY: plots
 plots: $(CMD_PYREV)
 	$(call _reverse,$(DIR_STUFF),_$(DIR_OBVTY))
 
@@ -166,11 +173,13 @@ define _sort
 			$(1)
 endef
 
-.PHONY: sort sortt sorts
+.PHONY: sort
 sort: $(CMD_ISORT)
 	$(call _sort,"$(DIR_OBVTY)" "$(FLASK)")
+.PHONY: sortt
 sortt: $(CMD_ISORT)
 	$(call _sort,"$(DIR_TESTS)")
+.PHONY: sorts
 sorts: $(CMD_ISORT)
 	$(call _sort,"$(DIR_STUFF)")
 
@@ -183,11 +192,13 @@ define _black
 			$(1)
 endef
 
-.PHONY: black blackt blacks
+.PHONY: black
 black: $(CMD_BLACK)
 	$(call _black,"$(DIR_OBVTY)" "$(FLASK)")
+.PHONY: blackt
 blackt: $(CMD_BLACK)
 	$(call _black,"$(DIR_TESTS)")
+.PHONY: blacks
 blacks: $(CMD_BLACK)
 	$(call _black,"$(DIR_STUFF)")
 
@@ -201,16 +212,20 @@ endef
 
 HTMLCOV		:=	htmlcov
 
-.PHONY: test tcov tcovh tcovh-open tcovh-watch
+.PHONY: test
 test: $(CMD_PYTEST)
 	$(call _test,--durations=5)
+.PHONY:tcov
 tcov: $(CMD_PYTEST)
 	$(call _tcov,)
+.PHONY:tcovh
 tcovh: $(CMD_PYTEST)
 	$(call _tcov,--cov-report="html:$(HTMLCOV)")
 
+.PHONY:tcovh-open
 tcovh-open: tcovh
 	$(CMD_PY) -m webbrowser -t "$(HTMLCOV)/index.html"
+.PHONY:tcovh-watch
 tcovh-watch: $(CMD_WATCH)
 	@$(CMD_WATCH) shell-command . \
 		--recursive \
@@ -232,9 +247,10 @@ define _gitclean
 		$(1)
 endef
 
-.PHONY: clean cleanup
+.PHONY: clean
 clean:
 	$(call _gitclean,-ndx)
+.PHONY: cleanup
 cleanup:
 	$(call _gitclean,-fdx)
 
@@ -250,11 +266,13 @@ define _flask
 	$(CMD_FLASK) $(1)
 endef
 
-.PHONY: run shell routes
+.PHONY: run
 run: $(CMD_FLASK) static
 	$(call _flask,run --host "$(_HOST)" --port "$(_PORT)")
-shell: $(CMD_FLASK) $(CMD_PTPY)
+.PHONY: shell
+shell: $(CMD_FLASK) $(CMD_BPY)
 	$(call _flask,shell)
+.PHONY: routes
 routes: $(CMD_FLASK)
 	$(call _flask,routes)
 
@@ -262,13 +280,16 @@ routes: $(CMD_FLASK)
 ###
 # database
 
-.PHONY: db-init db-mig db-up db-down
+.PHONY: db-init
 db-init: $(CMD_FLASK)
 	$(call _flask,db init)
+.PHONY: db-mig
 db-mig: $(CMD_FLASK)
 	$(call _flask,db migrate)
+.PHONY: db-up
 db-up: $(CMD_FLASK)
 	$(call _flask,db upgrade)
+.PHONY: db-down
 db-down: $(CMD_FLASK)
 	$(call _flask,db downgrade)
 
@@ -276,18 +297,22 @@ db-down: $(CMD_FLASK)
 ###
 # cli
 
-.PHONY: cli-adduser cli-setpass cli-setstate-active cli-setstate-blocked
+.PHONY: cli-adduser
 cli-adduser: $(CMD_FLASK)
 	$(call _flask,cli adduser)
+.PHONY: cli-setpass
 cli-setpass: $(CMD_FLASK)
 	$(call _flask,cli setpass)
+.PHONY: cli-setstate-active
 cli-setstate-active: $(CMD_FLASK)
 	$(call _flask,cli setstate --active)
+.PHONY: cli-setstate-blocked
 cli-setstate-blocked: $(CMD_FLASK)
 	$(call _flask,cli setstate --blocked)
-.PHONY: cli-sensorclear cli-sensorcurve
+.PHONY: cli-sensorclear
 cli-sensorclear: $(CMD_FLASK)
 	$(call _flask,cli sensorclear)
+.PHONY: cli-sensorcurve
 cli-sensorcurve: $(CMD_FLASK)
 	$(call _flask,cli sensorcurve)
 

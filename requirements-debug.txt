@@ -1,5 +1,5 @@
 -r requirements-dev.txt
-flask-shell-ptpython
+flask-shell-bpython
 pudb
 pytest-pudb
 watchdog[watchmedo]
