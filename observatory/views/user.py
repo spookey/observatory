@@ -48,7 +48,7 @@ def login():
             return redirect(request.args.get('next') or url_for('user.home'))
 
     return render_template(
-        'user/login.html', title='Tickets, please!', form=form
+        'page_form.html', title='Tickets, please!', form=form
     )
 
 

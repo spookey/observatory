@@ -99,7 +99,7 @@ def edit_mapper(prompt_slug=None, sensor_slug=None):
             return redirect(url_for('mgnt.view_mapper'))
 
     return render_template(
-        'mgnt/edit.html',
+        'page_form.html',
         title=title,
         form=form,
     )
@@ -116,7 +116,7 @@ def _edit_common(form, redirect_ep):
             return redirect(url_for(redirect_ep))
 
     return render_template(
-        'mgnt/edit.html',
+        'page_form.html',
         title=title,
         form=form,
     )
