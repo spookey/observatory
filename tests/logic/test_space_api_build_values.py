@@ -87,7 +87,7 @@ class TestSpaceApiBuildValues:
         res = api.build()
         assert res['cam'] == [
             {'_idx': 0, 'value': nil_cam},
-            {'_idx': 2, 'value': two_cam}
+            {'_idx': 2, 'value': two_cam},
         ]
 
     @staticmethod
@@ -286,7 +286,7 @@ class TestSpaceApiBuildValues:
         res = api.build()
         assert res['projects'] == [
             {'_idx': 1, 'value': one_pro},
-            {'_idx': 2, 'value': two_pro}
+            {'_idx': 2, 'value': two_pro},
         ]
 
     @staticmethod

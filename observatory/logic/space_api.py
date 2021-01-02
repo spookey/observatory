@@ -20,10 +20,14 @@ class SpaceApi:
         return Values.get(key=f'{SP_API_PREFIX}.{key}', idx=idx)
 
     def _get_all(self, key):
-        return [{
-            '_idx': elem.idx,
-            'value': elem.value,
-        } for elem in self._by_key(key) if elem is not None]
+        return [
+            {
+                '_idx': elem.idx,
+                'value': elem.value,
+            }
+            for elem in self._by_key(key)
+            if elem is not None
+        ]
 
     def _indices_any(self, *keys):
         result = set()

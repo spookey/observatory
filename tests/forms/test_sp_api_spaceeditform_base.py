@@ -1,3 +1,5 @@
+from random import choice
+
 from pytest import mark
 from wtforms import DecimalField, StringField, TextAreaField
 from wtforms.validators import DataRequired, NumberRange
@@ -29,20 +31,25 @@ class PhonyForm(SpaceEditForm):
 class TestSpaceEditFormBase:
     @staticmethod
     def test_basic_fields():
-        idx = 5
+        idx = choice(range(23, 42))
         form = PhonyForm(idx=idx)
         assert form.string is not None
         assert form.number is not None
         assert form.cstory is not None
 
-        assert form.idx == idx
         assert getattr(form, 'data', 'error') == dict(
             string=None, number=None, cstory=None
         )
 
     @staticmethod
+    def test_form_idx():
+        idx = choice(range(23, 42))
+        form = PhonyForm(idx=idx)
+        assert form.idx == idx
+
+    @staticmethod
     def test_preloads_data():
-        idx = 3
+        idx = choice(range(23, 42))
         data = dict(
             string=Values.set(
                 key=f'{SP_API_PREFIX}.test.string', idx=idx, value='test'
@@ -59,7 +66,7 @@ class TestSpaceEditFormBase:
         assert getattr(form, 'data', 'error') == data
 
     @staticmethod
-    def test_form_validation_fails():
+    def test_validation_fails():
         form = PhonyForm()
         assert form.validate() is False
         assert form.action() is None
@@ -69,7 +76,7 @@ class TestSpaceEditFormBase:
         assert ''.join(form.cstory.errors) == ''
 
     @staticmethod
-    def test_form_one_of_fails():
+    def test_one_of_fails():
         form = PhonyForm(string=None, number=2, cstory=None)
         assert form.validate() is False
         assert form.action() is None
@@ -79,10 +86,15 @@ class TestSpaceEditFormBase:
         assert 'at least' in ''.join(form.cstory.errors).lower()
 
     @staticmethod
-    def test_form_action_creates():
+    def test_action_creates():
         assert Values.query.all() == []
 
-        idx, string, number, cstory = 1, 'text', 2.5, 'more test'
+        idx, string, number, cstory = (
+            choice(range(23, 42)),
+            'text',
+            2.5,
+            'more test',
+        )
         form = PhonyForm(idx=idx, string=string, number=number, cstory=cstory)
 
         assert form.validate() is True
@@ -99,8 +111,13 @@ class TestSpaceEditFormBase:
         )
 
     @staticmethod
-    def test_form_action_changes():
-        idx, string, number, cstory = 2, None, 42.0, 'new story'
+    def test_action_changes():
+        idx, string, number, cstory = (
+            choice(range(23, 42)),
+            None,
+            42.0,
+            'new story',
+        )
 
         string_obj = Values.set(
             key=f'{SP_API_PREFIX}.test.string', idx=idx, value='old text'

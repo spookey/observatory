@@ -99,7 +99,9 @@ def edit_contact():
 )
 @login_required
 def edit_contact_keymasters(idx=0):
-    return _edit_form(SpaceEditKeymastersForm(idx=idx), 'Keymasters')
+    return _edit_form(
+        SpaceEditKeymastersForm(idx=idx), f'Keymaster #{ 1 + idx}'
+    )
 
 
 @BLUEPRINT_SAPI.route('/space/edit/feeds/blog', methods=['GET', 'POST'])

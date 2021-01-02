@@ -1,5 +1,5 @@
+from observatory.instance import SPACE_API
 from observatory.logic.space_api import SpaceApi
-from observatory.shared import SPACE_API
 
 
 def test_space_api():

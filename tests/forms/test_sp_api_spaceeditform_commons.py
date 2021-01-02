@@ -1,3 +1,5 @@
+from random import choice
+
 from pytest import mark
 
 from observatory.forms.extra.widgets import SubmitButtonInput
@@ -20,7 +22,7 @@ from observatory.models.values import Values
 from observatory.start.environment import SP_API_PREFIX
 
 
-def form_meta(form, *, keys, data, one_of=None, **kwargs):
+def form_edit(form, *, keys, data, one_of=None, **kwargs):
     def res():
         pass
 
@@ -34,7 +36,7 @@ def form_meta(form, *, keys, data, one_of=None, **kwargs):
 
 
 FORMS = [
-    form_meta(
+    form_edit(
         SpaceEditInfoForm,
         keys=dict(
             space='space',
@@ -47,7 +49,7 @@ FORMS = [
             url='https://example.org',
         ),
     ),
-    form_meta(
+    form_edit(
         SpaceEditLocationForm,
         keys=dict(
             address='location.address',
@@ -62,7 +64,7 @@ FORMS = [
             timezone_sel='UTC',
         ),
     ),
-    form_meta(
+    form_edit(
         SpaceEditSpaceFedForm,
         keys=dict(
             spacenet='spacefed.spacenet',
@@ -74,12 +76,12 @@ FORMS = [
         ),
         empty=True,
     ),
-    form_meta(
+    form_edit(
         SpaceEditCamForm,
         keys=dict(cam='cam'),
         data=dict(cam='https://example.org/webcam.mjpeg'),
     ),
-    form_meta(
+    form_edit(
         SpaceEditContactForm,
         keys=dict(
             phone='contact.phone',
@@ -117,7 +119,7 @@ FORMS = [
         ),
         one_of=['email', 'issue_mail', 'twitter', 'mailinglist'],
     ),
-    form_meta(
+    form_edit(
         SpaceEditKeymastersForm,
         keys=dict(
             name='contact.keymasters.name',
@@ -146,7 +148,7 @@ FORMS = [
             'twitter',
         ],
     ),
-    form_meta(
+    form_edit(
         SpaceEditFeedBlogForm,
         keys=dict(
             type_sel='feeds.blog.type',
@@ -157,7 +159,7 @@ FORMS = [
             url='https://blog.example.org/feed',
         ),
     ),
-    form_meta(
+    form_edit(
         SpaceEditFeedWikiForm,
         keys=dict(
             type_sel='feeds.wiki.type',
@@ -168,7 +170,7 @@ FORMS = [
             url='https://wiki.example.org/feed.xml',
         ),
     ),
-    form_meta(
+    form_edit(
         SpaceEditFeedCalendarForm,
         keys=dict(
             type_sel='feeds.calendar.type',
@@ -179,7 +181,7 @@ FORMS = [
             url='https://calendar.example.org/ical',
         ),
     ),
-    form_meta(
+    form_edit(
         SpaceEditFeedFlickrForm,
         keys=dict(
             type_sel='feeds.flickr.type',
@@ -190,12 +192,12 @@ FORMS = [
             url='https://example.com/space/feed.rss',
         ),
     ),
-    form_meta(
+    form_edit(
         SpaceEditProjectsForm,
         keys=dict(projects='projects'),
         data=dict(projects='https://project.example.org/'),
     ),
-    form_meta(
+    form_edit(
         SpaceEditLinksForm,
         keys=dict(
             name='links.name',
@@ -208,7 +210,7 @@ FORMS = [
             url='https://example.org',
         ),
     ),
-    form_meta(
+    form_edit(
         SpaceEditMembershipPlansForm,
         keys=dict(
             name='membership_plans.name',
@@ -226,79 +228,86 @@ FORMS = [
         ),
     ),
 ]
-IDS = [meta.form.__name__ for meta in FORMS]
+IDS = [edit.form.__name__ for edit in FORMS]
 
 
 @mark.usefixtures('session', 'ctx_app')
 class TestSpaceEditFormCommons:
     @staticmethod
-    @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_meta_meta(meta):
-        keys = meta.keys.keys()
-        assert sorted(keys) == sorted(meta.data.keys())
-        for key in meta.one_of:
+    @mark.parametrize('edit', FORMS, ids=IDS)
+    def test_edit_meta(edit):
+        keys = edit.keys.keys()
+        assert sorted(keys) == sorted(edit.data.keys())
+        for key in edit.one_of:
             assert key in keys
 
     @staticmethod
-    @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_meta_keys(meta):
-        assert meta.form.KEYS == meta.keys
+    @mark.parametrize('edit', FORMS, ids=IDS)
+    def test_edit_keys(edit):
+        assert edit.form.KEYS == edit.keys
 
     @staticmethod
-    @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_meta_one_of(meta):
-        assert meta.form.ONE_OF == meta.one_of
+    @mark.parametrize('edit', FORMS, ids=IDS)
+    def test_edit_one_of(edit):
+        assert edit.form.ONE_OF == edit.one_of
 
     @staticmethod
-    @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_basic_fields(meta):
-        form = meta.form(idx=0)
-        for field in meta.keys.keys():
+    @mark.parametrize('edit', FORMS, ids=IDS)
+    def test_form_idx(edit):
+        idx = choice(range(23, 42))
+        form = edit.form(idx=idx)
+        assert form.idx == idx
+
+    @staticmethod
+    @mark.parametrize('edit', FORMS, ids=IDS)
+    def test_basic_fields(edit):
+        form = edit.form(idx=0)
+        for field in edit.keys.keys():
             elem = getattr(form, field, 'error')
             assert elem is not None
             assert elem != 'error'
         assert form.submit is not None
 
     @staticmethod
-    @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_submit_button(meta):
-        form = meta.form(idx=0)
+    @mark.parametrize('edit', FORMS, ids=IDS)
+    def test_submit_button(edit):
+        form = edit.form(idx=0)
         assert form.submit.widget is not None
         assert isinstance(form.submit.widget, SubmitButtonInput)
         assert form.submit.widget.icon == 'ops_submit'
 
     @staticmethod
-    @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_empty_invalid(meta):
-        form = meta.form(idx=0)
-        assert form.validate() is meta.empty
+    @mark.parametrize('edit', FORMS, ids=IDS)
+    def test_empty_invalid(edit):
+        form = edit.form(idx=0)
+        assert form.validate() is edit.empty
         action = form.action()
-        if meta.empty:
+        if edit.empty:
             assert action is not None
         else:
             assert action is None
 
     @staticmethod
-    @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_create_new(meta):
+    @mark.parametrize('edit', FORMS, ids=IDS)
+    def test_create_new(edit):
         assert Values.query.all() == []
 
-        form = meta.form(idx=0, **meta.data)
+        form = edit.form(idx=0, **edit.data)
         assert form.validate() is True
         assert form.action()
 
-        for form_key, space_key in meta.keys.items():
+        for form_key, space_key in edit.keys.items():
             val = Values.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
             assert val is not None
-            assert val == meta.data.get(form_key, 'error')
+            assert val == edit.data.get(form_key, 'error')
 
     @staticmethod
-    @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_change_existing(meta):
+    @mark.parametrize('edit', FORMS, ids=IDS)
+    def test_change_existing(edit):
         assert Values.query.all() == []
 
-        for form_key, space_key in meta.keys.items():
-            val = meta.data.get(form_key, 'some')
+        for form_key, space_key in edit.keys.items():
+            val = edit.data.get(form_key, 'some')
             if isinstance(val, bool):
                 val = not val
             else:
@@ -312,11 +321,11 @@ class TestSpaceEditFormCommons:
 
         assert Values.query.all() != []
 
-        form = meta.form(idx=0, **meta.data)
+        form = edit.form(idx=0, **edit.data)
         assert form.validate() is True
         assert form.action()
 
-        for form_key, space_key in meta.keys.items():
+        for form_key, space_key in edit.keys.items():
             val = Values.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
             assert val is not None
-            assert val == meta.data.get(form_key, 'error')
+            assert val == edit.data.get(form_key, 'error')

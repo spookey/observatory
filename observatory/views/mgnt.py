@@ -112,7 +112,7 @@ def _edit_common(form, redirect_ep):
     if request.method == 'POST' and form.validate_on_submit():
         thing = form.action()
         if thing is not None:
-            flash(f'Saved {name} {thing.slug}!', 'success')
+            flash(f'{name} {thing.slug} saved!', 'success')
             return redirect(url_for(redirect_ep))
 
     return render_template(
@@ -162,8 +162,8 @@ def _drop_generic(form, redirect_ep):
 
     if request.method == 'POST' and form.validate_on_submit():
         slug = extract_slug(form.thing)
-        if form.action():
-            flash(f'Deleted {name} {slug}!', 'success')
+        if form.action() is not None:
+            flash(f'{name} {slug} deleted!', 'success')
 
     return redirect(url_for(redirect_ep))
 
@@ -219,9 +219,9 @@ def _sort_generic(form, redirect_ep):
 
     if request.method == 'POST' and form.validate_on_submit():
         slug = extract_slug(form.thing)
-        verb = 'Raised' if form.lift else 'Lowered'
-        if form.action():
-            flash(f'{verb} {name} {slug}!', 'success')
+        verb = 'raised' if form.lift else 'lowered'
+        if form.action() is not None:
+            flash(f'{name} {slug} {verb}!', 'success')
         else:
             flash(f'Can not move {name} {slug}!', 'error')
 

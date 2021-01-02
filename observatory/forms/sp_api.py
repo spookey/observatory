@@ -22,8 +22,8 @@ from wtforms.validators import (
 
 from observatory.forms.extra.validators import NeedInner, NeedStart
 from observatory.forms.extra.widgets import SubmitButtonInput
+from observatory.instance import SPACE_API
 from observatory.models.values import Values
-from observatory.shared import SPACE_API
 from observatory.start.environment import SP_API_PREFIX
 
 # pylint: disable=arguments-differ

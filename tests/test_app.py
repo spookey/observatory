@@ -1,3 +1,4 @@
+from observatory.instance import SPACE_API
 from observatory.lib.cli import BP_CLI
 from observatory.rest.charts import BP_REST_CHARTS
 from observatory.rest.mapper import BP_REST_MAPPER
@@ -6,7 +7,6 @@ from observatory.rest.prompt import BP_REST_PROMPT
 from observatory.rest.sensor import BP_REST_SENSOR
 from observatory.rest.sp_api import BP_REST_SP_API
 from observatory.shared import (
-    SPACE_API,
     errorhandler,
     form_drop_mapper,
     form_drop_prompt,
