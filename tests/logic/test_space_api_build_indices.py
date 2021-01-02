@@ -10,6 +10,17 @@ from observatory.start.environment import SP_API_PREFIX
 @mark.usefixtures('session')
 class TestSpaceApiBuildIndices:
     @staticmethod
+    def test_next_index():
+        func = SpaceApi.next_index
+        assert func(None) == 0
+        assert func(list()) == 0
+        assert func(set()) == 0
+        assert func([1, 2, 3]) == 0
+        assert func([0, 2, 3]) == 1
+        assert func([0, 1, 3]) == 2
+        assert func([0, 1, 2]) == 3
+
+    @staticmethod
     def test_cam():
         api = SpaceApi()
         assert api.cam_indices == []

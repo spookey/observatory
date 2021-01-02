@@ -81,7 +81,7 @@ def edit_spacefed():
 @BLUEPRINT_SAPI.route('/space/edit/cam/<int:idx>', methods=['GET', 'POST'])
 @BLUEPRINT_SAPI.route('/space/edit/cam', methods=['GET', 'POST'])
 @login_required
-def edit_cams(idx=0):
+def edit_cam(idx=0):
     return _edit_form(SpaceCamForm(idx=idx), f'Webcam #{1 + idx}')
 
 
@@ -145,7 +145,7 @@ def edit_links(idx=0):
 @BLUEPRINT_SAPI.route('/space/edit/plans/<int:idx>', methods=['GET', 'POST'])
 @BLUEPRINT_SAPI.route('/space/edit/plans', methods=['GET', 'POST'])
 @login_required
-def edit_plans(idx=0):
+def edit_membership_plans(idx=0):
     return _edit_form(
         SpaceMembershipPlansForm(idx=idx), f'Membership Plan #{1 + idx}'
     )

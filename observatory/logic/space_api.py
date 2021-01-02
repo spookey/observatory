@@ -12,16 +12,18 @@ class SpaceApi:
         self._last = None
 
     @staticmethod
+    def _by_key(key):
+        return Values.by_key(key=f'{SP_API_PREFIX}.{key}')
+
+    @staticmethod
     def _get(key, idx=0):
         return Values.get(key=f'{SP_API_PREFIX}.{key}', idx=idx)
 
-    @staticmethod
-    def _get_all(key):
-        return Values.get_all(key=f'{SP_API_PREFIX}.{key}')
-
-    @staticmethod
-    def _by_key(key):
-        return Values.by_key(key=f'{SP_API_PREFIX}.{key}')
+    def _get_all(self, key):
+        return [{
+            '_idx': elem.idx,
+            'value': elem.value,
+        } for elem in self._by_key(key) if elem is not None]
 
     def _indices_any(self, *keys):
         result = set()
@@ -40,6 +42,18 @@ class SpaceApi:
                 elem.idx for elem in self._by_key(key=key) if elem is not None
             )
         return sorted(result)
+
+    @staticmethod
+    def next_index(indices):
+        if not indices:
+            return 0
+
+        top = max(indices)
+        diff = set(range(top)).difference(indices)
+        if diff:
+            return min(diff)
+
+        return 1 + top
 
     @property
     def cam_indices(self):
@@ -98,6 +112,7 @@ class SpaceApi:
                 'sip': self._get('contact.sip'),
                 'keymasters': [
                     {
+                        '_idx': idx,
                         'name': self._get(
                             key='contact.keymasters.name', idx=idx
                         ),
@@ -143,7 +158,7 @@ class SpaceApi:
                 'temperature': [],
                 'door_locked': [],
                 'barometer': [],
-                'radiation': [],
+                'radiation': {},
                 'humidity': [],
                 'beverage_supply': [],
                 'power_consumption': [],
@@ -175,6 +190,7 @@ class SpaceApi:
             'projects': self._get_all('projects'),
             'links': [
                 {
+                    '_idx': idx,
                     'name': self._get(key='links.name', idx=idx),
                     'description': self._get(key='links.description', idx=idx),
                     'url': self._get(key='links.url', idx=idx),
@@ -183,6 +199,7 @@ class SpaceApi:
             ],
             'membership_plans': [
                 {
+                    '_idx': idx,
                     'name': self._get(key='membership_plans.name', idx=idx),
                     'value': self._get(key='membership_plans.value', idx=idx),
                     'currency': self._get(

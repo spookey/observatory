@@ -20,14 +20,14 @@ from observatory.models.values import Values
 from observatory.start.environment import SP_API_PREFIX
 
 
-def form_meta(form, *, keys, data, any_of=None, **kwargs):
+def form_meta(form, *, keys, data, one_of=None, **kwargs):
     def res():
         pass
 
     res.form = form
     res.data = data
     res.keys = keys
-    res.any_of = any_of if any_of is not None else {}
+    res.one_of = one_of if one_of is not None else []
     res.empty = kwargs.get('empty', False)
 
     return res
@@ -115,12 +115,7 @@ FORMS = [
             matrix='#chat:example.org',
             mumble='mumble://mumble.example.org/space?version=0.0.1',
         ),
-        any_of=dict(
-            email='E-Mail',
-            issue_mail='Issue Mail',
-            twitter='Twitter',
-            mailinglist='Mailinglist',
-        ),
+        one_of=['email', 'issue_mail', 'twitter', 'mailinglist'],
     ),
     form_meta(
         SpaceKeymastersForm,
@@ -144,12 +139,12 @@ FORMS = [
             mastodon='@somebody@example.org',
             matrix='@somebody:matrix.example.org',
         ),
-        any_of=dict(
-            irc_nick='IRC Nick',
-            phone='Phone',
-            email='E-Mail',
-            twitter='Twitter',
-        ),
+        one_of=[
+            'irc_nick',
+            'phone',
+            'email',
+            'twitter',
+        ],
     ),
     form_meta(
         SpaceFeedBlogForm,
@@ -241,7 +236,7 @@ class TestSpaceFormCommons:
     def test_meta_meta(meta):
         keys = meta.keys.keys()
         assert sorted(keys) == sorted(meta.data.keys())
-        for key in meta.any_of.keys():
+        for key in meta.one_of:
             assert key in keys
 
     @staticmethod
@@ -251,8 +246,8 @@ class TestSpaceFormCommons:
 
     @staticmethod
     @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_meta_any_of(meta):
-        assert meta.form.ANY_OF == meta.any_of
+    def test_meta_one_of(meta):
+        assert meta.form.ONE_OF == meta.one_of
 
     @staticmethod
     @mark.parametrize('meta', FORMS, ids=IDS)

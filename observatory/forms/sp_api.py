@@ -32,7 +32,7 @@ from observatory.start.environment import SP_API_PREFIX
 
 class SpaceForm(FlaskForm):
     KEYS = {}
-    ANY_OF = {}
+    ONE_OF = []
 
     def __init__(self, *args, idx=0, **kwargs):
         super().__init__(
@@ -51,14 +51,14 @@ class SpaceForm(FlaskForm):
 
         fields = [
             field
-            for field in [getattr(self, name, None) for name in self.ANY_OF]
+            for field in [getattr(self, name, None) for name in self.ONE_OF]
             if field is not None
         ]
-        if fields and any(
+        if fields and all(
             field.data is None or not str(field.data).strip()
             for field in fields
         ):
-            disp = '", "'.join(self.ANY_OF.values())
+            disp = '", "'.join(field.label.text for field in fields)
             for field in fields:
                 field.errors.append(
                     f'Need at least one of the "{disp}" fields'
@@ -225,12 +225,7 @@ class SpaceContactForm(SpaceForm):
         matrix='contact.matrix',
         mumble='contact.mumble',
     )
-    ANY_OF = dict(
-        email='E-Mail',
-        issue_mail='Issue Mail',
-        twitter='Twitter',
-        mailinglist='Mailinglist',
-    )
+    ONE_OF = ['email', 'issue_mail', 'twitter', 'mailinglist']
     phone = StringField(
         'Phone',
         validators=[
@@ -336,12 +331,12 @@ class SpaceKeymastersForm(SpaceForm):
         mastodon='contact.keymasters.mastodon',
         matrix='contact.keymasters.matrix',
     )
-    ANY_OF = dict(
-        irc_nick='IRC Nick',
-        phone='Phone',
-        email='E-Mail',
-        twitter='Twitter',
-    )
+    ONE_OF = [
+        'irc_nick',
+        'phone',
+        'email',
+        'twitter',
+    ]
     name = StringField(
         'Name',
         validators=[Optional()],

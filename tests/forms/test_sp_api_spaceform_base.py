@@ -14,11 +14,7 @@ class PhonyForm(SpaceForm):
         cstory='test.cstory',
         wrong='checks for wrong access',
     )
-    ANY_OF = dict(
-        number='Number',
-        cstory='Story',
-        error='checks for wrong access',
-    )
+    ONE_OF = ['string', 'cstory', 'this_checks_for_wrong_access']
 
     string = StringField('String')
     number = DecimalField(
@@ -73,13 +69,13 @@ class TestSpaceFormBase:
         assert ''.join(form.cstory.errors) == ''
 
     @staticmethod
-    def test_form_any_of_fails():
+    def test_form_one_of_fails():
         form = PhonyForm(string=None, number=2, cstory=None)
         assert form.validate() is False
         assert form.action() is None
 
-        assert ''.join(form.string.errors).lower() == ''
-        assert 'at least' in ''.join(form.number.errors).lower()
+        assert 'at least' in ''.join(form.string.errors).lower()
+        assert ''.join(form.number.errors).lower() == ''
         assert 'at least' in ''.join(form.cstory.errors).lower()
 
     @staticmethod

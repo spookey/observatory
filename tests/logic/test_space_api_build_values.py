@@ -85,7 +85,10 @@ class TestSpaceApiBuildValues:
         ).value
 
         res = api.build()
-        assert res['cam'] == [nil_cam, two_cam]
+        assert res['cam'] == [
+            {'_idx': 0, 'value': nil_cam},
+            {'_idx': 2, 'value': two_cam}
+        ]
 
     @staticmethod
     def test_contact_telephone():
@@ -243,6 +246,7 @@ class TestSpaceApiBuildValues:
         res = api.build()
         assert res['contact']['keymasters'] == [
             {
+                '_idx': 0,
                 'name': nil_name,
                 'irc_nick': None,
                 'phone': nil_phone,
@@ -253,6 +257,7 @@ class TestSpaceApiBuildValues:
                 'mastodon': None,
             },
             {
+                '_idx': 1,
                 'name': one_name,
                 'irc_nick': None,
                 'phone': None,
@@ -279,7 +284,10 @@ class TestSpaceApiBuildValues:
         ).value
 
         res = api.build()
-        assert res['projects'] == [one_pro, two_pro]
+        assert res['projects'] == [
+            {'_idx': 1, 'value': one_pro},
+            {'_idx': 2, 'value': two_pro}
+        ]
 
     @staticmethod
     def test_links():
@@ -313,11 +321,13 @@ class TestSpaceApiBuildValues:
         res = api.build()
         assert res['links'] == [
             {
+                '_idx': 0,
                 'name': nil_name,
                 'description': nil_desc,
                 'url': nil_url,
             },
             {
+                '_idx': 2,
                 'name': two_name,
                 'description': None,
                 'url': two_url,
@@ -392,6 +402,7 @@ class TestSpaceApiBuildValues:
         res = api.build()
         assert res['membership_plans'] == [
             {
+                '_idx': 0,
                 'name': nil_name,
                 'value': nil_value,
                 'currency': nil_curr,
@@ -399,6 +410,7 @@ class TestSpaceApiBuildValues:
                 'description': None,
             },
             {
+                '_idx': 2,
                 'name': two_name,
                 'value': two_value,
                 'currency': two_curr,

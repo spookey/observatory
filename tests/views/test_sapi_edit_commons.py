@@ -62,7 +62,7 @@ PAGES = [
         ),
     ),
     page_data(
-        'sapi.edit_cams',
+        'sapi.edit_cam',
         url='/space/edit/cam',
         multi=True,
         keys=dict(cam='cam'),
@@ -202,7 +202,7 @@ PAGES = [
         multi=True,
     ),
     page_data(
-        'sapi.edit_plans',
+        'sapi.edit_membership_plans',
         url='/space/edit/plans',
         keys=dict(
             name='membership_plans.name',
