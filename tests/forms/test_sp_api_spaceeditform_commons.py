@@ -2,19 +2,19 @@ from pytest import mark
 
 from observatory.forms.extra.widgets import SubmitButtonInput
 from observatory.forms.sp_api import (
-    SpaceCamForm,
-    SpaceContactForm,
-    SpaceFeedBlogForm,
-    SpaceFeedCalendarForm,
-    SpaceFeedFlickrForm,
-    SpaceFeedWikiForm,
-    SpaceInfoForm,
-    SpaceKeymastersForm,
-    SpaceLinksForm,
-    SpaceLocationForm,
-    SpaceMembershipPlansForm,
-    SpaceProjectsForm,
-    SpaceSpaceFedForm,
+    SpaceEditCamForm,
+    SpaceEditContactForm,
+    SpaceEditFeedBlogForm,
+    SpaceEditFeedCalendarForm,
+    SpaceEditFeedFlickrForm,
+    SpaceEditFeedWikiForm,
+    SpaceEditInfoForm,
+    SpaceEditKeymastersForm,
+    SpaceEditLinksForm,
+    SpaceEditLocationForm,
+    SpaceEditMembershipPlansForm,
+    SpaceEditProjectsForm,
+    SpaceEditSpaceFedForm,
 )
 from observatory.models.values import Values
 from observatory.start.environment import SP_API_PREFIX
@@ -35,7 +35,7 @@ def form_meta(form, *, keys, data, one_of=None, **kwargs):
 
 FORMS = [
     form_meta(
-        SpaceInfoForm,
+        SpaceEditInfoForm,
         keys=dict(
             space='space',
             logo='logo',
@@ -48,7 +48,7 @@ FORMS = [
         ),
     ),
     form_meta(
-        SpaceLocationForm,
+        SpaceEditLocationForm,
         keys=dict(
             address='location.address',
             lat='location.lat',
@@ -63,7 +63,7 @@ FORMS = [
         ),
     ),
     form_meta(
-        SpaceSpaceFedForm,
+        SpaceEditSpaceFedForm,
         keys=dict(
             spacenet='spacefed.spacenet',
             spacesaml='spacefed.spacesaml',
@@ -75,12 +75,12 @@ FORMS = [
         empty=True,
     ),
     form_meta(
-        SpaceCamForm,
+        SpaceEditCamForm,
         keys=dict(cam='cam'),
         data=dict(cam='https://example.org/webcam.mjpeg'),
     ),
     form_meta(
-        SpaceContactForm,
+        SpaceEditContactForm,
         keys=dict(
             phone='contact.phone',
             sip='contact.sip',
@@ -118,7 +118,7 @@ FORMS = [
         one_of=['email', 'issue_mail', 'twitter', 'mailinglist'],
     ),
     form_meta(
-        SpaceKeymastersForm,
+        SpaceEditKeymastersForm,
         keys=dict(
             name='contact.keymasters.name',
             irc_nick='contact.keymasters.irc_nick',
@@ -147,7 +147,7 @@ FORMS = [
         ],
     ),
     form_meta(
-        SpaceFeedBlogForm,
+        SpaceEditFeedBlogForm,
         keys=dict(
             type_sel='feeds.blog.type',
             url='feeds.blog.url',
@@ -158,7 +158,7 @@ FORMS = [
         ),
     ),
     form_meta(
-        SpaceFeedWikiForm,
+        SpaceEditFeedWikiForm,
         keys=dict(
             type_sel='feeds.wiki.type',
             url='feeds.wiki.url',
@@ -169,7 +169,7 @@ FORMS = [
         ),
     ),
     form_meta(
-        SpaceFeedCalendarForm,
+        SpaceEditFeedCalendarForm,
         keys=dict(
             type_sel='feeds.calendar.type',
             url='feeds.calendar.url',
@@ -180,7 +180,7 @@ FORMS = [
         ),
     ),
     form_meta(
-        SpaceFeedFlickrForm,
+        SpaceEditFeedFlickrForm,
         keys=dict(
             type_sel='feeds.flickr.type',
             url='feeds.flickr.url',
@@ -191,12 +191,12 @@ FORMS = [
         ),
     ),
     form_meta(
-        SpaceProjectsForm,
+        SpaceEditProjectsForm,
         keys=dict(projects='projects'),
         data=dict(projects='https://project.example.org/'),
     ),
     form_meta(
-        SpaceLinksForm,
+        SpaceEditLinksForm,
         keys=dict(
             name='links.name',
             description='links.description',
@@ -209,7 +209,7 @@ FORMS = [
         ),
     ),
     form_meta(
-        SpaceMembershipPlansForm,
+        SpaceEditMembershipPlansForm,
         keys=dict(
             name='membership_plans.name',
             value='membership_plans.value',
@@ -230,7 +230,7 @@ IDS = [meta.form.__name__ for meta in FORMS]
 
 
 @mark.usefixtures('session', 'ctx_app')
-class TestSpaceFormCommons:
+class TestSpaceEditFormCommons:
     @staticmethod
     @mark.parametrize('meta', FORMS, ids=IDS)
     def test_meta_meta(meta):

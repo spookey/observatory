@@ -30,7 +30,7 @@ from observatory.start.environment import SP_API_PREFIX
 # pylint: disable=no-member
 
 
-class SpaceForm(FlaskForm):
+class SpaceEditForm(FlaskForm):
     KEYS = {}
     ONE_OF = []
 
@@ -89,7 +89,7 @@ class SpaceForm(FlaskForm):
         return SPACE_API.reset()
 
 
-class SpaceInfoForm(SpaceForm):
+class SpaceEditInfoForm(SpaceEditForm):
     KEYS = dict(
         space='space',
         logo='logo',
@@ -117,7 +117,7 @@ class SpaceInfoForm(SpaceForm):
     )
 
 
-class SpaceLocationForm(SpaceForm):
+class SpaceEditLocationForm(SpaceEditForm):
     KEYS = dict(
         address='location.address',
         lat='location.lat',
@@ -168,7 +168,7 @@ class SpaceLocationForm(SpaceForm):
         self.timezone_sel.choices = self._timezone_choices()
 
 
-class SpaceSpaceFedForm(SpaceForm):
+class SpaceEditSpaceFedForm(SpaceEditForm):
     KEYS = dict(
         spacenet='spacefed.spacenet',
         spacesaml='spacefed.spacesaml',
@@ -190,7 +190,7 @@ class SpaceSpaceFedForm(SpaceForm):
     )
 
 
-class SpaceCamForm(SpaceForm):
+class SpaceEditCamForm(SpaceEditForm):
     KEYS = dict(cam='cam')
     cam = StringField(
         'Webcam URL',
@@ -207,7 +207,7 @@ class SpaceCamForm(SpaceForm):
         super().__init__(*args, idx=idx, **kwargs)
 
 
-class SpaceContactForm(SpaceForm):
+class SpaceEditContactForm(SpaceEditForm):
     KEYS = dict(
         phone='contact.phone',
         sip='contact.sip',
@@ -320,7 +320,7 @@ class SpaceContactForm(SpaceForm):
     )
 
 
-class SpaceKeymastersForm(SpaceForm):
+class SpaceEditKeymastersForm(SpaceEditForm):
     KEYS = dict(
         name='contact.keymasters.name',
         irc_nick='contact.keymasters.irc_nick',
@@ -393,7 +393,7 @@ class SpaceKeymastersForm(SpaceForm):
         super().__init__(*args, idx=idx, **kwargs)
 
 
-class SpaceFeedForm(SpaceForm):
+class SpaceEditFeedForm(SpaceEditForm):
     KEYS = {}
 
     type_sel = SelectField(
@@ -425,35 +425,35 @@ class SpaceFeedForm(SpaceForm):
         self.type_sel.choices = self._type_choices()
 
 
-class SpaceFeedBlogForm(SpaceFeedForm):
+class SpaceEditFeedBlogForm(SpaceEditFeedForm):
     KEYS = dict(
         type_sel='feeds.blog.type',
         url='feeds.blog.url',
     )
 
 
-class SpaceFeedWikiForm(SpaceFeedForm):
+class SpaceEditFeedWikiForm(SpaceEditFeedForm):
     KEYS = dict(
         type_sel='feeds.wiki.type',
         url='feeds.wiki.url',
     )
 
 
-class SpaceFeedCalendarForm(SpaceFeedForm):
+class SpaceEditFeedCalendarForm(SpaceEditFeedForm):
     KEYS = dict(
         type_sel='feeds.calendar.type',
         url='feeds.calendar.url',
     )
 
 
-class SpaceFeedFlickrForm(SpaceFeedForm):
+class SpaceEditFeedFlickrForm(SpaceEditFeedForm):
     KEYS = dict(
         type_sel='feeds.flickr.type',
         url='feeds.flickr.url',
     )
 
 
-class SpaceProjectsForm(SpaceForm):
+class SpaceEditProjectsForm(SpaceEditForm):
     KEYS = dict(projects='projects')
     projects = StringField(
         'Projects',
@@ -470,7 +470,7 @@ class SpaceProjectsForm(SpaceForm):
         super().__init__(*args, idx=idx, **kwargs)
 
 
-class SpaceLinksForm(SpaceForm):
+class SpaceEditLinksForm(SpaceEditForm):
     KEYS = dict(
         name='links.name',
         description='links.description',
@@ -501,7 +501,7 @@ class SpaceLinksForm(SpaceForm):
         super().__init__(*args, idx=idx, **kwargs)
 
 
-class SpaceMembershipPlansForm(SpaceForm):
+class SpaceEditMembershipPlansForm(SpaceEditForm):
     KEYS = dict(
         name='membership_plans.name',
         value='membership_plans.value',
