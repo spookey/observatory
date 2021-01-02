@@ -1,54 +1,41 @@
+from flask import current_app, url_for
 from pytest import mark
 
-from observatory.forms.extra.widgets import SubmitButtonInput
-from observatory.forms.sp_api import (
-    SpaceCamForm,
-    SpaceContactForm,
-    SpaceFeedBlogForm,
-    SpaceFeedCalendarForm,
-    SpaceFeedFlickrForm,
-    SpaceFeedWikiForm,
-    SpaceInfoForm,
-    SpaceKeymastersForm,
-    SpaceLinksForm,
-    SpaceLocationForm,
-    SpaceMembershipPlansForm,
-    SpaceProjectsForm,
-    SpaceSpaceFedForm,
-)
 from observatory.models.values import Values
 from observatory.start.environment import SP_API_PREFIX
 
 
-def form_meta(form, *, keys, data, any_of=None, **kwargs):
+def page_data(endpoint, *, url, keys, data, **kwargs):
     def res():
         pass
 
-    res.form = form
-    res.data = data
+    res.endpoint = endpoint
+    res.url = url
     res.keys = keys
-    res.any_of = any_of if any_of is not None else {}
-    res.empty = kwargs.get('empty', False)
+    res.data = data
+    res.multi = kwargs.get('multi', False)
 
     return res
 
 
-FORMS = [
-    form_meta(
-        SpaceInfoForm,
+PAGES = [
+    page_data(
+        'sapi.edit_info',
+        url='/space/edit/info',
         keys=dict(
             space='space',
             logo='logo',
             url='url',
         ),
         data=dict(
-            space='some space',
+            space='space',
             logo='https://example.org/logo.png',
             url='https://example.org',
         ),
     ),
-    form_meta(
-        SpaceLocationForm,
+    page_data(
+        'sapi.edit_location',
+        url='/space/edit/location',
         keys=dict(
             address='location.address',
             lat='location.lat',
@@ -62,25 +49,28 @@ FORMS = [
             timezone_sel='UTC',
         ),
     ),
-    form_meta(
-        SpaceSpaceFedForm,
+    page_data(
+        'sapi.edit_spacefed',
+        url='/space/edit/spacefed',
         keys=dict(
             spacenet='spacefed.spacenet',
             spacesaml='spacefed.spacesaml',
         ),
         data=dict(
             spacenet=True,
-            spacesaml=False,
+            spacesaml=True,
         ),
-        empty=True,
     ),
-    form_meta(
-        SpaceCamForm,
+    page_data(
+        'sapi.edit_cams',
+        url='/space/edit/cam',
+        multi=True,
         keys=dict(cam='cam'),
-        data=dict(cam='https://example.org/webcam.mjpeg'),
+        data=dict(cam='https://example.org/webcam'),
     ),
-    form_meta(
-        SpaceContactForm,
+    page_data(
+        'sapi.edit_contact',
+        url='/space/edit/contact',
         keys=dict(
             phone='contact.phone',
             sip='contact.sip',
@@ -115,15 +105,10 @@ FORMS = [
             matrix='#chat:example.org',
             mumble='mumble://mumble.example.org/space?version=0.0.1',
         ),
-        any_of=dict(
-            email='E-Mail',
-            issue_mail='Issue Mail',
-            twitter='Twitter',
-            mailinglist='Mailinglist',
-        ),
     ),
-    form_meta(
-        SpaceKeymastersForm,
+    page_data(
+        'sapi.edit_contact_keymasters',
+        url='/space/edit/contact/keymasters',
         keys=dict(
             name='contact.keymasters.name',
             irc_nick='contact.keymasters.irc_nick',
@@ -144,15 +129,11 @@ FORMS = [
             mastodon='@somebody@example.org',
             matrix='@somebody:matrix.example.org',
         ),
-        any_of=dict(
-            irc_nick='IRC Nick',
-            phone='Phone',
-            email='E-Mail',
-            twitter='Twitter',
-        ),
+        multi=True,
     ),
-    form_meta(
-        SpaceFeedBlogForm,
+    page_data(
+        'sapi.edit_feeds_blog',
+        url='/space/edit/feeds/blog',
         keys=dict(
             type_sel='feeds.blog.type',
             url='feeds.blog.url',
@@ -162,8 +143,9 @@ FORMS = [
             url='https://blog.example.org/feed',
         ),
     ),
-    form_meta(
-        SpaceFeedWikiForm,
+    page_data(
+        'sapi.edit_feeds_wiki',
+        url='/space/edit/feeds/wiki',
         keys=dict(
             type_sel='feeds.wiki.type',
             url='feeds.wiki.url',
@@ -173,8 +155,9 @@ FORMS = [
             url='https://wiki.example.org/feed.xml',
         ),
     ),
-    form_meta(
-        SpaceFeedCalendarForm,
+    page_data(
+        'sapi.edit_feeds_calendar',
+        url='/space/edit/feeds/calendar',
         keys=dict(
             type_sel='feeds.calendar.type',
             url='feeds.calendar.url',
@@ -184,8 +167,9 @@ FORMS = [
             url='https://calendar.example.org/ical',
         ),
     ),
-    form_meta(
-        SpaceFeedFlickrForm,
+    page_data(
+        'sapi.edit_feeds_flickr',
+        url='/space/edit/feeds/flickr',
         keys=dict(
             type_sel='feeds.flickr.type',
             url='feeds.flickr.url',
@@ -195,13 +179,16 @@ FORMS = [
             url='https://example.com/space/feed.rss',
         ),
     ),
-    form_meta(
-        SpaceProjectsForm,
+    page_data(
+        'sapi.edit_projects',
+        url='/space/edit/projects',
         keys=dict(projects='projects'),
         data=dict(projects='https://project.example.org/'),
+        multi=True,
     ),
-    form_meta(
-        SpaceLinksForm,
+    page_data(
+        'sapi.edit_links',
+        url='/space/edit/links',
         keys=dict(
             name='links.name',
             description='links.description',
@@ -212,9 +199,11 @@ FORMS = [
             description='This is just a link',
             url='https://example.org',
         ),
+        multi=True,
     ),
-    form_meta(
-        SpaceMembershipPlansForm,
+    page_data(
+        'sapi.edit_plans',
+        url='/space/edit/plans',
         keys=dict(
             name='membership_plans.name',
             value='membership_plans.value',
@@ -224,104 +213,72 @@ FORMS = [
         ),
         data=dict(
             name='some plan',
-            value=23.5,
+            value=42.0,
             currency_sel='RUB',
-            billing_interval_sel='daily',
+            billing_interval_sel='hourly',
             description='please pay',
         ),
+        multi=True,
     ),
 ]
-IDS = [meta.form.__name__ for meta in FORMS]
+IDS = [page.endpoint.split('.')[-1] for page in PAGES]
 
 
-@mark.usefixtures('session', 'ctx_app')
-class TestSpaceFormCommons:
+@mark.usefixtures('session')
+class TestSapiEditCommons:
     @staticmethod
-    @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_meta_meta(meta):
-        keys = meta.keys.keys()
-        assert sorted(keys) == sorted(meta.data.keys())
-        for key in meta.any_of.keys():
-            assert key in keys
+    @mark.parametrize('page', PAGES, ids=IDS)
+    def test_page_page(page):
+        assert sorted(page.keys.keys()) == sorted(page.data.keys())
 
     @staticmethod
-    @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_meta_keys(meta):
-        assert meta.form.KEYS == meta.keys
+    @mark.usefixtures('ctx_app')
+    @mark.parametrize('page', PAGES, ids=IDS)
+    def test_urls(page):
+        assert url_for(page.endpoint) == page.url
+        if page.multi:
+            assert url_for(page.endpoint, idx=23) == f'{page.url}/23'
 
     @staticmethod
-    @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_meta_any_of(meta):
-        assert meta.form.ANY_OF == meta.any_of
+    @mark.parametrize('page', PAGES, ids=IDS)
+    def test_no_user(page, visitor):
+        visitor(page.endpoint, code=401)
 
     @staticmethod
-    @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_basic_fields(meta):
-        form = meta.form(idx=0)
-        for field in meta.keys.keys():
-            elem = getattr(form, field, 'error')
-            assert elem is not None
-            assert elem != 'error'
-        assert form.submit is not None
+    @mark.parametrize('page', PAGES, ids=IDS)
+    def test_disabled(page, monkeypatch, visitor, gen_user_loggedin):
+        gen_user_loggedin()
+        monkeypatch.setitem(current_app.config, 'SP_API_ENABLE', False)
+
+        visitor(page.endpoint, code=404)
 
     @staticmethod
-    @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_submit_button(meta):
-        form = meta.form(idx=0)
-        assert form.submit.widget is not None
-        assert isinstance(form.submit.widget, SubmitButtonInput)
-        assert form.submit.widget.icon == 'ops_submit'
+    @mark.parametrize('page', PAGES, ids=IDS)
+    def test_form_params(page, visitor, gen_user_loggedin):
+        gen_user_loggedin()
+        res = visitor(page.endpoint)
+
+        form = res.soup.select('form')[-1]
+        assert form['method'] == 'POST'
+        assert form['action'] == url_for(page.endpoint, _external=True)
 
     @staticmethod
-    @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_empty_invalid(meta):
-        form = meta.form(idx=0)
-        assert form.validate() is meta.empty
-        action = form.action()
-        if meta.empty:
-            assert action is not None
-        else:
-            assert action is None
+    @mark.parametrize('page', PAGES, ids=IDS)
+    def test_form_creates(page, visitor, gen_user_loggedin):
+        gen_user_loggedin()
+        index_url = url_for('sapi.index', _external=True)
 
-    @staticmethod
-    @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_create_new(meta):
         assert Values.query.all() == []
 
-        form = meta.form(idx=0, **meta.data)
-        assert form.validate() is True
-        assert form.action()
+        res = visitor(
+            page.endpoint,
+            method='post',
+            data={**page.data, 'submit': True},
+            code=302,
+        )
 
-        for form_key, space_key in meta.keys.items():
+        assert res.request.headers['LOCATION'] == index_url
+        for form_key, space_key in page.keys.items():
             val = Values.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
             assert val is not None
-            assert val == meta.data.get(form_key, 'error')
-
-    @staticmethod
-    @mark.parametrize('meta', FORMS, ids=IDS)
-    def test_change_existing(meta):
-        assert Values.query.all() == []
-
-        for form_key, space_key in meta.keys.items():
-            val = meta.data.get(form_key, 'some')
-            if isinstance(val, bool):
-                val = not val
-            else:
-                val = 2 * val
-
-            Values.set(
-                key=f'{SP_API_PREFIX}.{space_key}',
-                idx=0,
-                value=val,
-            )
-
-        assert Values.query.all() != []
-
-        form = meta.form(idx=0, **meta.data)
-        assert form.validate() is True
-        assert form.action()
-
-        for form_key, space_key in meta.keys.items():
-            val = Values.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
-            assert val is not None
-            assert val == meta.data.get(form_key, 'error')
+            assert val == page.data.get(form_key, 'error')

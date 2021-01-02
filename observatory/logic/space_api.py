@@ -116,11 +116,11 @@ class SpaceApi:
                         'xmpp': self._get(
                             key='contact.keymasters.xmpp', idx=idx
                         ),
-                        'matrix': self._get(
-                            key='contact.keymasters.matrix', idx=idx
-                        ),
                         'mastodon': self._get(
                             key='contact.keymasters.mastodon', idx=idx
+                        ),
+                        'matrix': self._get(
+                            key='contact.keymasters.matrix', idx=idx
                         ),
                     }
                     for idx in self.concact_keymasters_indices

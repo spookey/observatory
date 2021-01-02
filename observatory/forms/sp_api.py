@@ -333,8 +333,8 @@ class SpaceKeymastersForm(SpaceForm):
         email='contact.keymasters.email',
         twitter='contact.keymasters.twitter',
         xmpp='contact.keymasters.xmpp',
-        matrix='contact.keymasters.matrix',
         mastodon='contact.keymasters.mastodon',
+        matrix='contact.keymasters.matrix',
     )
     ANY_OF = dict(
         irc_nick='IRC Nick',

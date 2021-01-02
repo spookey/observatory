@@ -28,7 +28,7 @@
         <h3 class="title">{{ title }}</h3>
       </div>
       <div class="column is-one-third">
-        {{ split_level(_heading('Raw Content'), _content_api_button() ) }}
+        {{ split_level(_heading('Raw Content'), _content_api_button()) }}
         <div class="content">
           <pre><code>{{ space_api.content|tojson(indent=2) }}</code></pre>
       </div>
