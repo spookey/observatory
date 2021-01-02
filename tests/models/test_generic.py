@@ -52,15 +52,15 @@ class TestGeneric:
 
         assert _comm.model.query.all() == [thr, two, one]
         assert _comm.model.query_sorted().all() == [thr, two, one]
-        #                                # 321
-        assert one.raise_step() is True  # 312
-        assert thr.lower_step() is True  # 132
-        assert two.raise_step() is True  # 123
+        #                               # 321
+        assert one.raise_step() == two  # 312
+        assert thr.lower_step() == one  # 132
+        assert two.raise_step() == thr  # 123
 
         assert _comm.model.query_sorted().all() == [one, two, thr]
 
-        assert one.raise_step() is False
-        assert thr.lower_step() is False
+        assert one.raise_step() is None
+        assert thr.lower_step() is None
 
     @staticmethod
     def test_sorted_relations(gen_prompt, gen_sensor):

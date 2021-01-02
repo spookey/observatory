@@ -19,9 +19,9 @@ def _comm(request, gen_prompt, gen_sensor):
         'mapper': (
             MapperSortForm,
             Mapper,
-            lambda slug='test': Mapper.create(
-                prompt=gen_prompt(slug=f'm_{slug}'),
-                sensor=gen_sensor(slug=f'm_{slug}'),
+            lambda slug='test', **kwargs: Mapper.create(
+                prompt=gen_prompt(slug=f'm_{slug}', **kwargs),
+                sensor=gen_sensor(slug=f'm_{slug}', **kwargs),
             ),
         ),
     }.get(request.param)
@@ -81,22 +81,22 @@ class TestGenericSortForm:
 
     @staticmethod
     def test_sort(_comm):
-        one = _comm.gen_generic('one')
-        two = _comm.gen_generic('two')
+        one = _comm.gen_generic('one', sortkey=1)
+        two = _comm.gen_generic('two', sortkey=2)
 
-        def _order(obj, lift, act=True):
+        def _order(obj, lift, expected=None):
             form = _comm.form(obj=obj, lift=lift)
             assert form.validate() is True
-            assert form.action() == act
+            assert form.action() == expected
 
             return _comm.model.query_sorted().all()
 
         assert _comm.model.query_sorted().all() == [two, one]
 
-        assert _order(one, True) == [one, two]
-        assert _order(one, False) == [two, one]
-        assert _order(two, False) == [one, two]
-        assert _order(two, True) == [two, one]
+        assert _order(one, True, expected=two) == [one, two]
+        assert _order(one, False, expected=two) == [two, one]
+        assert _order(two, False, expected=one) == [one, two]
+        assert _order(two, True, expected=one) == [two, one]
 
-        assert _order(two, True, act=False) == [two, one]
-        assert _order(one, False, act=False) == [two, one]
+        assert _order(two, True) == [two, one]
+        assert _order(one, False) == [two, one]

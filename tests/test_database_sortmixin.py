@@ -107,30 +107,30 @@ class TestSortMixin:
 
         assert SortMixinPhony.query_sorted().all() == [thr, two, one]
 
-        assert one.raise_step() is True
+        assert one.raise_step() == two
         assert SortMixinPhony.query_sorted().all() == [thr, one, two]
 
-        assert one.raise_step() is True
+        assert one.raise_step() == thr
         assert SortMixinPhony.query_sorted().all() == [one, thr, two]
 
-        assert one.raise_step() is False
+        assert one.raise_step() is None
         assert SortMixinPhony.query_sorted().all() == [one, thr, two]
 
-        assert two.raise_step() is True
+        assert two.raise_step() == thr
         assert SortMixinPhony.query_sorted().all() == [one, two, thr]
 
         assert SortMixinPhony.query.all() == [one, two, thr]
 
-        assert one.lower_step() is True
+        assert one.lower_step() == two
         assert SortMixinPhony.query_sorted().all() == [two, one, thr]
 
-        assert one.lower_step() is True
+        assert one.lower_step() == thr
         assert SortMixinPhony.query_sorted().all() == [two, thr, one]
 
-        assert one.lower_step() is False
+        assert one.lower_step() is None
         assert SortMixinPhony.query_sorted().all() == [two, thr, one]
 
-        assert thr.raise_step() is True
+        assert thr.raise_step() == two
         assert SortMixinPhony.query_sorted().all() == [thr, two, one]
 
         assert SortMixinPhony.query.all() == [one, two, thr]
@@ -159,14 +159,14 @@ class TestSortMixin:
         assert SortMixinPhony.query_sorted().all() == [thr, two, one]
         _check(False, False)
 
-        assert one.raise_step() is True
+        assert one.raise_step() == two
         assert SortMixinPhony.query_sorted().all() == [thr, one, two]
         _check(True, False)
 
-        assert one.raise_step() is True
+        assert one.raise_step() == thr
         assert SortMixinPhony.query_sorted().all() == [one, thr, two]
         _check(True, False)
 
-        assert two.raise_step() is True
+        assert two.raise_step() == thr
         assert SortMixinPhony.query_sorted().all() == [one, two, thr]
         _check(True, True)

@@ -150,7 +150,7 @@ class SortMixin:
 
     def __flip_sortkey(self, that):
         if not that:
-            return False
+            return None
 
         LOG.info(
             'flipping sortkey %d with %d for "%s"',
@@ -164,7 +164,7 @@ class SortMixin:
         that.update(sortkey=skey)
         self.update(sortkey=tkey)
 
-        return True
+        return that
 
     def raise_step(self):
         return self.__flip_sortkey(
