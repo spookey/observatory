@@ -1,6 +1,3 @@
-from random import choice
-from string import digits, hexdigits
-
 from flask_wtf import FlaskForm
 from pytest import mark
 from wtforms import StringField
@@ -8,16 +5,17 @@ from wtforms import StringField
 from observatory.forms.extra.validators import NeedInner
 
 MESSAGE = 'Test Message'
+PATTERN = 'abc'
 
 
 class PhonyForm(FlaskForm):
     exclusive = StringField(
         'Exclusive',
-        validators=[NeedInner(digits, message=MESSAGE, only=True)],
+        validators=[NeedInner(PATTERN, message=MESSAGE, only=True)],
     )
     inclusive = StringField(
         'Inclusive',
-        validators=[NeedInner(digits, message=MESSAGE, only=False)],
+        validators=[NeedInner(PATTERN, message=MESSAGE, only=False)],
     )
 
 
@@ -26,8 +24,8 @@ class TestNeedInner:
     @staticmethod
     def test_valid():
         form = PhonyForm(
-            exclusive=''.join(choice(digits) for _ in range(5)),
-            inclusive=''.join(choice(hexdigits) for _ in range(5)),
+            exclusive=''.join('acab'),
+            inclusive=''.join('abcd'),
         )
         assert form.validate() is True
         assert form.exclusive.errors == []
