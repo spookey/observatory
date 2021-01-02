@@ -10,6 +10,13 @@ from observatory.forms.common import (
     SensorSortForm,
 )
 from observatory.forms.mapper import MapperDropForm, MapperSortForm
+from observatory.forms.sp_api import (
+    SpaceDropCamForm,
+    SpaceDropKeymastersForm,
+    SpaceDropLinksForm,
+    SpaceDropMembershipPlansForm,
+    SpaceDropProjectsForm,
+)
 from observatory.lib.text import random_line
 from observatory.start.environment import (
     API_PLOT_REFRESH_MS,
@@ -98,3 +105,23 @@ def form_sort_prompt(prompt, lift):
 
 def form_sort_sensor(sensor, lift):
     return SensorSortForm(obj=sensor, lift=lift)
+
+
+def form_drop_space_cam(idx):
+    return SpaceDropCamForm(idx=idx)
+
+
+def form_drop_space_keymasters(idx):
+    return SpaceDropKeymastersForm(idx=idx)
+
+
+def form_drop_space_links(idx):
+    return SpaceDropLinksForm(idx=idx)
+
+
+def form_drop_space_membership_plans(idx):
+    return SpaceDropMembershipPlansForm(idx=idx)
+
+
+def form_drop_space_projects(idx):
+    return SpaceDropProjectsForm(idx=idx)

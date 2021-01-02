@@ -1,3 +1,6 @@
+from collections import namedtuple
+from random import choice
+
 from pytest import fixture, mark
 
 from observatory.forms.common import (
@@ -7,15 +10,53 @@ from observatory.forms.common import (
     SensorSortForm,
 )
 from observatory.forms.mapper import MapperDropForm, MapperSortForm
+from observatory.forms.sp_api import (
+    SpaceDropCamForm,
+    SpaceDropKeymastersForm,
+    SpaceDropLinksForm,
+    SpaceDropMembershipPlansForm,
+    SpaceDropProjectsForm,
+)
 from observatory.models.mapper import Mapper
 from observatory.shared import (
     form_drop_mapper,
     form_drop_prompt,
     form_drop_sensor,
+    form_drop_space_cam,
+    form_drop_space_keymasters,
+    form_drop_space_links,
+    form_drop_space_membership_plans,
+    form_drop_space_projects,
     form_sort_mapper,
     form_sort_prompt,
     form_sort_sensor,
 )
+
+SpaceDrop = namedtuple('SpaceDrop', ('func', 'form'))
+
+SPACE_DROP_FORMS = [
+    SpaceDrop(
+        func=form_drop_space_cam,
+        form=SpaceDropCamForm,
+    ),
+    SpaceDrop(
+        func=form_drop_space_keymasters,
+        form=SpaceDropKeymastersForm,
+    ),
+    SpaceDrop(
+        func=form_drop_space_links,
+        form=SpaceDropLinksForm,
+    ),
+    SpaceDrop(
+        func=form_drop_space_membership_plans,
+        form=SpaceDropMembershipPlansForm,
+    ),
+    SpaceDrop(
+        func=form_drop_space_projects,
+        form=SpaceDropProjectsForm,
+    ),
+]
+SPACE_DROP_IDS = [space_form.form.__name__ for space_form in SPACE_DROP_FORMS]
 
 
 @fixture(scope='function', params=['prompt', 'sensor', 'mapper'])
@@ -87,3 +128,13 @@ class TestSharedForms:
         assert form.thing == thing
         assert form.lift is True
         assert form.validate() is True
+
+    @staticmethod
+    @mark.parametrize('_drop', SPACE_DROP_FORMS)
+    def test_drop_space(_drop):
+        idx = choice(range(23, 42))
+        form = _drop.func(idx=idx)
+        assert isinstance(form, _drop.form)
+        assert form.idx == idx
+        assert form.validate() is True
+        assert form.KEYS
