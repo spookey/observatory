@@ -22,9 +22,9 @@ from wtforms.validators import (
 
 from observatory.forms.extra.validators import NeedInner, NeedStart
 from observatory.forms.extra.widgets import SubmitButtonInput
-from observatory.logic.space_api import PREFIX
 from observatory.models.values import Values
 from observatory.shared import SPACE_API
+from observatory.start.environment import SP_API_PREFIX
 
 # pylint: disable=arguments-differ
 # pylint: disable=no-member
@@ -38,7 +38,7 @@ class SpaceForm(FlaskForm):
         super().__init__(
             *args,
             data={
-                field: Values.get(key=f'{PREFIX}.{key}', idx=idx)
+                field: Values.get(key=f'{SP_API_PREFIX}.{key}', idx=idx)
                 for field, key in self.KEYS.items()
             },
             **kwargs,
@@ -81,7 +81,7 @@ class SpaceForm(FlaskForm):
                     value = None
 
                 Values.set(
-                    key=f'{PREFIX}.{space_key}',
+                    key=f'{SP_API_PREFIX}.{space_key}',
                     idx=self.idx,
                     value=value,
                 )

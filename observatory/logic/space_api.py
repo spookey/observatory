@@ -2,9 +2,7 @@ from datetime import datetime
 from logging import getLogger
 
 from observatory.models.values import Values
-from observatory.start.environment import SP_API_REFRESH
-
-PREFIX = 'space_api'
+from observatory.start.environment import SP_API_PREFIX, SP_API_REFRESH
 
 
 class SpaceApi:
@@ -15,15 +13,15 @@ class SpaceApi:
 
     @staticmethod
     def _get(key, idx=0):
-        return Values.get(key=f'{PREFIX}.{key}', idx=idx)
+        return Values.get(key=f'{SP_API_PREFIX}.{key}', idx=idx)
 
     @staticmethod
     def _get_all(key):
-        return Values.get_all(key=f'{PREFIX}.{key}')
+        return Values.get_all(key=f'{SP_API_PREFIX}.{key}')
 
     @staticmethod
     def _by_key(key):
-        return Values.by_key(key=f'{PREFIX}.{key}')
+        return Values.by_key(key=f'{SP_API_PREFIX}.{key}')
 
     def _indices_any(self, *keys):
         result = set()

@@ -5,7 +5,7 @@ ENDPOINT = 'sapi.index'
 
 
 @mark.usefixtures('session')
-class TestMainIndex:
+class TestSapiIndex:
     @staticmethod
     @mark.usefixtures('ctx_app')
     def test_url():

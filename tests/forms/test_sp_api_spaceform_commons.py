@@ -16,8 +16,8 @@ from observatory.forms.sp_api import (
     SpaceProjectsForm,
     SpaceSpaceFedForm,
 )
-from observatory.logic.space_api import PREFIX
 from observatory.models.values import Values
+from observatory.start.environment import SP_API_PREFIX
 
 
 def form_meta(form, *, keys, data, any_of=None, **kwargs):
@@ -293,7 +293,7 @@ class TestSpaceFormCommons:
         assert form.action()
 
         for form_key, space_key in meta.keys.items():
-            val = Values.get(key=f'{PREFIX}.{space_key}', idx=0)
+            val = Values.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
             assert val is not None
             assert val == meta.data.get(form_key, 'error')
 
@@ -310,7 +310,7 @@ class TestSpaceFormCommons:
                 val = 2 * val
 
             Values.set(
-                key=f'{PREFIX}.{space_key}',
+                key=f'{SP_API_PREFIX}.{space_key}',
                 idx=0,
                 value=val,
             )
@@ -322,6 +322,6 @@ class TestSpaceFormCommons:
         assert form.action()
 
         for form_key, space_key in meta.keys.items():
-            val = Values.get(key=f'{PREFIX}.{space_key}', idx=0)
+            val = Values.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
             assert val is not None
             assert val == meta.data.get(form_key, 'error')

@@ -76,7 +76,16 @@ def test_sp_api_enable(monkeypatch):
     assert environment.SP_API_ENABLE is False
 
 
-def test_space_refresh_sec(monkeypatch):
+def test_sp_api_prefix(monkeypatch):
+    assert environment.SP_API_PREFIX == 'space_api'
+
+    monkeypatch.setenv('SP_API_PREFIX', '🎼')
+    reload(environment)
+
+    assert environment.SP_API_PREFIX == '🎼'
+
+
+def test_sp_api_refresh_sec(monkeypatch):
     assert environment.SP_API_REFRESH == 18000
 
     monkeypatch.setenv('SP_API_REFRESH', '1337')

@@ -3,8 +3,8 @@ from wtforms import DecimalField, StringField, TextAreaField
 from wtforms.validators import DataRequired, NumberRange
 
 from observatory.forms.sp_api import SpaceForm
-from observatory.logic.space_api import PREFIX
 from observatory.models.values import Values
+from observatory.start.environment import SP_API_PREFIX
 
 
 class PhonyForm(SpaceForm):
@@ -49,13 +49,13 @@ class TestSpaceFormBase:
         idx = 3
         data = dict(
             string=Values.set(
-                key=f'{PREFIX}.test.string', idx=idx, value='test'
+                key=f'{SP_API_PREFIX}.test.string', idx=idx, value='test'
             ).value,
             number=Values.set(
-                key=f'{PREFIX}.test.number', idx=idx, value=1234.5
+                key=f'{SP_API_PREFIX}.test.number', idx=idx, value=1234.5
             ).value,
             cstory=Values.set(
-                key=f'{PREFIX}.test.cstory', idx=idx, value='more text'
+                key=f'{SP_API_PREFIX}.test.cstory', idx=idx, value='more text'
             ).value,
         )
 
@@ -92,22 +92,28 @@ class TestSpaceFormBase:
         assert form.validate() is True
         assert form.action()
 
-        assert Values.get(key=f'{PREFIX}.test.string', idx=idx) == string
-        assert Values.get(key=f'{PREFIX}.test.number', idx=idx) == number
-        assert Values.get(key=f'{PREFIX}.test.cstory', idx=idx) == cstory
+        assert (
+            Values.get(key=f'{SP_API_PREFIX}.test.string', idx=idx) == string
+        )
+        assert (
+            Values.get(key=f'{SP_API_PREFIX}.test.number', idx=idx) == number
+        )
+        assert (
+            Values.get(key=f'{SP_API_PREFIX}.test.cstory', idx=idx) == cstory
+        )
 
     @staticmethod
     def test_form_action_changes():
         idx, string, number, cstory = 2, None, 42.0, 'new story'
 
         string_obj = Values.set(
-            key=f'{PREFIX}.test.string', idx=idx, value='old text'
+            key=f'{SP_API_PREFIX}.test.string', idx=idx, value='old text'
         )
         number_obj = Values.set(
-            key=f'{PREFIX}.test.number', idx=idx, value=23.5
+            key=f'{SP_API_PREFIX}.test.number', idx=idx, value=23.5
         )
         cstory_obj = Values.set(
-            key=f'{PREFIX}.test.cstory', idx=idx, value='good old story'
+            key=f'{SP_API_PREFIX}.test.cstory', idx=idx, value='good old story'
         )
         assert Values.query.all() == [string_obj, number_obj, cstory_obj]
 
@@ -116,6 +122,12 @@ class TestSpaceFormBase:
         assert form.validate() is True
         assert form.action()
 
-        assert Values.get(key=f'{PREFIX}.test.string', idx=idx) == string
-        assert Values.get(key=f'{PREFIX}.test.number', idx=idx) == number
-        assert Values.get(key=f'{PREFIX}.test.cstory', idx=idx) == cstory
+        assert (
+            Values.get(key=f'{SP_API_PREFIX}.test.string', idx=idx) == string
+        )
+        assert (
+            Values.get(key=f'{SP_API_PREFIX}.test.number', idx=idx) == number
+        )
+        assert (
+            Values.get(key=f'{SP_API_PREFIX}.test.cstory', idx=idx) == cstory
+        )
