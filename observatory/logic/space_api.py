@@ -31,7 +31,7 @@ class SpaceApi:
             result = result.union(
                 elem.idx for elem in self._by_key(key=key) if elem is not None
             )
-        return result
+        return sorted(result)
 
     def _indices_all(self, first, *keys):
         result = set(
@@ -41,73 +41,40 @@ class SpaceApi:
             result = result.intersection(
                 elem.idx for elem in self._by_key(key=key) if elem is not None
             )
-        return result
+        return sorted(result)
 
-    def _contact_keymasters(self):
-        '''One of irc_nick, phone, email or twitter must be specified'''
-        indices = self._indices_any(
+    @property
+    def cam_indices(self):
+        return self._indices_all('cam')
+
+    @property
+    def concact_keymasters_indices(self):
+        return self._indices_any(
             'contact.keymasters.irc_nick',
             'contact.keymasters.phone',
             'contact.keymasters.email',
             'contact.keymasters.twitter',
         )
-        return [
-            {
-                'name': self._get(key='contact.keymasters.name', idx=idx),
-                'irc_nick': self._get(
-                    key='contact.keymasters.irc_nick', idx=idx
-                ),
-                'phone': self._get(key='contact.keymasters.phone', idx=idx),
-                'email': self._get(key='contact.keymasters.email', idx=idx),
-                'twitter': self._get(
-                    key='contact.keymasters.twitter', idx=idx
-                ),
-                'xmpp': self._get(key='contact.keymasters.xmpp', idx=idx),
-                'matrix': self._get(key='contact.keymasters.matrix', idx=idx),
-                'mastodon': self._get(
-                    key='contact.keymasters.mastodon', idx=idx
-                ),
-            }
-            for idx in sorted(indices)
-        ]
 
-    def _links(self):
-        indices = self._indices_all(
+    @property
+    def projects_indices(self):
+        return self._indices_all('projects')
+
+    @property
+    def links_indices(self):
+        return self._indices_all(
             'links.name',
             'links.url',
         )
-        return [
-            {
-                'name': self._get(key='links.name', idx=idx),
-                'description': self._get(key='links.description', idx=idx),
-                'url': self._get(key='links.url', idx=idx),
-            }
-            for idx in sorted(indices)
-        ]
 
-    def _membership_plans(self):
-        indices = self._indices_all(
+    @property
+    def membership_plans_indices(self):
+        return self._indices_all(
             'membership_plans.name',
             'membership_plans.value',
             'membership_plans.currency',
             'membership_plans.billing_interval',
         )
-        return [
-            {
-                'name': self._get(key='membership_plans.name', idx=idx),
-                'value': self._get(key='membership_plans.value', idx=idx),
-                'currency': self._get(
-                    key='membership_plans.currency', idx=idx
-                ),
-                'billing_interval': self._get(
-                    key='membership_plans.billing_interval', idx=idx
-                ),
-                'description': self._get(
-                    key='membership_plans.description', idx=idx
-                ),
-            }
-            for idx in sorted(indices)
-        ]
 
     def build(self):
         return {
@@ -131,7 +98,35 @@ class SpaceApi:
             'contact': {
                 'phone': self._get('contact.phone'),
                 'sip': self._get('contact.sip'),
-                'keymasters': self._contact_keymasters(),
+                'keymasters': [
+                    {
+                        'name': self._get(
+                            key='contact.keymasters.name', idx=idx
+                        ),
+                        'irc_nick': self._get(
+                            key='contact.keymasters.irc_nick', idx=idx
+                        ),
+                        'phone': self._get(
+                            key='contact.keymasters.phone', idx=idx
+                        ),
+                        'email': self._get(
+                            key='contact.keymasters.email', idx=idx
+                        ),
+                        'twitter': self._get(
+                            key='contact.keymasters.twitter', idx=idx
+                        ),
+                        'xmpp': self._get(
+                            key='contact.keymasters.xmpp', idx=idx
+                        ),
+                        'matrix': self._get(
+                            key='contact.keymasters.matrix', idx=idx
+                        ),
+                        'mastodon': self._get(
+                            key='contact.keymasters.mastodon', idx=idx
+                        ),
+                    }
+                    for idx in self.concact_keymasters_indices
+                ],
                 'irc': self._get('contact.irc'),
                 'twitter': self._get('contact.twitter'),
                 'mastodon': self._get('contact.mastodon'),
@@ -180,8 +175,30 @@ class SpaceApi:
                 },
             },
             'projects': self._get_all('projects'),
-            'links': self._links(),
-            'membership_plans': self._membership_plans(),
+            'links': [
+                {
+                    'name': self._get(key='links.name', idx=idx),
+                    'description': self._get(key='links.description', idx=idx),
+                    'url': self._get(key='links.url', idx=idx),
+                }
+                for idx in self.links_indices
+            ],
+            'membership_plans': [
+                {
+                    'name': self._get(key='membership_plans.name', idx=idx),
+                    'value': self._get(key='membership_plans.value', idx=idx),
+                    'currency': self._get(
+                        key='membership_plans.currency', idx=idx
+                    ),
+                    'billing_interval': self._get(
+                        key='membership_plans.billing_interval', idx=idx
+                    ),
+                    'description': self._get(
+                        key='membership_plans.description', idx=idx
+                    ),
+                }
+                for idx in self.membership_plans_indices
+            ],
         }
 
     def get_state(self):

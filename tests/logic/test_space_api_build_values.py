@@ -5,30 +5,7 @@ from observatory.models.values import Values
 
 
 @mark.usefixtures('session')
-class TestSpaceApiBuild:
-    @staticmethod
-    def test_toplevel_fields():
-        res = SpaceApi().build()
-        assert sorted(res.keys()) == sorted(
-            [
-                'api_compatibility',
-                'cam',
-                'contact',
-                'events',
-                'feeds',
-                'links',
-                'location',
-                'logo',
-                'membership_plans',
-                'projects',
-                'sensors',
-                'space',
-                'spacefed',
-                'state',
-                'url',
-            ]
-        )
-
+class TestSpaceApiBuildValues:
     @staticmethod
     def test_api_compatibility():
         res = SpaceApi().build()
@@ -51,19 +28,6 @@ class TestSpaceApiBuild:
         assert res['url'] == url
 
     @staticmethod
-    def test_location_fields():
-        res = SpaceApi().build()
-        location = res['location']
-        assert sorted(location.keys()) == sorted(
-            [
-                'address',
-                'lat',
-                'lon',
-                'timezone',
-            ]
-        )
-
-    @staticmethod
     def test_location():
         api = SpaceApi()
         address = Values.set(
@@ -84,17 +48,6 @@ class TestSpaceApiBuild:
         assert res['location']['lat'] == lat
         assert res['location']['lon'] == lon
         assert res['location']['timezone'] == timezone
-
-    @staticmethod
-    def test_spacefed_fields():
-        res = SpaceApi().build()
-        spacefed = res['spacefed']
-        assert sorted(spacefed.keys()) == sorted(
-            [
-                'spacenet',
-                'spacesaml',
-            ]
-        )
 
     @staticmethod
     def test_spacefed():
@@ -122,31 +75,6 @@ class TestSpaceApiBuild:
 
         res = api.build()
         assert res['cam'] == [nil_cam, two_cam]
-
-    @staticmethod
-    def test_contact_fields():
-        res = SpaceApi().build()
-        contact = res['contact']
-        assert sorted(contact.keys()) == sorted(
-            [
-                'email',
-                'facebook',
-                'foursquare',
-                'gopher',
-                'identica',
-                'irc',
-                'issue_mail',
-                'keymasters',
-                'mastodon',
-                'matrix',
-                'ml',
-                'mumble',
-                'phone',
-                'sip',
-                'twitter',
-                'xmpp',
-            ]
-        )
 
     @staticmethod
     def test_contact_telephone():
@@ -314,48 +242,6 @@ class TestSpaceApiBuild:
                 'mastodon': None,
             },
         ]
-
-    @staticmethod
-    def test_sensors_fields():
-        res = SpaceApi().build()
-        sensors = res['sensors']
-        assert sorted(sensors.keys()) == sorted(
-            [
-                'account_balance',
-                'barometer',
-                'beverage_supply',
-                'door_locked',
-                'humidity',
-                'network_connections',
-                'network_traffic',
-                'people_now_present',
-                'power_consumption',
-                'radiation',
-                'temperature',
-                'total_member_count',
-                'wind',
-            ]
-        )
-
-    @staticmethod
-    def test_feeds_fields():
-        res = SpaceApi().build()
-        feeds = res['feeds']
-        assert sorted(feeds.keys()) == sorted(
-            [
-                'blog',
-                'calendar',
-                'flickr',
-                'wiki',
-            ]
-        )
-        for elem in feeds.values():
-            assert sorted(elem.keys()) == sorted(
-                [
-                    'type',
-                    'url',
-                ]
-            )
 
     @staticmethod
     def test_projects():
