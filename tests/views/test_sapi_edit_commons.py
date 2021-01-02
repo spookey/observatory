@@ -254,7 +254,7 @@ class TestSapiEditCommons:
 
     @staticmethod
     @mark.parametrize('page', PAGES, ids=IDS)
-    def test_form_params(page, visitor, gen_user_loggedin):
+    def test_params(page, visitor, gen_user_loggedin):
         gen_user_loggedin()
         res = visitor(page.endpoint)
 
@@ -264,7 +264,7 @@ class TestSapiEditCommons:
 
     @staticmethod
     @mark.parametrize('page', PAGES, ids=IDS)
-    def test_form_creates(page, visitor, gen_user_loggedin):
+    def test_creates(page, visitor, gen_user_loggedin):
         gen_user_loggedin()
         index_url = url_for('sapi.index', _external=True)
 
