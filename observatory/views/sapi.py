@@ -11,6 +11,11 @@ from flask import (
 from flask_login import login_required
 
 from observatory.forms.sp_api import (
+    SpaceDropCamForm,
+    SpaceDropKeymastersForm,
+    SpaceDropLinksForm,
+    SpaceDropMembershipPlansForm,
+    SpaceDropProjectsForm,
     SpaceEditCamForm,
     SpaceEditContactForm,
     SpaceEditFeedBlogForm,
@@ -150,4 +155,50 @@ def edit_links(idx=0):
 def edit_membership_plans(idx=0):
     return _edit_form(
         SpaceEditMembershipPlansForm(idx=idx), f'Membership Plan #{1 + idx}'
+    )
+
+
+def _drop_form(form, title):
+    _enabled()
+
+    if request.method == 'POST' and form.validate_on_submit():
+        if form.action() is not None:
+            flash(f'{title} deleted!', 'success')
+
+    return redirect(url_for('sapi.index'))
+
+
+@BLUEPRINT_SAPI.route('/space/drop/cam/<int:idx>', methods=['POST'])
+@login_required
+def drop_cam(idx):
+    return _drop_form(SpaceDropCamForm(idx=idx), f'Webcam #{1 + idx}')
+
+
+@BLUEPRINT_SAPI.route(
+    '/space/drop/contact/keymasters/<int:idx>', methods=['POST']
+)
+@login_required
+def drop_contact_keymasters(idx):
+    return _drop_form(
+        SpaceDropKeymastersForm(idx=idx), f'Keymaster #{ 1 + idx}'
+    )
+
+
+@BLUEPRINT_SAPI.route('/space/drop/projects/<int:idx>', methods=['POST'])
+@login_required
+def drop_projects(idx):
+    return _drop_form(SpaceDropProjectsForm(idx=idx), f'Project #{1 + idx}')
+
+
+@BLUEPRINT_SAPI.route('/space/drop/links/<int:idx>', methods=['POST'])
+@login_required
+def drop_links(idx):
+    return _drop_form(SpaceDropLinksForm(idx=idx), f'Link #{1 + idx}')
+
+
+@BLUEPRINT_SAPI.route('/space/drop/plans/<int:idx>', methods=['POST'])
+@login_required
+def drop_membership_plans(idx):
+    return _drop_form(
+        SpaceDropMembershipPlansForm(idx=idx), f'Membership Plan #{1 + idx}'
     )
