@@ -66,6 +66,23 @@ class TestSpaceApiClass:
         assert last < datetime.utcnow()
 
     @staticmethod
+    def test_clear_method(monkeypatch):
+        obj = SpaceApi()
+        assert getattr(obj, '_content', 'error') is None
+        assert getattr(obj, '_last', 'error') is None
+
+        monkeypatch.setattr(obj, '_content', 'content')
+        monkeypatch.setattr(obj, '_last', 'last')
+
+        assert getattr(obj, '_content', 'error') == 'content'
+        assert getattr(obj, '_last', 'error') == 'last'
+
+        obj.clear()
+
+        assert getattr(obj, '_content', 'error') is None
+        assert getattr(obj, '_last', 'error') is None
+
+    @staticmethod
     def test_reset_method(monkeypatch):
         obj = SpaceApi()
         content, past = {'something': 'nice'}, datetime.utcnow()

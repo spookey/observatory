@@ -6,6 +6,7 @@ from flask_login import logout_user
 from pytest import fixture
 
 from observatory.app import create_app
+from observatory.instance import SPACE_API
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
 from observatory.models.user import User
@@ -59,6 +60,8 @@ def session(db):
     _transaction.rollback()
     _connection.close()
     _session.remove()
+
+    SPACE_API.clear()
 
 
 @fixture(scope='session')

@@ -162,7 +162,12 @@ class SpaceApi:
                 'temperature': [],
                 'door_locked': [],
                 'barometer': [],
-                'radiation': {},
+                'radiation': {
+                    'alpha': [],
+                    'beta': [],
+                    'gamma': [],
+                    'beta_gamma': [],
+                },
                 'humidity': [],
                 'beverage_supply': [],
                 'power_consumption': [],
@@ -256,8 +261,11 @@ class SpaceApi:
         self._last = datetime.utcnow()
         return self.content
 
-    def reset(self):
-        self._log.info('resetting content')
+    def clear(self):
         self._content = None
         self._last = None
+
+    def reset(self):
+        self._log.info('resetting content')
+        self.clear()
         return self.update()

@@ -7,6 +7,7 @@ ENDPOINT = 'api.sp_api.json'
 @mark.usefixtures('session')
 class TestSpaceApi:
     @staticmethod
+    @mark.usefixtures('ctx_app')
     def test_endpoint():
         assert url_for(ENDPOINT) == '/api/space.json'
 

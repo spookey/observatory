@@ -220,10 +220,10 @@ FORMS = [
             description='membership_plans.description',
         ),
         data=dict(
-            name='some plan',
+            name='gold plan',
             value=23.5,
-            currency_sel='RUB',
-            billing_interval_sel='daily',
+            currency_sel='XAU',
+            billing_interval_sel='hourly',
             description='please pay',
         ),
     ),

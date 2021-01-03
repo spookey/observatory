@@ -13,5 +13,5 @@ class TestSpaceApiState:
 
     @staticmethod
     def test_todo():
-        todo = not False
+        todo = True
         assert todo

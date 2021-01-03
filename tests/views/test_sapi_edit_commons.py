@@ -212,9 +212,9 @@ PAGES = [
             description='membership_plans.description',
         ),
         data=dict(
-            name='some plan',
+            name='silver plan',
             value=42.0,
-            currency_sel='RUB',
+            currency_sel='XAG',
             billing_interval_sel='hourly',
             description='please pay',
         ),

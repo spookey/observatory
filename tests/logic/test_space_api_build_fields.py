@@ -100,6 +100,19 @@ class TestSpaceApiBuildFields:
         )
 
     @staticmethod
+    def test_sensors_radiation():
+        res = SpaceApi().build()
+        radiation = res['sensors']['radiation']
+        assert sorted(radiation.keys()) == sorted(
+            [
+                'alpha',
+                'beta',
+                'beta_gamma',
+                'gamma',
+            ]
+        )
+
+    @staticmethod
     def test_feeds():
         res = SpaceApi().build()
         feeds = res['feeds']
