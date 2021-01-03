@@ -1,5 +1,8 @@
 from flask import current_app, url_for
+from flask.json import dumps
 from pytest import mark
+
+from observatory.instance import SPACE_API
 
 ENDPOINT = 'sapi.index'
 
@@ -31,3 +34,37 @@ class TestSapiIndex:
         heading = res.soup.select('h3.title')[-1]
         assert subtitle.text.strip() == 'Space API'
         assert heading.text.strip() == 'Space API'
+
+    @staticmethod
+    def test_content_display(visitor, gen_user_loggedin):
+        gen_user_loggedin()
+
+        res = visitor(ENDPOINT)
+        box = res.soup.select('div.is-one-third pre code')[-1]
+
+        assert box.text == dumps(SPACE_API.content, indent=2, sort_keys=True)
+
+    @staticmethod
+    def test_content_headings(visitor, gen_user_loggedin):
+        gen_user_loggedin()
+
+        res = visitor(ENDPOINT)
+        col = res.soup.select('div.is-two-thirds')[-1]
+
+        headings = col.select('h3.subtitle')
+
+        assert [head.text.strip() for head in headings] == [
+            'Info',
+            'Location',
+            'SpaceFED',
+            'Cam',
+            'Contact',
+            'Keymasters',
+            'Blog Feed',
+            'Wiki Feed',
+            'Calendar Feed',
+            'Flickr Feed',
+            'Projects',
+            'Links',
+            'Membership Plans',
+        ]

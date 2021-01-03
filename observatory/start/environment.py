@@ -82,6 +82,7 @@ ICON = {
     'obj_sp_api': getenv('ICON_OBJ_SP_API', 'braces'),
     'ops_arr_dn': getenv('ICON_OPS_ARR_DN', 'arrow-down-s'),
     'ops_arr_up': getenv('ICON_OPS_ARR_UP', 'arrow-up-s'),
+    'ops_change': getenv('ICON_OPS_CHANGE', 'pencil'),
     'ops_create': getenv('ICON_OPS_CREATE', 'add'),
     'ops_delete': getenv('ICON_OPS_DELETE', 'delete-bin'),
     'ops_submit': getenv('ICON_OPS_SUBMIT', 'check-double'),

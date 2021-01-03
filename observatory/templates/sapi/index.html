@@ -1,26 +1,200 @@
 {% extends '_base.html' %}
+{% from '_macros/elem.html' import bool_icon %}
+{% from '_macros/elem.html' import code_color %}
+{% from '_macros/elem.html' import text_code %}
 {% from '_macros/elem.html' import text_icon %}
+{% from '_macros/form.html' import render_form %}
+{% from '_macros/level.html' import key_val_level %}
 {% from '_macros/level.html' import split_level %}
 
 {% macro _heading(text, main=false) %}
 <h3 class="{{ 'title' if main else 'subtitle' }}">{{ text }}</h3>
 {% endmacro %}
 
+{% macro _block(name, data, edit_ep, drop_ep=none, drop_fm=none, indices=none) %}
+  {% macro _main_button(idx=none) %}
+  <a class="button is-dark" href="{{ url_for(edit_ep, idx=idx) }}">
+    {{ text_icon('ops_change' if idx is none else 'ops_create') }}
+    <span>{{ 'Edit' if idx is none else 'Add' }}</span>
+    </a>
+  {% endmacro %}
+  {% macro _drop_button(idx) %}
+    {% if drop_ep and drop_fm %}
+    {{ render_form(
+      drop_fm(idx),
+      action=url_for(drop_ep, idx=idx, _external=true),
+    ) }}
+    {% endif %}
+  {% endmacro %}
+  {% macro _edit_button(idx) %}
+  <a class="button is-small is-dark" href="{{ url_for(edit_ep, idx=idx) }}">
+    {{ text_icon('ops_change') }}
+    <span>Edit</span>
+    </a>
+  {% endmacro %}
+
+<div class="content">
+  {{ split_level(
+    _heading(name),
+    _main_button(idx=space_api.next_index(indices) if indices is not none else none),
+  ) }}
+  {% if indices is not none %}
+    {% if not data %}
+    <hr>
+    {% else %}
+    {% for elem in data %}
+      <div class="box">{{ caller(elem) }}</div>
+      {{ split_level(
+        _drop_button(elem._idx|d(0)),
+        _edit_button(elem._idx|d(0)),
+      ) }}
+      {% if loop.last %}<hr>{% endif %}
+    {% endfor %}
+    {% endif %}
+  {% else %}
+  <div class="box">{{ caller(data) }}</div>
+  {% endif %}
+</div>
+{% endmacro %}
+
+{% macro _value(val, req=false, bool=false) %}
+  {% if val is none %}
+    {{ text_icon('glob_error' if req else 'glob_empty') }}
+  {% else %}
+    {{ bool_icon(val) if bool else text_code(val) }}
+  {% endif %}
+{% endmacro %}
 
 
 {% block content %}
 <section class="section">
   <div class="container">
+    {% with content = space_api.content %}
     <div class="columns">
       <div class="column is-two-thirds">
         {{ _heading(title, main=true) }}
+        {% call(data) _block(
+          'Info', content,
+          edit_ep='sapi.edit_info'
+        ) %}
+          {{ key_val_level('Space', _value(data.space, req=true)) }}
+          {{ key_val_level('Logo', _value(data.logo, req=true)) }}
+          {{ key_val_level('URL', _value(data.url, req=true)) }}
+        {% endcall %}
+        {% call(data) _block(
+          'Location', content['location'],
+          edit_ep='sapi.edit_location'
+        ) %}
+          {{ key_val_level('Address', _value(data.address)) }}
+          {{ key_val_level('Latitude', _value(data.lat, req=true)) }}
+          {{ key_val_level('Longitude', _value(data.lon, req=true)) }}
+          {{ key_val_level('Timezone', _value(data.timezone)) }}
+        {% endcall %}
+        {% call(data) _block(
+          'SpaceFED', content['spacefed'],
+          edit_ep='sapi.edit_spacefed'
+        ) %}
+          {{ key_val_level('Spacenet', _value(data.spacenet, bool=true)) }}
+          {{ key_val_level('SpaceSAML', _value(data.spacesaml, bool=true)) }}
+        {% endcall %}
+        {% call(data) _block(
+          'Cam', content['cam'],
+          edit_ep='sapi.edit_cam',
+          drop_ep='sapi.drop_cam',
+          drop_fm=form_drop_space_cam,
+          indices=space_api.cam_indices,
+        ) %}
+          {{ key_val_level('URL', _value(data.value, req=true)) }}
+        {% endcall %}
+        {% call(data) _block(
+          'Contact', content['contact'],
+          edit_ep='sapi.edit_contact',
+        ) %}
+          {{ key_val_level('Phone', _value(data.phone)) }}
+          {{ key_val_level('SIP', _value(data.sip)) }}
+          {{ key_val_level('IRC', _value(data.irc)) }}
+          {{ key_val_level('Twitter', _value(data.twitter, req=true)) }}
+          {{ key_val_level('Mastodon', _value(data.mastodon)) }}
+          {{ key_val_level('Facebook', _value(data.facebook)) }}
+          {{ key_val_level('Identica', _value(data.identica)) }}
+          {{ key_val_level('Foursquare', _value(data.foursquare)) }}
+          {{ key_val_level('E-Mail', _value(data.email, req=true)) }}
+          {{ key_val_level('Mailinglist', _value(data.ml, req=true)) }}
+          {{ key_val_level('XMPP', _value(data.xmpp)) }}
+          {{ key_val_level('Issue Mail', _value(data.issue_mail, req=true)) }}
+          {{ key_val_level('Gopher', _value(data.gopher)) }}
+          {{ key_val_level('Matrix', _value(data.matrix)) }}
+          {{ key_val_level('Mumble', _value(data.mumble)) }}
+        {% endcall %}
+        {% call(data) _block(
+          'Keymasters', content['contact']['keymasters'],
+          edit_ep='sapi.edit_contact_keymasters',
+          drop_ep='sapi.drop_contact_keymasters',
+          drop_fm=form_drop_space_keymasters,
+          indices=space_api.concact_keymasters_indices,
+        ) %}
+          {{ key_val_level('Name', _value(data.name)) }}
+          {{ key_val_level('IRC Nick', _value(data.irc_nick, req=true)) }}
+          {{ key_val_level('Phone', _value(data.phone, req=true)) }}
+          {{ key_val_level('E-Mail', _value(data.email, req=true)) }}
+          {{ key_val_level('Twitter', _value(data.twitter, req=true)) }}
+          {{ key_val_level('XMPP', _value(data.xmpp)) }}
+          {{ key_val_level('Mastodon', _value(data.mastodon)) }}
+          {{ key_val_level('Matrix', _value(data.matrix)) }}
+        {% endcall %}
+        {% for (_title, _ep, _data) in (
+            ('Blog Feed', 'sapi.edit_feeds_blog', content['feeds']['blog']),
+            ('Wiki Feed', 'sapi.edit_feeds_wiki', content['feeds']['wiki']),
+            ('Calendar Feed', 'sapi.edit_feeds_calendar', content['feeds']['calendar']),
+            ('Flickr Feed', 'sapi.edit_feeds_flickr', content['feeds']['flickr']),
+        ) %}
+          {% call(data) _block(_title, _data, edit_ep=_ep) %}
+            {{ key_val_level('Type', _value(data.type)) }}
+            {{ key_val_level('URL', _value(data.url, req=True)) }}
+          {% endcall %}
+        {% endfor %}
+        {% call(data) _block(
+          'Projects', content['projects'],
+          edit_ep='sapi.edit_projects',
+          drop_ep='sapi.drop_projects',
+          drop_fm=form_drop_space_projects,
+          indices=space_api.projects_indices,
+        ) %}
+          {{ key_val_level('URL', _value(data.value, req=true)) }}
+        {% endcall %}
+        {% call(data) _block(
+          'Links', content['links'],
+          edit_ep='sapi.edit_links',
+          drop_ep='sapi.drop_links',
+          drop_fm=form_drop_space_links,
+          indices=space_api.links_indices,
+        ) %}
+          {{ key_val_level('Name', _value(data.name, req=true)) }}
+          {{ key_val_level('Description', _value(data.description)) }}
+          {{ key_val_level('URL', _value(data.url, req=true)) }}
+        {% endcall %}
+        {% call(data) _block(
+          'Membership Plans', content['membership_plans'],
+          edit_ep='sapi.edit_membership_plans',
+          drop_ep='sapi.drop_membership_plans',
+          drop_fm=form_drop_space_membership_plans,
+          indices=space_api.membership_plans_indices,
+        ) %}
+          {{ key_val_level('Name', _value(data.name, req=true)) }}
+          {{ key_val_level('Value', _value(data.value, req=true)) }}
+          {{ key_val_level('Currency', _value(data.currency, req=true)) }}
+          {{ key_val_level('Billing Interval', _value(data.billing_interval, req=true)) }}
+          {{ key_val_level('Description', _value(data.description)) }}
+        {% endcall %}
       </div>
       <div class="column is-one-third">
         {{ _heading('Raw Content') }}
         <div class="content">
-          <pre><code>{{ space_api.content|tojson(indent=2) }}</code></pre>
+          <pre><code>{{ content|tojson(indent=2, sort_keys=true) }}</code></pre>
+        </div>
       </div>
     </div>
+    {% endwith %}
   </div>
 </section>
 {% endblock %}
