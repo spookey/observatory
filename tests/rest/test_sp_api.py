@@ -20,6 +20,13 @@ class TestSpaceApi:
         assert ctt.lower() == 'application/json'
 
     @staticmethod
-    def test_content(visitor):
-        res = visitor(ENDPOINT, code=200)
-        assert res.json == {}
+    def test_empty_content(visitor):
+        res = visitor(ENDPOINT, code=202)
+        assert res.json == {
+            'api_compatibility': ['14'],
+            'space': '',
+            'logo': '',
+            'url': '',
+            'location': {'lat': 0, 'lon': 0},
+            'contact': {},
+        }
