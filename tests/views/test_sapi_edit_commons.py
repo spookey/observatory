@@ -64,9 +64,9 @@ PAGES = [
     page_data(
         'sapi.edit_cam',
         url='/space/edit/cam',
-        multi=True,
         keys=dict(cam='cam'),
         data=dict(cam='https://example.org/webcam'),
+        multi=True,
     ),
     page_data(
         'sapi.edit_contact',

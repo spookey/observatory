@@ -17,6 +17,7 @@ from observatory.forms.sp_api import (
     SpaceEditMembershipPlansForm,
     SpaceEditProjectsForm,
     SpaceEditSpaceFedForm,
+    SpaceEditStateIconForm,
 )
 from observatory.models.values import Values
 from observatory.start.environment import SP_API_PREFIX
@@ -80,6 +81,17 @@ FORMS = [
         SpaceEditCamForm,
         keys=dict(cam='cam'),
         data=dict(cam='https://example.org/webcam.mjpeg'),
+    ),
+    form_edit(
+        SpaceEditStateIconForm,
+        keys=dict(
+            opened='state.icon.open',
+            closed='state.icon.closed',
+        ),
+        data=dict(
+            opened='https://example.org/open.png',
+            closed='https://example.org/closed.png',
+        ),
     ),
     form_edit(
         SpaceEditContactForm,

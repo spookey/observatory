@@ -207,6 +207,32 @@ class SpaceEditCamForm(SpaceEditForm):
         super().__init__(*args, idx=idx, **kwargs)
 
 
+class SpaceEditStateIconForm(SpaceEditForm):
+    KEYS = dict(
+        opened='state.icon.open',
+        closed='state.icon.closed',
+    )
+    opened = StringField(
+        'Open',
+        validators=[DataRequired(), URL()],
+        description=(
+            'The URL to your customized space logo showing ' 'an open space'
+        ),
+    )
+    closed = StringField(
+        'Closed',
+        validators=[DataRequired(), URL()],
+        description=(
+            'The URL to your customized space logo showing ' 'a closed space '
+        ),
+    )
+    submit = SubmitField(
+        'Save',
+        description='Submit',
+        widget=SubmitButtonInput(icon='ops_submit'),
+    )
+
+
 class SpaceEditContactForm(SpaceEditForm):
     KEYS = dict(
         phone='contact.phone',
