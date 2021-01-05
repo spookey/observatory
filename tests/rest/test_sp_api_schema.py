@@ -213,7 +213,7 @@ class TestSpaceApiSchema:
         assert spc.is_valid
 
         spc.content = {'state': {'icon': {'wrong': 'value'}}}
-        assert spc.make(spc.obj.state_icon) == empty
+        assert spc.make(spc.obj.state_icon) == {}
         assert spc.is_invalid
 
         spc.content = {'state': empty}
@@ -251,16 +251,15 @@ class TestSpaceApiSchema:
         assert spc.make(spc.obj.state) == filled
         assert spc.is_valid
 
-        f_icon_wrong = merge(filled, {'state': {'icon': {'wrong': 'content'}}})
-        f_icon_right = merge(
-            filled, {'state': {'icon': {'open': '', 'closed': ''}}}
-        )
-        spc.content = f_icon_wrong
-        assert spc.make(spc.obj.state) == f_icon_right
+        spc.content = merge(filled, {'state': {'icon': {'wrong': 'content'}}})
+        assert spc.make(spc.obj.state) == filled
         assert spc.is_invalid
 
-        spc.content = f_icon_right
-        assert spc.make(spc.obj.state) == f_icon_right
+        with_icon = merge(
+            filled, {'state': {'icon': {'open': '', 'closed': ''}}}
+        )
+        spc.content = with_icon
+        assert spc.make(spc.obj.state) == with_icon
         assert spc.is_valid
 
     @staticmethod

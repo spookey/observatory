@@ -101,6 +101,7 @@ class SpaceSchema:
         }
         if any(base.get(key, None) is None for key in res):
             self.invalidate('missing required state icons')
+            return {}
 
         return {'icon': Nested(nested=res)}
 

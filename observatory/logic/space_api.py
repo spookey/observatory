@@ -94,7 +94,12 @@ class SpaceApi:
 
     def get_state(self):
         self._log.info('gathering state')
-        return {}
+        return {
+            'icon': {
+                'open': self._get('state.icon.open'),
+                'closed': self._get('state.icon.closed'),
+            },
+        }
 
     def get_events(self):
         self._log.info('gathering events')
