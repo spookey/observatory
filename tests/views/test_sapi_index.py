@@ -58,6 +58,7 @@ class TestSapiIndex:
             'Location',
             'SpaceFED',
             'Cam',
+            'State Icons',
             'Contact',
             'Keymasters',
             'Blog Feed',

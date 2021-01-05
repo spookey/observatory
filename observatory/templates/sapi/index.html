@@ -107,6 +107,13 @@
           {{ key_val_level('URL', _value(data.value, req=true)) }}
         {% endcall %}
         {% call(data) _block(
+          'State Icons', content['state']['icon'],
+          edit_ep='sapi.edit_state_icon',
+        ) %}
+          {{ key_val_level('Open Icon', _value(data.open, req=true)) }}
+          {{ key_val_level('Closed Icon', _value(data.closed, req=true)) }}
+        {% endcall %}
+        {% call(data) _block(
           'Contact', content['contact'],
           edit_ep='sapi.edit_contact',
         ) %}
