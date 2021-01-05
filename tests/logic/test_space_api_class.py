@@ -1,112 +1,121 @@
 from datetime import datetime, timedelta
 
+from pytest import fixture
+
 from observatory.logic.space_api import SpaceApi
 from observatory.start.environment import SP_API_REFRESH
+
+VERY_OLD = datetime.utcnow() - timedelta(seconds=23 * SP_API_REFRESH)
+CONTENT = {
+    'very': 'important',
+    'test': 'content',
+}
+STATE = {'broken': True}
+EVENTS = ['hardcore', 'party', 'action']
+
+# pylint: disable=redefined-outer-name
+
+
+@fixture(scope='function')
+def api(monkeypatch):
+    obj = SpaceApi()
+
+    def res():
+        pass
+
+    def _inner_content(value):
+        monkeypatch.setattr(obj, '_content', value)
+
+    def _inner_last(value):
+        monkeypatch.setattr(obj, '_last', value)
+
+    def build_fn(value):
+        monkeypatch.setattr(obj, 'build', lambda: value)
+
+    res.obj = obj
+    res.inner_content = _inner_content
+    res.inner_last = _inner_last
+    res.build_fn = build_fn
+
+    yield res
 
 
 class TestSpaceApiClass:
     @staticmethod
-    def test_initial():
-        obj = SpaceApi()
-        assert getattr(obj, '_content', 'error') is None
-        assert getattr(obj, '_last', 'error') is None
+    def test_initial(api):
+        assert getattr(api.obj, '_content', 'error') is None
+        assert getattr(api.obj, '_last', 'error') is None
 
     @staticmethod
-    def test_outdated(monkeypatch):
-        obj = SpaceApi()
-        monkeypatch.setattr(obj, '_content', None)
-        monkeypatch.setattr(obj, '_last', None)
-        assert obj.outdated is True
+    def test_outdated(api):
+        api.inner_content(None)
+        api.inner_last(None)
+        assert api.obj.outdated is True
 
-        monkeypatch.setattr(obj, '_content', {})
-        monkeypatch.setattr(obj, '_last', None)
-        assert obj.outdated is True
+        api.inner_content({})
+        api.inner_last(None)
+        assert api.obj.outdated is True
 
-        past = datetime.utcnow() - timedelta(seconds=2 * SP_API_REFRESH)
-        monkeypatch.setattr(obj, '_content', {})
-        monkeypatch.setattr(obj, '_last', past)
-        assert obj.outdated is True
+        api.inner_content({})
+        api.inner_last(VERY_OLD)
+        assert api.obj.outdated is True
 
-        monkeypatch.setattr(obj, '_content', {})
-        monkeypatch.setattr(obj, '_last', datetime.utcnow())
-        assert obj.outdated is False
+        api.inner_content({})
+        api.inner_last(datetime.utcnow())
+        assert api.obj.outdated is False
 
     @staticmethod
-    def test_content_property(monkeypatch):
-        obj = SpaceApi()
-        content, past = 'something', datetime.utcnow()
+    def test_content_property(api):
+        past = datetime.utcnow()
 
-        monkeypatch.setattr(obj, 'build', lambda: content)
-        assert getattr(obj, '_content', 'error') is None
-        assert getattr(obj, '_last', 'error') is None
+        assert getattr(api.obj, '_content', 'error') is None
+        assert getattr(api.obj, '_last', 'error') is None
 
-        assert obj.content == content
-        assert getattr(obj, '_content', 'error') == content
-        last = getattr(obj, '_last', 'error')
+        api.build_fn(CONTENT)
+
+        assert api.obj.content == CONTENT
+
+        assert getattr(api.obj, '_content', 'error') == CONTENT
+        last = getattr(api.obj, '_last', 'error')
         assert last >= past
         assert last < datetime.utcnow()
 
     @staticmethod
-    def test_update_method(monkeypatch):
-        obj = SpaceApi()
-        content, past = {'something': 'nice'}, datetime.utcnow()
-        state, events = 'broken', ['hardcore', 'party', 'action']
+    def test_clear_method(api):
+        assert getattr(api.obj, '_content', 'error') is None
+        assert getattr(api.obj, '_last', 'error') is None
 
-        monkeypatch.setattr(obj, 'build', lambda: content)
-        monkeypatch.setattr(obj, 'get_state', lambda: state)
-        monkeypatch.setattr(obj, 'get_events', lambda: events)
+        api.inner_content(CONTENT)
+        api.inner_last(VERY_OLD)
 
-        assert obj.content == content
+        assert getattr(api.obj, '_content', 'error') == CONTENT
+        assert getattr(api.obj, '_last', 'error') == VERY_OLD
 
-        assert obj.update()
+        assert api.obj.clear()
 
-        assert obj.content == dict(state=state, events=events, **content)
-        last = getattr(obj, '_last', 'error')
-        assert last >= past
-        assert last < datetime.utcnow()
+        assert getattr(api.obj, '_content', 'error') is None
+        assert getattr(api.obj, '_last', 'error') is None
 
     @staticmethod
-    def test_clear_method(monkeypatch):
-        obj = SpaceApi()
-        assert getattr(obj, '_content', 'error') is None
-        assert getattr(obj, '_last', 'error') is None
+    def test_reset_method(api):
+        past = datetime.utcnow()
 
-        monkeypatch.setattr(obj, '_content', 'content')
-        monkeypatch.setattr(obj, '_last', 'last')
+        assert getattr(api.obj, '_content', 'error') is None
+        assert getattr(api.obj, '_last', 'error') is None
 
-        assert getattr(obj, '_content', 'error') == 'content'
-        assert getattr(obj, '_last', 'error') == 'last'
+        new_content = dict(state=STATE, events=EVENTS, **CONTENT)
+        api.build_fn(new_content)
+        api.inner_content(CONTENT)
+        api.inner_last(past)
 
-        obj.clear()
+        assert getattr(api.obj, '_content', 'error') == CONTENT
+        assert getattr(api.obj, '_last', 'error') == past
 
-        assert getattr(obj, '_content', 'error') is None
-        assert getattr(obj, '_last', 'error') is None
+        assert api.obj.content == CONTENT
 
-    @staticmethod
-    def test_reset_method(monkeypatch):
-        obj = SpaceApi()
-        content, past = {'something': 'nice'}, datetime.utcnow()
-        state, events = 'broken', ['hardcore', 'party', 'action']
+        assert api.obj.reset()
 
-        monkeypatch.setattr(obj, 'build', lambda: content)
-        monkeypatch.setattr(obj, 'get_state', lambda: state)
-        monkeypatch.setattr(obj, 'get_events', lambda: events)
-
-        assert getattr(obj, '_content', 'error') is None
-        assert getattr(obj, '_last', 'error') is None
-
-        monkeypatch.setattr(obj, '_content', content)
-        monkeypatch.setattr(obj, '_last', past)
-
-        assert obj.content == content
-        assert getattr(obj, '_content', 'error') == content
-        assert getattr(obj, '_last', 'error') == past
-
-        assert obj.reset()
-
-        assert getattr(obj, '_content', 'error') == dict(
-            state=state, events=events, **content
-        )
-        last = getattr(obj, '_last', 'error')
+        assert getattr(api.obj, '_content', 'error') == new_content
+        last = getattr(api.obj, '_last', 'error')
         assert last >= past
         assert last < datetime.utcnow()

@@ -92,6 +92,14 @@ class SpaceApi:
             'membership_plans.billing_interval',
         )
 
+    def get_state(self):
+        self._log.info('gathering state')
+        return {}
+
+    def get_events(self):
+        self._log.info('gathering events')
+        return []
+
     def build(self):
         return {
             'api_compatibility': ['14'],
@@ -109,8 +117,8 @@ class SpaceApi:
                 'spacesaml': self._get('spacefed.spacesaml'),
             },
             'cam': self._get_all('cam'),
-            'state': {},
-            'events': [],
+            'state': self.get_state(),
+            'events': self.get_events(),
             'contact': {
                 'phone': self._get('contact.phone'),
                 'sip': self._get('contact.sip'),
@@ -225,14 +233,6 @@ class SpaceApi:
             ],
         }
 
-    def get_state(self):
-        self._log.info('gathering state')
-        return {}
-
-    def get_events(self):
-        self._log.info('gathering events')
-        return []
-
     @property
     def outdated(self):
         if self._content is None:
@@ -251,21 +251,12 @@ class SpaceApi:
             self._last = datetime.utcnow()
         return self._content
 
-    def update(self):
-        self._log.info('updating content')
-        self._content = {
-            **self.content,
-            'state': self.get_state(),
-            'events': self.get_events(),
-        }
-        self._last = datetime.utcnow()
-        return self.content
-
     def clear(self):
         self._content = None
         self._last = None
+        return all((self._content is None, self._last is None))
 
     def reset(self):
         self._log.info('resetting content')
         self.clear()
-        return self.update()
+        return self.content
