@@ -1,4 +1,4 @@
-from observatory.models.values import EnumBox
+from observatory.models.value import EnumBox
 
 
 def test_enumbox_from_type():

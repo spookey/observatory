@@ -3,7 +3,7 @@ from random import choice
 from pytest import mark
 
 from observatory.logic.space_api import SpaceApi
-from observatory.models.values import Values
+from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
 
@@ -27,7 +27,7 @@ class TestSpaceApiBuildIndices:
 
         indices = list(range(5))
         for idx in indices:
-            Values.set(f'{SP_API_PREFIX}.cam', idx=idx, value=f'cam #{idx}')
+            Value.set(f'{SP_API_PREFIX}.cam', idx=idx, value=f'cam #{idx}')
 
         assert api.cam_indices == indices
 
@@ -38,7 +38,7 @@ class TestSpaceApiBuildIndices:
 
         indices = list(range(5))
         for idx in indices:
-            Values.set(
+            Value.set(
                 choice(
                     [
                         f'{SP_API_PREFIX}.contact.keymasters.irc_nick',
@@ -60,7 +60,7 @@ class TestSpaceApiBuildIndices:
 
         indices = list(range(7))
         for idx in indices:
-            Values.set(
+            Value.set(
                 f'{SP_API_PREFIX}.projects', idx=idx, value=f'project #{idx}'
             )
 
@@ -73,10 +73,10 @@ class TestSpaceApiBuildIndices:
 
         indices = list(range(7))
         for idx in indices:
-            Values.set(
+            Value.set(
                 f'{SP_API_PREFIX}.links.name', idx=idx, value=f'link #{idx}'
             )
-            Values.set(
+            Value.set(
                 f'{SP_API_PREFIX}.links.url', idx=idx, value=f'url #{idx}'
             )
 
@@ -89,20 +89,20 @@ class TestSpaceApiBuildIndices:
 
         indices = list(range(3))
         for idx in indices:
-            Values.set(
+            Value.set(
                 f'{SP_API_PREFIX}.membership_plans.name',
                 idx=idx,
                 value=f'name #{idx}',
             )
-            Values.set(
+            Value.set(
                 f'{SP_API_PREFIX}.membership_plans.value', idx=idx, value=idx
             )
-            Values.set(
+            Value.set(
                 f'{SP_API_PREFIX}.membership_plans.currency',
                 idx=idx,
                 value=f'currency #{idx}',
             )
-            Values.set(
+            Value.set(
                 f'{SP_API_PREFIX}.membership_plans.billing_interval',
                 idx=idx,
                 value=f'interval #{idx}',

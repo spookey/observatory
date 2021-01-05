@@ -10,7 +10,7 @@ from observatory.forms.sp_api import (
     SpaceDropMembershipPlansForm,
     SpaceDropProjectsForm,
 )
-from observatory.models.values import Values
+from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
 
@@ -119,7 +119,7 @@ class TestSpaceDropFormCommons:
     def test_delete(drop):
         idx = choice(range(23, 42))
         elems = [
-            Values.set(
+            Value.set(
                 key=f'{SP_API_PREFIX}.{key}',
                 idx=idx,
                 value=choice(
@@ -133,10 +133,10 @@ class TestSpaceDropFormCommons:
             for key in drop.keys
         ]
 
-        assert Values.query.all() == elems
+        assert Value.query.all() == elems
 
         form = drop.form(idx=idx, submit=True)
         assert form.validate() is True
         assert form.action()
 
-        assert Values.query.all() == []
+        assert Value.query.all() == []

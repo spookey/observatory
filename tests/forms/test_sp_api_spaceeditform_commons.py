@@ -19,7 +19,7 @@ from observatory.forms.sp_api import (
     SpaceEditSpaceFedForm,
     SpaceEditStateIconForm,
 )
-from observatory.models.values import Values
+from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
 
@@ -302,21 +302,21 @@ class TestSpaceEditFormCommons:
     @staticmethod
     @mark.parametrize('edit', FORMS, ids=IDS)
     def test_create_new(edit):
-        assert Values.query.all() == []
+        assert Value.query.all() == []
 
         form = edit.form(idx=0, **edit.data)
         assert form.validate() is True
         assert form.action()
 
         for form_key, space_key in edit.keys.items():
-            val = Values.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
+            val = Value.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
             assert val is not None
             assert val == edit.data.get(form_key, 'error')
 
     @staticmethod
     @mark.parametrize('edit', FORMS, ids=IDS)
     def test_change_existing(edit):
-        assert Values.query.all() == []
+        assert Value.query.all() == []
 
         for form_key, space_key in edit.keys.items():
             val = edit.data.get(form_key, 'some')
@@ -325,19 +325,19 @@ class TestSpaceEditFormCommons:
             else:
                 val = 2 * val
 
-            Values.set(
+            Value.set(
                 key=f'{SP_API_PREFIX}.{space_key}',
                 idx=0,
                 value=val,
             )
 
-        assert Values.query.all() != []
+        assert Value.query.all() != []
 
         form = edit.form(idx=0, **edit.data)
         assert form.validate() is True
         assert form.action()
 
         for form_key, space_key in edit.keys.items():
-            val = Values.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
+            val = Value.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
             assert val is not None
             assert val == edit.data.get(form_key, 'error')

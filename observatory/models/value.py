@@ -16,13 +16,7 @@ class EnumBox(Enum):
     def from_type(cls, val):
         if isinstance(val, (bool,)):
             return cls.SWITCH
-        if isinstance(
-            val,
-            (
-                int,
-                float,
-            ),
-        ):
+        if isinstance(val, (int, float)):
             return cls.NUMBER
         return cls.STRING
 
@@ -30,7 +24,7 @@ class EnumBox(Enum):
 # pylint: disable=no-member
 
 
-class Values(Model):
+class Value(Model):
     key = DB.Column(
         DB.String(),
         nullable=False,

@@ -1,12 +1,12 @@
 from pytest import mark
 
 from observatory.logic.space_api import SpaceApi
-from observatory.models.values import Values
+from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
 
 @mark.usefixtures('session')
-class TestSpaceApiBuildValues:
+class TestSpaceApiBuildValue:
     @staticmethod
     def test_api_compatibility():
         res = SpaceApi().build()
@@ -15,15 +15,15 @@ class TestSpaceApiBuildValues:
     @staticmethod
     def test_space_logo_url():
         api = SpaceApi()
-        space = Values.set(
+        space = Value.set(
             key=f'{SP_API_PREFIX}.space', idx=0, value='space'
         ).value
-        logo = Values.set(
+        logo = Value.set(
             key=f'{SP_API_PREFIX}.logo',
             idx=0,
             value='https://example.org/image.gif',
         ).value
-        url = Values.set(
+        url = Value.set(
             key=f'{SP_API_PREFIX}.url', idx=0, value='https://example.net'
         ).value
 
@@ -35,18 +35,18 @@ class TestSpaceApiBuildValues:
     @staticmethod
     def test_location():
         api = SpaceApi()
-        address = Values.set(
+        address = Value.set(
             key=f'{SP_API_PREFIX}.location.address',
             idx=0,
             value='Somewhere 23, 12345 FNORD',
         ).value
-        lat = Values.set(
+        lat = Value.set(
             key=f'{SP_API_PREFIX}.location.lat', idx=0, value=23.5
         ).value
-        lon = Values.set(
+        lon = Value.set(
             key=f'{SP_API_PREFIX}.location.lon', idx=0, value=133.7
         ).value
-        timezone = Values.set(
+        timezone = Value.set(
             key=f'{SP_API_PREFIX}.location.timezone', idx=0, value='UTC'
         ).value
 
@@ -59,10 +59,10 @@ class TestSpaceApiBuildValues:
     @staticmethod
     def test_spacefed():
         api = SpaceApi()
-        spacenet = Values.set(
+        spacenet = Value.set(
             key=f'{SP_API_PREFIX}.spacefed.spacenet', idx=0, value=True
         ).value
-        spacesaml = Values.set(
+        spacesaml = Value.set(
             key=f'{SP_API_PREFIX}.spacefed.spacesaml', idx=0, value=False
         ).value
 
@@ -73,12 +73,12 @@ class TestSpaceApiBuildValues:
     @staticmethod
     def test_cam():
         api = SpaceApi()
-        nil_cam = Values.set(
+        nil_cam = Value.set(
             key=f'{SP_API_PREFIX}.cam',
             idx=0,
             value='https://example.org/cam.mjpg',
         ).value
-        two_cam = Values.set(
+        two_cam = Value.set(
             key=f'{SP_API_PREFIX}.cam',
             idx=2,
             value='https://example.com/webcam',
@@ -93,10 +93,10 @@ class TestSpaceApiBuildValues:
     @staticmethod
     def test_contact_telephone():
         api = SpaceApi()
-        phone = Values.set(
+        phone = Value.set(
             key=f'{SP_API_PREFIX}.contact.phone', idx=0, value='+1 234 567 890'
         ).value
-        sip = Values.set(
+        sip = Value.set(
             key=f'{SP_API_PREFIX}.contact.sip',
             idx=0,
             value='sip:space@sip.example.org',
@@ -109,22 +109,22 @@ class TestSpaceApiBuildValues:
     @staticmethod
     def test_contact_chats():
         api = SpaceApi()
-        irc = Values.set(
+        irc = Value.set(
             key=f'{SP_API_PREFIX}.contact.irc',
             idx=0,
             value='irc://example.org/#space',
         ).value
-        xmpp = Values.set(
+        xmpp = Value.set(
             key=f'{SP_API_PREFIX}.contact.xmpp',
             idx=0,
             value='chat@conference.example.org',
         ).value
-        matrix = Values.set(
+        matrix = Value.set(
             key=f'{SP_API_PREFIX}.contact.matrix',
             idx=0,
             value='#chat:example.org',
         ).value
-        mumble = Values.set(
+        mumble = Value.set(
             key=f'{SP_API_PREFIX}.contact.mumble',
             idx=0,
             value='mumble://mumble.example.org/space?version=0.0.1',
@@ -139,20 +139,20 @@ class TestSpaceApiBuildValues:
     @staticmethod
     def test_contact_social():
         api = SpaceApi()
-        twitter = Values.set(
+        twitter = Value.set(
             key=f'{SP_API_PREFIX}.contact.twitter', idx=0, value='@space'
         ).value
-        mastodon = Values.set(
+        mastodon = Value.set(
             key=f'{SP_API_PREFIX}.contact.mastodon',
             idx=0,
             value='@space@example.net',
         ).value
-        facebook = Values.set(
+        facebook = Value.set(
             key=f'{SP_API_PREFIX}.contact.facebook',
             idx=0,
             value='https://example.com/space',
         ).value
-        identica = Values.set(
+        identica = Value.set(
             key=f'{SP_API_PREFIX}.contact.identica',
             idx=0,
             value='space@example.org',
@@ -167,12 +167,12 @@ class TestSpaceApiBuildValues:
     @staticmethod
     def test_contact_network():
         api = SpaceApi()
-        foursquare = Values.set(
+        foursquare = Value.set(
             key=f'{SP_API_PREFIX}.contact.foursquare',
             idx=0,
             value='000000000000000000000000',
         ).value
-        gopher = Values.set(
+        gopher = Value.set(
             key=f'{SP_API_PREFIX}.contact.gopher',
             idx=0,
             value='gopher://gopher.space.example.org',
@@ -185,15 +185,15 @@ class TestSpaceApiBuildValues:
     @staticmethod
     def test_contact_mail():
         api = SpaceApi()
-        email = Values.set(
+        email = Value.set(
             key=f'{SP_API_PREFIX}.contact.email',
             idx=0,
             value='space@example.org',
         ).value
-        mailinglist = Values.set(
+        mailinglist = Value.set(
             key=f'{SP_API_PREFIX}.contact.ml', idx=0, value='list@example.org'
         ).value
-        issue_mail = Values.set(
+        issue_mail = Value.set(
             key=f'{SP_API_PREFIX}.contact.issue_mail',
             idx=0,
             value='space@example.org',
@@ -207,37 +207,37 @@ class TestSpaceApiBuildValues:
     @staticmethod
     def test_contact_keymasters():
         api = SpaceApi()
-        nil_name = Values.set(
+        nil_name = Value.set(
             key=f'{SP_API_PREFIX}.contact.keymasters.name', idx=0, value='nil'
         ).value
-        one_name = Values.set(
+        one_name = Value.set(
             key=f'{SP_API_PREFIX}.contact.keymasters.name', idx=1, value='one'
         ).value
-        Values.set(
+        Value.set(
             key=f'{SP_API_PREFIX}.contact.keymasters.name', idx=2, value='two'
         )
 
-        nil_phone = Values.set(
+        nil_phone = Value.set(
             key=f'{SP_API_PREFIX}.contact.keymasters.phone',
             idx=0,
             value='+1 234 567 890',
         ).value
-        nil_email = Values.set(
+        nil_email = Value.set(
             key=f'{SP_API_PREFIX}.contact.keymasters.email',
             idx=0,
             value='nil@example.org',
         ).value
-        one_email = Values.set(
+        one_email = Value.set(
             key=f'{SP_API_PREFIX}.contact.keymasters.email',
             idx=1,
             value='one@example.org',
         ).value
-        one_xmpp = Values.set(
+        one_xmpp = Value.set(
             key=f'{SP_API_PREFIX}.contact.keymasters.xmpp',
             idx=1,
             value='one@jabber.example.org',
         ).value
-        Values.set(
+        Value.set(
             key=f'{SP_API_PREFIX}.contact.keymasters.xmpp',
             idx=2,
             value='two@jabber.example.org',
@@ -272,12 +272,12 @@ class TestSpaceApiBuildValues:
     @staticmethod
     def test_projects():
         api = SpaceApi()
-        one_pro = Values.set(
+        one_pro = Value.set(
             key=f'{SP_API_PREFIX}.projects',
             idx=1,
             value='https://example.org/mega',
         ).value
-        two_pro = Values.set(
+        two_pro = Value.set(
             key=f'{SP_API_PREFIX}.projects',
             idx=2,
             value='https://example.net/awesome',
@@ -292,29 +292,29 @@ class TestSpaceApiBuildValues:
     @staticmethod
     def test_links():
         api = SpaceApi()
-        nil_name = Values.set(
+        nil_name = Value.set(
             key=f'{SP_API_PREFIX}.links.name', idx=0, value='nil'
         ).value
-        Values.set(key=f'{SP_API_PREFIX}.links.name', idx=1, value='one')
-        two_name = Values.set(
+        Value.set(key=f'{SP_API_PREFIX}.links.name', idx=1, value='one')
+        two_name = Value.set(
             key=f'{SP_API_PREFIX}.links.name', idx=2, value='two'
         ).value
 
-        nil_url = Values.set(
+        nil_url = Value.set(
             key=f'{SP_API_PREFIX}.links.url',
             idx=0,
             value='https://example.org',
         ).value
-        two_url = Values.set(
+        two_url = Value.set(
             key=f'{SP_API_PREFIX}.links.url',
             idx=2,
             value='https://example.net',
         ).value
 
-        nil_desc = Values.set(
+        nil_desc = Value.set(
             key=f'{SP_API_PREFIX}.links.description', idx=0, value='awesome'
         ).value
-        Values.set(
+        Value.set(
             key=f'{SP_API_PREFIX}.links.description', idx=1, value='mega'
         )
 
@@ -337,63 +337,63 @@ class TestSpaceApiBuildValues:
     @staticmethod
     def test_membership_plans():
         api = SpaceApi()
-        nil_name = Values.set(
+        nil_name = Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.name',
             idx=0,
             value='standard',
         ).value
-        Values.set(
+        Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.name',
             idx=1,
             value='premium',
         )
-        two_name = Values.set(
+        two_name = Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.name', idx=2, value='deluxe'
         ).value
 
-        nil_value = Values.set(
+        nil_value = Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.value', idx=0, value=23.5
         ).value
-        Values.set(
+        Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.value', idx=1, value=42.0
         )
-        two_value = Values.set(
+        two_value = Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.value', idx=2, value=1337.0
         ).value
 
-        nil_curr = Values.set(
+        nil_curr = Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.currency',
             idx=0,
             value='EUR',
         ).value
-        Values.set(
+        Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.currency',
             idx=1,
             value='GBP',
         )
-        two_curr = Values.set(
+        two_curr = Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.currency',
             idx=2,
             value='RUB',
         ).value
 
-        nil_int = Values.set(
+        nil_int = Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.billing_interval',
             idx=0,
             value='daily',
         ).value
-        two_int = Values.set(
+        two_int = Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.billing_interval',
             idx=2,
             value='hourly',
         ).value
 
-        Values.set(
+        Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.description',
             idx=1,
             value='premium plan',
         )
-        two_desc = Values.set(
+        two_desc = Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.description',
             idx=2,
             value='deluxe plan',

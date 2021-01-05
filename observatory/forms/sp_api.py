@@ -23,7 +23,7 @@ from wtforms.validators import (
 from observatory.forms.extra.validators import NeedInner, NeedStart
 from observatory.forms.extra.widgets import SubmitButtonInput
 from observatory.instance import SPACE_API
-from observatory.models.values import Values
+from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
 # pylint: disable=arguments-differ
@@ -38,7 +38,7 @@ class SpaceEditForm(FlaskForm):
         super().__init__(
             *args,
             data={
-                field: Values.get(key=f'{SP_API_PREFIX}.{key}', idx=idx)
+                field: Value.get(key=f'{SP_API_PREFIX}.{key}', idx=idx)
                 for field, key in self.KEYS.items()
             },
             **kwargs,
@@ -80,7 +80,7 @@ class SpaceEditForm(FlaskForm):
                 if value is None or not str(value).strip():
                     value = None
 
-                Values.set(
+                Value.set(
                     key=f'{SP_API_PREFIX}.{space_key}',
                     idx=self.idx,
                     value=value,
@@ -617,7 +617,7 @@ class SpaceDropForm(FlaskForm):
         results = [
             elem.delete()
             for elem in [
-                Values.by_key_idx(key=f'{SP_API_PREFIX}.{key}', idx=self.idx)
+                Value.by_key_idx(key=f'{SP_API_PREFIX}.{key}', idx=self.idx)
                 for key in self.KEYS
             ]
             if elem is not None

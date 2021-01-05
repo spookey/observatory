@@ -1,7 +1,7 @@
 from pytest import mark
 
 from observatory.logic.space_api import SpaceApi
-from observatory.models.values import Values
+from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
 
@@ -18,12 +18,12 @@ class TestSpaceApiState:
     def test_icons():
         api = SpaceApi()
 
-        opened = Values.set(
+        opened = Value.set(
             key=f'{SP_API_PREFIX}.state.icon.open',
             idx=0,
             value='http://example.org/img/space-is-open.gif',
         ).value
-        closed = Values.set(
+        closed = Value.set(
             key=f'{SP_API_PREFIX}.state.icon.closed',
             idx=0,
             value='http://example.org/img/sorry-we-are-closed.gif',

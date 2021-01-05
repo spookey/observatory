@@ -1,7 +1,7 @@
 from datetime import datetime
 from logging import getLogger
 
-from observatory.models.values import Values
+from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX, SP_API_REFRESH
 
 
@@ -13,11 +13,11 @@ class SpaceApi:
 
     @staticmethod
     def _by_key(key):
-        return Values.by_key(key=f'{SP_API_PREFIX}.{key}')
+        return Value.by_key(key=f'{SP_API_PREFIX}.{key}')
 
     @staticmethod
     def _get(key, idx=0):
-        return Values.get(key=f'{SP_API_PREFIX}.{key}', idx=idx)
+        return Value.get(key=f'{SP_API_PREFIX}.{key}', idx=idx)
 
     def _get_all(self, key):
         return [

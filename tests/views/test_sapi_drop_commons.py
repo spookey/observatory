@@ -1,7 +1,7 @@
 from flask import current_app, url_for
 from pytest import mark
 
-from observatory.models.values import Values
+from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
 
@@ -105,7 +105,7 @@ class TestSapiDropCommons:
 
         idx = 5
         elems = [
-            Values.set(
+            Value.set(
                 key=f'{SP_API_PREFIX}.{key}',
                 idx=idx,
                 value=f'{key} #{idx}',
@@ -113,8 +113,8 @@ class TestSapiDropCommons:
             for key in page.keys
         ]
 
-        assert Values.query.all() == elems
+        assert Value.query.all() == elems
 
         visitor(page.endpoint, params={'idx': idx}, method='post', code=302)
 
-        assert Values.query.all() == []
+        assert Value.query.all() == []

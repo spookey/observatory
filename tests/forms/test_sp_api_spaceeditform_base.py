@@ -5,7 +5,7 @@ from wtforms import DecimalField, StringField, TextAreaField
 from wtforms.validators import DataRequired, NumberRange
 
 from observatory.forms.sp_api import SpaceEditForm
-from observatory.models.values import Values
+from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
 
@@ -51,13 +51,13 @@ class TestSpaceEditFormBase:
     def test_preloads_data():
         idx = choice(range(23, 42))
         data = dict(
-            string=Values.set(
+            string=Value.set(
                 key=f'{SP_API_PREFIX}.test.string', idx=idx, value='test'
             ).value,
-            number=Values.set(
+            number=Value.set(
                 key=f'{SP_API_PREFIX}.test.number', idx=idx, value=1234.5
             ).value,
-            cstory=Values.set(
+            cstory=Value.set(
                 key=f'{SP_API_PREFIX}.test.cstory', idx=idx, value='more text'
             ).value,
         )
@@ -87,7 +87,7 @@ class TestSpaceEditFormBase:
 
     @staticmethod
     def test_action_creates():
-        assert Values.query.all() == []
+        assert Value.query.all() == []
 
         idx, string, number, cstory = (
             choice(range(23, 42)),
@@ -100,15 +100,9 @@ class TestSpaceEditFormBase:
         assert form.validate() is True
         assert form.action()
 
-        assert (
-            Values.get(key=f'{SP_API_PREFIX}.test.string', idx=idx) == string
-        )
-        assert (
-            Values.get(key=f'{SP_API_PREFIX}.test.number', idx=idx) == number
-        )
-        assert (
-            Values.get(key=f'{SP_API_PREFIX}.test.cstory', idx=idx) == cstory
-        )
+        assert Value.get(key=f'{SP_API_PREFIX}.test.string', idx=idx) == string
+        assert Value.get(key=f'{SP_API_PREFIX}.test.number', idx=idx) == number
+        assert Value.get(key=f'{SP_API_PREFIX}.test.cstory', idx=idx) == cstory
 
     @staticmethod
     def test_action_changes():
@@ -119,28 +113,22 @@ class TestSpaceEditFormBase:
             'new story',
         )
 
-        string_obj = Values.set(
+        string_obj = Value.set(
             key=f'{SP_API_PREFIX}.test.string', idx=idx, value='old text'
         )
-        number_obj = Values.set(
+        number_obj = Value.set(
             key=f'{SP_API_PREFIX}.test.number', idx=idx, value=23.5
         )
-        cstory_obj = Values.set(
+        cstory_obj = Value.set(
             key=f'{SP_API_PREFIX}.test.cstory', idx=idx, value='good old story'
         )
-        assert Values.query.all() == [string_obj, number_obj, cstory_obj]
+        assert Value.query.all() == [string_obj, number_obj, cstory_obj]
 
         form = PhonyForm(idx=idx, string=string, number=number, cstory=cstory)
 
         assert form.validate() is True
         assert form.action()
 
-        assert (
-            Values.get(key=f'{SP_API_PREFIX}.test.string', idx=idx) == string
-        )
-        assert (
-            Values.get(key=f'{SP_API_PREFIX}.test.number', idx=idx) == number
-        )
-        assert (
-            Values.get(key=f'{SP_API_PREFIX}.test.cstory', idx=idx) == cstory
-        )
+        assert Value.get(key=f'{SP_API_PREFIX}.test.string', idx=idx) == string
+        assert Value.get(key=f'{SP_API_PREFIX}.test.number', idx=idx) == number
+        assert Value.get(key=f'{SP_API_PREFIX}.test.cstory', idx=idx) == cstory

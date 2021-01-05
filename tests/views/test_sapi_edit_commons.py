@@ -1,7 +1,7 @@
 from flask import current_app, url_for
 from pytest import mark
 
-from observatory.models.values import Values
+from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
 
@@ -280,7 +280,7 @@ class TestSapiEditCommons:
         gen_user_loggedin()
         index_url = url_for('sapi.index', _external=True)
 
-        assert Values.query.all() == []
+        assert Value.query.all() == []
 
         res = visitor(
             page.endpoint,
@@ -291,6 +291,6 @@ class TestSapiEditCommons:
 
         assert res.request.headers['LOCATION'] == index_url
         for form_key, space_key in page.keys.items():
-            val = Values.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
+            val = Value.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
             assert val is not None
             assert val == page.data.get(form_key, 'error')
