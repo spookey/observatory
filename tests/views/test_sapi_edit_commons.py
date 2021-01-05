@@ -69,6 +69,18 @@ PAGES = [
         multi=True,
     ),
     page_data(
+        'sapi.edit_state_icon',
+        url='/space/edit/state/icon',
+        keys=dict(
+            opened='state.icon.open',
+            closed='state.icon.closed',
+        ),
+        data=dict(
+            opened='https://example.org/open.png',
+            closed='https://example.org/closed.png',
+        ),
+    ),
+    page_data(
         'sapi.edit_contact',
         url='/space/edit/contact',
         keys=dict(

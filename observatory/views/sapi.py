@@ -29,6 +29,7 @@ from observatory.forms.sp_api import (
     SpaceEditMembershipPlansForm,
     SpaceEditProjectsForm,
     SpaceEditSpaceFedForm,
+    SpaceEditStateIconForm,
 )
 
 BLUEPRINT_SAPI = Blueprint('sapi', __name__)
@@ -88,6 +89,12 @@ def edit_spacefed():
 @login_required
 def edit_cam(idx=0):
     return _edit_form(SpaceEditCamForm(idx=idx), f'Webcam #{1 + idx}')
+
+
+@BLUEPRINT_SAPI.route('/space/edit/state/icon', methods=['GET', 'POST'])
+@login_required
+def edit_state_icon():
+    return _edit_form(SpaceEditStateIconForm(), 'State Icons')
 
 
 @BLUEPRINT_SAPI.route('/space/edit/contact', methods=['GET', 'POST'])
