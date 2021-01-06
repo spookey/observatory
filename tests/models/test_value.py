@@ -68,7 +68,7 @@ class TestValue:
         assert Value.by_key(key) == list(reversed(res))
 
     @staticmethod
-    def test_value_get():
+    def test_value_property_get():
         value = Value.create(
             key='value', **{bx.value: BUCKET[bx] for bx in EnumBox}
         )
@@ -78,7 +78,7 @@ class TestValue:
             assert value.value == expect
 
     @staticmethod
-    def test_value_set():
+    def test_value_property_set():
         value = Value.create(key='value')
         for box in EnumBox:
             assert getattr(value, box.value, 'error') is None
@@ -91,7 +91,7 @@ class TestValue:
                 )
 
     @staticmethod
-    def test_value_set_nulls_all():
+    def test_value_property_set_null():
         value = Value.create(
             key='value', **{bx.value: BUCKET[bx] for bx in EnumBox}
         )
@@ -127,18 +127,35 @@ class TestValue:
         assert Value.get_all(key) == list(range(1 + 23, 1 + 42))
 
     @staticmethod
-    def test_set():
+    def test_set_method_value():
         past = Value.create(key='past', idx=0)
 
         assert Value.query.all() == [past]
         assert past.value is None
 
-        past_val = 'past'
-        done_val = 23
+        past_value = 'past'
+        done_value = 23
 
-        Value.set(key='past', idx=0, value=past_val)
-        done = Value.set(key='done', idx=0, value=done_val)
+        Value.set(key='past', idx=0, value=past_value)
+        done = Value.set(key='done', idx=0, value=done_value)
 
         assert Value.query.all() == [past, done]
-        assert past.value == past_val
-        assert done.value == done_val
+        assert past.value == past_value
+        assert done.value == done_value
+
+    @staticmethod
+    def test_set_method_sensor(gen_sensor):
+        past = Value.create(key='past', idx=0)
+
+        assert Value.query.all() == [past]
+        assert past.sensor is None
+
+        past_sensor = gen_sensor('past')
+        done_sensor = gen_sensor('done')
+
+        Value.set(key='past', idx=0, sensor=past_sensor)
+        done = Value.set(key='done', idx=0, sensor=done_sensor)
+
+        assert Value.query.all() == [past, done]
+        assert past.sensor == past_sensor
+        assert done.sensor == done_sensor

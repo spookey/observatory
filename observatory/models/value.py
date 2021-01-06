@@ -4,8 +4,6 @@ from sqlalchemy import and_, asc
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from observatory.database import Model
-
-# from observatory.models.sensor import Sensor
 from observatory.start.extensions import DB
 
 
@@ -101,8 +99,8 @@ class Value(Model):
         return [obj.value for obj in cls.by_key(key)]
 
     @classmethod
-    def set(cls, key, idx=0, value=None):
+    def set(cls, key, idx=0, value=None, sensor=None):
         obj = cls.by_key_idx(key=key, idx=idx)
         if obj is None:
             obj = cls.create(key=key, idx=idx)
-        return obj.update(value=value)
+        return obj.update(value=value, sensor=sensor)
