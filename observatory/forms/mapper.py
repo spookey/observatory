@@ -75,12 +75,12 @@ class MapperEditForm(FlaskForm):
         ]
 
     @staticmethod
-    def _enum_choices(enum):
-        return [(en.value, en.name) for en in enum]
+    def _color_choices():
+        return [(en.color, en.name) for en in EnumColor]
 
     @staticmethod
-    def _enum_color_choices(enum):
-        return [(en.color, en.name) for en in enum]
+    def _translate_choices(enum):
+        return [(en.value, en.name) for en in enum]
 
     def __init__(self, *args, obj=None, **kwargs):
         super().__init__(*args, obj=obj, **kwargs)
@@ -89,9 +89,9 @@ class MapperEditForm(FlaskForm):
         self.prompt_sel.choices = self._comm_choices(Prompt)
         self.sensor_sel.choices = self._comm_choices(Sensor)
 
-        self.color_sel.choices = self._enum_color_choices(EnumColor)
-        self.convert_sel.choices = self._enum_choices(EnumConvert)
-        self.horizon_sel.choices = self._enum_choices(EnumHorizon)
+        self.color_sel.choices = self._color_choices()
+        self.convert_sel.choices = self._translate_choices(EnumConvert)
+        self.horizon_sel.choices = self._translate_choices(EnumHorizon)
 
     def set_selections(self):
         if not self.mapper:
