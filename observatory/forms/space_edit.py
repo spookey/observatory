@@ -23,6 +23,7 @@ from wtforms.validators import (
 from observatory.forms.extra.validators import NeedInner, NeedStart
 from observatory.forms.extra.widgets import SubmitButtonInput
 from observatory.instance import SPACE_API
+from observatory.models.sensor import Sensor
 from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
@@ -33,13 +34,27 @@ from observatory.start.environment import SP_API_PREFIX
 class SpaceEditForm(FlaskForm):
     KEYS = {}
     ONE_OF = []
+    SENSORS = []
 
     def __init__(self, *args, idx=0, **kwargs):
         super().__init__(
             *args,
             data={
-                field: Value.get(key=f'{SP_API_PREFIX}.{key}', idx=idx)
-                for field, key in self.KEYS.items()
+                field: (
+                    value.sensor_prime
+                    if field in self.SENSORS
+                    else value.value
+                )
+                for field, value in [
+                    (
+                        fld,
+                        Value.by_key_idx(
+                            key=f'{SP_API_PREFIX}.{key}', idx=idx
+                        ),
+                    )
+                    for fld, key in self.KEYS.items()
+                ]
+                if value is not None
             },
             **kwargs,
         )
@@ -74,16 +89,23 @@ class SpaceEditForm(FlaskForm):
         for form_key, space_key in self.KEYS.items():
             field = self._fields.get(form_key, None)
             if field is not None:
+                sensor = None
                 value = field.data
-                if isinstance(field, DecimalField):
-                    value = float(value)
+
+                if form_key in self.SENSORS:
+                    sensor = Sensor.by_prime(value)
+                    value = None
+
                 if value is None or not str(value).strip():
                     value = None
+                if value is not None and isinstance(field, DecimalField):
+                    value = float(value)
 
                 Value.set(
                     key=f'{SP_API_PREFIX}.{space_key}',
                     idx=self.idx,
                     value=value,
+                    sensor=sensor,
                 )
 
         return SPACE_API.reset()
@@ -150,6 +172,7 @@ class SpaceEditLocationForm(SpaceEditForm):
     timezone_sel = SelectField(
         'Timezone',
         coerce=str,
+        validators=[Optional()],
         description='The timezone the space is located in',
     )
     submit = SubmitField(
@@ -425,10 +448,13 @@ class SpaceEditFeedForm(SpaceEditForm):
     type_sel = SelectField(
         'Type',
         coerce=str,
+        validators=[Optional()],
         description='Type of the feed',
     )
     url = StringField(
-        'URL', validators=[DataRequired(), URL()], description='Feed URL'
+        'URL',
+        validators=[DataRequired(), URL()],
+        description='Feed URL',
     )
     submit = SubmitField(
         'Save',
@@ -549,11 +575,13 @@ class SpaceEditMembershipPlansForm(SpaceEditForm):
     currency_sel = SelectField(
         'Currency',
         coerce=str,
+        validators=[DataRequired()],
         description='What\'s the currency?',
     )
     billing_interval_sel = SelectField(
         'Billing interval',
         coerce=str,
+        validators=[DataRequired()],
         description='How often is the membership billed?',
     )
     description = TextAreaField(
