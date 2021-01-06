@@ -16,6 +16,7 @@ from observatory.forms.space_edit import (
     SpaceEditLocationForm,
     SpaceEditMembershipPlansForm,
     SpaceEditProjectsForm,
+    SpaceEditSensorsTemperatureForm,
     SpaceEditSpaceFedForm,
     SpaceEditStateIconForm,
 )
@@ -23,7 +24,7 @@ from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
 
-def form_edit(form, *, keys, data, one_of=None, **kwargs):
+def form_edit(form, *, keys, data, one_of=None, sensors=None, **kwargs):
     def res():
         pass
 
@@ -31,6 +32,7 @@ def form_edit(form, *, keys, data, one_of=None, **kwargs):
     res.data = data
     res.keys = keys
     res.one_of = one_of if one_of is not None else []
+    res.sensors = sensors if sensors is not None else []
     res.empty = kwargs.get('empty', False)
 
     return res
@@ -159,6 +161,24 @@ FORMS = [
             'email',
             'twitter',
         ],
+    ),
+    form_edit(
+        SpaceEditSensorsTemperatureForm,
+        keys=dict(
+            sensor_sel='sensors.temperature.value',
+            unit_sel='sensors.temperature.unit',
+            location='sensors.temperature.location',
+            name='sensors.temperature.name',
+            description='sensors.temperature.description',
+        ),
+        data=dict(
+            sensor_sel=2,
+            unit_sel='°C',
+            location='somewhere',
+            name='temperature sensor',
+            description='measures the temperature',
+        ),
+        sensors=['sensor_sel'],
     ),
     form_edit(
         SpaceEditFeedBlogForm,
@@ -301,34 +321,51 @@ class TestSpaceEditCommons:
 
     @staticmethod
     @mark.parametrize('edit', FORMS, ids=IDS)
-    def test_create_new(edit):
+    def test_create_new(edit, gen_sensor):
         assert Value.query.all() == []
+
+        sensors = [
+            gen_sensor(name, prime=edit.data[name]) for name in edit.sensors
+        ]
 
         form = edit.form(idx=0, **edit.data)
         assert form.validate() is True
         assert form.action()
 
         for form_key, space_key in edit.keys.items():
-            val = Value.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
-            assert val is not None
-            assert val == edit.data.get(form_key, 'error')
+            val = Value.by_key_idx(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
+            if form_key in edit.sensors:
+                assert val.sensor is not None
+                assert val.sensor in sensors
+            else:
+                assert val.value is not None
+                assert val.value == edit.data.get(form_key, 'error')
 
     @staticmethod
     @mark.parametrize('edit', FORMS, ids=IDS)
-    def test_change_existing(edit):
+    def test_change_existing(edit, gen_sensor):
         assert Value.query.all() == []
 
+        sensors = [
+            gen_sensor(name, prime=edit.data[name]) for name in edit.sensors
+        ]
+
         for form_key, space_key in edit.keys.items():
-            val = edit.data.get(form_key, 'some')
-            if isinstance(val, bool):
-                val = not val
+            old_sensor = None
+            old_value = edit.data.get(form_key, 'some')
+            if isinstance(old_value, bool):
+                old_value = not old_value
             else:
-                val = 2 * val
+                old_value = 2 * old_value
+
+            if form_key in edit.sensors:
+                old_sensor = gen_sensor(f'old_{form_key}', prime=old_value)
 
             Value.set(
                 key=f'{SP_API_PREFIX}.{space_key}',
                 idx=0,
-                value=val,
+                value=old_value,
+                sensor=old_sensor,
             )
 
         assert Value.query.all() != []
@@ -338,6 +375,10 @@ class TestSpaceEditCommons:
         assert form.action()
 
         for form_key, space_key in edit.keys.items():
-            val = Value.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
-            assert val is not None
-            assert val == edit.data.get(form_key, 'error')
+            val = Value.by_key_idx(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
+            if form_key in edit.sensors:
+                assert val.sensor is not None
+                assert val.sensor in sensors
+            else:
+                assert val.value is not None
+                assert val.value == edit.data.get(form_key, 'error')

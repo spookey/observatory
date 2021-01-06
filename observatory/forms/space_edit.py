@@ -442,6 +442,75 @@ class SpaceEditKeymastersForm(SpaceEditForm):
         super().__init__(*args, idx=idx, **kwargs)
 
 
+class SpaceEditSensorsForm(SpaceEditForm):
+    KEYS = {}
+    SENSORS = []
+
+    @staticmethod
+    def _sensor_choices():
+        return [
+            (sensor.prime, f'{sensor.slug} ({sensor.title})')
+            for sensor in Sensor.query.order_by('slug').all()
+        ]
+
+
+class SpaceEditSensorsTemperatureForm(SpaceEditSensorsForm):
+    KEYS = dict(
+        sensor_sel='sensors.temperature.value',
+        unit_sel='sensors.temperature.unit',
+        location='sensors.temperature.location',
+        name='sensors.temperature.name',
+        description='sensors.temperature.description',
+    )
+    SENSORS = ['sensor_sel']
+
+    sensor_sel = SelectField(
+        'Sensor',
+        coerce=int,
+        validators=[DataRequired()],
+        description='Temperature sensor',
+    )
+    unit_sel = SelectField(
+        'Unit',
+        coerce=str,
+        validators=[DataRequired()],
+        description='The unit of the sensor value',
+    )
+    location = StringField(
+        'Location',
+        validators=[DataRequired()],
+        description='The location of your sensor',
+    )
+    name = StringField(
+        'Name',
+        validators=[Optional()],
+        description='Give your sensor a name',
+    )
+    description = TextAreaField(
+        'Description',
+        validators=[Optional()],
+        description='Some additional information',
+    )
+    submit = SubmitField(
+        'Save',
+        description='Submit',
+        widget=SubmitButtonInput(icon='ops_submit'),
+    )
+
+    @staticmethod
+    def _unit_choices():
+        return [
+            (val, val)
+            for val in ('°C', '°F', 'K', '°De', '°N', '°R', '°Ré', '°Rø')
+        ]
+
+    def __init__(self, idx, *args, **kwargs):
+        super().__init__(*args, idx=idx, **kwargs)
+
+        self.sensor_sel.choices = self._sensor_choices()
+        self.unit_sel.choices = self._unit_choices()
+
+
 class SpaceEditFeedForm(SpaceEditForm):
     KEYS = {}
 
