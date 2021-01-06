@@ -3,7 +3,7 @@ from random import choice
 from pytest import mark
 
 from observatory.forms.extra.widgets import SubmitButtonInput
-from observatory.forms.sp_api import (
+from observatory.forms.space_edit import (
     SpaceEditCamForm,
     SpaceEditContactForm,
     SpaceEditFeedBlogForm,
@@ -244,7 +244,7 @@ IDS = [edit.form.__name__ for edit in FORMS]
 
 
 @mark.usefixtures('session', 'ctx_app')
-class TestSpaceEditFormCommons:
+class TestSpaceEditCommons:
     @staticmethod
     @mark.parametrize('edit', FORMS, ids=IDS)
     def test_edit_meta(edit):

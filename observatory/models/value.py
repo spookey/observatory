@@ -4,6 +4,8 @@ from sqlalchemy import and_, asc
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from observatory.database import Model
+
+# from observatory.models.sensor import Sensor
 from observatory.start.extensions import DB
 
 

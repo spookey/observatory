@@ -4,7 +4,7 @@ from pytest import mark
 from wtforms import DecimalField, StringField, TextAreaField
 from wtforms.validators import DataRequired, NumberRange
 
-from observatory.forms.sp_api import SpaceEditForm
+from observatory.forms.space_edit import SpaceEditForm
 from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
@@ -28,7 +28,7 @@ class PhonyForm(SpaceEditForm):
 
 
 @mark.usefixtures('session', 'ctx_app')
-class TestSpaceEditFormBase:
+class TestSpaceEditBase:
     @staticmethod
     def test_basic_fields():
         idx = choice(range(23, 42))

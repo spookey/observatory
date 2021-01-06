@@ -3,7 +3,7 @@ from random import choice
 from pytest import mark
 
 from observatory.forms.extra.widgets import SubmitButtonInput
-from observatory.forms.sp_api import SpaceDropForm
+from observatory.forms.space_drop import SpaceDropForm
 from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
@@ -13,7 +13,7 @@ class PhonyForm(SpaceDropForm):
 
 
 @mark.usefixtures('session', 'ctx_app')
-class TestSpaceDropFormBase:
+class TestSpaceDropBase:
     @staticmethod
     def test_basic_fields():
         idx = 5

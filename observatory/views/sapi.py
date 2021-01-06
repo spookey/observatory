@@ -10,12 +10,14 @@ from flask import (
 )
 from flask_login import login_required
 
-from observatory.forms.sp_api import (
+from observatory.forms.space_drop import (
     SpaceDropCamForm,
     SpaceDropKeymastersForm,
     SpaceDropLinksForm,
     SpaceDropMembershipPlansForm,
     SpaceDropProjectsForm,
+)
+from observatory.forms.space_edit import (
     SpaceEditCamForm,
     SpaceEditContactForm,
     SpaceEditFeedBlogForm,

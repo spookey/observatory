@@ -10,7 +10,7 @@ from observatory.forms.common import (
     SensorSortForm,
 )
 from observatory.forms.mapper import MapperDropForm, MapperSortForm
-from observatory.forms.sp_api import (
+from observatory.forms.space_drop import (
     SpaceDropCamForm,
     SpaceDropKeymastersForm,
     SpaceDropLinksForm,

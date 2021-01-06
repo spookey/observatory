@@ -3,7 +3,7 @@ from random import choice
 from pytest import mark
 
 from observatory.forms.extra.widgets import SubmitButtonInput
-from observatory.forms.sp_api import (
+from observatory.forms.space_drop import (
     SpaceDropCamForm,
     SpaceDropKeymastersForm,
     SpaceDropLinksForm,
@@ -69,7 +69,7 @@ IDS = [drop.form.__name__ for drop in FORMS]
 
 
 @mark.usefixtures('session', 'ctx_app')
-class TestSpaceDropFormCommons:
+class TestSpaceDropCommons:
     @staticmethod
     @mark.parametrize('drop', FORMS, ids=IDS)
     def test_edit_keys(drop):
