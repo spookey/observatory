@@ -18,6 +18,13 @@ class Sensor(CommonMixin, SortMixin, CreatedMixin, Model):
         cascade='all,delete-orphan',
         lazy=True,
     )
+    values = DB.relationship(
+        'Value',
+        backref=DB.backref('sensor', lazy=True),
+        order_by='Value.idx.asc()',
+        cascade='all,delete-orphan',
+        lazy=True,
+    )
 
     @property
     def active(self):

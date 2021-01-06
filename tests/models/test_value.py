@@ -24,6 +24,20 @@ class TestValue:
         for box in EnumBox:
             assert getattr(value, box.value, 'error') is None
 
+        assert value.sensor is None
+
+    @staticmethod
+    def test_can_have_content_and_sensor(gen_sensor):
+        key, idx = 'key', 0
+        sensor, number = gen_sensor(), 1337
+
+        value = Value.create(key=key, idx=idx)
+        value.update(value=number, sensor=sensor)
+
+        assert value.value == number
+        assert value.sensor == sensor
+        assert sensor.values == [value]
+
     @staticmethod
     def test_by_key_idx():
         nil_key = 'nil'
@@ -77,17 +91,31 @@ class TestValue:
                 )
 
     @staticmethod
+    def test_value_set_nulls_all():
+        value = Value.create(
+            key='value', **{bx.value: BUCKET[bx] for bx in EnumBox}
+        )
+
+        for box, val in BUCKET.items():
+            assert getattr(value, box.value, 'error') == val
+
+        value.value = None
+
+        for box in BUCKET:
+            assert getattr(value, box.value, 'error') is None
+
+    @staticmethod
     def test_get():
-        one_key, one_idx, one_val = 'one', 23, BUCKET[EnumBox.STRING]
-        two_key, two_idx, two_val = 'two', 42, BUCKET[EnumBox.NUMBER]
-        thr_key, thr_idx, thr_val = 'thr', 55, BUCKET[EnumBox.SWITCH]
+        nil_key, nil_idx, nil_val = 'nil', 23, BUCKET[EnumBox.STRING]
+        one_key, one_idx, one_val = 'one', 42, BUCKET[EnumBox.NUMBER]
+        two_key, two_idx, two_val = 'two', 55, BUCKET[EnumBox.SWITCH]
+        Value.create(key=nil_key, idx=nil_idx).update(value=nil_val)
         Value.create(key=one_key, idx=one_idx).update(value=one_val)
         Value.create(key=two_key, idx=two_idx).update(value=two_val)
-        Value.create(key=thr_key, idx=thr_idx).update(value=thr_val)
 
+        assert Value.get(nil_key, idx=nil_idx) == nil_val
         assert Value.get(one_key, idx=one_idx) == one_val
         assert Value.get(two_key, idx=two_idx) == two_val
-        assert Value.get(thr_key, idx=thr_idx) == thr_val
 
     @staticmethod
     def test_get_all():

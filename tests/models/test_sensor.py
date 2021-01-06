@@ -2,6 +2,7 @@ from pytest import mark
 
 from observatory.models.point import Point
 from observatory.models.sensor import Sensor
+from observatory.models.value import Value
 
 
 def _pointsort(points):
@@ -11,13 +12,15 @@ def _pointsort(points):
 @mark.usefixtures('session')
 class TestSensor:
     @staticmethod
-    def test_points_field_and_query(gen_sensor):
+    def test_fields_and_points_query(gen_sensor):
         sensor = gen_sensor(slug='test')
 
         assert sensor.points == []
         assert sensor.query_points.all() == []
         assert sensor.query_points.count() == 0
         assert sensor.query_points.first() is None
+
+        assert sensor.values == []
 
     @staticmethod
     def test_points_ordered(gen_sensor, gen_points_batch):
@@ -28,7 +31,17 @@ class TestSensor:
         assert sensor.query_points.all() == _pointsort(points)
 
     @staticmethod
-    def test_delete_cascade_orphan(gen_sensor, gen_user):
+    def test_values_ordered(gen_sensor):
+        sensor = gen_sensor()
+
+        two = Value.create(key='two', idx=2, sensor=sensor)
+        one = Value.create(key='one', idx=1, sensor=sensor)
+        nil = Value.create(key='nil', idx=0, sensor=sensor)
+
+        assert sensor.values == [nil, one, two]
+
+    @staticmethod
+    def test_delete_cascade_orphan_point(gen_sensor, gen_user):
         sensor = gen_sensor()
         user = gen_user()
 
@@ -49,7 +62,27 @@ class TestSensor:
         assert Point.query.all() == []
 
     @staticmethod
-    def test_delete_cascade_keep_others(gen_sensor, gen_user):
+    def test_delete_cascade_orphan_value(gen_sensor):
+        sensor = gen_sensor()
+
+        assert Sensor.query.all() == [sensor]
+        assert sensor.values == []
+
+        values = [
+            Value.create(sensor=sensor, key='value', idx=0),
+            Value.create(sensor=sensor, key='value', idx=1),
+        ]
+
+        assert Value.query.all() == values
+        assert sensor.values == values
+
+        assert sensor.delete()
+
+        assert Sensor.query.all() == []
+        assert Value.query.all() == []
+
+    @staticmethod
+    def test_delete_cascade_keep_other_points(gen_sensor, gen_user):
         keep_sensor = gen_sensor('keep')
         drop_sensor = gen_sensor('drop')
         user = gen_user()
@@ -70,6 +103,25 @@ class TestSensor:
 
         assert Sensor.query.all() == [keep_sensor]
         assert Point.query.all() == [keep_point]
+
+    @staticmethod
+    def test_delete_cascade_keep_other_values(gen_sensor):
+        keep_sensor = gen_sensor('keep')
+        drop_sensor = gen_sensor('drop')
+
+        assert Sensor.query.all() == [keep_sensor, drop_sensor]
+        assert keep_sensor.values == []
+        assert drop_sensor.values == []
+
+        keep_value = Value.create(sensor=keep_sensor, key='value', idx=1)
+        drop_value = Value.create(sensor=drop_sensor, key='value', idx=0)
+
+        assert Value.query.all() == [keep_value, drop_value]
+
+        assert drop_sensor.delete()
+
+        assert Sensor.query.all() == [keep_sensor]
+        assert Value.query.all() == [keep_value]
 
     @staticmethod
     def test_length(gen_sensor, gen_user):

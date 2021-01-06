@@ -14,7 +14,7 @@ class EnumBox(Enum):
 
     @classmethod
     def from_type(cls, val):
-        if isinstance(val, (bool,)):
+        if isinstance(val, bool):
             return cls.SWITCH
         if isinstance(val, (int, float)):
             return cls.NUMBER
@@ -49,6 +49,12 @@ class Value(Model):
     )
     _switch = DB.Column(
         DB.Boolean(),
+        nullable=True,
+    )
+
+    sensor_prime = DB.Column(
+        DB.Integer(),
+        DB.ForeignKey('sensor.prime'),
         nullable=True,
     )
 

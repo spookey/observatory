@@ -165,7 +165,6 @@ def gen_user():
         return User.create(username=username, password=password, **kwargs)
 
     yield make
-    logout_user()
 
 
 @fixture(scope='function')
