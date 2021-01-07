@@ -62,6 +62,7 @@ class TestMapperEnumConvert:
         assert EnumConvert.from_text('wrong') == EnumConvert.NATURAL
 
         assert EnumConvert.from_text('23') == EnumConvert.NATURAL
+        assert EnumConvert.from_text(42) == EnumConvert.NATURAL
         assert EnumConvert.from_text(None) == EnumConvert.NATURAL
         assert EnumConvert.from_text(True) == EnumConvert.NATURAL
 
@@ -72,14 +73,16 @@ class TestMapperEnumHorizon:
         assert [elem.name for elem in EnumHorizon] == ['NORMAL', 'INVERT']
 
     @staticmethod
-    def test_from_bool():
-        assert EnumHorizon.from_bool(False) == EnumHorizon.NORMAL
-        assert EnumHorizon.from_bool(True) == EnumHorizon.INVERT
+    def test_from_text():
+        assert EnumHorizon.from_text('NORMAL') == EnumHorizon.NORMAL
+        assert EnumHorizon.from_text('INVERT') == EnumHorizon.INVERT
 
-        assert EnumHorizon.from_bool(None) == EnumHorizon.NORMAL
+        assert EnumHorizon.from_text('normal') == EnumHorizon.NORMAL
+        assert EnumHorizon.from_text(' INvert ') == EnumHorizon.INVERT
+        assert EnumHorizon.from_text('') == EnumHorizon.NORMAL
+        assert EnumHorizon.from_text('wrong') == EnumHorizon.NORMAL
 
-        assert EnumHorizon.from_bool(0) == EnumHorizon.NORMAL
-        assert EnumHorizon.from_bool(1) == EnumHorizon.INVERT
-
-        assert EnumHorizon.from_bool('') == EnumHorizon.NORMAL
-        assert EnumHorizon.from_bool('a') == EnumHorizon.INVERT
+        assert EnumHorizon.from_text('23') == EnumHorizon.NORMAL
+        assert EnumHorizon.from_text(42) == EnumHorizon.NORMAL
+        assert EnumHorizon.from_text(None) == EnumHorizon.NORMAL
+        assert EnumHorizon.from_text(True) == EnumHorizon.NORMAL

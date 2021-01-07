@@ -111,3 +111,9 @@ class Value(Model):
         if obj is None:
             obj = cls.create(key=key, idx=idx, _commit=False)
         return obj.update(elem=elem, _commit=_commit)
+
+    @property
+    def latest(self):
+        if self.sensor is not None:
+            return self.sensor.latest
+        return None

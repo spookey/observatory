@@ -23,6 +23,7 @@ from wtforms.validators import (
 from observatory.forms.extra.validators import NeedInner, NeedStart
 from observatory.forms.extra.widgets import SubmitButtonInput
 from observatory.instance import SPACE_API
+from observatory.models.mapper import EnumConvert, EnumHorizon
 from observatory.models.sensor import Sensor
 from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
@@ -438,16 +439,57 @@ class SpaceEditSensorsForm(SpaceEditForm):
     SENSORS = []
 
     @staticmethod
+    def sensor_fields(description):
+        return (
+            SelectField(
+                'Sensor',
+                coerce=int,
+                validators=[DataRequired()],
+                description=description,
+            ),
+            DecimalField(
+                'Elevate',
+                default=1.0,
+                places=4,
+                validators=[NumberRange(min=0.0)],
+                description='Increase raw value with this factor',
+            ),
+            SelectField(
+                'Convert',
+                coerce=int,
+                validators=[DataRequired()],
+                description='Select conversion',
+            ),
+            SelectField(
+                'Horizon',
+                coerce=int,
+                validators=[DataRequired()],
+                description='Select horizon',
+            ),
+        )
+
+    @staticmethod
     def _sensor_choices():
         return [
             (sensor.prime, f'{sensor.slug} ({sensor.title})')
             for sensor in Sensor.query.order_by('slug').all()
         ]
 
+    @staticmethod
+    def _convert_choices():
+        return [(en.value, en.name) for en in EnumConvert]
+
+    @staticmethod
+    def _horizon_choices():
+        return [(en.value, en.name) for en in EnumHorizon]
+
 
 class SpaceEditSensorsTemperatureForm(SpaceEditSensorsForm):
     KEYS = dict(
         sensor_sel='sensors.temperature.value',
+        elevate_sel='sensors.temperature.value.elevate',
+        convert_sel='sensors.temperature.value.convert',
+        horizon_sel='sensors.temperature.value.horizon',
         unit_sel='sensors.temperature.unit',
         location='sensors.temperature.location',
         name='sensors.temperature.name',
@@ -455,12 +497,12 @@ class SpaceEditSensorsTemperatureForm(SpaceEditSensorsForm):
     )
     SENSORS = ['sensor_sel']
 
-    sensor_sel = SelectField(
-        'Sensor',
-        coerce=int,
-        validators=[DataRequired()],
-        description='Temperature sensor',
-    )
+    (
+        sensor_sel,
+        elevate_sel,
+        convert_sel,
+        horizon_sel,
+    ) = SpaceEditSensorsForm.sensor_fields('Temperature sensor')
     unit_sel = SelectField(
         'Unit',
         coerce=str,
@@ -499,6 +541,8 @@ class SpaceEditSensorsTemperatureForm(SpaceEditSensorsForm):
         super().__init__(*args, idx=idx, **kwargs)
 
         self.sensor_sel.choices = self._sensor_choices()
+        self.convert_sel.choices = self._convert_choices()
+        self.horizon_sel.choices = self._horizon_choices()
         self.unit_sel.choices = self._unit_choices()
 
 

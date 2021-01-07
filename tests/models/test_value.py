@@ -149,3 +149,23 @@ class TestValue:
         assert Value.query.all() == [past, done]
         assert past.elem == past_elem
         assert done.elem == done_elem
+
+    @staticmethod
+    def test_latest(gen_sensor, gen_user):
+        value = Value.create(key='value', idx=42)
+        sensor, user = gen_sensor(), gen_user()
+
+        assert value.latest is None
+        value.update(elem=23)
+        assert value.latest is None
+
+        value.update(elem=sensor)
+        assert value.latest is None
+
+        one = sensor.append(user=user, value=23)
+        assert value.latest is one
+
+        two = sensor.append(user=user, value=42)
+        assert value.latest is two
+
+        assert value.sensor.query_points.all() == [two, one]

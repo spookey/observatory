@@ -49,8 +49,13 @@ class EnumHorizon(Enum):
     INVERT = 2
 
     @classmethod
-    def from_bool(cls, val):
-        return cls.INVERT if val else cls.NORMAL
+    def from_text(cls, val):
+        if isinstance(val, str):
+            val = val.strip().upper()
+            for elem in cls:
+                if elem.name == val:
+                    return elem
+        return cls.NORMAL
 
 
 # pylint: disable=no-member
