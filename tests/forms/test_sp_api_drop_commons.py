@@ -122,7 +122,7 @@ class TestSpaceDropCommons:
             Value.set(
                 key=f'{SP_API_PREFIX}.{key}',
                 idx=idx,
-                value=choice(
+                elem=choice(
                     [
                         choice(['test', 'demo']),
                         choice([True, False]),

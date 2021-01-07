@@ -4,6 +4,7 @@ from sqlalchemy import and_, asc
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from observatory.database import Model
+from observatory.models.sensor import Sensor
 from observatory.start.extensions import DB
 
 
@@ -11,9 +12,12 @@ class EnumBox(Enum):
     STRING = '_string'
     NUMBER = '_number'
     SWITCH = '_switch'
+    SENSOR = '_sensor'
 
     @classmethod
     def from_type(cls, val):
+        if isinstance(val, Sensor):
+            return cls.SENSOR
         if isinstance(val, bool):
             return cls.SWITCH
         if isinstance(val, (int, float)):
@@ -51,8 +55,7 @@ class Value(Model):
         DB.Boolean(),
         nullable=True,
     )
-
-    sensor_prime = DB.Column(
+    _sensor = DB.Column(
         DB.Integer(),
         DB.ForeignKey('sensor.prime'),
         nullable=True,
@@ -78,29 +81,33 @@ class Value(Model):
         )
 
     @hybrid_property
-    def value(self):
+    def elem(self):
+        if self.box == EnumBox.SENSOR:
+            return self.sensor
         return getattr(self, self.box.value, None)
 
-    @value.setter
-    def value(self, val):
+    @elem.setter
+    def elem(self, val):
         box = EnumBox.from_type(val)
-        self.update(
-            box=box,
-            **{bx.value: (None if bx != box else val) for bx in EnumBox},
-        )
+        underscore = {bx.value: None for bx in EnumBox}
+        sensor = val
+        if box != EnumBox.SENSOR:
+            underscore.update({box.value: val})
+            sensor = None
+        self.update(box=box, sensor=sensor, **underscore)
 
     @classmethod
     def get(cls, key, idx=0):
         obj = cls.by_key_idx(key, idx=idx)
-        return obj.value if obj is not None else None
+        return obj.elem if obj is not None else None
 
     @classmethod
     def get_all(cls, key):
-        return [obj.value for obj in cls.by_key(key)]
+        return [obj.elem for obj in cls.by_key(key)]
 
     @classmethod
-    def set(cls, key, idx=0, value=None, sensor=None):
+    def set(cls, key, idx=0, elem=None, _commit=True):
         obj = cls.by_key_idx(key=key, idx=idx)
         if obj is None:
-            obj = cls.create(key=key, idx=idx)
-        return obj.update(value=value, sensor=sensor)
+            obj = cls.create(key=key, idx=idx, _commit=False)
+        return obj.update(elem=elem, _commit=_commit)

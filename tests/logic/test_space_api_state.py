@@ -21,13 +21,13 @@ class TestSpaceApiState:
         opened = Value.set(
             key=f'{SP_API_PREFIX}.state.icon.open',
             idx=0,
-            value='http://example.org/img/space-is-open.gif',
-        ).value
+            elem='http://example.org/img/space-is-open.gif',
+        ).elem
         closed = Value.set(
             key=f'{SP_API_PREFIX}.state.icon.closed',
             idx=0,
-            value='http://example.org/img/sorry-we-are-closed.gif',
-        ).value
+            elem='http://example.org/img/sorry-we-are-closed.gif',
+        ).elem
 
         res = api.get_state()
         assert res['icon']['open'] == opened

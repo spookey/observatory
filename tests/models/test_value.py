@@ -1,16 +1,39 @@
-from pytest import mark
+from pytest import fixture, mark
 
 from observatory.models.value import EnumBox, Value
 
-BUCKET = {
-    EnumBox.STRING: 'AA',
-    EnumBox.NUMBER: 1337,
-    EnumBox.SWITCH: True,
-}
+# pylint: disable=redefined-outer-name
+
+
+@fixture(scope='function')
+def bucket(gen_sensor):
+    sensor = gen_sensor()
+    base = {
+        EnumBox.STRING: 'AA',
+        EnumBox.NUMBER: 1337,
+        EnumBox.SWITCH: True,
+        EnumBox.SENSOR: None,
+    }
+
+    def res():
+        pass
+
+    res.obj = {**base, EnumBox.SENSOR: sensor}
+    res.key = {**base, EnumBox.SENSOR: sensor.prime}
+
+    yield res
 
 
 @mark.usefixtures('session')
 class TestValue:
+    @staticmethod
+    def test_bucket(bucket):
+        assert bucket.obj.keys() == bucket.key.keys()
+        for key, val in bucket.obj.items():
+            assert bucket.key[key] == (
+                val if key != EnumBox.SENSOR else val.prime
+            )
+
     @staticmethod
     def test_default_fields():
         key = 'test'
@@ -25,18 +48,6 @@ class TestValue:
             assert getattr(value, box.value, 'error') is None
 
         assert value.sensor is None
-
-    @staticmethod
-    def test_can_have_content_and_sensor(gen_sensor):
-        key, idx = 'key', 0
-        sensor, number = gen_sensor(), 1337
-
-        value = Value.create(key=key, idx=idx)
-        value.update(value=number, sensor=sensor)
-
-        assert value.value == number
-        assert value.sensor == sensor
-        assert sensor.values == [value]
 
     @staticmethod
     def test_by_key_idx():
@@ -68,94 +79,73 @@ class TestValue:
         assert Value.by_key(key) == list(reversed(res))
 
     @staticmethod
-    def test_value_property_get():
+    def test_elem_property(bucket):
         value = Value.create(
-            key='value', **{bx.value: BUCKET[bx] for bx in EnumBox}
+            key='value', **{bx.value: bucket.key[bx] for bx in EnumBox}
         )
 
-        for box, expect in BUCKET.items():
+        for box, expect in bucket.obj.items():
             value.update(box=box)
-            assert value.value == expect
+            assert value.elem == expect
 
     @staticmethod
-    def test_value_property_set():
+    def test_elem_property_set(bucket):
         value = Value.create(key='value')
         for box in EnumBox:
             assert getattr(value, box.value, 'error') is None
 
-        for box, val in BUCKET.items():
-            value.value = val
-            for bxx in EnumBox:
+        for box, val in bucket.obj.items():
+            value.elem = val
+            for bxx, exp in bucket.key.items():
                 assert getattr(value, bxx.value, 'error') == (
-                    val if bxx == box else None
+                    exp if box == bxx else None
                 )
 
     @staticmethod
-    def test_value_property_set_null():
+    def test_elem_property_set_null(bucket):
         value = Value.create(
-            key='value', **{bx.value: BUCKET[bx] for bx in EnumBox}
+            key='value', **{bx.value: bucket.key[bx] for bx in EnumBox}
         )
 
-        for box, val in BUCKET.items():
+        for box, val in bucket.key.items():
             assert getattr(value, box.value, 'error') == val
 
-        value.value = None
+        value.elem = None
 
-        for box in BUCKET:
+        for box in bucket.key:
             assert getattr(value, box.value, 'error') is None
 
     @staticmethod
-    def test_get():
-        nil_key, nil_idx, nil_val = 'nil', 23, BUCKET[EnumBox.STRING]
-        one_key, one_idx, one_val = 'one', 42, BUCKET[EnumBox.NUMBER]
-        two_key, two_idx, two_val = 'two', 55, BUCKET[EnumBox.SWITCH]
-        Value.create(key=nil_key, idx=nil_idx).update(value=nil_val)
-        Value.create(key=one_key, idx=one_idx).update(value=one_val)
-        Value.create(key=two_key, idx=two_idx).update(value=two_val)
+    def test_get(bucket):
+        idx = 23
+        for key, obj in bucket.obj.items():
+            Value.create(key=str(key), idx=idx).update(elem=obj)
 
-        assert Value.get(nil_key, idx=nil_idx) == nil_val
-        assert Value.get(one_key, idx=one_idx) == one_val
-        assert Value.get(two_key, idx=two_idx) == two_val
+        for key, obj in bucket.obj.items():
+            assert Value.get(key=str(key), idx=idx) == obj
 
     @staticmethod
     def test_get_all():
         key = 'value'
         for idx in range(42, 23, -1):
-            Value.create(key=key, idx=idx).update(value=idx)
+            Value.create(key=key, idx=idx).update(elem=idx)
 
         assert Value.get_all('some') == []
         assert Value.get_all(key) == list(range(1 + 23, 1 + 42))
 
     @staticmethod
-    def test_set_method_value():
+    def test_set_method():
         past = Value.create(key='past', idx=0)
 
         assert Value.query.all() == [past]
-        assert past.value is None
+        assert past.elem is None
 
-        past_value = 'past'
-        done_value = 23
+        past_elem = 'past'
+        done_elem = 23
 
-        Value.set(key='past', idx=0, value=past_value)
-        done = Value.set(key='done', idx=0, value=done_value)
-
-        assert Value.query.all() == [past, done]
-        assert past.value == past_value
-        assert done.value == done_value
-
-    @staticmethod
-    def test_set_method_sensor(gen_sensor):
-        past = Value.create(key='past', idx=0)
-
-        assert Value.query.all() == [past]
-        assert past.sensor is None
-
-        past_sensor = gen_sensor('past')
-        done_sensor = gen_sensor('done')
-
-        Value.set(key='past', idx=0, sensor=past_sensor)
-        done = Value.set(key='done', idx=0, sensor=done_sensor)
+        Value.set(key='past', idx=0, elem=past_elem)
+        done = Value.set(key='done', idx=0, elem=done_elem)
 
         assert Value.query.all() == [past, done]
-        assert past.sensor == past_sensor
-        assert done.sensor == done_sensor
+        assert past.elem == past_elem
+        assert done.elem == done_elem

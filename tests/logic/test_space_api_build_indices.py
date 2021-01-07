@@ -27,7 +27,7 @@ class TestSpaceApiBuildIndices:
 
         indices = list(range(5))
         for idx in indices:
-            Value.set(f'{SP_API_PREFIX}.cam', idx=idx, value=f'cam #{idx}')
+            Value.set(f'{SP_API_PREFIX}.cam', idx=idx, elem=f'cam #{idx}')
 
         assert api.cam_indices == indices
 
@@ -48,7 +48,7 @@ class TestSpaceApiBuildIndices:
                     ]
                 ),
                 idx=idx,
-                value=f'keymaster #{idx}',
+                elem=f'keymaster #{idx}',
             )
 
         assert api.concact_keymasters_indices == indices
@@ -61,7 +61,7 @@ class TestSpaceApiBuildIndices:
         indices = list(range(7))
         for idx in indices:
             Value.set(
-                f'{SP_API_PREFIX}.projects', idx=idx, value=f'project #{idx}'
+                f'{SP_API_PREFIX}.projects', idx=idx, elem=f'project #{idx}'
             )
 
         assert api.projects_indices == indices
@@ -74,10 +74,10 @@ class TestSpaceApiBuildIndices:
         indices = list(range(7))
         for idx in indices:
             Value.set(
-                f'{SP_API_PREFIX}.links.name', idx=idx, value=f'link #{idx}'
+                f'{SP_API_PREFIX}.links.name', idx=idx, elem=f'link #{idx}'
             )
             Value.set(
-                f'{SP_API_PREFIX}.links.url', idx=idx, value=f'url #{idx}'
+                f'{SP_API_PREFIX}.links.url', idx=idx, elem=f'url #{idx}'
             )
 
         assert api.links_indices == indices
@@ -92,20 +92,20 @@ class TestSpaceApiBuildIndices:
             Value.set(
                 f'{SP_API_PREFIX}.membership_plans.name',
                 idx=idx,
-                value=f'name #{idx}',
+                elem=f'name #{idx}',
             )
             Value.set(
-                f'{SP_API_PREFIX}.membership_plans.value', idx=idx, value=idx
+                f'{SP_API_PREFIX}.membership_plans.value', idx=idx, elem=idx
             )
             Value.set(
                 f'{SP_API_PREFIX}.membership_plans.currency',
                 idx=idx,
-                value=f'currency #{idx}',
+                elem=f'currency #{idx}',
             )
             Value.set(
                 f'{SP_API_PREFIX}.membership_plans.billing_interval',
                 idx=idx,
-                value=f'interval #{idx}',
+                elem=f'interval #{idx}',
             )
 
         assert api.membership_plans_indices == indices

@@ -106,9 +106,7 @@ class TestSapiDropCommons:
         idx = 5
         elems = [
             Value.set(
-                key=f'{SP_API_PREFIX}.{key}',
-                idx=idx,
-                value=f'{key} #{idx}',
+                key=f'{SP_API_PREFIX}.{key}', idx=idx, elem=f'{key} #{idx}'
             )
             for key in page.keys
         ]

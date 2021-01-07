@@ -1,3 +1,5 @@
+from pytest import mark
+
 from observatory.models.value import EnumBox
 
 
@@ -8,6 +10,7 @@ class TestValueEnumBox:
             'STRING',
             'NUMBER',
             'SWITCH',
+            'SENSOR',
         ]
 
     @staticmethod
@@ -16,10 +19,12 @@ class TestValueEnumBox:
             '_string',
             '_number',
             '_switch',
+            '_sensor',
         ]
 
     @staticmethod
-    def test_from_type():
+    @mark.usefixtures('session')
+    def test_from_type(gen_sensor):
         assert EnumBox.from_type(True) == EnumBox.SWITCH
         assert EnumBox.from_type(False) == EnumBox.SWITCH
 
@@ -30,6 +35,8 @@ class TestValueEnumBox:
         assert EnumBox.from_type('') == EnumBox.STRING
         assert EnumBox.from_type('test') == EnumBox.STRING
         assert EnumBox.from_type('abc xyz') == EnumBox.STRING
+
+        assert EnumBox.from_type(gen_sensor()) == EnumBox.SENSOR
 
         assert EnumBox.from_type(None) == EnumBox.STRING
         assert EnumBox.from_type(Exception) == EnumBox.STRING

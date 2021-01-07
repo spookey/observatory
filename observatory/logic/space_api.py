@@ -23,7 +23,7 @@ class SpaceApi:
         return [
             {
                 '_idx': elem.idx,
-                'value': elem.value,
+                'value': elem.elem,
             }
             for elem in self._by_key(key)
             if elem is not None

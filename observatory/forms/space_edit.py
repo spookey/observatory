@@ -41,20 +41,15 @@ class SpaceEditForm(FlaskForm):
             *args,
             data={
                 field: (
-                    value.sensor_prime
-                    if field in self.SENSORS
-                    else value.value
+                    elem.prime
+                    if field in self.SENSORS and elem is not None
+                    else elem
                 )
-                for field, value in [
-                    (
-                        fld,
-                        Value.by_key_idx(
-                            key=f'{SP_API_PREFIX}.{key}', idx=idx
-                        ),
-                    )
+                for field, elem in [
+                    (fld, Value.get(key=f'{SP_API_PREFIX}.{key}', idx=idx))
                     for fld, key in self.KEYS.items()
                 ]
-                if value is not None
+                if elem is not None
             },
             **kwargs,
         )
@@ -89,23 +84,19 @@ class SpaceEditForm(FlaskForm):
         for form_key, space_key in self.KEYS.items():
             field = self._fields.get(form_key, None)
             if field is not None:
-                sensor = None
                 value = field.data
-
-                if form_key in self.SENSORS:
-                    sensor = Sensor.by_prime(value)
-                    value = None
 
                 if value is None or not str(value).strip():
                     value = None
+                if form_key in self.SENSORS:
+                    value = Sensor.by_prime(value)
                 if value is not None and isinstance(field, DecimalField):
                     value = float(value)
 
                 Value.set(
                     key=f'{SP_API_PREFIX}.{space_key}',
                     idx=self.idx,
-                    value=value,
-                    sensor=sensor,
+                    elem=value,
                 )
 
         return SPACE_API.reset()

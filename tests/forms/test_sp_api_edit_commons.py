@@ -335,11 +335,9 @@ class TestSpaceEditCommons:
         for form_key, space_key in edit.keys.items():
             val = Value.by_key_idx(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
             if form_key in edit.sensors:
-                assert val.sensor is not None
-                assert val.sensor in sensors
+                assert val.elem in sensors
             else:
-                assert val.value is not None
-                assert val.value == edit.data.get(form_key, 'error')
+                assert val.elem == edit.data.get(form_key, 'error')
 
     @staticmethod
     @mark.parametrize('edit', FORMS, ids=IDS)
@@ -351,21 +349,18 @@ class TestSpaceEditCommons:
         ]
 
         for form_key, space_key in edit.keys.items():
-            old_sensor = None
             old_value = edit.data.get(form_key, 'some')
+
             if isinstance(old_value, bool):
                 old_value = not old_value
             else:
                 old_value = 2 * old_value
 
             if form_key in edit.sensors:
-                old_sensor = gen_sensor(f'old_{form_key}', prime=old_value)
+                old_value = gen_sensor(f'old_{form_key}', prime=old_value)
 
             Value.set(
-                key=f'{SP_API_PREFIX}.{space_key}',
-                idx=0,
-                value=old_value,
-                sensor=old_sensor,
+                key=f'{SP_API_PREFIX}.{space_key}', idx=0, elem=old_value
             )
 
         assert Value.query.all() != []
@@ -377,8 +372,6 @@ class TestSpaceEditCommons:
         for form_key, space_key in edit.keys.items():
             val = Value.by_key_idx(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
             if form_key in edit.sensors:
-                assert val.sensor is not None
-                assert val.sensor in sensors
+                assert val.elem in sensors
             else:
-                assert val.value is not None
-                assert val.value == edit.data.get(form_key, 'error')
+                assert val.elem == edit.data.get(form_key, 'error')

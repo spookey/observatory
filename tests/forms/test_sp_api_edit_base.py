@@ -58,21 +58,20 @@ class TestSpaceEditBase:
     @staticmethod
     def test_preloads_data(gen_sensor):
         idx = choice(range(23, 42))
-        sensor = gen_sensor()
 
         data = dict(
             string=Value.set(
-                key=f'{SP_API_PREFIX}.test.string', idx=idx, value='test'
-            ).value,
+                key=f'{SP_API_PREFIX}.test.string', idx=idx, elem='test'
+            ).elem,
             number=Value.set(
-                key=f'{SP_API_PREFIX}.test.number', idx=idx, value=1234.5
-            ).value,
+                key=f'{SP_API_PREFIX}.test.number', idx=idx, elem=1234.5
+            ).elem,
             cstory=Value.set(
-                key=f'{SP_API_PREFIX}.test.cstory', idx=idx, value='more text'
-            ).value,
+                key=f'{SP_API_PREFIX}.test.cstory', idx=idx, elem='more text'
+            ).elem,
             sensor=Value.set(
-                key=f'{SP_API_PREFIX}.test.sensor', idx=idx, sensor=sensor
-            ).sensor_prime,
+                key=f'{SP_API_PREFIX}.test.sensor', idx=idx, elem=gen_sensor()
+            ).elem.prime,
         )
 
         form = PhonyForm(idx=idx)
@@ -123,12 +122,7 @@ class TestSpaceEditBase:
         assert Value.get(key=f'{SP_API_PREFIX}.test.string', idx=idx) == string
         assert Value.get(key=f'{SP_API_PREFIX}.test.number', idx=idx) == number
         assert Value.get(key=f'{SP_API_PREFIX}.test.cstory', idx=idx) == cstory
-        assert (
-            Value.by_key_idx(
-                key=f'{SP_API_PREFIX}.test.sensor', idx=idx
-            ).sensor
-            == sensor
-        )
+        assert Value.get(key=f'{SP_API_PREFIX}.test.sensor', idx=idx) == sensor
 
     @staticmethod
     def test_action_changes(gen_sensor):
@@ -141,18 +135,18 @@ class TestSpaceEditBase:
         )
 
         string_obj = Value.set(
-            key=f'{SP_API_PREFIX}.test.string', idx=idx, value='old text'
+            key=f'{SP_API_PREFIX}.test.string', idx=idx, elem='old text'
         )
         number_obj = Value.set(
-            key=f'{SP_API_PREFIX}.test.number', idx=idx, value=23.5
+            key=f'{SP_API_PREFIX}.test.number', idx=idx, elem=23.5
         )
         cstory_obj = Value.set(
-            key=f'{SP_API_PREFIX}.test.cstory', idx=idx, value='good old story'
+            key=f'{SP_API_PREFIX}.test.cstory', idx=idx, elem='good old story'
         )
         sensor_obj = Value.set(
             key=f'{SP_API_PREFIX}.test.sensor',
             idx=idx,
-            sensor=gen_sensor('old sensor'),
+            elem=gen_sensor('old sensor'),
         )
         assert Value.query.all() == [
             string_obj,
@@ -175,9 +169,4 @@ class TestSpaceEditBase:
         assert Value.get(key=f'{SP_API_PREFIX}.test.string', idx=idx) == string
         assert Value.get(key=f'{SP_API_PREFIX}.test.number', idx=idx) == number
         assert Value.get(key=f'{SP_API_PREFIX}.test.cstory', idx=idx) == cstory
-        assert (
-            Value.by_key_idx(
-                key=f'{SP_API_PREFIX}.test.sensor', idx=idx
-            ).sensor
-            == sensor
-        )
+        assert Value.get(key=f'{SP_API_PREFIX}.test.sensor', idx=idx) == sensor

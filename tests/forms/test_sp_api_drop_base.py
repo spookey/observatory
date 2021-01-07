@@ -54,7 +54,7 @@ class TestSpaceDropBase:
         idx = choice(range(23, 42))
         elems = [
             Value.set(
-                key=f'{SP_API_PREFIX}.{key}', idx=idx, value=f'{key} #{idx}'
+                key=f'{SP_API_PREFIX}.{key}', idx=idx, elem=f'{key} #{idx}'
             )
             for key in PhonyForm.KEYS
         ]
@@ -76,7 +76,7 @@ class TestSpaceDropBase:
             Value.set(
                 key=f'{SP_API_PREFIX}.{key}',
                 idx=keep_idx,
-                value=f'keep.{key} #{keep_idx}',
+                elem=f'keep.{key} #{keep_idx}',
             )
             for key in PhonyForm.KEYS
         ]
@@ -84,7 +84,7 @@ class TestSpaceDropBase:
             Value.set(
                 key=f'{SP_API_PREFIX}.{key}',
                 idx=drop_idx,
-                value=f'drop.{key} #{drop_idx}',
+                elem=f'drop.{key} #{drop_idx}',
             )
             for key in PhonyForm.KEYS
         ]

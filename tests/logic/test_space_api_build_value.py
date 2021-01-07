@@ -16,16 +16,16 @@ class TestSpaceApiBuildValue:
     def test_space_logo_url():
         api = SpaceApi()
         space = Value.set(
-            key=f'{SP_API_PREFIX}.space', idx=0, value='space'
-        ).value
+            key=f'{SP_API_PREFIX}.space', idx=0, elem='space'
+        ).elem
         logo = Value.set(
             key=f'{SP_API_PREFIX}.logo',
             idx=0,
-            value='https://example.org/image.gif',
-        ).value
+            elem='https://example.org/image.gif',
+        ).elem
         url = Value.set(
-            key=f'{SP_API_PREFIX}.url', idx=0, value='https://example.net'
-        ).value
+            key=f'{SP_API_PREFIX}.url', idx=0, elem='https://example.net'
+        ).elem
 
         res = api.build()
         assert res['space'] == space
@@ -38,17 +38,17 @@ class TestSpaceApiBuildValue:
         address = Value.set(
             key=f'{SP_API_PREFIX}.location.address',
             idx=0,
-            value='Somewhere 23, 12345 FNORD',
-        ).value
+            elem='Somewhere 23, 12345 FNORD',
+        ).elem
         lat = Value.set(
-            key=f'{SP_API_PREFIX}.location.lat', idx=0, value=23.5
-        ).value
+            key=f'{SP_API_PREFIX}.location.lat', idx=0, elem=23.5
+        ).elem
         lon = Value.set(
-            key=f'{SP_API_PREFIX}.location.lon', idx=0, value=133.7
-        ).value
+            key=f'{SP_API_PREFIX}.location.lon', idx=0, elem=133.7
+        ).elem
         timezone = Value.set(
-            key=f'{SP_API_PREFIX}.location.timezone', idx=0, value='UTC'
-        ).value
+            key=f'{SP_API_PREFIX}.location.timezone', idx=0, elem='UTC'
+        ).elem
 
         res = api.build()
         assert res['location']['address'] == address
@@ -60,11 +60,11 @@ class TestSpaceApiBuildValue:
     def test_spacefed():
         api = SpaceApi()
         spacenet = Value.set(
-            key=f'{SP_API_PREFIX}.spacefed.spacenet', idx=0, value=True
-        ).value
+            key=f'{SP_API_PREFIX}.spacefed.spacenet', idx=0, elem=True
+        ).elem
         spacesaml = Value.set(
-            key=f'{SP_API_PREFIX}.spacefed.spacesaml', idx=0, value=False
-        ).value
+            key=f'{SP_API_PREFIX}.spacefed.spacesaml', idx=0, elem=False
+        ).elem
 
         res = api.build()
         assert res['spacefed']['spacenet'] == spacenet
@@ -76,13 +76,13 @@ class TestSpaceApiBuildValue:
         nil_cam = Value.set(
             key=f'{SP_API_PREFIX}.cam',
             idx=0,
-            value='https://example.org/cam.mjpg',
-        ).value
+            elem='https://example.org/cam.mjpg',
+        ).elem
         two_cam = Value.set(
             key=f'{SP_API_PREFIX}.cam',
             idx=2,
-            value='https://example.com/webcam',
-        ).value
+            elem='https://example.com/webcam',
+        ).elem
 
         res = api.build()
         assert res['cam'] == [
@@ -94,13 +94,13 @@ class TestSpaceApiBuildValue:
     def test_contact_telephone():
         api = SpaceApi()
         phone = Value.set(
-            key=f'{SP_API_PREFIX}.contact.phone', idx=0, value='+1 234 567 890'
-        ).value
+            key=f'{SP_API_PREFIX}.contact.phone', idx=0, elem='+1 234 567 890'
+        ).elem
         sip = Value.set(
             key=f'{SP_API_PREFIX}.contact.sip',
             idx=0,
-            value='sip:space@sip.example.org',
-        ).value
+            elem='sip:space@sip.example.org',
+        ).elem
 
         res = api.build()
         assert res['contact']['phone'] == phone
@@ -112,23 +112,23 @@ class TestSpaceApiBuildValue:
         irc = Value.set(
             key=f'{SP_API_PREFIX}.contact.irc',
             idx=0,
-            value='irc://example.org/#space',
-        ).value
+            elem='irc://example.org/#space',
+        ).elem
         xmpp = Value.set(
             key=f'{SP_API_PREFIX}.contact.xmpp',
             idx=0,
-            value='chat@conference.example.org',
-        ).value
+            elem='chat@conference.example.org',
+        ).elem
         matrix = Value.set(
             key=f'{SP_API_PREFIX}.contact.matrix',
             idx=0,
-            value='#chat:example.org',
-        ).value
+            elem='#chat:example.org',
+        ).elem
         mumble = Value.set(
             key=f'{SP_API_PREFIX}.contact.mumble',
             idx=0,
-            value='mumble://mumble.example.org/space?version=0.0.1',
-        ).value
+            elem='mumble://mumble.example.org/space?version=0.0.1',
+        ).elem
 
         res = api.build()
         assert res['contact']['irc'] == irc
@@ -140,23 +140,23 @@ class TestSpaceApiBuildValue:
     def test_contact_social():
         api = SpaceApi()
         twitter = Value.set(
-            key=f'{SP_API_PREFIX}.contact.twitter', idx=0, value='@space'
-        ).value
+            key=f'{SP_API_PREFIX}.contact.twitter', idx=0, elem='@space'
+        ).elem
         mastodon = Value.set(
             key=f'{SP_API_PREFIX}.contact.mastodon',
             idx=0,
-            value='@space@example.net',
-        ).value
+            elem='@space@example.net',
+        ).elem
         facebook = Value.set(
             key=f'{SP_API_PREFIX}.contact.facebook',
             idx=0,
-            value='https://example.com/space',
-        ).value
+            elem='https://example.com/space',
+        ).elem
         identica = Value.set(
             key=f'{SP_API_PREFIX}.contact.identica',
             idx=0,
-            value='space@example.org',
-        ).value
+            elem='space@example.org',
+        ).elem
 
         res = api.build()
         assert res['contact']['twitter'] == twitter
@@ -170,13 +170,13 @@ class TestSpaceApiBuildValue:
         foursquare = Value.set(
             key=f'{SP_API_PREFIX}.contact.foursquare',
             idx=0,
-            value='000000000000000000000000',
-        ).value
+            elem='000000000000000000000000',
+        ).elem
         gopher = Value.set(
             key=f'{SP_API_PREFIX}.contact.gopher',
             idx=0,
-            value='gopher://gopher.space.example.org',
-        ).value
+            elem='gopher://gopher.space.example.org',
+        ).elem
 
         res = api.build()
         assert res['contact']['foursquare'] == foursquare
@@ -188,16 +188,16 @@ class TestSpaceApiBuildValue:
         email = Value.set(
             key=f'{SP_API_PREFIX}.contact.email',
             idx=0,
-            value='space@example.org',
-        ).value
+            elem='space@example.org',
+        ).elem
         mailinglist = Value.set(
-            key=f'{SP_API_PREFIX}.contact.ml', idx=0, value='list@example.org'
-        ).value
+            key=f'{SP_API_PREFIX}.contact.ml', idx=0, elem='list@example.org'
+        ).elem
         issue_mail = Value.set(
             key=f'{SP_API_PREFIX}.contact.issue_mail',
             idx=0,
-            value='space@example.org',
-        ).value
+            elem='space@example.org',
+        ).elem
 
         res = api.build()
         assert res['contact']['email'] == email
@@ -208,39 +208,39 @@ class TestSpaceApiBuildValue:
     def test_contact_keymasters():
         api = SpaceApi()
         nil_name = Value.set(
-            key=f'{SP_API_PREFIX}.contact.keymasters.name', idx=0, value='nil'
-        ).value
+            key=f'{SP_API_PREFIX}.contact.keymasters.name', idx=0, elem='nil'
+        ).elem
         one_name = Value.set(
-            key=f'{SP_API_PREFIX}.contact.keymasters.name', idx=1, value='one'
-        ).value
+            key=f'{SP_API_PREFIX}.contact.keymasters.name', idx=1, elem='one'
+        ).elem
         Value.set(
-            key=f'{SP_API_PREFIX}.contact.keymasters.name', idx=2, value='two'
+            key=f'{SP_API_PREFIX}.contact.keymasters.name', idx=2, elem='two'
         )
 
         nil_phone = Value.set(
             key=f'{SP_API_PREFIX}.contact.keymasters.phone',
             idx=0,
-            value='+1 234 567 890',
-        ).value
+            elem='+1 234 567 890',
+        ).elem
         nil_email = Value.set(
             key=f'{SP_API_PREFIX}.contact.keymasters.email',
             idx=0,
-            value='nil@example.org',
-        ).value
+            elem='nil@example.org',
+        ).elem
         one_email = Value.set(
             key=f'{SP_API_PREFIX}.contact.keymasters.email',
             idx=1,
-            value='one@example.org',
-        ).value
+            elem='one@example.org',
+        ).elem
         one_xmpp = Value.set(
             key=f'{SP_API_PREFIX}.contact.keymasters.xmpp',
             idx=1,
-            value='one@jabber.example.org',
-        ).value
+            elem='one@jabber.example.org',
+        ).elem
         Value.set(
             key=f'{SP_API_PREFIX}.contact.keymasters.xmpp',
             idx=2,
-            value='two@jabber.example.org',
+            elem='two@jabber.example.org',
         )
 
         res = api.build()
@@ -275,13 +275,13 @@ class TestSpaceApiBuildValue:
         one_pro = Value.set(
             key=f'{SP_API_PREFIX}.projects',
             idx=1,
-            value='https://example.org/mega',
-        ).value
+            elem='https://example.org/mega',
+        ).elem
         two_pro = Value.set(
             key=f'{SP_API_PREFIX}.projects',
             idx=2,
-            value='https://example.net/awesome',
-        ).value
+            elem='https://example.net/awesome',
+        ).elem
 
         res = api.build()
         assert res['projects'] == [
@@ -293,30 +293,28 @@ class TestSpaceApiBuildValue:
     def test_links():
         api = SpaceApi()
         nil_name = Value.set(
-            key=f'{SP_API_PREFIX}.links.name', idx=0, value='nil'
-        ).value
-        Value.set(key=f'{SP_API_PREFIX}.links.name', idx=1, value='one')
+            key=f'{SP_API_PREFIX}.links.name', idx=0, elem='nil'
+        ).elem
+        Value.set(key=f'{SP_API_PREFIX}.links.name', idx=1, elem='one')
         two_name = Value.set(
-            key=f'{SP_API_PREFIX}.links.name', idx=2, value='two'
-        ).value
+            key=f'{SP_API_PREFIX}.links.name', idx=2, elem='two'
+        ).elem
 
         nil_url = Value.set(
             key=f'{SP_API_PREFIX}.links.url',
             idx=0,
-            value='https://example.org',
-        ).value
+            elem='https://example.org',
+        ).elem
         two_url = Value.set(
             key=f'{SP_API_PREFIX}.links.url',
             idx=2,
-            value='https://example.net',
-        ).value
+            elem='https://example.net',
+        ).elem
 
         nil_desc = Value.set(
-            key=f'{SP_API_PREFIX}.links.description', idx=0, value='awesome'
-        ).value
-        Value.set(
-            key=f'{SP_API_PREFIX}.links.description', idx=1, value='mega'
-        )
+            key=f'{SP_API_PREFIX}.links.description', idx=0, elem='awesome'
+        ).elem
+        Value.set(key=f'{SP_API_PREFIX}.links.description', idx=1, elem='mega')
 
         res = api.build()
         assert res['links'] == [
@@ -340,64 +338,64 @@ class TestSpaceApiBuildValue:
         nil_name = Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.name',
             idx=0,
-            value='standard',
-        ).value
+            elem='standard',
+        ).elem
         Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.name',
             idx=1,
-            value='premium',
+            elem='premium',
         )
         two_name = Value.set(
-            key=f'{SP_API_PREFIX}.membership_plans.name', idx=2, value='deluxe'
-        ).value
+            key=f'{SP_API_PREFIX}.membership_plans.name', idx=2, elem='deluxe'
+        ).elem
 
         nil_value = Value.set(
-            key=f'{SP_API_PREFIX}.membership_plans.value', idx=0, value=23.5
-        ).value
+            key=f'{SP_API_PREFIX}.membership_plans.value', idx=0, elem=23.5
+        ).elem
         Value.set(
-            key=f'{SP_API_PREFIX}.membership_plans.value', idx=1, value=42.0
+            key=f'{SP_API_PREFIX}.membership_plans.value', idx=1, elem=42.0
         )
         two_value = Value.set(
-            key=f'{SP_API_PREFIX}.membership_plans.value', idx=2, value=1337.0
-        ).value
+            key=f'{SP_API_PREFIX}.membership_plans.value', idx=2, elem=1337.0
+        ).elem
 
         nil_curr = Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.currency',
             idx=0,
-            value='EUR',
-        ).value
+            elem='EUR',
+        ).elem
         Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.currency',
             idx=1,
-            value='GBP',
+            elem='GBP',
         )
         two_curr = Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.currency',
             idx=2,
-            value='RUB',
-        ).value
+            elem='RUB',
+        ).elem
 
         nil_int = Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.billing_interval',
             idx=0,
-            value='daily',
-        ).value
+            elem='daily',
+        ).elem
         two_int = Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.billing_interval',
             idx=2,
-            value='hourly',
-        ).value
+            elem='hourly',
+        ).elem
 
         Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.description',
             idx=1,
-            value='premium plan',
+            elem='premium plan',
         )
         two_desc = Value.set(
             key=f'{SP_API_PREFIX}.membership_plans.description',
             idx=2,
-            value='deluxe plan',
-        ).value
+            elem='deluxe plan',
+        ).elem
 
         res = api.build()
         assert res['membership_plans'] == [

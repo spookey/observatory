@@ -86,7 +86,7 @@ class SpaceSchema:
         if not base:
             return {}
 
-        return {'cam': List(String(attribute='value', default=''), default=[])}
+        return {'cam': List(String(attribute='elem', default=''), default=[])}
 
     @property
     def state_icon(self):
@@ -605,7 +605,7 @@ class SpaceSchema:
             return {}
 
         return {
-            'projects': List(String(attribute='value', default=''), default=[])
+            'projects': List(String(attribute='elem', default=''), default=[])
         }
 
     @property
