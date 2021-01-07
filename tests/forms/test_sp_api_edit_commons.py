@@ -166,7 +166,7 @@ FORMS = [
         SpaceEditSensorsTemperatureForm,
         keys=dict(
             sensor_sel='sensors.temperature.value',
-            elevate_sel='sensors.temperature.value.elevate',
+            elevate='sensors.temperature.value.elevate',
             convert_sel='sensors.temperature.value.convert',
             horizon_sel='sensors.temperature.value.horizon',
             unit_sel='sensors.temperature.unit',
@@ -176,9 +176,9 @@ FORMS = [
         ),
         data=dict(
             sensor_sel=2,
-            elevate_sel=1.01,
-            convert_sel=1,
-            horizon_sel=2,
+            elevate=1.01,
+            convert_sel='NATURAL',
+            horizon_sel='NORMAL',
             unit_sel='°C',
             location='somewhere',
             name='temperature sensor',

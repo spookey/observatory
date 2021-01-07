@@ -456,13 +456,13 @@ class SpaceEditSensorsForm(SpaceEditForm):
             ),
             SelectField(
                 'Convert',
-                coerce=int,
+                coerce=str,
                 validators=[DataRequired()],
                 description='Select conversion',
             ),
             SelectField(
                 'Horizon',
-                coerce=int,
+                coerce=str,
                 validators=[DataRequired()],
                 description='Select horizon',
             ),
@@ -477,17 +477,17 @@ class SpaceEditSensorsForm(SpaceEditForm):
 
     @staticmethod
     def _convert_choices():
-        return [(en.value, en.name) for en in EnumConvert]
+        return [(en.name, en.name) for en in EnumConvert]
 
     @staticmethod
     def _horizon_choices():
-        return [(en.value, en.name) for en in EnumHorizon]
+        return [(en.name, en.name) for en in EnumHorizon]
 
 
 class SpaceEditSensorsTemperatureForm(SpaceEditSensorsForm):
     KEYS = dict(
         sensor_sel='sensors.temperature.value',
-        elevate_sel='sensors.temperature.value.elevate',
+        elevate='sensors.temperature.value.elevate',
         convert_sel='sensors.temperature.value.convert',
         horizon_sel='sensors.temperature.value.horizon',
         unit_sel='sensors.temperature.unit',
@@ -499,7 +499,7 @@ class SpaceEditSensorsTemperatureForm(SpaceEditSensorsForm):
 
     (
         sensor_sel,
-        elevate_sel,
+        elevate,
         convert_sel,
         horizon_sel,
     ) = SpaceEditSensorsForm.sensor_fields('Temperature sensor')
