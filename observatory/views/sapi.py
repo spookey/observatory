@@ -30,6 +30,7 @@ from observatory.forms.space_edit import (
     SpaceEditLocationForm,
     SpaceEditMembershipPlansForm,
     SpaceEditProjectsForm,
+    SpaceEditSensorsTemperatureForm,
     SpaceEditSpaceFedForm,
     SpaceEditStateIconForm,
 )
@@ -114,7 +115,21 @@ def edit_contact():
 @login_required
 def edit_contact_keymasters(idx=0):
     return _edit_form(
-        SpaceEditKeymastersForm(idx=idx), f'Keymaster #{ 1 + idx}'
+        SpaceEditKeymastersForm(idx=idx), f'Keymaster #{1 + idx}'
+    )
+
+
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/temperature/<int:idx>', methods=['GET', 'POST']
+)
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/temperature', methods=['GET', 'POST']
+)
+@login_required
+def edit_sensors_temperature(idx=0):
+    return _edit_form(
+        SpaceEditSensorsTemperatureForm(idx=idx),
+        f'Temperature Sensor #{1 + idx}',
     )
 
 
@@ -189,7 +204,7 @@ def drop_cam(idx):
 @login_required
 def drop_contact_keymasters(idx):
     return _drop_form(
-        SpaceDropKeymastersForm(idx=idx), f'Keymaster #{ 1 + idx}'
+        SpaceDropKeymastersForm(idx=idx), f'Keymaster #{1 + idx}'
     )
 
 

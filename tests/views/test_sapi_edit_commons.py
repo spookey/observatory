@@ -5,7 +5,7 @@ from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
 
-def page_data(endpoint, *, url, keys, data, **kwargs):
+def page_data(endpoint, *, url, keys, data, sensors=None, **kwargs):
     def res():
         pass
 
@@ -13,6 +13,7 @@ def page_data(endpoint, *, url, keys, data, **kwargs):
     res.url = url
     res.keys = keys
     res.data = data
+    res.sensors = sensors if sensors is not None else []
     res.multi = kwargs.get('multi', False)
 
     return res
@@ -141,6 +142,32 @@ PAGES = [
             mastodon='@somebody@example.org',
             matrix='@somebody:matrix.example.org',
         ),
+        multi=True,
+    ),
+    page_data(
+        'sapi.edit_sensors_temperature',
+        url='/space/edit/sensors/temperature',
+        keys=dict(
+            sensor_sel='sensors.temperature.value',
+            elevate='sensors.temperature.value.elevate',
+            convert_sel='sensors.temperature.value.convert',
+            horizon_sel='sensors.temperature.value.horizon',
+            unit_sel='sensors.temperature.unit',
+            location='sensors.temperature.location',
+            name='sensors.temperature.name',
+            description='sensors.temperature.description',
+        ),
+        data=dict(
+            sensor_sel=2,
+            elevate=1.5,
+            convert_sel='NATURAL',
+            horizon_sel='NORMAL',
+            unit_sel='K',
+            location='upstairs',
+            name='temperature',
+            description='temperature sensor',
+        ),
+        sensors=['sensor_sel'],
         multi=True,
     ),
     page_data(
@@ -276,11 +303,15 @@ class TestSapiEditCommons:
 
     @staticmethod
     @mark.parametrize('page', PAGES, ids=IDS)
-    def test_creates(page, visitor, gen_user_loggedin):
+    def test_creates(page, visitor, gen_user_loggedin, gen_sensor):
         gen_user_loggedin()
         index_url = url_for('sapi.index', _external=True)
 
         assert Value.query.all() == []
+
+        sensors = [
+            gen_sensor(name, prime=page.data[name]) for name in page.sensors
+        ]
 
         res = visitor(
             page.endpoint,
@@ -292,5 +323,7 @@ class TestSapiEditCommons:
         assert res.request.headers['LOCATION'] == index_url
         for form_key, space_key in page.keys.items():
             val = Value.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
-            assert val is not None
-            assert val == page.data.get(form_key, 'error')
+            if form_key in page.sensors:
+                assert val in sensors
+            else:
+                assert val == page.data.get(form_key, 'error')
