@@ -93,9 +93,9 @@ class TestPoint:
     def test_translate(gen_sensor, gen_user):
         sensor = gen_sensor()
         user = gen_user()
-        neg = sensor.append(user, -23.5)
-        nil = sensor.append(user, 0)
-        pos = sensor.append(user, 13.37)
+        neg = sensor.append(user=user, value=-23.5)
+        nil = sensor.append(user=user, value=0)
+        pos = sensor.append(user=user, value=13.37)
 
         for horizon, convert, elevate, numeric, params in [
             (

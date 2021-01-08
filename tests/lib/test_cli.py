@@ -248,7 +248,7 @@ class TestCli:
         user = gen_user()
         number = 23
         for num in range(1, 1 + number):
-            sensor.append(user, num)
+            sensor.append(user=user, value=num)
 
         assert Point.query.count() == number
 
