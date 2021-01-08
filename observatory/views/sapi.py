@@ -16,6 +16,7 @@ from observatory.forms.space_drop import (
     SpaceDropLinksForm,
     SpaceDropMembershipPlansForm,
     SpaceDropProjectsForm,
+    SpaceDropSensorsTemperatureForm,
 )
 from observatory.forms.space_edit import (
     SpaceEditCamForm,
@@ -205,6 +206,17 @@ def drop_cam(idx):
 def drop_contact_keymasters(idx):
     return _drop_form(
         SpaceDropKeymastersForm(idx=idx), f'Keymaster #{1 + idx}'
+    )
+
+
+@BLUEPRINT_SAPI.route(
+    '/space/drop/sensors/temperature/<int:idx>', methods=['POST']
+)
+@login_required
+def drop_sensors_temperature(idx):
+    return _drop_form(
+        SpaceDropSensorsTemperatureForm(idx=idx),
+        f'Temperature Sensor #{1 + idx}',
     )
 
 

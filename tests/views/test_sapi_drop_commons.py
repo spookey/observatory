@@ -37,6 +37,20 @@ PAGES = [
         ],
     ),
     page_data(
+        'sapi.drop_sensors_temperature',
+        url='/space/drop/sensors/temperature',
+        keys=[
+            'sensors.temperature.value',
+            'sensors.temperature.value.elevate',
+            'sensors.temperature.value.convert',
+            'sensors.temperature.value.horizon',
+            'sensors.temperature.unit',
+            'sensors.temperature.location',
+            'sensors.temperature.name',
+            'sensors.temperature.description',
+        ],
+    ),
+    page_data(
         'sapi.drop_projects',
         url='/space/drop/projects',
         keys=['projects'],

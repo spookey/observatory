@@ -9,6 +9,7 @@ from observatory.forms.space_drop import (
     SpaceDropLinksForm,
     SpaceDropMembershipPlansForm,
     SpaceDropProjectsForm,
+    SpaceDropSensorsTemperatureForm,
 )
 from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
@@ -40,6 +41,19 @@ FORMS = [
             'contact.keymasters.xmpp',
             'contact.keymasters.mastodon',
             'contact.keymasters.matrix',
+        ],
+    ),
+    form_drop(
+        SpaceDropSensorsTemperatureForm,
+        keys=[
+            'sensors.temperature.value',
+            'sensors.temperature.value.elevate',
+            'sensors.temperature.value.convert',
+            'sensors.temperature.value.horizon',
+            'sensors.temperature.unit',
+            'sensors.temperature.location',
+            'sensors.temperature.name',
+            'sensors.temperature.description',
         ],
     ),
     form_drop(

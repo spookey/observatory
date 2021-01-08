@@ -16,6 +16,7 @@ from observatory.forms.space_drop import (
     SpaceDropLinksForm,
     SpaceDropMembershipPlansForm,
     SpaceDropProjectsForm,
+    SpaceDropSensorsTemperatureForm,
 )
 from observatory.lib.text import random_line
 from observatory.start.environment import (
@@ -113,6 +114,10 @@ def form_drop_space_cam(idx):
 
 def form_drop_space_keymasters(idx):
     return SpaceDropKeymastersForm(idx=idx)
+
+
+def form_drop_space_sensors_temperature(idx):
+    return SpaceDropSensorsTemperatureForm(idx=idx)
 
 
 def form_drop_space_links(idx):

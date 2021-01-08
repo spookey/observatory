@@ -65,6 +65,19 @@ class SpaceDropKeymastersForm(SpaceDropForm):
     ]
 
 
+class SpaceDropSensorsTemperatureForm(SpaceDropForm):
+    KEYS = [
+        'sensors.temperature.value',
+        'sensors.temperature.value.elevate',
+        'sensors.temperature.value.convert',
+        'sensors.temperature.value.horizon',
+        'sensors.temperature.unit',
+        'sensors.temperature.location',
+        'sensors.temperature.name',
+        'sensors.temperature.description',
+    ]
+
+
 class SpaceDropProjectsForm(SpaceDropForm):
     KEYS = ['projects']
 
