@@ -475,6 +475,54 @@ class TestSpaceApiBuildValue:
         ]
 
     @staticmethod
+    def test_sensors_humidity(gen_sensor, gen_user):
+        api = SpaceApi()
+        user = gen_user()
+        nil_sensor = gen_sensor('nil')
+        nil_sensor.append(user=user, value=0)
+        nil_value = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.humidity.value',
+            idx=0,
+            elem=nil_sensor,
+        ).latest.value
+
+        nil_unit = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.humidity.unit',
+            idx=0,
+            elem='wet',
+        ).elem
+
+        nil_location = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.humidity.location',
+            idx=0,
+            elem='somewhere',
+        ).elem
+
+        nil_name = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.humidity.name',
+            idx=0,
+            elem='sensor #0',
+        ).elem
+
+        nil_description = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.humidity.description',
+            idx=0,
+            elem='humidity sensor #0',
+        ).elem
+
+        res = api.build()
+        assert res['sensors']['humidity'] == [
+            {
+                '_idx': 0,
+                'value': nil_value,
+                'unit': nil_unit,
+                'location': nil_location,
+                'name': nil_name,
+                'description': nil_description,
+            }
+        ]
+
+    @staticmethod
     def test_projects():
         api = SpaceApi()
         one_pro = Value.set(

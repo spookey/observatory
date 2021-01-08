@@ -221,6 +221,32 @@ PAGES = [
         multi=True,
     ),
     page_data(
+        'sapi.edit_sensors_humidity',
+        url='/space/edit/sensors/humidity',
+        keys=dict(
+            sensor_sel='sensors.humidity.value',
+            elevate='sensors.humidity.value.elevate',
+            convert_sel='sensors.humidity.value.convert',
+            horizon_sel='sensors.humidity.value.horizon',
+            unit_sel='sensors.humidity.unit',
+            location='sensors.humidity.location',
+            name='sensors.humidity.name',
+            description='sensors.humidity.description',
+        ),
+        data=dict(
+            sensor_sel=3,
+            elevate=1,
+            convert_sel='INTEGER',
+            horizon_sel='NORMAL',
+            unit_sel='%',
+            location='upstairs',
+            name='humidity',
+            description='our humidity sensor',
+        ),
+        sensors=['sensor_sel'],
+        multi=True,
+    ),
+    page_data(
         'sapi.edit_feeds_blog',
         url='/space/edit/feeds/blog',
         keys=dict(

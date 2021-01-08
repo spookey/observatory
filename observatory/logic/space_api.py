@@ -117,6 +117,14 @@ class SpaceApi:
         )
 
     @property
+    def sensors_humidity_indices(self):
+        return self._indices_all(
+            'sensors.humidity.value',
+            'sensors.humidity.unit',
+            'sensors.humidity.location',
+        )
+
+    @property
     def projects_indices(self):
         return self._indices_all('projects')
 
@@ -284,7 +292,27 @@ class SpaceApi:
                     'gamma': [],
                     'beta_gamma': [],
                 },
-                'humidity': [],
+                'humidity': [
+                    {
+                        '_idx': idx,
+                        'value': self.latest_value(
+                            'sensors.humidity.value',
+                            idx=idx,
+                            horizon_key='sensors.humidity.value.horizon',
+                            convert_key='sensors.humidity.value.convert',
+                            elevate_key='sensors.humidity.value.elevate',
+                        ),
+                        'unit': self._get('sensors.humidity.unit', idx=idx),
+                        'location': self._get(
+                            'sensors.humidity.location', idx=idx
+                        ),
+                        'name': self._get('sensors.humidity.name', idx=idx),
+                        'description': self._get(
+                            'sensors.humidity.description', idx=idx
+                        ),
+                    }
+                    for idx in self.sensors_humidity_indices
+                ],
                 'beverage_supply': [],
                 'power_consumption': [],
                 'wind': [],

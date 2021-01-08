@@ -11,6 +11,7 @@ from observatory.forms.space_drop import (
     SpaceDropProjectsForm,
     SpaceDropSensorsBarometerForm,
     SpaceDropSensorsDoorLockedForm,
+    SpaceDropSensorsHumidityForm,
     SpaceDropSensorsTemperatureForm,
 )
 from observatory.models.value import Value
@@ -81,6 +82,19 @@ FORMS = [
             'sensors.barometer.location',
             'sensors.barometer.name',
             'sensors.barometer.description',
+        ],
+    ),
+    form_drop(
+        SpaceDropSensorsHumidityForm,
+        keys=[
+            'sensors.humidity.value',
+            'sensors.humidity.value.elevate',
+            'sensors.humidity.value.convert',
+            'sensors.humidity.value.horizon',
+            'sensors.humidity.unit',
+            'sensors.humidity.location',
+            'sensors.humidity.name',
+            'sensors.humidity.description',
         ],
     ),
     form_drop(

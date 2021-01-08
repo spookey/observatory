@@ -18,6 +18,7 @@ from observatory.forms.space_drop import (
     SpaceDropProjectsForm,
     SpaceDropSensorsBarometerForm,
     SpaceDropSensorsDoorLockedForm,
+    SpaceDropSensorsHumidityForm,
     SpaceDropSensorsTemperatureForm,
 )
 from observatory.forms.space_edit import (
@@ -35,6 +36,7 @@ from observatory.forms.space_edit import (
     SpaceEditProjectsForm,
     SpaceEditSensorsBarometerForm,
     SpaceEditSensorsDoorLockedForm,
+    SpaceEditSensorsHumidityForm,
     SpaceEditSensorsTemperatureForm,
     SpaceEditSpaceFedForm,
     SpaceEditStateIconForm,
@@ -163,6 +165,17 @@ def edit_sensors_barometer(idx=0):
     )
 
 
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/humidity/<int:idx>', methods=['GET', 'POST']
+)
+@BLUEPRINT_SAPI.route('/space/edit/sensors/humidity', methods=['GET', 'POST'])
+@login_required
+def edit_sensors_humidity(idx=0):
+    return _edit_form(
+        SpaceEditSensorsHumidityForm(idx=idx), f'Humidity sensor #{1 + idx}'
+    )
+
+
 @BLUEPRINT_SAPI.route('/space/edit/feeds/blog', methods=['GET', 'POST'])
 @login_required
 def edit_feeds_blog():
@@ -267,6 +280,16 @@ def drop_sensors_door_locked(idx):
 def drop_sensors_barometer(idx):
     return _drop_form(
         SpaceDropSensorsBarometerForm(idx=idx), f'Barometer #{1 + idx}'
+    )
+
+
+@BLUEPRINT_SAPI.route(
+    '/space/drop/sensors/humidity/<int:idx>', methods=['POST']
+)
+@login_required
+def drop_sensors_humidity(idx):
+    return _drop_form(
+        SpaceDropSensorsHumidityForm(idx=idx), f'Humidity sensor #{1 + idx}'
     )
 
 

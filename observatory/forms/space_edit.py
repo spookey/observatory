@@ -654,6 +654,65 @@ class SpaceEditSensorsBarometerForm(SpaceEditSensorsForm):
         self.unit_sel.choices = self._unit_choices()
 
 
+class SpaceEditSensorsHumidityForm(SpaceEditSensorsForm):
+    KEYS = dict(
+        sensor_sel='sensors.humidity.value',
+        elevate='sensors.humidity.value.elevate',
+        convert_sel='sensors.humidity.value.convert',
+        horizon_sel='sensors.humidity.value.horizon',
+        unit_sel='sensors.humidity.unit',
+        location='sensors.humidity.location',
+        name='sensors.humidity.name',
+        description='sensors.humidity.description',
+    )
+    SENSORS = ['sensor_sel']
+
+    (
+        sensor_sel,
+        elevate,
+        convert_sel,
+        horizon_sel,
+    ) = SpaceEditSensorsForm.sensor_fields('Humidity sensor')
+    unit_sel = SelectField(
+        'Unit',
+        coerce=str,
+        validators=[DataRequired()],
+        description='The unit of the sensor value',
+    )
+    location = StringField(
+        'Location',
+        validators=[DataRequired()],
+        description='The location of your sensor',
+    )
+    name = StringField(
+        'Name',
+        validators=[Optional()],
+        description='Give your sensor a name',
+    )
+    description = TextAreaField(
+        'Description',
+        validators=[Optional()],
+        description='Some additional information',
+    )
+    submit = SubmitField(
+        'Save',
+        description='Submit',
+        widget=SubmitButtonInput(icon='ops_submit'),
+    )
+
+    @staticmethod
+    def _unit_choices():
+        return [('%', '%')]
+
+    def __init__(self, idx, *args, **kwargs):
+        super().__init__(*args, idx=idx, **kwargs)
+
+        self.sensor_sel.choices = self._sensor_choices()
+        self.convert_sel.choices = self._convert_choices()
+        self.horizon_sel.choices = self._horizon_choices()
+        self.unit_sel.choices = self._unit_choices()
+
+
 class SpaceEditFeedForm(SpaceEditForm):
     KEYS = {}
 

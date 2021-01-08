@@ -64,6 +64,7 @@ class TestSapiIndex:
             'Temperature sensor',
             'Door locked sensor',
             'Barometer',
+            'Humidity sensor',
             'Blog feed',
             'Wiki feed',
             'Calendar feed',

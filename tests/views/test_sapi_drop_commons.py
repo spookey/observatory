@@ -78,6 +78,20 @@ PAGES = [
         ],
     ),
     page_data(
+        'sapi.drop_sensors_humidity',
+        url='/space/drop/sensors/humidity',
+        keys=[
+            'sensors.humidity.value',
+            'sensors.humidity.value.elevate',
+            'sensors.humidity.value.convert',
+            'sensors.humidity.value.horizon',
+            'sensors.humidity.unit',
+            'sensors.humidity.location',
+            'sensors.humidity.name',
+            'sensors.humidity.description',
+        ],
+    ),
+    page_data(
         'sapi.drop_projects',
         url='/space/drop/projects',
         keys=['projects'],

@@ -54,7 +54,7 @@ class TestSpaceApiBuildIndices:
         assert api.contact_keymasters_indices == indices
 
     @staticmethod
-    @mark.parametrize('field', ('temperature', 'barometer'))
+    @mark.parametrize('field', ('temperature', 'barometer', 'humidity'))
     def test_sensors_value_unit_location(field):
         api = SpaceApi()
         assert getattr(api, f'sensors_{field}_indices', None) == []
