@@ -546,6 +546,55 @@ class SpaceEditSensorsTemperatureForm(SpaceEditSensorsForm):
         self.unit_sel.choices = self._unit_choices()
 
 
+class SpaceEditSensorsDoorLockedForm(SpaceEditSensorsForm):
+    KEYS = dict(
+        sensor_sel='sensors.door_locked.value',
+        elevate='sensors.door_locked.value.elevate',
+        convert_sel='sensors.door_locked.value.convert',
+        horizon_sel='sensors.door_locked.value.horizon',
+        location='sensors.door_locked.location',
+        name='sensors.door_locked.name',
+        description='sensors.door_locked.description',
+    )
+    SENSORS = ['sensor_sel']
+
+    (
+        sensor_sel,
+        elevate,
+        convert_sel,
+        horizon_sel,
+    ) = SpaceEditSensorsForm.sensor_fields(
+        'Indicate if a certain door is locked'
+    )
+    location = StringField(
+        'Location',
+        validators=[DataRequired()],
+        description='The location of your sensor',
+    )
+    name = StringField(
+        'Name',
+        validators=[Optional()],
+        description='Give your sensor a name',
+    )
+    description = TextAreaField(
+        'Description',
+        validators=[Optional()],
+        description='Some additional information',
+    )
+    submit = SubmitField(
+        'Save',
+        description='Submit',
+        widget=SubmitButtonInput(icon='ops_submit'),
+    )
+
+    def __init__(self, idx, *args, **kwargs):
+        super().__init__(*args, idx=idx, **kwargs)
+
+        self.sensor_sel.choices = self._sensor_choices()
+        self.convert_sel.choices = self._convert_choices()
+        self.horizon_sel.choices = self._horizon_choices()
+
+
 class SpaceEditFeedForm(SpaceEditForm):
     KEYS = {}
 

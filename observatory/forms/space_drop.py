@@ -78,6 +78,18 @@ class SpaceDropSensorsTemperatureForm(SpaceDropForm):
     ]
 
 
+class SpaceDropSensorsDoorLockedForm(SpaceDropForm):
+    KEYS = [
+        'sensors.door_locked.value',
+        'sensors.door_locked.value.elevate',
+        'sensors.door_locked.value.convert',
+        'sensors.door_locked.value.horizon',
+        'sensors.door_locked.location',
+        'sensors.door_locked.name',
+        'sensors.door_locked.description',
+    ]
+
+
 class SpaceDropProjectsForm(SpaceDropForm):
     KEYS = ['projects']
 

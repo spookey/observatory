@@ -79,6 +79,26 @@ class TestSpaceApiBuildIndices:
         assert api.sensors_temperature_indices == indices
 
     @staticmethod
+    def test_sensors_door_locked_indices():
+        api = SpaceApi()
+        assert api.sensors_door_locked_indices == []
+
+        indices = list(range(7))
+        for idx in indices:
+            Value.set(
+                f'{SP_API_PREFIX}.sensors.door_locked.value',
+                idx=idx,
+                elem=f'door #{idx} locked value',
+            )
+            Value.set(
+                f'{SP_API_PREFIX}.sensors.door_locked.location',
+                idx=idx,
+                elem=f'door #{idx} locked location',
+            )
+
+        assert api.sensors_door_locked_indices == indices
+
+    @staticmethod
     def test_projects():
         api = SpaceApi()
         assert api.projects_indices == []

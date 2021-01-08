@@ -171,6 +171,30 @@ PAGES = [
         multi=True,
     ),
     page_data(
+        'sapi.edit_sensors_door_locked',
+        url='/space/edit/sensors/door-locked',
+        keys=dict(
+            sensor_sel='sensors.door_locked.value',
+            elevate='sensors.door_locked.value.elevate',
+            convert_sel='sensors.door_locked.value.convert',
+            horizon_sel='sensors.door_locked.value.horizon',
+            location='sensors.door_locked.location',
+            name='sensors.door_locked.name',
+            description='sensors.door_locked.description',
+        ),
+        data=dict(
+            sensor_sel=5,
+            elevate=1,
+            convert_sel='BOOLEAN',
+            horizon_sel='NORMAL',
+            location='entry',
+            name='main door',
+            description='the door where you can go in',
+        ),
+        sensors=['sensor_sel'],
+        multi=True,
+    ),
+    page_data(
         'sapi.edit_feeds_blog',
         url='/space/edit/feeds/blog',
         keys=dict(

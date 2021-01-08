@@ -51,6 +51,19 @@ PAGES = [
         ],
     ),
     page_data(
+        'sapi.drop_sensors_door_locked',
+        url='/space/drop/sensors/door-locked',
+        keys=[
+            'sensors.door_locked.value',
+            'sensors.door_locked.value.elevate',
+            'sensors.door_locked.value.convert',
+            'sensors.door_locked.value.horizon',
+            'sensors.door_locked.location',
+            'sensors.door_locked.name',
+            'sensors.door_locked.description',
+        ],
+    ),
+    page_data(
         'sapi.drop_projects',
         url='/space/drop/projects',
         keys=['projects'],

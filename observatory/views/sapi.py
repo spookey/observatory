@@ -16,6 +16,7 @@ from observatory.forms.space_drop import (
     SpaceDropLinksForm,
     SpaceDropMembershipPlansForm,
     SpaceDropProjectsForm,
+    SpaceDropSensorsDoorLockedForm,
     SpaceDropSensorsTemperatureForm,
 )
 from observatory.forms.space_edit import (
@@ -31,6 +32,7 @@ from observatory.forms.space_edit import (
     SpaceEditLocationForm,
     SpaceEditMembershipPlansForm,
     SpaceEditProjectsForm,
+    SpaceEditSensorsDoorLockedForm,
     SpaceEditSensorsTemperatureForm,
     SpaceEditSpaceFedForm,
     SpaceEditStateIconForm,
@@ -134,6 +136,20 @@ def edit_sensors_temperature(idx=0):
     )
 
 
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/door-locked/<int:idx>', methods=['GET', 'POST']
+)
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/door-locked', methods=['GET', 'POST']
+)
+@login_required
+def edit_sensors_door_locked(idx=0):
+    return _edit_form(
+        SpaceEditSensorsDoorLockedForm(idx=idx),
+        f'Door locked sensor #{1 + idx}',
+    )
+
+
 @BLUEPRINT_SAPI.route('/space/edit/feeds/blog', methods=['GET', 'POST'])
 @login_required
 def edit_feeds_blog():
@@ -217,6 +233,17 @@ def drop_sensors_temperature(idx):
     return _drop_form(
         SpaceDropSensorsTemperatureForm(idx=idx),
         f'Temperature sensor #{1 + idx}',
+    )
+
+
+@BLUEPRINT_SAPI.route(
+    '/space/drop/sensors/door-locked/<int:idx>', methods=['POST']
+)
+@login_required
+def drop_sensors_door_locked(idx):
+    return _drop_form(
+        SpaceDropSensorsDoorLockedForm(idx=idx),
+        f'Door locked sensor #{1 + idx}',
     )
 
 

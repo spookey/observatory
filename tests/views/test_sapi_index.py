@@ -62,6 +62,7 @@ class TestSapiIndex:
             'Contact',
             'Keymasters',
             'Temperature sensor',
+            'Door locked sensor',
             'Blog feed',
             'Wiki feed',
             'Calendar feed',

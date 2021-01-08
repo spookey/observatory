@@ -355,6 +355,77 @@ class TestSpaceApiBuildValue:
         ]
 
     @staticmethod
+    def test_sensors_door_locked(gen_sensor, gen_user):
+        api = SpaceApi()
+        user = gen_user()
+
+        nil_sensor = gen_sensor('nil')
+        nil_sensor.append(user=user, value=1)
+        nil_value = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.door_locked.value',
+            idx=0,
+            elem=nil_sensor,
+        ).latest.value
+        one_sensor = gen_sensor('one')
+        one_sensor.append(user=user, value=0)
+        one_value = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.door_locked.value',
+            idx=1,
+            elem=one_sensor,
+        ).latest.value
+
+        nil_location = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.door_locked.location',
+            idx=0,
+            elem='main',
+        ).elem
+        one_location = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.door_locked.location',
+            idx=1,
+            elem='side',
+        ).elem
+
+        nil_name = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.door_locked.name',
+            idx=0,
+            elem='sensor #0',
+        ).elem
+        one_name = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.door_locked.name',
+            idx=1,
+            elem='sensor #1',
+        ).elem
+
+        nil_description = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.door_locked.description',
+            idx=0,
+            elem='door lock sensor #0',
+        ).elem
+        one_description = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.door_locked.description',
+            idx=1,
+            elem='door lock sensor #1',
+        ).elem
+
+        res = api.build()
+        assert res['sensors']['door_locked'] == [
+            {
+                '_idx': 0,
+                'value': nil_value,
+                'location': nil_location,
+                'name': nil_name,
+                'description': nil_description,
+            },
+            {
+                '_idx': 1,
+                'value': one_value,
+                'location': one_location,
+                'name': one_name,
+                'description': one_description,
+            },
+        ]
+
+    @staticmethod
     def test_projects():
         api = SpaceApi()
         one_pro = Value.set(
