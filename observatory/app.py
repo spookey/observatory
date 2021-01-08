@@ -14,10 +14,11 @@ from observatory.shared import (
     form_drop_prompt,
     form_drop_sensor,
     form_drop_space_cam,
-    form_drop_space_keymasters,
+    form_drop_space_contact_keymasters,
     form_drop_space_links,
     form_drop_space_membership_plans,
     form_drop_space_projects,
+    form_drop_space_sensors_temperature,
     form_sort_mapper,
     form_sort_prompt,
     form_sort_sensor,
@@ -88,20 +89,28 @@ def register_blueprints(app):
 
 def register_template_functions(app):
     app.jinja_env.globals.update(
-        form_drop_mapper=form_drop_mapper,
-        form_drop_prompt=form_drop_prompt,
-        form_drop_sensor=form_drop_sensor,
-        form_drop_space_cam=form_drop_space_cam,
-        form_drop_space_keymasters=form_drop_space_keymasters,
-        form_drop_space_links=form_drop_space_links,
-        form_drop_space_membership_plans=form_drop_space_membership_plans,
-        form_drop_space_projects=form_drop_space_projects,
-        form_sort_mapper=form_sort_mapper,
-        form_sort_prompt=form_sort_prompt,
-        form_sort_sensor=form_sort_sensor,
-        script_config_data=script_config_data,
-        space_api=SPACE_API,
-        tagline=tagline,
+        {
+            'space_api': SPACE_API,
+            **{
+                func.__name__: func
+                for func in (
+                    form_drop_mapper,
+                    form_drop_prompt,
+                    form_drop_sensor,
+                    form_drop_space_cam,
+                    form_drop_space_contact_keymasters,
+                    form_drop_space_links,
+                    form_drop_space_membership_plans,
+                    form_drop_space_projects,
+                    form_drop_space_sensors_temperature,
+                    form_sort_mapper,
+                    form_sort_prompt,
+                    form_sort_sensor,
+                    script_config_data,
+                    tagline,
+                )
+            },
+        }
     )
 
 

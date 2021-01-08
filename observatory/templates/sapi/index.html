@@ -107,7 +107,7 @@
           {{ key_val_level('URL', _value(data.value, req=true)) }}
         {% endcall %}
         {% call(data) _block(
-          'State Icons', content['state']['icon'],
+          'State icons', content['state']['icon'],
           edit_ep='sapi.edit_state_icon',
         ) %}
           {{ key_val_level('Open Icon', _value(data.open, req=true)) }}
@@ -137,8 +137,8 @@
           'Keymasters', content['contact']['keymasters'],
           edit_ep='sapi.edit_contact_keymasters',
           drop_ep='sapi.drop_contact_keymasters',
-          drop_fm=form_drop_space_keymasters,
-          indices=space_api.concact_keymasters_indices,
+          drop_fm=form_drop_space_contact_keymasters,
+          indices=space_api.contact_keymasters_indices,
         ) %}
           {{ key_val_level('Name', _value(data.name)) }}
           {{ key_val_level('IRC Nick', _value(data.irc_nick, req=true)) }}
@@ -149,11 +149,24 @@
           {{ key_val_level('Mastodon', _value(data.mastodon)) }}
           {{ key_val_level('Matrix', _value(data.matrix)) }}
         {% endcall %}
+        {% call(data) _block(
+          'Temperature sensor', content['sensors']['temperature'],
+          edit_ep='sapi.edit_sensors_temperature',
+          drop_ep='sapi.drop_sensors_temperature',
+          drop_fm=form_drop_space_sensors_temperature,
+          indices=space_api.sensors_temperature_indices,
+        ) %}
+          {{ key_val_level('Value', _value(data.value)) }}
+          {{ key_val_level('Unit', _value(data.unit, req=true)) }}
+          {{ key_val_level('Name', _value(data.name, req=true)) }}
+          {{ key_val_level('Location', _value(data.location, req=true)) }}
+          {{ key_val_level('Description', _value(data.description, req=true)) }}
+        {% endcall %}
         {% for (_title, _ep, _data) in (
-            ('Blog Feed', 'sapi.edit_feeds_blog', content['feeds']['blog']),
-            ('Wiki Feed', 'sapi.edit_feeds_wiki', content['feeds']['wiki']),
-            ('Calendar Feed', 'sapi.edit_feeds_calendar', content['feeds']['calendar']),
-            ('Flickr Feed', 'sapi.edit_feeds_flickr', content['feeds']['flickr']),
+            ('Blog feed', 'sapi.edit_feeds_blog', content['feeds']['blog']),
+            ('Wiki feed', 'sapi.edit_feeds_wiki', content['feeds']['wiki']),
+            ('Calendar feed', 'sapi.edit_feeds_calendar', content['feeds']['calendar']),
+            ('Flickr feed', 'sapi.edit_feeds_flickr', content['feeds']['flickr']),
         ) %}
           {% call(data) _block(_title, _data, edit_ep=_ep) %}
             {{ key_val_level('Type', _value(data.type)) }}
@@ -181,7 +194,7 @@
           {{ key_val_level('URL', _value(data.url, req=true)) }}
         {% endcall %}
         {% call(data) _block(
-          'Membership Plans', content['membership_plans'],
+          'Membership plans', content['membership_plans'],
           edit_ep='sapi.edit_membership_plans',
           drop_ep='sapi.drop_membership_plans',
           drop_fm=form_drop_space_membership_plans,

@@ -34,7 +34,7 @@ class TestSpaceApiBuildIndices:
     @staticmethod
     def test_contact_keymasters():
         api = SpaceApi()
-        assert api.concact_keymasters_indices == []
+        assert api.contact_keymasters_indices == []
 
         indices = list(range(5))
         for idx in indices:
@@ -51,7 +51,7 @@ class TestSpaceApiBuildIndices:
                 elem=f'keymaster #{idx}',
             )
 
-        assert api.concact_keymasters_indices == indices
+        assert api.contact_keymasters_indices == indices
 
     @staticmethod
     def test_sensors_temperature():

@@ -361,7 +361,7 @@ class SpaceEditContactForm(SpaceEditForm):
     )
 
 
-class SpaceEditKeymastersForm(SpaceEditForm):
+class SpaceEditContactKeymastersForm(SpaceEditForm):
     KEYS = dict(
         name='contact.keymasters.name',
         irc_nick='contact.keymasters.irc_nick',

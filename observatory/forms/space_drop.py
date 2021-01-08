@@ -52,7 +52,7 @@ class SpaceDropCamForm(SpaceDropForm):
     KEYS = ['cam']
 
 
-class SpaceDropKeymastersForm(SpaceDropForm):
+class SpaceDropContactKeymastersForm(SpaceDropForm):
     KEYS = [
         'contact.keymasters.name',
         'contact.keymasters.irc_nick',

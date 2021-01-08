@@ -12,7 +12,7 @@ from flask_login import login_required
 
 from observatory.forms.space_drop import (
     SpaceDropCamForm,
-    SpaceDropKeymastersForm,
+    SpaceDropContactKeymastersForm,
     SpaceDropLinksForm,
     SpaceDropMembershipPlansForm,
     SpaceDropProjectsForm,
@@ -21,12 +21,12 @@ from observatory.forms.space_drop import (
 from observatory.forms.space_edit import (
     SpaceEditCamForm,
     SpaceEditContactForm,
+    SpaceEditContactKeymastersForm,
     SpaceEditFeedBlogForm,
     SpaceEditFeedCalendarForm,
     SpaceEditFeedFlickrForm,
     SpaceEditFeedWikiForm,
     SpaceEditInfoForm,
-    SpaceEditKeymastersForm,
     SpaceEditLinksForm,
     SpaceEditLocationForm,
     SpaceEditMembershipPlansForm,
@@ -116,7 +116,7 @@ def edit_contact():
 @login_required
 def edit_contact_keymasters(idx=0):
     return _edit_form(
-        SpaceEditKeymastersForm(idx=idx), f'Keymaster #{1 + idx}'
+        SpaceEditContactKeymastersForm(idx=idx), f'Keymaster #{1 + idx}'
     )
 
 
@@ -130,7 +130,7 @@ def edit_contact_keymasters(idx=0):
 def edit_sensors_temperature(idx=0):
     return _edit_form(
         SpaceEditSensorsTemperatureForm(idx=idx),
-        f'Temperature Sensor #{1 + idx}',
+        f'Temperature sensor #{1 + idx}',
     )
 
 
@@ -205,7 +205,7 @@ def drop_cam(idx):
 @login_required
 def drop_contact_keymasters(idx):
     return _drop_form(
-        SpaceDropKeymastersForm(idx=idx), f'Keymaster #{1 + idx}'
+        SpaceDropContactKeymastersForm(idx=idx), f'Keymaster #{1 + idx}'
     )
 
 
@@ -216,7 +216,7 @@ def drop_contact_keymasters(idx):
 def drop_sensors_temperature(idx):
     return _drop_form(
         SpaceDropSensorsTemperatureForm(idx=idx),
-        f'Temperature Sensor #{1 + idx}',
+        f'Temperature sensor #{1 + idx}',
     )
 
 

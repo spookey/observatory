@@ -6,12 +6,12 @@ from observatory.forms.extra.widgets import SubmitButtonInput
 from observatory.forms.space_edit import (
     SpaceEditCamForm,
     SpaceEditContactForm,
+    SpaceEditContactKeymastersForm,
     SpaceEditFeedBlogForm,
     SpaceEditFeedCalendarForm,
     SpaceEditFeedFlickrForm,
     SpaceEditFeedWikiForm,
     SpaceEditInfoForm,
-    SpaceEditKeymastersForm,
     SpaceEditLinksForm,
     SpaceEditLocationForm,
     SpaceEditMembershipPlansForm,
@@ -134,7 +134,7 @@ FORMS = [
         one_of=['email', 'issue_mail', 'twitter', 'mailinglist'],
     ),
     form_edit(
-        SpaceEditKeymastersForm,
+        SpaceEditContactKeymastersForm,
         keys=dict(
             name='contact.keymasters.name',
             irc_nick='contact.keymasters.irc_nick',

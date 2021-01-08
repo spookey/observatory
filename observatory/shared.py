@@ -12,7 +12,7 @@ from observatory.forms.common import (
 from observatory.forms.mapper import MapperDropForm, MapperSortForm
 from observatory.forms.space_drop import (
     SpaceDropCamForm,
-    SpaceDropKeymastersForm,
+    SpaceDropContactKeymastersForm,
     SpaceDropLinksForm,
     SpaceDropMembershipPlansForm,
     SpaceDropProjectsForm,
@@ -112,8 +112,8 @@ def form_drop_space_cam(idx):
     return SpaceDropCamForm(idx=idx)
 
 
-def form_drop_space_keymasters(idx):
-    return SpaceDropKeymastersForm(idx=idx)
+def form_drop_space_contact_keymasters(idx):
+    return SpaceDropContactKeymastersForm(idx=idx)
 
 
 def form_drop_space_sensors_temperature(idx):

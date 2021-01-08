@@ -86,7 +86,7 @@ class SpaceApi:
         return self._indices_all('cam')
 
     @property
-    def concact_keymasters_indices(self):
+    def contact_keymasters_indices(self):
         return self._indices_any(
             'contact.keymasters.irc_nick',
             'contact.keymasters.phone',
@@ -185,7 +185,7 @@ class SpaceApi:
                             key='contact.keymasters.matrix', idx=idx
                         ),
                     }
-                    for idx in self.concact_keymasters_indices
+                    for idx in self.contact_keymasters_indices
                 ],
                 'irc': self._get('contact.irc'),
                 'twitter': self._get('contact.twitter'),

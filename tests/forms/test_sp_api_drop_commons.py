@@ -5,7 +5,7 @@ from pytest import mark
 from observatory.forms.extra.widgets import SubmitButtonInput
 from observatory.forms.space_drop import (
     SpaceDropCamForm,
-    SpaceDropKeymastersForm,
+    SpaceDropContactKeymastersForm,
     SpaceDropLinksForm,
     SpaceDropMembershipPlansForm,
     SpaceDropProjectsForm,
@@ -31,7 +31,7 @@ FORMS = [
         keys=['cam'],
     ),
     form_drop(
-        SpaceDropKeymastersForm,
+        SpaceDropContactKeymastersForm,
         keys=[
             'contact.keymasters.name',
             'contact.keymasters.irc_nick',
