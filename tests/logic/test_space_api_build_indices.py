@@ -61,15 +61,19 @@ class TestSpaceApiBuildIndices:
         indices = list(range(12))
         for idx in indices:
             Value.set(
-                choice(
-                    [
-                        f'{SP_API_PREFIX}.sensors.temperature.value',
-                        f'{SP_API_PREFIX}.sensors.temperature.unit',
-                        f'{SP_API_PREFIX}.sensors.temperature.location',
-                    ]
-                ),
+                f'{SP_API_PREFIX}.sensors.temperature.value',
                 idx=idx,
-                elem=f'temperature #{idx}',
+                elem=f'temperature #{idx} value',
+            )
+            Value.set(
+                f'{SP_API_PREFIX}.sensors.temperature.unit',
+                idx=idx,
+                elem=f'temperature #{idx} unit',
+            )
+            Value.set(
+                f'{SP_API_PREFIX}.sensors.temperature.location',
+                idx=idx,
+                elem=f'temperature #{idx} location',
             )
 
         assert api.sensors_temperature_indices == indices

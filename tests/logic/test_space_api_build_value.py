@@ -4,6 +4,8 @@ from observatory.logic.space_api import SpaceApi
 from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
+# pylint: disable=too-many-locals
+
 
 @mark.usefixtures('session')
 class TestSpaceApiBuildValue:

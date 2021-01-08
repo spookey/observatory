@@ -96,7 +96,7 @@ class SpaceApi:
 
     @property
     def sensors_temperature_indices(self):
-        return self._indices_any(
+        return self._indices_all(
             'sensors.temperature.value',
             'sensors.temperature.unit',
             'sensors.temperature.location',
