@@ -64,6 +64,20 @@ PAGES = [
         ],
     ),
     page_data(
+        'sapi.drop_sensors_barometer',
+        url='/space/drop/sensors/barometer',
+        keys=[
+            'sensors.barometer.value',
+            'sensors.barometer.value.elevate',
+            'sensors.barometer.value.convert',
+            'sensors.barometer.value.horizon',
+            'sensors.barometer.unit',
+            'sensors.barometer.location',
+            'sensors.barometer.name',
+            'sensors.barometer.description',
+        ],
+    ),
+    page_data(
         'sapi.drop_projects',
         url='/space/drop/projects',
         keys=['projects'],

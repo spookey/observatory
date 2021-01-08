@@ -195,6 +195,32 @@ PAGES = [
         multi=True,
     ),
     page_data(
+        'sapi.edit_sensors_barometer',
+        url='/space/edit/sensors/barometer',
+        keys=dict(
+            sensor_sel='sensors.barometer.value',
+            elevate='sensors.barometer.value.elevate',
+            convert_sel='sensors.barometer.value.convert',
+            horizon_sel='sensors.barometer.value.horizon',
+            unit_sel='sensors.barometer.unit',
+            location='sensors.barometer.location',
+            name='sensors.barometer.name',
+            description='sensors.barometer.description',
+        ),
+        data=dict(
+            sensor_sel=6,
+            elevate=1,
+            convert_sel='NATURAL',
+            horizon_sel='INVERT',
+            unit_sel='hPA',
+            location='downstairs',
+            name='barometer',
+            description='our barometer',
+        ),
+        sensors=['sensor_sel'],
+        multi=True,
+    ),
+    page_data(
         'sapi.edit_feeds_blog',
         url='/space/edit/feeds/blog',
         keys=dict(

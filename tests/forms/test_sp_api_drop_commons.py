@@ -9,6 +9,7 @@ from observatory.forms.space_drop import (
     SpaceDropLinksForm,
     SpaceDropMembershipPlansForm,
     SpaceDropProjectsForm,
+    SpaceDropSensorsBarometerForm,
     SpaceDropSensorsDoorLockedForm,
     SpaceDropSensorsTemperatureForm,
 )
@@ -67,6 +68,19 @@ FORMS = [
             'sensors.door_locked.location',
             'sensors.door_locked.name',
             'sensors.door_locked.description',
+        ],
+    ),
+    form_drop(
+        SpaceDropSensorsBarometerForm,
+        keys=[
+            'sensors.barometer.value',
+            'sensors.barometer.value.elevate',
+            'sensors.barometer.value.convert',
+            'sensors.barometer.value.horizon',
+            'sensors.barometer.unit',
+            'sensors.barometer.location',
+            'sensors.barometer.name',
+            'sensors.barometer.description',
         ],
     ),
     form_drop(

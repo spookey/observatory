@@ -426,6 +426,55 @@ class TestSpaceApiBuildValue:
         ]
 
     @staticmethod
+    def test_sensors_barometer(gen_sensor, gen_user):
+        api = SpaceApi()
+        user = gen_user()
+
+        one_sensor = gen_sensor('one')
+        one_sensor.append(user=user, value=1)
+        one_value = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.barometer.value',
+            idx=1,
+            elem=one_sensor,
+        ).latest.value
+
+        one_unit = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.barometer.unit',
+            idx=1,
+            elem='high',
+        ).elem
+
+        one_location = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.barometer.location',
+            idx=1,
+            elem='somewhere',
+        ).elem
+
+        one_name = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.barometer.name',
+            idx=1,
+            elem='sensor #1',
+        ).elem
+
+        one_description = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.barometer.description',
+            idx=1,
+            elem='barometer #1',
+        ).elem
+
+        res = api.build()
+        assert res['sensors']['barometer'] == [
+            {
+                '_idx': 1,
+                'value': one_value,
+                'unit': one_unit,
+                'location': one_location,
+                'name': one_name,
+                'description': one_description,
+            },
+        ]
+
+    @staticmethod
     def test_projects():
         api = SpaceApi()
         one_pro = Value.set(

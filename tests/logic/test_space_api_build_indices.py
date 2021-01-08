@@ -54,32 +54,33 @@ class TestSpaceApiBuildIndices:
         assert api.contact_keymasters_indices == indices
 
     @staticmethod
-    def test_sensors_temperature():
+    @mark.parametrize('field', ('temperature', 'barometer'))
+    def test_sensors_value_unit_location(field):
         api = SpaceApi()
-        assert api.sensors_temperature_indices == []
+        assert getattr(api, f'sensors_{field}_indices', None) == []
 
-        indices = list(range(12))
+        indices = list(range(choice(range(23, 42))))
         for idx in indices:
             Value.set(
-                f'{SP_API_PREFIX}.sensors.temperature.value',
+                f'{SP_API_PREFIX}.sensors.{field}.value',
                 idx=idx,
-                elem=f'temperature #{idx} value',
+                elem=f'{field} #{idx} value',
             )
             Value.set(
-                f'{SP_API_PREFIX}.sensors.temperature.unit',
+                f'{SP_API_PREFIX}.sensors.{field}.unit',
                 idx=idx,
-                elem=f'temperature #{idx} unit',
+                elem=f'{field} #{idx} unit',
             )
             Value.set(
-                f'{SP_API_PREFIX}.sensors.temperature.location',
+                f'{SP_API_PREFIX}.sensors.{field}.location',
                 idx=idx,
-                elem=f'temperature #{idx} location',
+                elem=f'{field} #{idx} location',
             )
 
-        assert api.sensors_temperature_indices == indices
+        assert getattr(api, f'sensors_{field}_indices', None) == indices
 
     @staticmethod
-    def test_sensors_door_locked_indices():
+    def test_sensors_door_locked():
         api = SpaceApi()
         assert api.sensors_door_locked_indices == []
 

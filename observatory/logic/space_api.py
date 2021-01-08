@@ -109,6 +109,14 @@ class SpaceApi:
         )
 
     @property
+    def sensors_barometer_indices(self):
+        return self._indices_all(
+            'sensors.barometer.value',
+            'sensors.barometer.unit',
+            'sensors.barometer.location',
+        )
+
+    @property
     def projects_indices(self):
         return self._indices_all('projects')
 
@@ -249,7 +257,27 @@ class SpaceApi:
                     }
                     for idx in self.sensors_door_locked_indices
                 ],
-                'barometer': [],
+                'barometer': [
+                    {
+                        '_idx': idx,
+                        'value': self.latest_value(
+                            'sensors.barometer.value',
+                            idx=idx,
+                            horizon_key='sensors.barometer.value.horizon',
+                            convert_key='sensors.barometer.value.convert',
+                            elevate_key='sensors.barometer.value.elevate',
+                        ),
+                        'unit': self._get('sensors.barometer.unit', idx=idx),
+                        'location': self._get(
+                            'sensors.barometer.location', idx=idx
+                        ),
+                        'name': self._get('sensors.barometer.name', idx=idx),
+                        'description': self._get(
+                            'sensors.barometer.description', idx=idx
+                        ),
+                    }
+                    for idx in self.sensors_barometer_indices
+                ],
                 'radiation': {
                     'alpha': [],
                     'beta': [],
