@@ -1,13 +1,17 @@
 from datetime import datetime
 from logging import getLogger
 
+from observatory.models.mapper import EnumConvert, EnumHorizon
 from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX, SP_API_REFRESH
+
+# pylint: disable=too-many-arguments
 
 
 class SpaceApi:
     def __init__(self):
         self._log = getLogger(self.__class__.__name__)
+
         self._content = None
         self._last = None
 
@@ -28,6 +32,24 @@ class SpaceApi:
             for elem in self._by_key(key)
             if elem is not None
         ]
+
+    def latest_value(
+        self, key, *, idx=0, horizon_key, convert_key, elevate_key
+    ):
+        sensor = self._get(key, idx=idx)
+        if sensor is None or sensor.latest is None:
+            return None
+
+        elevate = self._get(elevate_key, idx=idx)
+        if elevate is None or not isinstance(elevate, (int, float)):
+            elevate = 1.0
+
+        return sensor.latest.translate(
+            horizon=EnumHorizon.from_text(self._get(horizon_key, idx=idx)),
+            convert=EnumConvert.from_text(self._get(convert_key, idx=idx)),
+            elevate=elevate,
+            numeric=False,
+        )
 
     def _indices_any(self, *keys):
         result = set()
