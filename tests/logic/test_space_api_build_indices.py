@@ -54,6 +54,27 @@ class TestSpaceApiBuildIndices:
         assert api.concact_keymasters_indices == indices
 
     @staticmethod
+    def test_sensors_temperature():
+        api = SpaceApi()
+        assert api.sensors_temperature_indices == []
+
+        indices = list(range(12))
+        for idx in indices:
+            Value.set(
+                choice(
+                    [
+                        f'{SP_API_PREFIX}.sensors.temperature.value',
+                        f'{SP_API_PREFIX}.sensors.temperature.unit',
+                        f'{SP_API_PREFIX}.sensors.temperature.location',
+                    ]
+                ),
+                idx=idx,
+                elem=f'temperature #{idx}',
+            )
+
+        assert api.sensors_temperature_indices == indices
+
+    @staticmethod
     def test_projects():
         api = SpaceApi()
         assert api.projects_indices == []

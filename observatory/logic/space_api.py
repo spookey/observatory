@@ -95,6 +95,14 @@ class SpaceApi:
         )
 
     @property
+    def sensors_temperature_indices(self):
+        return self._indices_any(
+            'sensors.temperature.value',
+            'sensors.temperature.unit',
+            'sensors.temperature.location',
+        )
+
+    @property
     def projects_indices(self):
         return self._indices_all('projects')
 
@@ -194,7 +202,27 @@ class SpaceApi:
                 'mumble': self._get('contact.mumble'),
             },
             'sensors': {
-                'temperature': [],
+                'temperature': [
+                    {
+                        '_idx': idx,
+                        'value': self.latest_value(
+                            'sensors.temperature.value',
+                            idx=idx,
+                            horizon_key='sensors.temperature.value.horizon',
+                            convert_key='sensors.temperature.value.convert',
+                            elevate_key='sensors.temperature.value.elevate',
+                        ),
+                        'unit': self._get('sensors.temperature.unit', idx=idx),
+                        'location': self._get(
+                            'sensors.temperature.location', idx=idx
+                        ),
+                        'name': self._get('sensors.temperature.name', idx=idx),
+                        'description': self._get(
+                            'sensors.temperature.description', idx=idx
+                        ),
+                    }
+                    for idx in self.sensors_temperature_indices
+                ],
                 'door_locked': [],
                 'barometer': [],
                 'radiation': {

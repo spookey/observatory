@@ -270,6 +270,89 @@ class TestSpaceApiBuildValue:
         ]
 
     @staticmethod
+    def test_sensors_temperature(gen_sensor, gen_user):
+        api = SpaceApi()
+        user = gen_user()
+        nil_sensor = gen_sensor('nil')
+        nil_sensor.append(user=user, value=0)
+        nil_value = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.temperature.value',
+            idx=0,
+            elem=nil_sensor,
+        ).latest.value
+        one_sensor = gen_sensor('one')
+        one_sensor.append(user=user, value=1)
+        one_value = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.temperature.value',
+            idx=1,
+            elem=one_sensor,
+        ).latest.value
+
+        nil_unit = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.temperature.unit',
+            idx=0,
+            elem='hot',
+        ).elem
+        one_unit = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.temperature.unit',
+            idx=1,
+            elem='cold',
+        ).elem
+
+        nil_location = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.temperature.location',
+            idx=0,
+            elem='below',
+        ).elem
+        one_location = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.temperature.location',
+            idx=1,
+            elem='above',
+        ).elem
+
+        nil_name = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.temperature.name',
+            idx=0,
+            elem='sensor #0',
+        ).elem
+        one_name = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.temperature.name',
+            idx=1,
+            elem='sensor #1',
+        ).elem
+
+        nil_description = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.temperature.description',
+            idx=0,
+            elem='temperature sensor #0',
+        ).elem
+        one_description = Value.set(
+            key=f'{SP_API_PREFIX}.sensors.temperature.description',
+            idx=1,
+            elem='temperature sensor #1',
+        ).elem
+
+        res = api.build()
+        assert res['sensors']['temperature'] == [
+            {
+                '_idx': 0,
+                'value': nil_value,
+                'unit': nil_unit,
+                'location': nil_location,
+                'name': nil_name,
+                'description': nil_description,
+            },
+            {
+                '_idx': 1,
+                'value': one_value,
+                'unit': one_unit,
+                'location': one_location,
+                'name': one_name,
+                'description': one_description,
+            },
+        ]
+
+    @staticmethod
     def test_projects():
         api = SpaceApi()
         one_pro = Value.set(
