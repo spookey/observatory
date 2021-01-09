@@ -23,6 +23,7 @@ from observatory.forms.space_drop import (
     SpaceDropSensorsHumidityForm,
     SpaceDropSensorsPowerConsumptionForm,
     SpaceDropSensorsTemperatureForm,
+    SpaceDropSensorsTotalMemberCountForm,
 )
 from observatory.lib.text import random_line
 from observatory.start.environment import (
@@ -148,6 +149,10 @@ def form_drop_space_sensors_power_consumption(idx):
 
 def form_drop_space_sensors_account_balance(idx):
     return SpaceDropSensorsAccountBalanceForm(idx=idx)
+
+
+def form_drop_space_sensors_total_member_count(idx):
+    return SpaceDropSensorsTotalMemberCountForm(idx=idx)
 
 
 def form_drop_space_links(idx):

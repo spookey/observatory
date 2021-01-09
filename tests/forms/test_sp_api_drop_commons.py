@@ -16,6 +16,7 @@ from observatory.forms.space_drop import (
     SpaceDropSensorsHumidityForm,
     SpaceDropSensorsPowerConsumptionForm,
     SpaceDropSensorsTemperatureForm,
+    SpaceDropSensorsTotalMemberCountForm,
 )
 from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
@@ -137,6 +138,18 @@ FORMS = [
             'sensors.account_balance.location',
             'sensors.account_balance.name',
             'sensors.account_balance.description',
+        ],
+    ),
+    form_drop(
+        SpaceDropSensorsTotalMemberCountForm,
+        keys=[
+            'sensors.total_member_count.value',
+            'sensors.total_member_count.value.elevate',
+            'sensors.total_member_count.value.convert',
+            'sensors.total_member_count.value.horizon',
+            'sensors.total_member_count.location',
+            'sensors.total_member_count.name',
+            'sensors.total_member_count.description',
         ],
     ),
     form_drop(

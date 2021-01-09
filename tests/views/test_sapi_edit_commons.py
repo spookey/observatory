@@ -325,6 +325,30 @@ PAGES = [
         multi=True,
     ),
     page_data(
+        'sapi.edit_sensors_total_member_count',
+        url='/space/edit/sensors/total-member-count',
+        keys=dict(
+            sensor_sel='sensors.total_member_count.value',
+            elevate='sensors.total_member_count.value.elevate',
+            convert_sel='sensors.total_member_count.value.convert',
+            horizon_sel='sensors.total_member_count.value.horizon',
+            location='sensors.total_member_count.location',
+            name='sensors.total_member_count.name',
+            description='sensors.total_member_count.description',
+        ),
+        data=dict(
+            sensor_sel=6,
+            elevate=1.0,
+            convert_sel='INTEGER',
+            horizon_sel='NORMAL',
+            location='space',
+            name='member',
+            description='count',
+        ),
+        sensors=['sensor_sel'],
+        multi=True,
+    ),
+    page_data(
         'sapi.edit_feeds_blog',
         url='/space/edit/feeds/blog',
         keys=dict(

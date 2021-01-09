@@ -23,6 +23,7 @@ from observatory.forms.space_drop import (
     SpaceDropSensorsHumidityForm,
     SpaceDropSensorsPowerConsumptionForm,
     SpaceDropSensorsTemperatureForm,
+    SpaceDropSensorsTotalMemberCountForm,
 )
 from observatory.forms.space_edit import (
     SpaceEditCamForm,
@@ -44,6 +45,7 @@ from observatory.forms.space_edit import (
     SpaceEditSensorsHumidityForm,
     SpaceEditSensorsPowerConsumptionForm,
     SpaceEditSensorsTemperatureForm,
+    SpaceEditSensorsTotalMemberCountForm,
     SpaceEditSpaceFedForm,
     SpaceEditStateIconForm,
 )
@@ -224,6 +226,20 @@ def edit_sensors_account_balance(idx=0):
     )
 
 
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/total-member-count/<int:idx>', methods=['GET', 'POST']
+)
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/total-member-count', methods=['GET', 'POST']
+)
+@login_required
+def edit_sensors_total_member_count(idx=0):
+    return _edit_form(
+        SpaceEditSensorsTotalMemberCountForm(idx=idx),
+        f'Total member count #{1 + idx}',
+    )
+
+
 @BLUEPRINT_SAPI.route('/space/edit/feeds/blog', methods=['GET', 'POST'])
 @login_required
 def edit_feeds_blog():
@@ -371,6 +387,17 @@ def drop_sensors_account_balance(idx):
     return _drop_form(
         SpaceDropSensorsAccountBalanceForm(idx=idx),
         f'Account balance #{1 + idx}',
+    )
+
+
+@BLUEPRINT_SAPI.route(
+    '/space/drop/sensors/total-member-count/<int:idx>', methods=['POST']
+)
+@login_required
+def drop_sensors_total_member_count(idx):
+    return _drop_form(
+        SpaceDropSensorsTotalMemberCountForm(idx=idx),
+        f'Total member count #{1 + idx}',
     )
 
 

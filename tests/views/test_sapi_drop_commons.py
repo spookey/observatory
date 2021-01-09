@@ -134,6 +134,19 @@ PAGES = [
         ],
     ),
     page_data(
+        'sapi.drop_sensors_total_member_count',
+        url='/space/drop/sensors/total-member-count',
+        keys=[
+            'sensors.total_member_count.value',
+            'sensors.total_member_count.value.elevate',
+            'sensors.total_member_count.value.convert',
+            'sensors.total_member_count.value.horizon',
+            'sensors.total_member_count.location',
+            'sensors.total_member_count.name',
+            'sensors.total_member_count.description',
+        ],
+    ),
+    page_data(
         'sapi.drop_projects',
         url='/space/drop/projects',
         keys=['projects'],

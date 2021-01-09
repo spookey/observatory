@@ -68,6 +68,7 @@ class TestSapiIndex:
             'Beverage supply',
             'Power consumption',
             'Account balance',
+            'Total member count',
             'Blog feed',
             'Wiki feed',
             'Calendar feed',

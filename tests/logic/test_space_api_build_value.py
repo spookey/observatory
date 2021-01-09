@@ -342,6 +342,15 @@ class TestSpaceApiBuildValue:
                     description='sensors.account_balance.description',
                 ),
             ),
+            (
+                'total_member_count',
+                dict(value='sensors.total_member_count.value'),
+                dict(
+                    location='sensors.total_member_count.location',
+                    name='sensors.total_member_count.name',
+                    description='sensors.total_member_count.description',
+                ),
+            ),
         ],
     )
     def test_sensors_common(field, sensors, fields, gen_sensor, gen_user):

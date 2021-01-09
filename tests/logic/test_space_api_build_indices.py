@@ -107,6 +107,7 @@ class TestSpaceApiBuildIndices:
                     'sensors.account_balance.unit',
                 ],
             ),
+            ('total_member_count', ['sensors.total_member_count.value']),
         ],
     )
     def test_sensors_common(field, keys):

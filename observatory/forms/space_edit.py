@@ -895,6 +895,53 @@ class SpaceEditSensorsAccountBalanceForm(SpaceEditSensorsForm):
         self.unit_sel.choices = self._unit_choices()
 
 
+class SpaceEditSensorsTotalMemberCountForm(SpaceEditSensorsForm):
+    KEYS = dict(
+        sensor_sel='sensors.total_member_count.value',
+        elevate='sensors.total_member_count.value.elevate',
+        convert_sel='sensors.total_member_count.value.convert',
+        horizon_sel='sensors.total_member_count.value.horizon',
+        location='sensors.total_member_count.location',
+        name='sensors.total_member_count.name',
+        description='sensors.total_member_count.description',
+    )
+    SENSORS = ['sensor_sel']
+
+    (
+        sensor_sel,
+        elevate,
+        convert_sel,
+        horizon_sel,
+    ) = SpaceEditSensorsForm.sensor_fields('Total member count')
+    location = StringField(
+        'Location',
+        validators=[Optional()],
+        description='The location of your sensor',
+    )
+    name = StringField(
+        'Name',
+        validators=[Optional()],
+        description='Give your sensor a name',
+    )
+    description = TextAreaField(
+        'Description',
+        validators=[Optional()],
+        description='Some additional information',
+    )
+    submit = SubmitField(
+        'Save',
+        description='Submit',
+        widget=SubmitButtonInput(icon='ops_submit'),
+    )
+
+    def __init__(self, idx, *args, **kwargs):
+        super().__init__(*args, idx=idx, **kwargs)
+
+        self.sensor_sel.choices = self._sensor_choices()
+        self.convert_sel.choices = self._convert_choices()
+        self.horizon_sel.choices = self._horizon_choices()
+
+
 class SpaceEditFeedForm(SpaceEditForm):
     KEYS = {}
 

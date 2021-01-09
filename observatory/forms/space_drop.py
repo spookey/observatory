@@ -155,6 +155,18 @@ class SpaceDropSensorsAccountBalanceForm(SpaceDropForm):
     ]
 
 
+class SpaceDropSensorsTotalMemberCountForm(SpaceDropForm):
+    KEYS = [
+        'sensors.total_member_count.value',
+        'sensors.total_member_count.value.elevate',
+        'sensors.total_member_count.value.convert',
+        'sensors.total_member_count.value.horizon',
+        'sensors.total_member_count.location',
+        'sensors.total_member_count.name',
+        'sensors.total_member_count.description',
+    ]
+
+
 class SpaceDropProjectsForm(SpaceDropForm):
     KEYS = ['projects']
 

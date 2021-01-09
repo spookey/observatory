@@ -239,6 +239,18 @@
           {{ key_val_level('Location', _value(data.location)) }}
           {{ key_val_level('Description', _value(data.description)) }}
         {% endcall %}
+        {% call(data) _block(
+          'Total member count', content['sensors']['total_member_count'],
+          edit_ep='sapi.edit_sensors_total_member_count',
+          drop_ep='sapi.drop_sensors_total_member_count',
+          drop_fm=form_drop_space_sensors_total_member_count,
+          indices=space_api.sensors_total_member_count_indices,
+        ) %}
+          {{ key_val_level('Value', _value(data.value, req=true)) }}
+          {{ key_val_level('Name', _value(data.name)) }}
+          {{ key_val_level('Location', _value(data.location)) }}
+          {{ key_val_level('Description', _value(data.description)) }}
+        {% endcall %}
         {% for (_title, _ep, _data) in (
             ('Blog feed', 'sapi.edit_feeds_blog', content['feeds']['blog']),
             ('Wiki feed', 'sapi.edit_feeds_wiki', content['feeds']['wiki']),

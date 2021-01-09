@@ -148,6 +148,10 @@ class SpaceApi:
         )
 
     @property
+    def sensors_total_member_count_indices(self):
+        return self._indices_all('sensors.total_member_count.value')
+
+    @property
     def projects_indices(self):
         return self._indices_all('projects')
 
@@ -431,7 +435,28 @@ class SpaceApi:
                     }
                     for idx in self.sensors_account_balance_indices
                 ],
-                'total_member_count': [],
+                'total_member_count': [
+                    {
+                        '_idx': idx,
+                        'value': self.latest_value(
+                            'sensors.total_member_count.value',
+                            idx=idx,
+                            horizon_key='sensors.total_member_count.horizon',
+                            convert_key='sensors.total_member_count.convert',
+                            elevate_key='sensors.total_member_count.elevate',
+                        ),
+                        'location': self._get(
+                            'sensors.total_member_count.location', idx=idx
+                        ),
+                        'name': self._get(
+                            'sensors.total_member_count.name', idx=idx
+                        ),
+                        'description': self._get(
+                            'sensors.total_member_count.description', idx=idx
+                        ),
+                    }
+                    for idx in self.sensors_total_member_count_indices
+                ],
                 'people_now_present': [],
                 'network_traffic': [],
             },
