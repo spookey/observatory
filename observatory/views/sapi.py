@@ -39,6 +39,10 @@ from observatory.forms.space_edit import (
     SpaceEditLocationForm,
     SpaceEditMembershipPlansForm,
     SpaceEditProjectsForm,
+    SpaceEditSpaceFedForm,
+    SpaceEditStateIconForm,
+)
+from observatory.forms.space_edit_sensors import (
     SpaceEditSensorsAccountBalanceForm,
     SpaceEditSensorsBarometerForm,
     SpaceEditSensorsBeverageSupplyForm,
@@ -48,8 +52,6 @@ from observatory.forms.space_edit import (
     SpaceEditSensorsTemperatureForm,
     SpaceEditSensorsTotalMemberCountForm,
     SpaceEditSensorsWindForm,
-    SpaceEditSpaceFedForm,
-    SpaceEditStateIconForm,
 )
 
 BLUEPRINT_SAPI = Blueprint('sapi', __name__)

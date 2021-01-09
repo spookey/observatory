@@ -235,13 +235,13 @@
         ) %}
           {% with props = data.properties %}
           {{ key_val_level('Speed', _value(props.speed.value, req=true)) }}
-          {{ key_val_level('Unit', _value(props.speed.unit, req=true)) }}
+          {{ key_val_level('Speed unit', _value(props.speed.unit, req=true)) }}
           {{ key_val_level('Gust', _value(props.gust.value, req=true)) }}
-          {{ key_val_level('Unit', _value(props.gust.unit, req=true)) }}
+          {{ key_val_level('Gust unit', _value(props.gust.unit, req=true)) }}
           {{ key_val_level('Elevation', _value(props.elevation.value, req=true)) }}
-          {{ key_val_level('Unit', _value(props.elevation.unit, req=true)) }}
+          {{ key_val_level('Elevation unit', _value(props.elevation.unit, req=true)) }}
           {{ key_val_level('Direction', _value(props.direction.value, req=true)) }}
-          {{ key_val_level('Unit', _value(props.direction.unit, req=true)) }}
+          {{ key_val_level('Direction unit', _value(props.direction.unit, req=true)) }}
           {% endwith %}
           {{ key_val_level('Name', _value(data.name)) }}
           {{ key_val_level('Location', _value(data.location, req=true)) }}

@@ -16,6 +16,10 @@ from observatory.forms.space_edit import (
     SpaceEditLocationForm,
     SpaceEditMembershipPlansForm,
     SpaceEditProjectsForm,
+    SpaceEditSpaceFedForm,
+    SpaceEditStateIconForm,
+)
+from observatory.forms.space_edit_sensors import (
     SpaceEditSensorsAccountBalanceForm,
     SpaceEditSensorsBarometerForm,
     SpaceEditSensorsBeverageSupplyForm,
@@ -25,8 +29,6 @@ from observatory.forms.space_edit import (
     SpaceEditSensorsTemperatureForm,
     SpaceEditSensorsTotalMemberCountForm,
     SpaceEditSensorsWindForm,
-    SpaceEditSpaceFedForm,
-    SpaceEditStateIconForm,
 )
 from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
