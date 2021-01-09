@@ -54,50 +54,53 @@ class TestSpaceApiBuildIndices:
         assert api.contact_keymasters_indices == indices
 
     @staticmethod
-    @mark.parametrize('field', ('temperature', 'barometer', 'humidity'))
-    def test_sensors_value_unit_location(field):
+    @mark.parametrize(
+        ('field', 'keys'),
+        [
+            (
+                'temperature',
+                [
+                    'sensors.temperature.value',
+                    'sensors.temperature.unit',
+                    'sensors.temperature.location',
+                ],
+            ),
+            (
+                'door_locked',
+                ['sensors.door_locked.value', 'sensors.door_locked.location'],
+            ),
+            (
+                'barometer',
+                [
+                    'sensors.barometer.value',
+                    'sensors.barometer.unit',
+                    'sensors.barometer.location',
+                ],
+            ),
+            (
+                'humidity',
+                [
+                    'sensors.humidity.value',
+                    'sensors.humidity.unit',
+                    'sensors.humidity.location',
+                ],
+            ),
+        ],
+    )
+    def test_sensors_common(field, keys):
         api = SpaceApi()
         assert getattr(api, f'sensors_{field}_indices', None) == []
 
         indices = list(range(choice(range(23, 42))))
         for idx in indices:
-            Value.set(
-                f'{SP_API_PREFIX}.sensors.{field}.value',
-                idx=idx,
-                elem=f'{field} #{idx} value',
-            )
-            Value.set(
-                f'{SP_API_PREFIX}.sensors.{field}.unit',
-                idx=idx,
-                elem=f'{field} #{idx} unit',
-            )
-            Value.set(
-                f'{SP_API_PREFIX}.sensors.{field}.location',
-                idx=idx,
-                elem=f'{field} #{idx} location',
-            )
+            for key in keys:
+                Value.set(
+                    f'{SP_API_PREFIX}.{key}',
+                    idx=idx,
+                    elem=f'{field} #{idx} {key}',
+                )
 
         assert getattr(api, f'sensors_{field}_indices', None) == indices
-
-    @staticmethod
-    def test_sensors_door_locked():
-        api = SpaceApi()
-        assert api.sensors_door_locked_indices == []
-
-        indices = list(range(7))
-        for idx in indices:
-            Value.set(
-                f'{SP_API_PREFIX}.sensors.door_locked.value',
-                idx=idx,
-                elem=f'door #{idx} locked value',
-            )
-            Value.set(
-                f'{SP_API_PREFIX}.sensors.door_locked.location',
-                idx=idx,
-                elem=f'door #{idx} locked location',
-            )
-
-        assert api.sensors_door_locked_indices == indices
 
     @staticmethod
     def test_projects():

@@ -4,8 +4,6 @@ from observatory.logic.space_api import SpaceApi
 from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
-# pylint: disable=too-many-locals
-
 
 @mark.usefixtures('session')
 class TestSpaceApiBuildValue:
@@ -272,255 +270,87 @@ class TestSpaceApiBuildValue:
         ]
 
     @staticmethod
-    def test_sensors_temperature(gen_sensor, gen_user):
-        api = SpaceApi()
-        user = gen_user()
-        nil_sensor = gen_sensor('nil')
-        nil_sensor.append(user=user, value=0)
-        nil_value = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.temperature.value',
-            idx=0,
-            elem=nil_sensor,
-        ).latest.value
-        one_sensor = gen_sensor('one')
-        one_sensor.append(user=user, value=1)
-        one_value = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.temperature.value',
-            idx=1,
-            elem=one_sensor,
-        ).latest.value
-
-        nil_unit = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.temperature.unit',
-            idx=0,
-            elem='hot',
-        ).elem
-        one_unit = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.temperature.unit',
-            idx=1,
-            elem='cold',
-        ).elem
-
-        nil_location = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.temperature.location',
-            idx=0,
-            elem='below',
-        ).elem
-        one_location = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.temperature.location',
-            idx=1,
-            elem='above',
-        ).elem
-
-        nil_name = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.temperature.name',
-            idx=0,
-            elem='sensor #0',
-        ).elem
-        one_name = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.temperature.name',
-            idx=1,
-            elem='sensor #1',
-        ).elem
-
-        nil_description = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.temperature.description',
-            idx=0,
-            elem='temperature sensor #0',
-        ).elem
-        one_description = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.temperature.description',
-            idx=1,
-            elem='temperature sensor #1',
-        ).elem
-
-        res = api.build()
-        assert res['sensors']['temperature'] == [
-            {
-                '_idx': 0,
-                'value': nil_value,
-                'unit': nil_unit,
-                'location': nil_location,
-                'name': nil_name,
-                'description': nil_description,
-            },
-            {
-                '_idx': 1,
-                'value': one_value,
-                'unit': one_unit,
-                'location': one_location,
-                'name': one_name,
-                'description': one_description,
-            },
-        ]
-
-    @staticmethod
-    def test_sensors_door_locked(gen_sensor, gen_user):
+    @mark.parametrize(
+        ('field', 'sensors', 'fields'),
+        [
+            (
+                'temperature',
+                dict(value='sensors.temperature.value'),
+                dict(
+                    unit='sensors.temperature.unit',
+                    location='sensors.temperature.location',
+                    name='sensors.temperature.name',
+                    description='sensors.temperature.description',
+                ),
+            ),
+            (
+                'door_locked',
+                dict(value='sensors.door_locked.value'),
+                dict(
+                    location='sensors.door_locked.location',
+                    name='sensors.door_locked.name',
+                    description='sensors.door_locked.description',
+                ),
+            ),
+            (
+                'barometer',
+                dict(value='sensors.barometer.value'),
+                dict(
+                    unit='sensors.barometer.unit',
+                    location='sensors.barometer.location',
+                    name='sensors.barometer.name',
+                    description='sensors.barometer.description',
+                ),
+            ),
+            (
+                'humidity',
+                dict(value='sensors.humidity.value'),
+                dict(
+                    unit='sensors.humidity.unit',
+                    location='sensors.humidity.location',
+                    name='sensors.humidity.name',
+                    description='sensors.humidity.description',
+                ),
+            ),
+        ],
+    )
+    def test_sensors_common(field, sensors, fields, gen_sensor, gen_user):
         api = SpaceApi()
         user = gen_user()
 
-        nil_sensor = gen_sensor('nil')
-        nil_sensor.append(user=user, value=1)
-        nil_value = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.door_locked.value',
-            idx=0,
-            elem=nil_sensor,
-        ).latest.value
-        one_sensor = gen_sensor('one')
-        one_sensor.append(user=user, value=0)
-        one_value = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.door_locked.value',
-            idx=1,
-            elem=one_sensor,
-        ).latest.value
+        result = []
+        for idx in range(3):
+            payload = {'_idx': idx}
 
-        nil_location = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.door_locked.location',
-            idx=0,
-            elem='main',
-        ).elem
-        one_location = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.door_locked.location',
-            idx=1,
-            elem='side',
-        ).elem
+            for key, sensor_key in sensors.items():
+                sensor = gen_sensor(f'{sensor_key}-{idx}')
+                sensor.append(user=user, value=idx)
 
-        nil_name = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.door_locked.name',
-            idx=0,
-            elem='sensor #0',
-        ).elem
-        one_name = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.door_locked.name',
-            idx=1,
-            elem='sensor #1',
-        ).elem
+                payload.update(
+                    {
+                        key: Value.set(
+                            key=f'{SP_API_PREFIX}.{sensor_key}',
+                            idx=idx,
+                            elem=sensor,
+                        ).latest.value
+                    }
+                )
 
-        nil_description = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.door_locked.description',
-            idx=0,
-            elem='door lock sensor #0',
-        ).elem
-        one_description = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.door_locked.description',
-            idx=1,
-            elem='door lock sensor #1',
-        ).elem
+            for key, field_key in fields.items():
+                payload.update(
+                    {
+                        key: Value.set(
+                            key=f'{SP_API_PREFIX}.{field_key}',
+                            idx=idx,
+                            elem=field_key,
+                        ).elem
+                    }
+                )
+
+            result.append(payload)
 
         res = api.build()
-        assert res['sensors']['door_locked'] == [
-            {
-                '_idx': 0,
-                'value': nil_value,
-                'location': nil_location,
-                'name': nil_name,
-                'description': nil_description,
-            },
-            {
-                '_idx': 1,
-                'value': one_value,
-                'location': one_location,
-                'name': one_name,
-                'description': one_description,
-            },
-        ]
-
-    @staticmethod
-    def test_sensors_barometer(gen_sensor, gen_user):
-        api = SpaceApi()
-        user = gen_user()
-
-        one_sensor = gen_sensor('one')
-        one_sensor.append(user=user, value=1)
-        one_value = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.barometer.value',
-            idx=1,
-            elem=one_sensor,
-        ).latest.value
-
-        one_unit = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.barometer.unit',
-            idx=1,
-            elem='high',
-        ).elem
-
-        one_location = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.barometer.location',
-            idx=1,
-            elem='somewhere',
-        ).elem
-
-        one_name = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.barometer.name',
-            idx=1,
-            elem='sensor #1',
-        ).elem
-
-        one_description = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.barometer.description',
-            idx=1,
-            elem='barometer #1',
-        ).elem
-
-        res = api.build()
-        assert res['sensors']['barometer'] == [
-            {
-                '_idx': 1,
-                'value': one_value,
-                'unit': one_unit,
-                'location': one_location,
-                'name': one_name,
-                'description': one_description,
-            },
-        ]
-
-    @staticmethod
-    def test_sensors_humidity(gen_sensor, gen_user):
-        api = SpaceApi()
-        user = gen_user()
-        nil_sensor = gen_sensor('nil')
-        nil_sensor.append(user=user, value=0)
-        nil_value = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.humidity.value',
-            idx=0,
-            elem=nil_sensor,
-        ).latest.value
-
-        nil_unit = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.humidity.unit',
-            idx=0,
-            elem='wet',
-        ).elem
-
-        nil_location = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.humidity.location',
-            idx=0,
-            elem='somewhere',
-        ).elem
-
-        nil_name = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.humidity.name',
-            idx=0,
-            elem='sensor #0',
-        ).elem
-
-        nil_description = Value.set(
-            key=f'{SP_API_PREFIX}.sensors.humidity.description',
-            idx=0,
-            elem='humidity sensor #0',
-        ).elem
-
-        res = api.build()
-        assert res['sensors']['humidity'] == [
-            {
-                '_idx': 0,
-                'value': nil_value,
-                'unit': nil_unit,
-                'location': nil_location,
-                'name': nil_name,
-                'description': nil_description,
-            }
-        ]
+        assert res['sensors'][field] == result
 
     @staticmethod
     def test_projects():
