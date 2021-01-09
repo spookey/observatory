@@ -17,6 +17,7 @@ from observatory.forms.space_drop import (
     SpaceDropMembershipPlansForm,
     SpaceDropProjectsForm,
     SpaceDropSensorsBarometerForm,
+    SpaceDropSensorsBeverageSupplyForm,
     SpaceDropSensorsDoorLockedForm,
     SpaceDropSensorsHumidityForm,
     SpaceDropSensorsTemperatureForm,
@@ -133,6 +134,10 @@ def form_drop_space_sensors_barometer(idx):
 
 def form_drop_space_sensors_humidity(idx):
     return SpaceDropSensorsHumidityForm(idx=idx)
+
+
+def form_drop_space_sensors_beverage_supply(idx):
+    return SpaceDropSensorsBeverageSupplyForm(idx=idx)
 
 
 def form_drop_space_links(idx):

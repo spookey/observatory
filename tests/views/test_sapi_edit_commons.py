@@ -247,6 +247,32 @@ PAGES = [
         multi=True,
     ),
     page_data(
+        'sapi.edit_sensors_beverage_supply',
+        url='/space/edit/sensors/beverage-supply',
+        keys=dict(
+            sensor_sel='sensors.beverage_supply.value',
+            elevate='sensors.beverage_supply.value.elevate',
+            convert_sel='sensors.beverage_supply.value.convert',
+            horizon_sel='sensors.beverage_supply.value.horizon',
+            unit_sel='sensors.beverage_supply.unit',
+            location='sensors.beverage_supply.location',
+            name='sensors.beverage_supply.name',
+            description='sensors.beverage_supply.description',
+        ),
+        data=dict(
+            sensor_sel=7,
+            elevate=1,
+            convert_sel='INTEGER',
+            horizon_sel='NORMAL',
+            unit_sel='crt',
+            location='cellar',
+            name='beer',
+            description='yes',
+        ),
+        sensors=['sensor_sel'],
+        multi=True,
+    ),
+    page_data(
         'sapi.edit_feeds_blog',
         url='/space/edit/feeds/blog',
         keys=dict(

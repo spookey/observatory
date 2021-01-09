@@ -92,6 +92,20 @@ PAGES = [
         ],
     ),
     page_data(
+        'sapi.drop_sensors_beverage_supply',
+        url='/space/drop/sensors/beverage-supply',
+        keys=[
+            'sensors.beverage_supply.value',
+            'sensors.beverage_supply.value.elevate',
+            'sensors.beverage_supply.value.convert',
+            'sensors.beverage_supply.value.horizon',
+            'sensors.beverage_supply.unit',
+            'sensors.beverage_supply.location',
+            'sensors.beverage_supply.name',
+            'sensors.beverage_supply.description',
+        ],
+    ),
+    page_data(
         'sapi.drop_projects',
         url='/space/drop/projects',
         keys=['projects'],

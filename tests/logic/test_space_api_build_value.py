@@ -312,6 +312,16 @@ class TestSpaceApiBuildValue:
                     description='sensors.humidity.description',
                 ),
             ),
+            (
+                'beverage_supply',
+                dict(value='sensors.beverage_supply.value'),
+                dict(
+                    unit='sensors.beverage_supply.unit',
+                    location='sensors.beverage_supply.location',
+                    name='sensors.beverage_supply.name',
+                    description='sensors.beverage_supply.description',
+                ),
+            ),
         ],
     )
     def test_sensors_common(field, sensors, fields, gen_sensor, gen_user):

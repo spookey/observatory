@@ -125,6 +125,13 @@ class SpaceApi:
         )
 
     @property
+    def sensors_beverage_supply_indices(self):
+        return self._indices_all(
+            'sensors.beverage_supply.value',
+            'sensors.beverage_supply.unit',
+        )
+
+    @property
     def projects_indices(self):
         return self._indices_all('projects')
 
@@ -313,7 +320,31 @@ class SpaceApi:
                     }
                     for idx in self.sensors_humidity_indices
                 ],
-                'beverage_supply': [],
+                'beverage_supply': [
+                    {
+                        '_idx': idx,
+                        'value': self.latest_value(
+                            'sensors.beverage_supply.value',
+                            idx=idx,
+                            horizon_key='sensors.beverage_supply.value.horizon',
+                            convert_key='sensors.beverage_supply.value.convert',
+                            elevate_key='sensors.beverage_supply.value.elevate',
+                        ),
+                        'unit': self._get(
+                            'sensors.beverage_supply.unit', idx=idx
+                        ),
+                        'location': self._get(
+                            'sensors.beverage_supply.location', idx=idx
+                        ),
+                        'name': self._get(
+                            'sensors.beverage_supply.name', idx=idx
+                        ),
+                        'description': self._get(
+                            'sensors.beverage_supply.description', idx=idx
+                        ),
+                    }
+                    for idx in self.sensors_beverage_supply_indices
+                ],
                 'power_consumption': [],
                 'wind': [],
                 'network_connections': [],

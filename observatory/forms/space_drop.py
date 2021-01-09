@@ -116,6 +116,19 @@ class SpaceDropSensorsHumidityForm(SpaceDropForm):
     ]
 
 
+class SpaceDropSensorsBeverageSupplyForm(SpaceDropForm):
+    KEYS = [
+        'sensors.beverage_supply.value',
+        'sensors.beverage_supply.value.elevate',
+        'sensors.beverage_supply.value.convert',
+        'sensors.beverage_supply.value.horizon',
+        'sensors.beverage_supply.unit',
+        'sensors.beverage_supply.location',
+        'sensors.beverage_supply.name',
+        'sensors.beverage_supply.description',
+    ]
+
+
 class SpaceDropProjectsForm(SpaceDropForm):
     KEYS = ['projects']
 

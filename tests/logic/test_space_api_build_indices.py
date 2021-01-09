@@ -85,6 +85,13 @@ class TestSpaceApiBuildIndices:
                     'sensors.humidity.location',
                 ],
             ),
+            (
+                'beverage_supply',
+                [
+                    'sensors.beverage_supply.value',
+                    'sensors.beverage_supply.unit',
+                ],
+            ),
         ],
     )
     def test_sensors_common(field, keys):
