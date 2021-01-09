@@ -9,6 +9,7 @@ from observatory.forms.space_drop import (
     SpaceDropLinksForm,
     SpaceDropMembershipPlansForm,
     SpaceDropProjectsForm,
+    SpaceDropSensorsAccountBalanceForm,
     SpaceDropSensorsBarometerForm,
     SpaceDropSensorsBeverageSupplyForm,
     SpaceDropSensorsDoorLockedForm,
@@ -123,6 +124,19 @@ FORMS = [
             'sensors.power_consumption.location',
             'sensors.power_consumption.name',
             'sensors.power_consumption.description',
+        ],
+    ),
+    form_drop(
+        SpaceDropSensorsAccountBalanceForm,
+        keys=[
+            'sensors.account_balance.value',
+            'sensors.account_balance.value.elevate',
+            'sensors.account_balance.value.convert',
+            'sensors.account_balance.value.horizon',
+            'sensors.account_balance.unit',
+            'sensors.account_balance.location',
+            'sensors.account_balance.name',
+            'sensors.account_balance.description',
         ],
     ),
     form_drop(

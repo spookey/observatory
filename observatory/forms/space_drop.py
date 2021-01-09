@@ -142,6 +142,19 @@ class SpaceDropSensorsPowerConsumptionForm(SpaceDropForm):
     ]
 
 
+class SpaceDropSensorsAccountBalanceForm(SpaceDropForm):
+    KEYS = [
+        'sensors.account_balance.value',
+        'sensors.account_balance.value.elevate',
+        'sensors.account_balance.value.convert',
+        'sensors.account_balance.value.horizon',
+        'sensors.account_balance.unit',
+        'sensors.account_balance.location',
+        'sensors.account_balance.name',
+        'sensors.account_balance.description',
+    ]
+
+
 class SpaceDropProjectsForm(SpaceDropForm):
     KEYS = ['projects']
 

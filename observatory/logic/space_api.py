@@ -6,6 +6,7 @@ from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX, SP_API_REFRESH
 
 # pylint: disable=too-many-arguments
+# pylint: disable=too-many-public-methods
 
 
 class SpaceApi:
@@ -137,6 +138,13 @@ class SpaceApi:
             'sensors.power_consumption.value',
             'sensors.power_consumption.unit',
             'sensors.power_consumption.location',
+        )
+
+    @property
+    def sensors_account_balance_indices(self):
+        return self._indices_all(
+            'sensors.account_balance.value',
+            'sensors.account_balance.unit',
         )
 
     @property
@@ -334,9 +342,15 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.beverage_supply.value',
                             idx=idx,
-                            horizon_key='sensors.beverage_supply.value.horizon',
-                            convert_key='sensors.beverage_supply.value.convert',
-                            elevate_key='sensors.beverage_supply.value.elevate',
+                            horizon_key=(
+                                'sensors.beverage_supply.value.horizon'
+                            ),
+                            convert_key=(
+                                'sensors.beverage_supply.value.convert'
+                            ),
+                            elevate_key=(
+                                'sensors.beverage_supply.value.elevate'
+                            ),
                         ),
                         'unit': self._get(
                             'sensors.beverage_supply.unit', idx=idx
@@ -359,9 +373,15 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.power_consumption.value',
                             idx=idx,
-                            horizon_key='sensors.power_consumption.value.horizon',
-                            convert_key='sensors.power_consumption.value.convert',
-                            elevate_key='sensors.power_consumption.value.elevate',
+                            horizon_key=(
+                                'sensors.power_consumption.value.horizon'
+                            ),
+                            convert_key=(
+                                'sensors.power_consumption.value.convert'
+                            ),
+                            elevate_key=(
+                                'sensors.power_consumption.value.elevate'
+                            ),
                         ),
                         'unit': self._get(
                             'sensors.power_consumption.unit', idx=idx
@@ -380,7 +400,37 @@ class SpaceApi:
                 ],
                 'wind': [],
                 'network_connections': [],
-                'account_balance': [],
+                'account_balance': [
+                    {
+                        '_idx': idx,
+                        'value': self.latest_value(
+                            'sensors.account_balance.value',
+                            idx=idx,
+                            horizon_key=(
+                                'sensors.account_balance.value.horizon'
+                            ),
+                            convert_key=(
+                                'sensors.account_balance.value.convert'
+                            ),
+                            elevate_key=(
+                                'sensors.account_balance.value.elevate'
+                            ),
+                        ),
+                        'unit': self._get(
+                            'sensors.account_balance.unit', idx=idx
+                        ),
+                        'location': self._get(
+                            'sensors.account_balance.location', idx=idx
+                        ),
+                        'name': self._get(
+                            'sensors.account_balance.name', idx=idx
+                        ),
+                        'description': self._get(
+                            'sensors.account_balance.description', idx=idx
+                        ),
+                    }
+                    for idx in self.sensors_account_balance_indices
+                ],
                 'total_member_count': [],
                 'people_now_present': [],
                 'network_traffic': [],

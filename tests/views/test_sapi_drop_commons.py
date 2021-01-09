@@ -120,6 +120,20 @@ PAGES = [
         ],
     ),
     page_data(
+        'sapi.drop_sensors_account_balance',
+        url='/space/drop/sensors/account-balance',
+        keys=[
+            'sensors.account_balance.value',
+            'sensors.account_balance.value.elevate',
+            'sensors.account_balance.value.convert',
+            'sensors.account_balance.value.horizon',
+            'sensors.account_balance.unit',
+            'sensors.account_balance.location',
+            'sensors.account_balance.name',
+            'sensors.account_balance.description',
+        ],
+    ),
+    page_data(
         'sapi.drop_projects',
         url='/space/drop/projects',
         keys=['projects'],

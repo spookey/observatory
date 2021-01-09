@@ -332,6 +332,16 @@ class TestSpaceApiBuildValue:
                     description='sensors.power_consumption.description',
                 ),
             ),
+            (
+                'account_balance',
+                dict(value='sensors.account_balance.value'),
+                dict(
+                    unit='sensors.account_balance.unit',
+                    location='sensors.account_balance.location',
+                    name='sensors.account_balance.name',
+                    description='sensors.account_balance.description',
+                ),
+            ),
         ],
     )
     def test_sensors_common(field, sensors, fields, gen_sensor, gen_user):

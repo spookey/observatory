@@ -299,6 +299,32 @@ PAGES = [
         multi=True,
     ),
     page_data(
+        'sapi.edit_sensors_account_balance',
+        url='/space/edit/sensors/account-balance',
+        keys=dict(
+            sensor_sel='sensors.account_balance.value',
+            elevate='sensors.account_balance.value.elevate',
+            convert_sel='sensors.account_balance.value.convert',
+            horizon_sel='sensors.account_balance.value.horizon',
+            unit_sel='sensors.account_balance.unit',
+            location='sensors.account_balance.location',
+            name='sensors.account_balance.name',
+            description='sensors.account_balance.description',
+        ),
+        data=dict(
+            sensor_sel=3,
+            elevate=0.99999,
+            convert_sel='NATURAL',
+            horizon_sel='INVERT',
+            unit_sel='EUR',
+            location='pocket',
+            name='cash',
+            description='money',
+        ),
+        sensors=['sensor_sel'],
+        multi=True,
+    ),
+    page_data(
         'sapi.edit_feeds_blog',
         url='/space/edit/feeds/blog',
         keys=dict(

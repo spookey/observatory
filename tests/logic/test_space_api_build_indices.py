@@ -100,6 +100,13 @@ class TestSpaceApiBuildIndices:
                     'sensors.power_consumption.location',
                 ],
             ),
+            (
+                'account_balance',
+                [
+                    'sensors.account_balance.value',
+                    'sensors.account_balance.unit',
+                ],
+            ),
         ],
     )
     def test_sensors_common(field, keys):
