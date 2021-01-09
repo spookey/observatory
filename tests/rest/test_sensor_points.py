@@ -14,6 +14,7 @@ ENDPOINT = 'api.sensor.points'
 @mark.usefixtures('session')
 class TestSensorPoints:
     @staticmethod
+    @mark.usefixtures('ctx_app')
     def test_url():
         assert url_for(ENDPOINT, slug='test') == '/api/sensor/test/points'
 

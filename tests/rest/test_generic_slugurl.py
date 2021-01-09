@@ -1,4 +1,5 @@
 from flask import url_for
+from pytest import mark
 
 from observatory.rest.generic import MapperSlugUrl, SlugUrl
 
@@ -39,6 +40,7 @@ class TestSlugUrl:
         assert getattr(res, 'slug', None) == 'real slug'
 
     @staticmethod
+    @mark.usefixtures('ctx_app')
     def test_output():
         obj = make_obj(slug='test slug')
 
@@ -84,6 +86,7 @@ class TestMapperSlugUrl:
         assert getattr(res, 'prompt_slug', None) == 'real prompt_slug'
 
     @staticmethod
+    @mark.usefixtures('ctx_app')
     def test_output():
         obj = make_obj(slug='test slug')
 

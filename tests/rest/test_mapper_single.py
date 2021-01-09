@@ -13,6 +13,7 @@ ENDPOINT = 'api.mapper.single'
 @mark.usefixtures('session')
 class TestMapperSingle:
     @staticmethod
+    @mark.usefixtures('ctx_app')
     def test_url():
         assert (
             url_for(

@@ -36,6 +36,7 @@ def _comm(request, gen_prompt, gen_sensor):
 @mark.usefixtures('session')
 class TestCommonListing:
     @staticmethod
+    @mark.usefixtures('ctx_app')
     def test_endpoint(_comm):
         assert url_for(_comm.endpoint) == _comm.url
 

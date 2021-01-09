@@ -11,6 +11,7 @@ ENDPOINT = 'api.owners.listing'
 @mark.usefixtures('session')
 class TestOwnersListing:
     @staticmethod
+    @mark.usefixtures('ctx_app')
     def test_endpoint():
         assert url_for(ENDPOINT) == '/api/user'
 

@@ -1,5 +1,6 @@
 from flask import url_for
 from jinja2 import Markup
+from pytest import mark
 
 from observatory.shared import script_config_data
 from observatory.start.environment import (
@@ -17,6 +18,7 @@ from observatory.start.environment import (
 )
 
 
+@mark.usefixtures('ctx_app')
 def test_script_config_data():
     config = script_config_data()
     assert isinstance(config, Markup)

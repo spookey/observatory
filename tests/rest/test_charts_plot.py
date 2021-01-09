@@ -15,6 +15,7 @@ ENDPOINT = 'api.charts.plot'
 @mark.usefixtures('session')
 class TestChartsPlot:
     @staticmethod
+    @mark.usefixtures('ctx_app')
     def test_url():
         assert url_for(ENDPOINT, slug='demo') == '/api/charts/demo'
         assert url_for(ENDPOINT, slug='') == '/api/charts/'
