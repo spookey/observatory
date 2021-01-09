@@ -122,6 +122,16 @@ class TestSpaceApiBuildIndices:
                 ],
             ),
             ('total_member_count', ['sensors.total_member_count.value']),
+            (
+                'network_traffic',
+                [
+                    'sensors.network_traffic.properties.bits_per_second.value',
+                    (
+                        'sensors.network_traffic.properties'
+                        '.packets_per_second.value'
+                    ),
+                ],
+            ),
         ],
     )
     def test_sensors_common(field, keys):

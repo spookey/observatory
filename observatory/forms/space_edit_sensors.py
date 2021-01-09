@@ -663,3 +663,96 @@ class SpaceEditSensorsTotalMemberCountForm(SpaceEditSensorsForm):
         self.sensor_sel.choices = self._sensor_choices()
         self.convert_sel.choices = self._convert_choices()
         self.horizon_sel.choices = self._horizon_choices()
+
+
+class SpaceEditSensorsNetworkTrafficForm(SpaceEditSensorsForm):
+    KEYS = dict(
+        bps_sensor_sel=(
+            'sensors.network_traffic.properties.bits_per_second.value'
+        ),
+        bps_elevate=(
+            'sensors.network_traffic.properties.bits_per_second.value.elevate'
+        ),
+        bps_convert_sel=(
+            'sensors.network_traffic.properties.bits_per_second.value.convert'
+        ),
+        bps_horizon_sel=(
+            'sensors.network_traffic.properties.bits_per_second.value.horizon'
+        ),
+        bps_maximum=(
+            'sensors.network_traffic.properties.bits_per_second.maximum'
+        ),
+        pps_sensor_sel=(
+            'sensors.network_traffic.properties.packets_per_second.value'
+        ),
+        pps_elevate=(
+            'sensors.network_traffic.properties.'
+            'packets_per_second.value.elevate'
+        ),
+        pps_convert_sel=(
+            'sensors.network_traffic.properties.'
+            'packets_per_second.value.convert'
+        ),
+        pps_horizon_sel=(
+            'sensors.network_traffic.properties.'
+            'packets_per_second.value.horizon'
+        ),
+        location='sensors.network_traffic.location',
+        name='sensors.network_traffic.name',
+        description='sensors.network_traffic.description',
+    )
+    SENSORS = [
+        'bps_sensor_sel',
+        'pps_sensor_sel',
+    ]
+
+    (
+        bps_sensor_sel,
+        bps_elevate,
+        bps_convert_sel,
+        bps_horizon_sel,
+    ) = SpaceEditSensorsForm.sensor_fields('Bits per second')
+    bps_maximum = DecimalField(
+        'Maximum bits per second',
+        default=0.0,
+        places=4,
+        validators=[NumberRange(min=0.0)],
+        description='E.g. as sold by your ISP',
+    )
+    (
+        pps_sensor_sel,
+        pps_elevate,
+        pps_convert_sel,
+        pps_horizon_sel,
+    ) = SpaceEditSensorsForm.sensor_fields('Packages per second')
+    location = StringField(
+        'Location',
+        validators=[Optional()],
+        description='The location of your sensor',
+    )
+    name = StringField(
+        'Name',
+        validators=[Optional()],
+        description='Give your sensor a name',
+    )
+    description = TextAreaField(
+        'Description',
+        validators=[Optional()],
+        description='Some additional information',
+    )
+    submit = SubmitField(
+        'Save',
+        description='Submit',
+        widget=SubmitButtonInput(icon='ops_submit'),
+    )
+
+    def __init__(self, idx, *args, **kwargs):
+        super().__init__(*args, idx=idx, **kwargs)
+
+        self.bps_sensor_sel.choices = self._sensor_choices()
+        self.bps_convert_sel.choices = self._convert_choices()
+        self.bps_horizon_sel.choices = self._horizon_choices()
+
+        self.pps_sensor_sel.choices = self._sensor_choices()
+        self.pps_convert_sel.choices = self._convert_choices()
+        self.pps_horizon_sel.choices = self._horizon_choices()

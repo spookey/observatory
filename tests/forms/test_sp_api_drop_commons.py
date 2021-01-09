@@ -14,6 +14,7 @@ from observatory.forms.space_drop import (
     SpaceDropSensorsBeverageSupplyForm,
     SpaceDropSensorsDoorLockedForm,
     SpaceDropSensorsHumidityForm,
+    SpaceDropSensorsNetworkTrafficForm,
     SpaceDropSensorsPowerConsumptionForm,
     SpaceDropSensorsTemperatureForm,
     SpaceDropSensorsTotalMemberCountForm,
@@ -179,6 +180,32 @@ FORMS = [
             'sensors.total_member_count.location',
             'sensors.total_member_count.name',
             'sensors.total_member_count.description',
+        ],
+    ),
+    form_drop(
+        SpaceDropSensorsNetworkTrafficForm,
+        keys=[
+            'sensors.network_traffic.properties.bits_per_second.value',
+            'sensors.network_traffic.properties.bits_per_second.value.elevate',
+            'sensors.network_traffic.properties.bits_per_second.value.convert',
+            'sensors.network_traffic.properties.bits_per_second.value.horizon',
+            'sensors.network_traffic.properties.bits_per_second.maximum',
+            'sensors.network_traffic.properties.packets_per_second.value',
+            (
+                'sensors.network_traffic.properties.'
+                'packets_per_second.value.elevate'
+            ),
+            (
+                'sensors.network_traffic.properties.'
+                'packets_per_second.value.convert'
+            ),
+            (
+                'sensors.network_traffic.properties.'
+                'packets_per_second.value.horizon'
+            ),
+            'sensors.network_traffic.location',
+            'sensors.network_traffic.name',
+            'sensors.network_traffic.description',
         ],
     ),
     form_drop(

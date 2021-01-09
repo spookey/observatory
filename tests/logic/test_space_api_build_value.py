@@ -447,6 +447,64 @@ class TestSpaceApiBuildValue:
         assert res['sensors']['wind'] == result
 
     @staticmethod
+    def test_sensors_network_traffic(gen_sensor, gen_user):
+        api = SpaceApi()
+        user = gen_user()
+
+        result = []
+        for idx in range(2):
+            bps_sensor = gen_sensor(f'bps-sensor-{idx}')
+            bps_sensor.append(user=user, value=idx)
+            pps_sensor = gen_sensor(f'pps-sensor-{idx}')
+            pps_sensor.append(user=user, value=idx)
+
+            payload = {
+                '_idx': idx,
+                'properties': {
+                    'bits_per_second': {
+                        'value': Value.set(
+                            (
+                                f'{SP_API_PREFIX}.sensors.network_traffic.'
+                                'properties.bits_per_second.value'
+                            ),
+                            idx=idx,
+                            elem=bps_sensor,
+                        ).latest.value,
+                        'maximum': Value.set(
+                            (
+                                f'{SP_API_PREFIX}.sensors.network_traffic.'
+                                'properties.bits_per_second.maximum'
+                            ),
+                            idx=idx,
+                            elem=idx * 5,
+                        ).elem,
+                    },
+                    'packets_per_second': {
+                        'value': Value.set(
+                            (
+                                f'{SP_API_PREFIX}.sensors.network_traffic.'
+                                'properties.packets_per_second.value'
+                            ),
+                            idx=idx,
+                            elem=pps_sensor,
+                        ).latest.value,
+                    },
+                },
+                **{
+                    key: Value.set(
+                        f'{SP_API_PREFIX}.sensors.network_traffic.{key}',
+                        idx=idx,
+                        elem=key,
+                    ).elem
+                    for key in ['location', 'name', 'description']
+                },
+            }
+            result.append(payload)
+
+        res = api.build()
+        assert res['sensors']['network_traffic'] == result
+
+    @staticmethod
     def test_projects():
         api = SpaceApi()
         one_pro = Value.set(

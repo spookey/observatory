@@ -195,6 +195,23 @@ class SpaceDropSensorsTotalMemberCountForm(SpaceDropForm):
     ]
 
 
+class SpaceDropSensorsNetworkTrafficForm(SpaceDropForm):
+    KEYS = [
+        'sensors.network_traffic.properties.bits_per_second.value',
+        'sensors.network_traffic.properties.bits_per_second.value.elevate',
+        'sensors.network_traffic.properties.bits_per_second.value.convert',
+        'sensors.network_traffic.properties.bits_per_second.value.horizon',
+        'sensors.network_traffic.properties.bits_per_second.maximum',
+        'sensors.network_traffic.properties.packets_per_second.value',
+        'sensors.network_traffic.properties.packets_per_second.value.elevate',
+        'sensors.network_traffic.properties.packets_per_second.value.convert',
+        'sensors.network_traffic.properties.packets_per_second.value.horizon',
+        'sensors.network_traffic.location',
+        'sensors.network_traffic.name',
+        'sensors.network_traffic.description',
+    ]
+
+
 class SpaceDropProjectsForm(SpaceDropForm):
     KEYS = ['projects']
 

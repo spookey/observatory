@@ -176,6 +176,33 @@ PAGES = [
         ],
     ),
     page_data(
+        'sapi.drop_sensors_network_traffic',
+        url='/space/drop/sensors/network-traffic',
+        keys=[
+            'sensors.network_traffic.properties.bits_per_second.value',
+            'sensors.network_traffic.properties.bits_per_second.value.elevate',
+            'sensors.network_traffic.properties.bits_per_second.value.convert',
+            'sensors.network_traffic.properties.bits_per_second.value.horizon',
+            'sensors.network_traffic.properties.bits_per_second.maximum',
+            'sensors.network_traffic.properties.packets_per_second.value',
+            (
+                'sensors.network_traffic.properties.'
+                'packets_per_second.value.elevate'
+            ),
+            (
+                'sensors.network_traffic.properties.'
+                'packets_per_second.value.convert'
+            ),
+            (
+                'sensors.network_traffic.properties.'
+                'packets_per_second.value.horizon'
+            ),
+            'sensors.network_traffic.location',
+            'sensors.network_traffic.name',
+            'sensors.network_traffic.description',
+        ],
+    ),
+    page_data(
         'sapi.drop_projects',
         url='/space/drop/projects',
         keys=['projects'],

@@ -166,6 +166,13 @@ class SpaceApi:
         return self._indices_all('sensors.total_member_count.value')
 
     @property
+    def sensors_network_traffic_indices(self):
+        return self._indices_any(
+            'sensors.network_traffic.properties.bits_per_second.value',
+            'sensors.network_traffic.properties.packets_per_second.value',
+        )
+
+    @property
     def projects_indices(self):
         return self._indices_all('projects')
 
@@ -574,7 +581,72 @@ class SpaceApi:
                     for idx in self.sensors_total_member_count_indices
                 ],
                 'people_now_present': [],
-                'network_traffic': [],
+                'network_traffic': [
+                    {
+                        '_idx': idx,
+                        'properties': {
+                            'bits_per_second': {
+                                'value': self.latest_value(
+                                    (
+                                        'sensors.network_traffic.properties.'
+                                        'bits_per_second.value'
+                                    ),
+                                    idx=idx,
+                                    horizon_key=(
+                                        'sensors.network_traffic.properties.'
+                                        'bits_per_second.value.horizon'
+                                    ),
+                                    convert_key=(
+                                        'sensors.network_traffic.properties.'
+                                        'bits_per_second.value.convert'
+                                    ),
+                                    elevate_key=(
+                                        'sensors.network_traffic.properties.'
+                                        'bits_per_second.value.elevate'
+                                    ),
+                                ),
+                                'maximum': self._get(
+                                    (
+                                        'sensors.network_traffic.properties.'
+                                        'bits_per_second.maximum'
+                                    ),
+                                    idx=idx,
+                                ),
+                            },
+                            'packets_per_second': {
+                                'value': self.latest_value(
+                                    (
+                                        'sensors.network_traffic.properties.'
+                                        'packets_per_second.value'
+                                    ),
+                                    idx=idx,
+                                    horizon_key=(
+                                        'sensors.network_traffic.properties.'
+                                        'packets_per_second.value.horizon'
+                                    ),
+                                    convert_key=(
+                                        'sensors.network_traffic.properties.'
+                                        'packets_per_second.value.convert'
+                                    ),
+                                    elevate_key=(
+                                        'sensors.network_traffic.properties.'
+                                        'packets_per_second.value.elevate'
+                                    ),
+                                ),
+                            },
+                        },
+                        'location': self._get(
+                            'sensors.network_traffic.location', idx=idx
+                        ),
+                        'name': self._get(
+                            'sensors.network_traffic.name', idx=idx
+                        ),
+                        'description': self._get(
+                            'sensors.network_traffic.description', idx=idx
+                        ),
+                    }
+                    for idx in self.sensors_network_traffic_indices
+                ],
             },
             'feeds': {
                 'blog': {

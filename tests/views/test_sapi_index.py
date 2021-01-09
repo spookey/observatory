@@ -70,6 +70,7 @@ class TestSapiIndex:
             'Wind sensor',
             'Account balance',
             'Total member count',
+            'Network traffic',
             'Blog feed',
             'Wiki feed',
             'Calendar feed',

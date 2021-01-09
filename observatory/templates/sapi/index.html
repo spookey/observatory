@@ -272,6 +272,24 @@
           {{ key_val_level('Location', _value(data.location)) }}
           {{ key_val_level('Description', _value(data.description)) }}
         {% endcall %}
+        {% call(data) _block(
+          'Network traffic', content['sensors']['network_traffic'],
+          edit_ep='sapi.edit_sensors_network_traffic',
+          drop_ep='sapi.drop_sensors_network_traffic',
+          drop_fm=form_drop_space_sensors_network_traffic,
+          indices=space_api.sensors_network_traffic_indices,
+        ) %}
+          {% with props = data.properties %}
+          {% with (bps, pps) = (props.bits_per_second, props.packets_per_second) %}
+          {{ key_val_level('Bits per second', _value(bps.value, req=true)) }}
+          {{ key_val_level('Maximum', _value(bps.maximum, req=true)) }}
+          {{ key_val_level('Packets per second', _value(pps.value, req=true)) }}
+          {% endwith %}
+          {% endwith %}
+          {{ key_val_level('Name', _value(data.name)) }}
+          {{ key_val_level('Location', _value(data.location, req=true)) }}
+          {{ key_val_level('Description', _value(data.description)) }}
+        {% endcall %}
         {% for (_title, _ep, _data) in (
             ('Blog feed', 'sapi.edit_feeds_blog', content['feeds']['blog']),
             ('Wiki feed', 'sapi.edit_feeds_wiki', content['feeds']['wiki']),

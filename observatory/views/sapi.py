@@ -21,6 +21,7 @@ from observatory.forms.space_drop import (
     SpaceDropSensorsBeverageSupplyForm,
     SpaceDropSensorsDoorLockedForm,
     SpaceDropSensorsHumidityForm,
+    SpaceDropSensorsNetworkTrafficForm,
     SpaceDropSensorsPowerConsumptionForm,
     SpaceDropSensorsTemperatureForm,
     SpaceDropSensorsTotalMemberCountForm,
@@ -48,6 +49,7 @@ from observatory.forms.space_edit_sensors import (
     SpaceEditSensorsBeverageSupplyForm,
     SpaceEditSensorsDoorLockedForm,
     SpaceEditSensorsHumidityForm,
+    SpaceEditSensorsNetworkTrafficForm,
     SpaceEditSensorsPowerConsumptionForm,
     SpaceEditSensorsTemperatureForm,
     SpaceEditSensorsTotalMemberCountForm,
@@ -255,6 +257,20 @@ def edit_sensors_total_member_count(idx=0):
     )
 
 
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/network-traffic/<int:idx>', methods=['GET', 'POST']
+)
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/network-traffic', methods=['GET', 'POST']
+)
+@login_required
+def edit_sensors_network_traffic(idx=0):
+    return _edit_form(
+        SpaceEditSensorsNetworkTrafficForm(idx=idx),
+        f'Network traffic #{1 + idx}',
+    )
+
+
 @BLUEPRINT_SAPI.route('/space/edit/feeds/blog', methods=['GET', 'POST'])
 @login_required
 def edit_feeds_blog():
@@ -410,6 +426,17 @@ def drop_sensors_account_balance(idx):
     return _drop_form(
         SpaceDropSensorsAccountBalanceForm(idx=idx),
         f'Account balance #{1 + idx}',
+    )
+
+
+@BLUEPRINT_SAPI.route(
+    '/space/drop/sensors/network-traffic/<int:idx>', methods=['POST']
+)
+@login_required
+def drop_sensors_network_traffic(idx):
+    return _drop_form(
+        SpaceDropSensorsNetworkTrafficForm(idx=idx),
+        f'Network traffic #{1 + idx}',
     )
 
 

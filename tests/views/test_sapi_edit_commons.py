@@ -422,6 +422,67 @@ PAGES = [
         multi=True,
     ),
     page_data(
+        'sapi.edit_sensors_network_traffic',
+        url='/space/edit/sensors/network-traffic',
+        keys=dict(
+            bps_sensor_sel=(
+                'sensors.network_traffic.properties.bits_per_second.value'
+            ),
+            bps_elevate=(
+                'sensors.network_traffic.properties.'
+                'bits_per_second.value.elevate'
+            ),
+            bps_convert_sel=(
+                'sensors.network_traffic.properties.'
+                'bits_per_second.value.convert'
+            ),
+            bps_horizon_sel=(
+                'sensors.network_traffic.properties.'
+                'bits_per_second.value.horizon'
+            ),
+            bps_maximum=(
+                'sensors.network_traffic.properties.bits_per_second.maximum'
+            ),
+            pps_sensor_sel=(
+                'sensors.network_traffic.properties.packets_per_second.value'
+            ),
+            pps_elevate=(
+                'sensors.network_traffic.properties.'
+                'packets_per_second.value.elevate'
+            ),
+            pps_convert_sel=(
+                'sensors.network_traffic.properties.'
+                'packets_per_second.value.convert'
+            ),
+            pps_horizon_sel=(
+                'sensors.network_traffic.properties.'
+                'packets_per_second.value.horizon'
+            ),
+            location='sensors.network_traffic.location',
+            name='sensors.network_traffic.name',
+            description='sensors.network_traffic.description',
+        ),
+        data=dict(
+            bps_sensor_sel=2,
+            bps_elevate=1.2,
+            bps_convert_sel='INTEGER',
+            bps_horizon_sel='NORMAL',
+            bps_maximum=13.37,
+            pps_sensor_sel=4,
+            pps_elevate=1.4,
+            pps_convert_sel='INTEGER',
+            pps_horizon_sel='NORMAL',
+            location='switch',
+            name='traffic',
+            description='collecting bits',
+        ),
+        sensors=[
+            'bps_sensor_sel',
+            'pps_sensor_sel',
+        ],
+        multi=True,
+    ),
+    page_data(
         'sapi.edit_feeds_blog',
         url='/space/edit/feeds/blog',
         keys=dict(

@@ -25,6 +25,7 @@ from observatory.forms.space_edit_sensors import (
     SpaceEditSensorsBeverageSupplyForm,
     SpaceEditSensorsDoorLockedForm,
     SpaceEditSensorsHumidityForm,
+    SpaceEditSensorsNetworkTrafficForm,
     SpaceEditSensorsPowerConsumptionForm,
     SpaceEditSensorsTemperatureForm,
     SpaceEditSensorsTotalMemberCountForm,
@@ -430,6 +431,65 @@ FORMS = [
             description='how many',
         ),
         sensors=['sensor_sel'],
+    ),
+    form_edit(
+        SpaceEditSensorsNetworkTrafficForm,
+        keys=dict(
+            bps_sensor_sel=(
+                'sensors.network_traffic.properties.bits_per_second.value'
+            ),
+            bps_elevate=(
+                'sensors.network_traffic.properties.'
+                'bits_per_second.value.elevate'
+            ),
+            bps_convert_sel=(
+                'sensors.network_traffic.properties.'
+                'bits_per_second.value.convert'
+            ),
+            bps_horizon_sel=(
+                'sensors.network_traffic.properties.'
+                'bits_per_second.value.horizon'
+            ),
+            bps_maximum=(
+                'sensors.network_traffic.properties.bits_per_second.maximum'
+            ),
+            pps_sensor_sel=(
+                'sensors.network_traffic.properties.packets_per_second.value'
+            ),
+            pps_elevate=(
+                'sensors.network_traffic.properties.'
+                'packets_per_second.value.elevate'
+            ),
+            pps_convert_sel=(
+                'sensors.network_traffic.properties.'
+                'packets_per_second.value.convert'
+            ),
+            pps_horizon_sel=(
+                'sensors.network_traffic.properties.'
+                'packets_per_second.value.horizon'
+            ),
+            location='sensors.network_traffic.location',
+            name='sensors.network_traffic.name',
+            description='sensors.network_traffic.description',
+        ),
+        data=dict(
+            bps_sensor_sel=1,
+            bps_elevate=1.1,
+            bps_convert_sel='INTEGER',
+            bps_horizon_sel='NORMAL',
+            bps_maximum=13.37,
+            pps_sensor_sel=3,
+            pps_elevate=1.3,
+            pps_convert_sel='INTEGER',
+            pps_horizon_sel='NORMAL',
+            location='router',
+            name='network traffic',
+            description='our network is networking',
+        ),
+        sensors=[
+            'bps_sensor_sel',
+            'pps_sensor_sel',
+        ],
     ),
     form_edit(
         SpaceEditFeedBlogForm,
