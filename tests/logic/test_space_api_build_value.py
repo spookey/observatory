@@ -392,6 +392,61 @@ class TestSpaceApiBuildValue:
         assert res['sensors'][field] == result
 
     @staticmethod
+    def test_sensors_wind(gen_sensor, gen_user):
+        api = SpaceApi()
+        user = gen_user()
+
+        result = []
+        for idx in range(2):
+            payload = {'_idx': idx}
+
+            properties = {}
+            for prop in ['speed', 'gust', 'direction', 'elevation']:
+                sensor = gen_sensor(f'{prop}-sensor-{idx}')
+                sensor.append(user=user, value=idx)
+
+                properties.update(
+                    {
+                        prop: {
+                            'value': Value.set(
+                                key=(
+                                    f'{SP_API_PREFIX}.sensors.wind.'
+                                    f'properties.{prop}.value'
+                                ),
+                                idx=idx,
+                                elem=sensor,
+                            ).latest.value,
+                            'unit': Value.set(
+                                key=(
+                                    f'{SP_API_PREFIX}.sensors.wind.'
+                                    f'properties.{prop}.unit'
+                                ),
+                                idx=idx,
+                                elem=f'{prop}-unit',
+                            ).elem,
+                        }
+                    }
+                )
+
+            payload.update({'properties': properties})
+
+            for key in ['location', 'name', 'description']:
+                payload.update(
+                    {
+                        key: Value.set(
+                            key=f'{SP_API_PREFIX}.sensors.wind.{key}',
+                            idx=idx,
+                            elem=key,
+                        ).elem,
+                    }
+                )
+
+            result.append(payload)
+
+        res = api.build()
+        assert res['sensors']['wind'] == result
+
+    @staticmethod
     def test_projects():
         api = SpaceApi()
         one_pro = Value.set(

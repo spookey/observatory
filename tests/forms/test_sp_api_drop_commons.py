@@ -17,6 +17,7 @@ from observatory.forms.space_drop import (
     SpaceDropSensorsPowerConsumptionForm,
     SpaceDropSensorsTemperatureForm,
     SpaceDropSensorsTotalMemberCountForm,
+    SpaceDropSensorsWindForm,
 )
 from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
@@ -125,6 +126,34 @@ FORMS = [
             'sensors.power_consumption.location',
             'sensors.power_consumption.name',
             'sensors.power_consumption.description',
+        ],
+    ),
+    form_drop(
+        SpaceDropSensorsWindForm,
+        keys=[
+            'sensors.wind.properties.speed.value',
+            'sensors.wind.properties.speed.value.elevate',
+            'sensors.wind.properties.speed.value.convert',
+            'sensors.wind.properties.speed.value.horizon',
+            'sensors.wind.properties.speed.unit',
+            'sensors.wind.properties.gust.value',
+            'sensors.wind.properties.gust.value.elevate',
+            'sensors.wind.properties.gust.value.convert',
+            'sensors.wind.properties.gust.value.horizon',
+            'sensors.wind.properties.gust.unit',
+            'sensors.wind.properties.direction.value',
+            'sensors.wind.properties.direction.value.elevate',
+            'sensors.wind.properties.direction.value.convert',
+            'sensors.wind.properties.direction.value.horizon',
+            'sensors.wind.properties.direction.unit',
+            'sensors.wind.properties.elevation.value',
+            'sensors.wind.properties.elevation.value.elevate',
+            'sensors.wind.properties.elevation.value.convert',
+            'sensors.wind.properties.elevation.value.horizon',
+            'sensors.wind.properties.elevation.unit',
+            'sensors.wind.location',
+            'sensors.wind.name',
+            'sensors.wind.description',
         ],
     ),
     form_drop(

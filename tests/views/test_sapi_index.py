@@ -67,6 +67,7 @@ class TestSapiIndex:
             'Humidity sensor',
             'Beverage supply',
             'Power consumption',
+            'Wind sensor',
             'Account balance',
             'Total member count',
             'Blog feed',

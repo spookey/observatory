@@ -834,6 +834,149 @@ class SpaceEditSensorsPowerConsumptionForm(SpaceEditSensorsForm):
         self.unit_sel.choices = self._unit_choices()
 
 
+class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
+    KEYS = dict(
+        speed_sensor_sel='sensors.wind.properties.speed.value',
+        speed_elevate='sensors.wind.properties.speed.value.elevate',
+        speed_convert_sel='sensors.wind.properties.speed.value.convert',
+        speed_horizon_sel='sensors.wind.properties.speed.value.horizon',
+        speed_unit_sel='sensors.wind.properties.speed.unit',
+        gust_sensor_sel='sensors.wind.properties.gust.value',
+        gust_elevate='sensors.wind.properties.gust.value.elevate',
+        gust_convert_sel='sensors.wind.properties.gust.value.convert',
+        gust_horizon_sel='sensors.wind.properties.gust.value.horizon',
+        gust_unit_sel='sensors.wind.properties.gust.unit',
+        direction_sensor_sel='sensors.wind.properties.direction.value',
+        direction_elevate='sensors.wind.properties.direction.value.elevate',
+        direction_convert_sel=(
+            'sensors.wind.properties.direction.value.convert'
+        ),
+        direction_horizon_sel=(
+            'sensors.wind.properties.direction.value.horizon'
+        ),
+        direction_unit_sel='sensors.wind.properties.direction.unit',
+        elevation_sensor_sel='sensors.wind.properties.elevation.value',
+        elevation_elevate='sensors.wind.properties.elevation.value.elevate',
+        elevation_convert_sel=(
+            'sensors.wind.properties.elevation.value.convert'
+        ),
+        elevation_horizon_sel=(
+            'sensors.wind.properties.elevation.value.horizon'
+        ),
+        elevation_unit_sel='sensors.wind.properties.elevation.unit',
+        location='sensors.wind.location',
+        name='sensors.wind.name',
+        description='sensors.wind.description',
+    )
+    SENSORS = [
+        'speed_sensor_sel',
+        'gust_sensor_sel',
+        'direction_sensor_sel',
+        'elevation_sensor_sel',
+    ]
+
+    (
+        speed_sensor_sel,
+        speed_elevate,
+        speed_convert_sel,
+        speed_horizon_sel,
+    ) = SpaceEditSensorsForm.sensor_fields('Wind speed sensor')
+    speed_unit_sel = SelectField(
+        'Unit',
+        coerce=str,
+        validators=[DataRequired()],
+        description='The unit of the sensor value',
+    )
+    (
+        gust_sensor_sel,
+        gust_elevate,
+        gust_convert_sel,
+        gust_horizon_sel,
+    ) = SpaceEditSensorsForm.sensor_fields('Wind gust sensor')
+    gust_unit_sel = SelectField(
+        'Unit',
+        coerce=str,
+        validators=[DataRequired()],
+        description='The unit of the sensor value',
+    )
+    (
+        direction_sensor_sel,
+        direction_elevate,
+        direction_convert_sel,
+        direction_horizon_sel,
+    ) = SpaceEditSensorsForm.sensor_fields('Wind direction sensor')
+    direction_unit_sel = SelectField(
+        'Unit',
+        coerce=str,
+        validators=[DataRequired()],
+        description='The unit of the sensor value',
+    )
+    (
+        elevation_sensor_sel,
+        elevation_elevate,
+        elevation_convert_sel,
+        elevation_horizon_sel,
+    ) = SpaceEditSensorsForm.sensor_fields('Wind elevation sensor')
+    elevation_unit_sel = SelectField(
+        'Unit',
+        coerce=str,
+        validators=[DataRequired()],
+        description='The unit of the sensor value',
+    )
+    location = StringField(
+        'Location',
+        validators=[DataRequired()],
+        description='The location of your sensor',
+    )
+    name = StringField(
+        'Name',
+        validators=[Optional()],
+        description='Give your sensor a name',
+    )
+    description = TextAreaField(
+        'Description',
+        validators=[Optional()],
+        description='Some additional information',
+    )
+    submit = SubmitField(
+        'Save',
+        description='Submit',
+        widget=SubmitButtonInput(icon='ops_submit'),
+    )
+
+    @staticmethod
+    def _speed_gust_unit_choices():
+        return [(val, val) for val in ('m/s', 'km/h', 'kn')]
+
+    @staticmethod
+    def _direction_unit_choices():
+        return [('°', '°')]
+
+    @staticmethod
+    def _elevation_unit_choices():
+        return [('m', 'm')]
+
+    def __init__(self, idx, *args, **kwargs):
+        super().__init__(*args, idx=idx, **kwargs)
+
+        self.speed_sensor_sel.choices = self._sensor_choices()
+        self.speed_convert_sel.choices = self._convert_choices()
+        self.speed_horizon_sel.choices = self._horizon_choices()
+        self.speed_unit_sel.choices = self._speed_gust_unit_choices()
+        self.gust_sensor_sel.choices = self._sensor_choices()
+        self.gust_convert_sel.choices = self._convert_choices()
+        self.gust_horizon_sel.choices = self._horizon_choices()
+        self.gust_unit_sel.choices = self._speed_gust_unit_choices()
+        self.direction_sensor_sel.choices = self._sensor_choices()
+        self.direction_convert_sel.choices = self._convert_choices()
+        self.direction_horizon_sel.choices = self._horizon_choices()
+        self.direction_unit_sel.choices = self._direction_unit_choices()
+        self.elevation_sensor_sel.choices = self._sensor_choices()
+        self.elevation_convert_sel.choices = self._convert_choices()
+        self.elevation_horizon_sel.choices = self._horizon_choices()
+        self.elevation_unit_sel.choices = self._elevation_unit_choices()
+
+
 class SpaceEditSensorsAccountBalanceForm(SpaceEditSensorsForm):
     KEYS = dict(
         sensor_sel='sensors.account_balance.value',

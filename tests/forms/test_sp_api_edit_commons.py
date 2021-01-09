@@ -24,6 +24,7 @@ from observatory.forms.space_edit import (
     SpaceEditSensorsPowerConsumptionForm,
     SpaceEditSensorsTemperatureForm,
     SpaceEditSensorsTotalMemberCountForm,
+    SpaceEditSensorsWindForm,
     SpaceEditSpaceFedForm,
     SpaceEditStateIconForm,
 )
@@ -310,6 +311,77 @@ FORMS = [
             description='electronic deluxe',
         ),
         sensors=['sensor_sel'],
+    ),
+    form_edit(
+        SpaceEditSensorsWindForm,
+        keys=dict(
+            speed_sensor_sel='sensors.wind.properties.speed.value',
+            speed_elevate='sensors.wind.properties.speed.value.elevate',
+            speed_convert_sel='sensors.wind.properties.speed.value.convert',
+            speed_horizon_sel='sensors.wind.properties.speed.value.horizon',
+            speed_unit_sel='sensors.wind.properties.speed.unit',
+            gust_sensor_sel='sensors.wind.properties.gust.value',
+            gust_elevate='sensors.wind.properties.gust.value.elevate',
+            gust_convert_sel='sensors.wind.properties.gust.value.convert',
+            gust_horizon_sel='sensors.wind.properties.gust.value.horizon',
+            gust_unit_sel='sensors.wind.properties.gust.unit',
+            direction_sensor_sel='sensors.wind.properties.direction.value',
+            direction_elevate=(
+                'sensors.wind.properties.direction.value.elevate'
+            ),
+            direction_convert_sel=(
+                'sensors.wind.properties.direction.value.convert'
+            ),
+            direction_horizon_sel=(
+                'sensors.wind.properties.direction.value.horizon'
+            ),
+            direction_unit_sel=('sensors.wind.properties.direction.unit'),
+            elevation_sensor_sel='sensors.wind.properties.elevation.value',
+            elevation_elevate=(
+                'sensors.wind.properties.elevation.value.elevate'
+            ),
+            elevation_convert_sel=(
+                'sensors.wind.properties.elevation.value.convert'
+            ),
+            elevation_horizon_sel=(
+                'sensors.wind.properties.elevation.value.horizon'
+            ),
+            elevation_unit_sel='sensors.wind.properties.elevation.unit',
+            location='sensors.wind.location',
+            name='sensors.wind.name',
+            description='sensors.wind.description',
+        ),
+        data=dict(
+            speed_sensor_sel=1,
+            speed_elevate=1.1,
+            speed_convert_sel='NATURAL',
+            speed_horizon_sel='NORMAL',
+            speed_unit_sel='m/s',
+            gust_sensor_sel=3,
+            gust_elevate=1.3,
+            gust_convert_sel='NATURAL',
+            gust_horizon_sel='NORMAL',
+            gust_unit_sel='m/s',
+            direction_sensor_sel=5,
+            direction_elevate=1.5,
+            direction_convert_sel='INTEGER',
+            direction_horizon_sel='NORMAL',
+            direction_unit_sel='°',
+            elevation_sensor_sel=7,
+            elevation_elevate=1.7,
+            elevation_convert_sel='INTEGER',
+            elevation_horizon_sel='NORMAL',
+            elevation_unit_sel='m',
+            location='roof',
+            name='wind sensor',
+            description='windy',
+        ),
+        sensors=[
+            'speed_sensor_sel',
+            'gust_sensor_sel',
+            'direction_sensor_sel',
+            'elevation_sensor_sel',
+        ],
     ),
     form_edit(
         SpaceEditSensorsAccountBalanceForm,

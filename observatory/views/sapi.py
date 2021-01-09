@@ -24,6 +24,7 @@ from observatory.forms.space_drop import (
     SpaceDropSensorsPowerConsumptionForm,
     SpaceDropSensorsTemperatureForm,
     SpaceDropSensorsTotalMemberCountForm,
+    SpaceDropSensorsWindForm,
 )
 from observatory.forms.space_edit import (
     SpaceEditCamForm,
@@ -46,6 +47,7 @@ from observatory.forms.space_edit import (
     SpaceEditSensorsPowerConsumptionForm,
     SpaceEditSensorsTemperatureForm,
     SpaceEditSensorsTotalMemberCountForm,
+    SpaceEditSensorsWindForm,
     SpaceEditSpaceFedForm,
     SpaceEditStateIconForm,
 )
@@ -213,6 +215,17 @@ def edit_sensors_power_consumption(idx=0):
 
 
 @BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/wind/<int:idx>', methods=['GET', 'POST']
+)
+@BLUEPRINT_SAPI.route('/space/edit/sensors/wind', methods=['GET', 'POST'])
+@login_required
+def edit_sensors_wind(idx=0):
+    return _edit_form(
+        SpaceEditSensorsWindForm(idx=idx), f'Wind sensor #{1 + idx}'
+    )
+
+
+@BLUEPRINT_SAPI.route(
     '/space/edit/sensors/account-balance/<int:idx>', methods=['GET', 'POST']
 )
 @BLUEPRINT_SAPI.route(
@@ -376,6 +389,14 @@ def drop_sensors_power_consumption(idx):
     return _drop_form(
         SpaceDropSensorsPowerConsumptionForm(idx=idx),
         f'Power consumption #{1 + idx}',
+    )
+
+
+@BLUEPRINT_SAPI.route('/space/drop/sensors/wind/<int:idx>', methods=['POST'])
+@login_required
+def drop_sensors_wind(idx):
+    return _drop_form(
+        SpaceDropSensorsWindForm(idx=idx), f'Wind sensor #{1 + idx}'
     )
 
 

@@ -101,6 +101,20 @@ class TestSpaceApiBuildIndices:
                 ],
             ),
             (
+                'wind',
+                [
+                    'sensors.wind.properties.speed.value',
+                    'sensors.wind.properties.speed.unit',
+                    'sensors.wind.properties.gust.value',
+                    'sensors.wind.properties.gust.unit',
+                    'sensors.wind.properties.direction.value',
+                    'sensors.wind.properties.direction.unit',
+                    'sensors.wind.properties.elevation.value',
+                    'sensors.wind.properties.elevation.unit',
+                    'sensors.wind.location',
+                ],
+            ),
+            (
                 'account_balance',
                 [
                     'sensors.account_balance.value',

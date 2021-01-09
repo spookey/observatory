@@ -142,6 +142,34 @@ class SpaceDropSensorsPowerConsumptionForm(SpaceDropForm):
     ]
 
 
+class SpaceDropSensorsWindForm(SpaceDropForm):
+    KEYS = [
+        'sensors.wind.properties.speed.value',
+        'sensors.wind.properties.speed.value.elevate',
+        'sensors.wind.properties.speed.value.convert',
+        'sensors.wind.properties.speed.value.horizon',
+        'sensors.wind.properties.speed.unit',
+        'sensors.wind.properties.gust.value',
+        'sensors.wind.properties.gust.value.elevate',
+        'sensors.wind.properties.gust.value.convert',
+        'sensors.wind.properties.gust.value.horizon',
+        'sensors.wind.properties.gust.unit',
+        'sensors.wind.properties.direction.value',
+        'sensors.wind.properties.direction.value.elevate',
+        'sensors.wind.properties.direction.value.convert',
+        'sensors.wind.properties.direction.value.horizon',
+        'sensors.wind.properties.direction.unit',
+        'sensors.wind.properties.elevation.value',
+        'sensors.wind.properties.elevation.value.elevate',
+        'sensors.wind.properties.elevation.value.convert',
+        'sensors.wind.properties.elevation.value.horizon',
+        'sensors.wind.properties.elevation.unit',
+        'sensors.wind.location',
+        'sensors.wind.name',
+        'sensors.wind.description',
+    ]
+
+
 class SpaceDropSensorsAccountBalanceForm(SpaceDropForm):
     KEYS = [
         'sensors.account_balance.value',

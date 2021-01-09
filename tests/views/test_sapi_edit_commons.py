@@ -299,6 +299,79 @@ PAGES = [
         multi=True,
     ),
     page_data(
+        'sapi.edit_sensors_wind',
+        url='/space/edit/sensors/wind',
+        keys=dict(
+            speed_sensor_sel='sensors.wind.properties.speed.value',
+            speed_elevate='sensors.wind.properties.speed.value.elevate',
+            speed_convert_sel='sensors.wind.properties.speed.value.convert',
+            speed_horizon_sel='sensors.wind.properties.speed.value.horizon',
+            speed_unit_sel='sensors.wind.properties.speed.unit',
+            gust_sensor_sel='sensors.wind.properties.gust.value',
+            gust_elevate='sensors.wind.properties.gust.value.elevate',
+            gust_convert_sel='sensors.wind.properties.gust.value.convert',
+            gust_horizon_sel='sensors.wind.properties.gust.value.horizon',
+            gust_unit_sel='sensors.wind.properties.gust.unit',
+            direction_sensor_sel='sensors.wind.properties.direction.value',
+            direction_elevate=(
+                'sensors.wind.properties.direction.value.elevate'
+            ),
+            direction_convert_sel=(
+                'sensors.wind.properties.direction.value.convert'
+            ),
+            direction_horizon_sel=(
+                'sensors.wind.properties.direction.value.horizon'
+            ),
+            direction_unit_sel='sensors.wind.properties.direction.unit',
+            elevation_sensor_sel='sensors.wind.properties.elevation.value',
+            elevation_elevate=(
+                'sensors.wind.properties.elevation.value.elevate'
+            ),
+            elevation_convert_sel=(
+                'sensors.wind.properties.elevation.value.convert'
+            ),
+            elevation_horizon_sel=(
+                'sensors.wind.properties.elevation.value.horizon'
+            ),
+            elevation_unit_sel='sensors.wind.properties.elevation.unit',
+            location='sensors.wind.location',
+            name='sensors.wind.name',
+            description='sensors.wind.description',
+        ),
+        data=dict(
+            speed_sensor_sel=2,
+            speed_elevate=1.2,
+            speed_convert_sel='NATURAL',
+            speed_horizon_sel='NORMAL',
+            speed_unit_sel='m/s',
+            gust_sensor_sel=4,
+            gust_elevate=1.4,
+            gust_convert_sel='NATURAL',
+            gust_horizon_sel='NORMAL',
+            gust_unit_sel='m/s',
+            direction_sensor_sel=6,
+            direction_elevate=1.6,
+            direction_convert_sel='INTEGER',
+            direction_horizon_sel='NORMAL',
+            direction_unit_sel='°',
+            elevation_sensor_sel=8,
+            elevation_elevate=1.8,
+            elevation_convert_sel='INTEGER',
+            elevation_horizon_sel='NORMAL',
+            elevation_unit_sel='m',
+            location='outside',
+            name='wind sensor',
+            description='windy',
+        ),
+        sensors=[
+            'speed_sensor_sel',
+            'gust_sensor_sel',
+            'direction_sensor_sel',
+            'elevation_sensor_sel',
+        ],
+        multi=True,
+    ),
+    page_data(
         'sapi.edit_sensors_account_balance',
         url='/space/edit/sensors/account-balance',
         keys=dict(

@@ -141,6 +141,20 @@ class SpaceApi:
         )
 
     @property
+    def sensors_wind_indices(self):
+        return self._indices_all(
+            'sensors.wind.properties.speed.value',
+            'sensors.wind.properties.speed.unit',
+            'sensors.wind.properties.gust.value',
+            'sensors.wind.properties.gust.unit',
+            'sensors.wind.properties.direction.value',
+            'sensors.wind.properties.direction.unit',
+            'sensors.wind.properties.elevation.value',
+            'sensors.wind.properties.elevation.unit',
+            'sensors.wind.location',
+        )
+
+    @property
     def sensors_account_balance_indices(self):
         return self._indices_all(
             'sensors.account_balance.value',
@@ -402,7 +416,109 @@ class SpaceApi:
                     }
                     for idx in self.sensors_power_consumption_indices
                 ],
-                'wind': [],
+                'wind': [
+                    {
+                        '_idx': idx,
+                        'properties': {
+                            'speed': {
+                                'value': self.latest_value(
+                                    'sensors.wind.properties.speed.value',
+                                    idx=idx,
+                                    horizon_key=(
+                                        'sensors.wind.properties.speed.'
+                                        'value.horizon'
+                                    ),
+                                    convert_key=(
+                                        'sensors.wind.properties.speed.'
+                                        'value.convert'
+                                    ),
+                                    elevate_key=(
+                                        'sensors.wind.properties.speed.'
+                                        'value.elevate'
+                                    ),
+                                ),
+                                'unit': self._get(
+                                    'sensors.wind.properties.speed.unit',
+                                    idx=idx,
+                                ),
+                            },
+                            'gust': {
+                                'value': self.latest_value(
+                                    'sensors.wind.properties.gust.value',
+                                    idx=idx,
+                                    horizon_key=(
+                                        'sensors.wind.properties.gust.'
+                                        'value.horizon'
+                                    ),
+                                    convert_key=(
+                                        'sensors.wind.properties.gust.'
+                                        'value.convert'
+                                    ),
+                                    elevate_key=(
+                                        'sensors.wind.properties.gust.'
+                                        'value.elevate'
+                                    ),
+                                ),
+                                'unit': self._get(
+                                    'sensors.wind.properties.gust.unit',
+                                    idx=idx,
+                                ),
+                            },
+                            'direction': {
+                                'value': self.latest_value(
+                                    'sensors.wind.properties.direction.value',
+                                    idx=idx,
+                                    horizon_key=(
+                                        'sensors.wind.properties.direction.'
+                                        'value.horizon'
+                                    ),
+                                    convert_key=(
+                                        'sensors.wind.properties.direction.'
+                                        'value.convert'
+                                    ),
+                                    elevate_key=(
+                                        'sensors.wind.properties.direction.'
+                                        'value.elevate'
+                                    ),
+                                ),
+                                'unit': self._get(
+                                    'sensors.wind.properties.direction.unit',
+                                    idx=idx,
+                                ),
+                            },
+                            'elevation': {
+                                'value': self.latest_value(
+                                    'sensors.wind.properties.elevation.value',
+                                    idx=idx,
+                                    horizon_key=(
+                                        'sensors.wind.properties.elevation.'
+                                        'value.horizon'
+                                    ),
+                                    convert_key=(
+                                        'sensors.wind.properties.elevation.'
+                                        'value.convert'
+                                    ),
+                                    elevate_key=(
+                                        'sensors.wind.properties.elevation.'
+                                        'value.elevate'
+                                    ),
+                                ),
+                                'unit': self._get(
+                                    'sensors.wind.properties.elevation.unit',
+                                    idx=idx,
+                                ),
+                            },
+                        },
+                        'location': self._get(
+                            'sensors.wind.location', idx=idx
+                        ),
+                        'name': self._get('sensors.wind.name', idx=idx),
+                        'description': self._get(
+                            'sensors.wind.description', idx=idx
+                        ),
+                    }
+                    for idx in self.sensors_wind_indices
+                ],
                 'network_connections': [],
                 'account_balance': [
                     {

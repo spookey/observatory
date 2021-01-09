@@ -227,6 +227,27 @@
           {{ key_val_level('Description', _value(data.description)) }}
         {% endcall %}
         {% call(data) _block(
+          'Wind sensor', content['sensors']['wind'],
+          edit_ep='sapi.edit_sensors_wind',
+          drop_ep='sapi.drop_sensors_wind',
+          drop_fm=form_drop_space_sensors_wind,
+          indices=space_api.sensors_wind_indices,
+        ) %}
+          {% with props = data.properties %}
+          {{ key_val_level('Speed', _value(props.speed.value, req=true)) }}
+          {{ key_val_level('Unit', _value(props.speed.unit, req=true)) }}
+          {{ key_val_level('Gust', _value(props.gust.value, req=true)) }}
+          {{ key_val_level('Unit', _value(props.gust.unit, req=true)) }}
+          {{ key_val_level('Elevation', _value(props.elevation.value, req=true)) }}
+          {{ key_val_level('Unit', _value(props.elevation.unit, req=true)) }}
+          {{ key_val_level('Direction', _value(props.direction.value, req=true)) }}
+          {{ key_val_level('Unit', _value(props.direction.unit, req=true)) }}
+          {% endwith %}
+          {{ key_val_level('Name', _value(data.name)) }}
+          {{ key_val_level('Location', _value(data.location, req=true)) }}
+          {{ key_val_level('Description', _value(data.description)) }}
+        {% endcall %}
+        {% call(data) _block(
           'Account balance', content['sensors']['account_balance'],
           edit_ep='sapi.edit_sensors_account_balance',
           drop_ep='sapi.drop_sensors_account_balance',
