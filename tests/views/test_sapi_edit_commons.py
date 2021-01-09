@@ -273,6 +273,32 @@ PAGES = [
         multi=True,
     ),
     page_data(
+        'sapi.edit_sensors_power_consumption',
+        url='/space/edit/sensors/power-consumption',
+        keys=dict(
+            sensor_sel='sensors.power_consumption.value',
+            elevate='sensors.power_consumption.value.elevate',
+            convert_sel='sensors.power_consumption.value.convert',
+            horizon_sel='sensors.power_consumption.value.horizon',
+            unit_sel='sensors.power_consumption.unit',
+            location='sensors.power_consumption.location',
+            name='sensors.power_consumption.name',
+            description='sensors.power_consumption.description',
+        ),
+        data=dict(
+            sensor_sel=8,
+            elevate=9,
+            convert_sel='NATURAL',
+            horizon_sel='INVERT',
+            unit_sel='W',
+            location='cellar',
+            name='power',
+            description='electricity',
+        ),
+        sensors=['sensor_sel'],
+        multi=True,
+    ),
+    page_data(
         'sapi.edit_feeds_blog',
         url='/space/edit/feeds/blog',
         keys=dict(

@@ -132,6 +132,14 @@ class SpaceApi:
         )
 
     @property
+    def sensors_power_consumption_indices(self):
+        return self._indices_all(
+            'sensors.power_consumption.value',
+            'sensors.power_consumption.unit',
+            'sensors.power_consumption.location',
+        )
+
+    @property
     def projects_indices(self):
         return self._indices_all('projects')
 
@@ -345,7 +353,31 @@ class SpaceApi:
                     }
                     for idx in self.sensors_beverage_supply_indices
                 ],
-                'power_consumption': [],
+                'power_consumption': [
+                    {
+                        '_idx': idx,
+                        'value': self.latest_value(
+                            'sensors.power_consumption.value',
+                            idx=idx,
+                            horizon_key='sensors.power_consumption.value.horizon',
+                            convert_key='sensors.power_consumption.value.convert',
+                            elevate_key='sensors.power_consumption.value.elevate',
+                        ),
+                        'unit': self._get(
+                            'sensors.power_consumption.unit', idx=idx
+                        ),
+                        'location': self._get(
+                            'sensors.power_consumption.location', idx=idx
+                        ),
+                        'name': self._get(
+                            'sensors.power_consumption.name', idx=idx
+                        ),
+                        'description': self._get(
+                            'sensors.power_consumption.description', idx=idx
+                        ),
+                    }
+                    for idx in self.sensors_power_consumption_indices
+                ],
                 'wind': [],
                 'network_connections': [],
                 'account_balance': [],

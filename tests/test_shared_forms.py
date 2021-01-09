@@ -20,6 +20,7 @@ from observatory.forms.space_drop import (
     SpaceDropSensorsBeverageSupplyForm,
     SpaceDropSensorsDoorLockedForm,
     SpaceDropSensorsHumidityForm,
+    SpaceDropSensorsPowerConsumptionForm,
     SpaceDropSensorsTemperatureForm,
 )
 from observatory.models.mapper import Mapper
@@ -36,6 +37,7 @@ from observatory.shared import (
     form_drop_space_sensors_beverage_supply,
     form_drop_space_sensors_door_locked,
     form_drop_space_sensors_humidity,
+    form_drop_space_sensors_power_consumption,
     form_drop_space_sensors_temperature,
     form_sort_mapper,
     form_sort_prompt,
@@ -72,6 +74,10 @@ SPACE_DROP_FORMS = [
     SpaceDrop(
         func=form_drop_space_sensors_beverage_supply,
         form=SpaceDropSensorsBeverageSupplyForm,
+    ),
+    SpaceDrop(
+        func=form_drop_space_sensors_power_consumption,
+        form=SpaceDropSensorsPowerConsumptionForm,
     ),
     SpaceDrop(
         func=form_drop_space_links,

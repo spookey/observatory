@@ -92,6 +92,14 @@ class TestSpaceApiBuildIndices:
                     'sensors.beverage_supply.unit',
                 ],
             ),
+            (
+                'power_consumption',
+                [
+                    'sensors.power_consumption.value',
+                    'sensors.power_consumption.unit',
+                    'sensors.power_consumption.location',
+                ],
+            ),
         ],
     )
     def test_sensors_common(field, keys):

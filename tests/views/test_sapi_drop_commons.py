@@ -106,6 +106,20 @@ PAGES = [
         ],
     ),
     page_data(
+        'sapi.drop_sensors_power_consumption',
+        url='/space/drop/sensors/power-consumption',
+        keys=[
+            'sensors.power_consumption.value',
+            'sensors.power_consumption.value.elevate',
+            'sensors.power_consumption.value.convert',
+            'sensors.power_consumption.value.horizon',
+            'sensors.power_consumption.unit',
+            'sensors.power_consumption.location',
+            'sensors.power_consumption.name',
+            'sensors.power_consumption.description',
+        ],
+    ),
+    page_data(
         'sapi.drop_projects',
         url='/space/drop/projects',
         keys=['projects'],

@@ -322,6 +322,16 @@ class TestSpaceApiBuildValue:
                     description='sensors.beverage_supply.description',
                 ),
             ),
+            (
+                'power_consumption',
+                dict(value='sensors.power_consumption.value'),
+                dict(
+                    unit='sensors.power_consumption.unit',
+                    location='sensors.power_consumption.location',
+                    name='sensors.power_consumption.name',
+                    description='sensors.power_consumption.description',
+                ),
+            ),
         ],
     )
     def test_sensors_common(field, sensors, fields, gen_sensor, gen_user):

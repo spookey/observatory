@@ -66,6 +66,7 @@ class TestSapiIndex:
             'Barometer',
             'Humidity sensor',
             'Beverage supply',
+            'Power consumption',
             'Blog feed',
             'Wiki feed',
             'Calendar feed',

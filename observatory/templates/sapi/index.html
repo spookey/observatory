@@ -213,6 +213,19 @@
           {{ key_val_level('Location', _value(data.location)) }}
           {{ key_val_level('Description', _value(data.description)) }}
         {% endcall %}
+        {% call(data) _block(
+          'Power consumption', content['sensors']['power_consumption'],
+          edit_ep='sapi.edit_sensors_power_consumption',
+          drop_ep='sapi.drop_sensors_power_consumption',
+          drop_fm=form_drop_space_sensors_power_consumption,
+          indices=space_api.sensors_power_consumption_indices,
+        ) %}
+          {{ key_val_level('Value', _value(data.value, req=true)) }}
+          {{ key_val_level('Unit', _value(data.unit, req=true)) }}
+          {{ key_val_level('Name', _value(data.name)) }}
+          {{ key_val_level('Location', _value(data.location, req=true)) }}
+          {{ key_val_level('Description', _value(data.description)) }}
+        {% endcall %}
         {% for (_title, _ep, _data) in (
             ('Blog feed', 'sapi.edit_feeds_blog', content['feeds']['blog']),
             ('Wiki feed', 'sapi.edit_feeds_wiki', content['feeds']['wiki']),

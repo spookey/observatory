@@ -13,6 +13,7 @@ from observatory.forms.space_drop import (
     SpaceDropSensorsBeverageSupplyForm,
     SpaceDropSensorsDoorLockedForm,
     SpaceDropSensorsHumidityForm,
+    SpaceDropSensorsPowerConsumptionForm,
     SpaceDropSensorsTemperatureForm,
 )
 from observatory.models.value import Value
@@ -109,6 +110,19 @@ FORMS = [
             'sensors.beverage_supply.location',
             'sensors.beverage_supply.name',
             'sensors.beverage_supply.description',
+        ],
+    ),
+    form_drop(
+        SpaceDropSensorsPowerConsumptionForm,
+        keys=[
+            'sensors.power_consumption.value',
+            'sensors.power_consumption.value.elevate',
+            'sensors.power_consumption.value.convert',
+            'sensors.power_consumption.value.horizon',
+            'sensors.power_consumption.unit',
+            'sensors.power_consumption.location',
+            'sensors.power_consumption.name',
+            'sensors.power_consumption.description',
         ],
     ),
     form_drop(

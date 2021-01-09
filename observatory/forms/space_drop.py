@@ -129,6 +129,19 @@ class SpaceDropSensorsBeverageSupplyForm(SpaceDropForm):
     ]
 
 
+class SpaceDropSensorsPowerConsumptionForm(SpaceDropForm):
+    KEYS = [
+        'sensors.power_consumption.value',
+        'sensors.power_consumption.value.elevate',
+        'sensors.power_consumption.value.convert',
+        'sensors.power_consumption.value.horizon',
+        'sensors.power_consumption.unit',
+        'sensors.power_consumption.location',
+        'sensors.power_consumption.name',
+        'sensors.power_consumption.description',
+    ]
+
+
 class SpaceDropProjectsForm(SpaceDropForm):
     KEYS = ['projects']
 

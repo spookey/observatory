@@ -30,6 +30,7 @@ from observatory.start.environment import SP_API_PREFIX
 
 # pylint: disable=arguments-differ
 # pylint: disable=no-member
+# pylint: disable=too-many-lines
 
 
 class SpaceEditForm(FlaskForm):
@@ -764,6 +765,65 @@ class SpaceEditSensorsBeverageSupplyForm(SpaceEditSensorsForm):
     @staticmethod
     def _unit_choices():
         return [('btl', 'Bottles'), ('crt', 'Crates')]
+
+    def __init__(self, idx, *args, **kwargs):
+        super().__init__(*args, idx=idx, **kwargs)
+
+        self.sensor_sel.choices = self._sensor_choices()
+        self.convert_sel.choices = self._convert_choices()
+        self.horizon_sel.choices = self._horizon_choices()
+        self.unit_sel.choices = self._unit_choices()
+
+
+class SpaceEditSensorsPowerConsumptionForm(SpaceEditSensorsForm):
+    KEYS = dict(
+        sensor_sel='sensors.power_consumption.value',
+        elevate='sensors.power_consumption.value.elevate',
+        convert_sel='sensors.power_consumption.value.convert',
+        horizon_sel='sensors.power_consumption.value.horizon',
+        unit_sel='sensors.power_consumption.unit',
+        location='sensors.power_consumption.location',
+        name='sensors.power_consumption.name',
+        description='sensors.power_consumption.description',
+    )
+    SENSORS = ['sensor_sel']
+
+    (
+        sensor_sel,
+        elevate,
+        convert_sel,
+        horizon_sel,
+    ) = SpaceEditSensorsForm.sensor_fields('Power consumption')
+    unit_sel = SelectField(
+        'Unit',
+        coerce=str,
+        validators=[DataRequired()],
+        description='The unit of the sensor value',
+    )
+    location = StringField(
+        'Location',
+        validators=[DataRequired()],
+        description='The location of your sensor',
+    )
+    name = StringField(
+        'Name',
+        validators=[Optional()],
+        description='Give your sensor a name',
+    )
+    description = TextAreaField(
+        'Description',
+        validators=[Optional()],
+        description='Some additional information',
+    )
+    submit = SubmitField(
+        'Save',
+        description='Submit',
+        widget=SubmitButtonInput(icon='ops_submit'),
+    )
+
+    @staticmethod
+    def _unit_choices():
+        return [(val, val) for val in ('mW', 'W', 'VA')]
 
     def __init__(self, idx, *args, **kwargs):
         super().__init__(*args, idx=idx, **kwargs)
