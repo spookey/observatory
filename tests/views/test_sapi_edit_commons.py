@@ -560,9 +560,10 @@ class TestSapiEditCommons:
 
         assert Value.query.all() == []
 
-        sensors = [
-            gen_sensor(name, prime=page.data[name]) for name in page.sensors
-        ]
+        sensors = {
+            name: gen_sensor(name, prime=page.data[name])
+            for name in page.sensors
+        }
 
         res = visitor(
             page.endpoint,
@@ -574,7 +575,6 @@ class TestSapiEditCommons:
         assert res.request.headers['LOCATION'] == index_url
         for form_key, space_key in page.keys.items():
             val = Value.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
-            if form_key in page.sensors:
-                assert val in sensors
-            else:
-                assert val == page.data.get(form_key, 'error')
+            base = sensors if form_key in page.sensors else page.data
+
+            assert val == base.get(form_key, 'error')

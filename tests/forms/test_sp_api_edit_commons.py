@@ -575,29 +575,30 @@ class TestSpaceEditCommons:
     def test_create_new(edit, gen_sensor):
         assert Value.query.all() == []
 
-        sensors = [
-            gen_sensor(name, prime=edit.data[name]) for name in edit.sensors
-        ]
+        sensors = {
+            name: gen_sensor(name, prime=edit.data[name])
+            for name in edit.sensors
+        }
 
         form = edit.form(idx=0, **edit.data)
         assert form.validate() is True
         assert form.action()
 
         for form_key, space_key in edit.keys.items():
-            val = Value.by_key_idx(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
-            if form_key in edit.sensors:
-                assert val.elem in sensors
-            else:
-                assert val.elem == edit.data.get(form_key, 'error')
+            val = Value.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
+            base = sensors if form_key in edit.sensors else edit.data
+
+            assert val == base.get(form_key, 'error')
 
     @staticmethod
     @mark.parametrize('edit', FORMS, ids=IDS)
     def test_change_existing(edit, gen_sensor):
         assert Value.query.all() == []
 
-        sensors = [
-            gen_sensor(name, prime=edit.data[name]) for name in edit.sensors
-        ]
+        sensors = {
+            name: gen_sensor(name, prime=edit.data[name])
+            for name in edit.sensors
+        }
 
         for form_key, space_key in edit.keys.items():
             old_value = edit.data.get(form_key, 'some')
@@ -621,8 +622,7 @@ class TestSpaceEditCommons:
         assert form.action()
 
         for form_key, space_key in edit.keys.items():
-            val = Value.by_key_idx(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
-            if form_key in edit.sensors:
-                assert val.elem in sensors
-            else:
-                assert val.elem == edit.data.get(form_key, 'error')
+            val = Value.get(key=f'{SP_API_PREFIX}.{space_key}', idx=0)
+            base = sensors if form_key in edit.sensors else edit.data
+
+            assert val == base.get(form_key, 'error')
