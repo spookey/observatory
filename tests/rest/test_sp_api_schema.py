@@ -191,7 +191,7 @@ class TestSpaceApiSchema:
         assert spc.is_valid
 
         spc.content = _wrap(
-            {'ignored': 'data', 'elem': 'cam1'}, {'elem': 'cam2'}
+            {'ignored': 'data', 'value': 'cam1'}, {'value': 'cam2'}
         )
         assert spc.make(spc.obj.cam) == _wrap('cam1', 'cam2')
         assert spc.is_valid
@@ -607,7 +607,7 @@ class TestSpaceApiSchema:
         assert spc.is_valid
 
         spc.content = _wrap(
-            {'ignored': 'data', 'elem': 'project1'}, {'elem': 'project2'}
+            {'ignored': 'data', 'value': 'project1'}, {'value': 'project2'}
         )
         assert spc.make(spc.obj.projects) == _wrap('project1', 'project2')
         assert spc.is_valid
