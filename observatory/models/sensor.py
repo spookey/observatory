@@ -26,9 +26,20 @@ class Sensor(CommonMixin, SortMixin, CreatedMixin, Model):
         lazy=True,
     )
 
+    sticky = DB.Column(
+        DB.Boolean(),
+        nullable=False,
+        default=False,
+    )
+
     @property
     def active(self):
         return any(self.mapping_active)
+
+    @classmethod
+    def query_sticky(cls, sticky=True, query=None):
+        query = query if query is not None else cls.query
+        return query.filter(cls.sticky == sticky)
 
     @property
     def query_points(self):
@@ -42,9 +53,11 @@ class Sensor(CommonMixin, SortMixin, CreatedMixin, Model):
     def latest(self):
         return self.query_points.first()
 
-    @staticmethod
-    def cleanup(_commit=True):
-        query = Point.query_outdated()
+    def cleanup(self, _commit=True):
+        query = Point.query_sorted(Point.query_outdated())
+        if self.sticky:
+            query = query.offset(1)
+
         LOG.info('cleanup "%d" outdated points', query.count())
 
         return all(point.delete(_commit=_commit) for point in query.all())

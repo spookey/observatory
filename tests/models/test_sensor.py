@@ -15,12 +15,26 @@ class TestSensor:
     def test_fields_and_points_query(gen_sensor):
         sensor = gen_sensor(slug='test')
 
+        assert sensor.sticky is False
+
         assert sensor.points == []
         assert sensor.query_points.all() == []
         assert sensor.query_points.count() == 0
         assert sensor.query_points.first() is None
 
         assert sensor.values == []
+
+    @staticmethod
+    def test_query_sticky(gen_sensor):
+        stick = gen_sensor('stick', sticky=True)
+        flick = gen_sensor('flick')
+
+        assert stick.sticky is True
+        assert flick.sticky is False
+
+        assert Sensor.query.all() == [stick, flick]
+        assert Sensor.query_sticky().all() == [stick]
+        assert Sensor.query_sticky(sticky=False).all() == [flick]
 
     @staticmethod
     def test_points_ordered(gen_sensor, gen_points_batch):
@@ -179,6 +193,21 @@ class TestSensor:
 
         assert one.points == []
         assert two.points == []
+
+    @staticmethod
+    def test_cleanup_sticky(gen_sensor, gen_points_batch):
+        sensor = gen_sensor(sticky=True)
+
+        _, _, batch = gen_points_batch(sensor=sensor, old=5, new=0)
+        batch = _pointsort(batch)
+        stick, *_, flick = batch
+
+        assert stick.created > flick.created
+        assert sensor.points == batch
+
+        assert sensor.cleanup()
+
+        assert sensor.points == [stick]
 
     @staticmethod
     def test_append(gen_sensor, gen_user):
