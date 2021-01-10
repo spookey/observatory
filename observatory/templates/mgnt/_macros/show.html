@@ -5,6 +5,7 @@
 {% from '_macros/elem.html' import text_icon %}
 {% from '_macros/elem.html' import time_abs %}
 {% from '_macros/elem.html' import time_rel %}
+{% from '_macros/form.html' import link_button %}
 {% from '_macros/form.html' import render_form %}
 {% from '_macros/level.html' import key_val_level %}
 {% from '_macros/level.html' import single_level %}
@@ -90,6 +91,11 @@
     form_drop_prompt(thing),
     action=url_for(drop_ep, slug=thing.slug, _external=true),
   ),
+  right=link_button(
+    'Edit',
+    icon='ops_change',
+    href=url_for(edit_ep, slug=thing.slug),
+  ),
 ) }}
 {% endif %}
 {% endmacro %}
@@ -100,6 +106,10 @@
   sensor, 'mgnt.edit_sensor', 'mgnt.drop_sensor',
   'mgnt.sort_sensor', form_sort_sensor,
 ) %}
+{{ key_val_level(
+  'Sticky',
+  bool_icon(sensor.sticky),
+) }}
 {{ key_val_level(
   'Points',
   sensor.length,
@@ -185,6 +195,15 @@
       prompt_slug=mapper.prompt.slug,
       sensor_slug=mapper.sensor.slug,
       _external=true,
+    ),
+  ),
+  right=link_button(
+    'Edit',
+    icon='ops_change',
+    href=url_for(
+      'mgnt.edit_mapper',
+      prompt_slug=mapper.prompt.slug,
+      sensor_slug=mapper.sensor.slug,
     ),
   ),
 ) }}

@@ -7,8 +7,21 @@
 {% from 'mgnt/_macros/show.html' import show_sensor %}
 
 
-{% macro _display(heading, function, things) %}
-<h3 class="title">{{ heading }}</h3>
+{% macro _display(heading, endpoint, function, things) %}
+  {% macro _heading(text) %}
+  <h3 class="title">{{ text }}</h3>
+  {% endmacro %}
+  {% macro _add_button() %}
+  <a class="button is-dark" href="{{ url_for(endpoint) }}">
+    {{ text_icon('ops_create') }}
+    <span>Add</span>
+  </a>
+  {% endmacro %}
+
+{{ split_level(
+  left=_heading(heading),
+  right=_add_button(),
+) }}
 {% if not things %}
 {{ nothing_there() }}
 {% else %}
@@ -37,31 +50,19 @@
 </div>
 {% endmacro %}
 
-{% macro _create_button(name, endpoint) %}
-<div class="content has-text-right">
-  <a class="button is-dark" href="{{ url_for(endpoint, slug=none) }}">
-    {{ text_icon('ops_create') }}
-    <span>New {{ name }}</span>
-  </a>
-</div>
-{% endmacro %}
-
 
 {% block content %}
 <section class="section">
   <div class="container">
     {{ _inner_navigation() }}
     {% if prompts is defined %}
-      {{ _display('Prompt', show_prompt, prompts) }}
-      {{ split_level(right=_create_button('prompt', 'mgnt.edit_prompt')) }}
+    {{ _display('Prompt', 'mgnt.edit_prompt', show_prompt, prompts) }}
     {% endif %}
     {% if mapping is defined %}
-      {{ _display('Mapper', show_mapper, mapping) }}
-      {{ split_level(right=_create_button('mapper', 'mgnt.edit_mapper')) }}
+    {{ _display('Mapper', 'mgnt.edit_mapper', show_mapper, mapping) }}
     {% endif %}
     {% if sensors is defined %}
-      {{ _display('Sensor', show_sensor, sensors) }}
-      {{ split_level(right=_create_button('sensor', 'mgnt.edit_sensor')) }}
+    {{ _display('Sensor', 'mgnt.edit_sensor', show_sensor, sensors) }}
     {% endif %}
   </div>
 </section>

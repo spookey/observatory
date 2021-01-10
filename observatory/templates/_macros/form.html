@@ -1,3 +1,5 @@
+{% from '_macros/elem.html' import text_icon %}
+
 {% macro _render_field(field) %}
   {% macro _errors() %}
   {% for error in field.errors %}
@@ -5,13 +7,13 @@
   {% endfor %}
   {% endmacro %}
 {% if field.type in ['CSRFTokenField', 'HiddenField'] %}
-  {{ field() }}
+  {{ field(class='is-hidden') }}
   {{ _errors() }}
 {% else %}
 <div class="field">
   {% if field.type in ['StringField', 'PasswordField'] %}
     <div class="control">
-      {{ field.label(class='label') }}
+      {{ field.label(class='label', title=field.description) }}
       {{ field(
         class='input' ~ (' is-danger' if field.errors),
         placeholder=field.description,
@@ -19,7 +21,7 @@
     </div>
   {% elif field.type in ['TextAreaField'] %}
     <div class="control">
-      {{ field.label(class='label') }}
+      {{ field.label(class='label', title=field.description) }}
       {{ field(
         class='textarea' ~ (' is-danger' if field.errors),
         placeholder=field.description,
@@ -27,7 +29,7 @@
     </div>
   {% elif field.type in ['DecimalField'] %}
     <div class="control">
-      {{ field.label(class='label') }}
+      {{ field.label(class='label', title=field.description) }}
       {{ field(
         class='input' ~ (' is-danger' if field.errors),
         type='number',
@@ -37,12 +39,12 @@
     </div>
   {% elif field.type in ['BooleanField'] %}
     <div class="control">
-      {{ field(class='checkbox') }}
+      {{ field(class='checkbox', title=field.description) }}
       {{ field.label(class='checkbox', title=field.description) }}
     </div>
   {% elif field.type in ['SelectField'] %}
     <div class="control">
-      {{ field.label(class='label') }}
+      {{ field.label(class='label', title=field.description) }}
       <div class="select is-fullwidth{{ ' is-danger' if field.errors }}">
         {{ field(class='select') }}
       </div>
@@ -80,4 +82,16 @@
   </div>
 </div>
 {% endif %}
+{% endmacro %}
+
+
+{% macro link_button(text, icon, href) %}
+<div class="field">
+  <div class="control">
+    <a class="button is-small is-dark" href="{{ href }}">
+      {{ text_icon(icon) }}<span>{{ text }}</span>
+    </a>
+  </div>
+</div>
+<div>{# compensate for the csrf input field #}</div>
 {% endmacro %}

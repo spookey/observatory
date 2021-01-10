@@ -3,6 +3,7 @@
 {% from '_macros/elem.html' import code_color %}
 {% from '_macros/elem.html' import text_code %}
 {% from '_macros/elem.html' import text_icon %}
+{% from '_macros/form.html' import link_button %}
 {% from '_macros/form.html' import render_form %}
 {% from '_macros/level.html' import key_val_level %}
 {% from '_macros/level.html' import split_level %}
@@ -18,25 +19,13 @@
     <span>{{ 'Edit' if idx is none else 'Add' }}</span>
     </a>
   {% endmacro %}
-  {% macro _drop_button(idx) %}
-    {% if drop_ep and drop_fm %}
-    {{ render_form(
-      drop_fm(idx),
-      action=url_for(drop_ep, idx=idx, _external=true),
-    ) }}
-    {% endif %}
-  {% endmacro %}
-  {% macro _edit_button(idx) %}
-  <a class="button is-small is-dark" href="{{ url_for(edit_ep, idx=idx) }}">
-    {{ text_icon('ops_change') }}
-    <span>Edit</span>
-    </a>
-  {% endmacro %}
 
 <div class="content">
   {{ split_level(
-    _heading(name),
-    _main_button(idx=space_api.next_index(indices) if indices is not none else none),
+    left=_heading(name),
+    right=_main_button(
+      idx=space_api.next_index(indices) if indices is not none else none
+    ),
   ) }}
   {% if indices is not none %}
     {% if not data %}
@@ -44,10 +33,19 @@
     {% else %}
     {% for elem in data %}
       <div class="box">{{ caller(elem) }}</div>
+      {% if elem._idx is defined %}
       {{ split_level(
-        _drop_button(elem._idx|d(0)),
-        _edit_button(elem._idx|d(0)),
+        left=render_form(
+          drop_fm(elem._idx),
+          action=url_for(drop_ep, idx=elem._idx, _external=true),
+        ) if drop_ep and drop_fm,
+        right=link_button(
+          'Edit',
+          icon='ops_change',
+          href=url_for(edit_ep, idx=elem._idx),
+        ),
       ) }}
+      {% endif %}
       {% if loop.last %}<hr>{% endif %}
     {% endfor %}
     {% endif %}
