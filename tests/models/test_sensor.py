@@ -195,19 +195,31 @@ class TestSensor:
         assert two.points == []
 
     @staticmethod
-    def test_cleanup_sticky(gen_sensor, gen_points_batch):
-        sensor = gen_sensor(sticky=True)
+    def test_cleanup_sticky(gen_sensor, gen_user, gen_points_batch):
+        one = gen_sensor('one', sticky=True)
+        two = gen_sensor('two', sticky=False)
+        user = gen_user()
 
-        _, _, batch = gen_points_batch(sensor=sensor, old=5, new=0)
-        batch = _pointsort(batch)
-        stick, *_, flick = batch
+        _, _, one_batch = gen_points_batch(sensor=one, user=user, old=5, new=0)
+        _, _, two_batch = gen_points_batch(sensor=two, user=user, old=4, new=1)
 
-        assert stick.created > flick.created
-        assert sensor.points == batch
+        assert Point.query.all() == [*one_batch, *two_batch]
 
-        assert sensor.cleanup()
+        one_batch = _pointsort(one_batch)
+        two_batch = _pointsort(two_batch)
 
-        assert sensor.points == [stick]
+        stick, *_ = one_batch
+        flick, *_ = two_batch
+
+        assert one.points == one_batch
+        assert two.points == two_batch
+
+        assert one.cleanup()
+
+        assert one.points == [stick]
+        assert two.points == [flick]
+
+        assert Point.query.all() == [stick, flick]
 
     @staticmethod
     def test_append(gen_sensor, gen_user):

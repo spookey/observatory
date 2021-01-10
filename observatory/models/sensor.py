@@ -53,14 +53,24 @@ class Sensor(CommonMixin, SortMixin, CreatedMixin, Model):
     def latest(self):
         return self.query_points.first()
 
-    def cleanup(self, _commit=True):
-        query = Point.query_sorted(Point.query_outdated())
-        if self.sticky:
-            query = query.offset(1)
+    @classmethod
+    def cleanup(cls, _commit=True):
+        result = []
+        for sensor in cls.query.all():
+            query = Point.query_outdated(sensor.query_points)
+            if sensor.sticky:
+                query = query.offset(1)
 
-        LOG.info('cleanup "%d" outdated points', query.count())
+            LOG.info(
+                'cleanup "%d" outdated points for "%s"',
+                query.count(),
+                sensor.slug,
+            )
+            result.append(
+                all(point.delete(_commit=_commit) for point in query.all())
+            )
 
-        return all(point.delete(_commit=_commit) for point in query.all())
+        return all(result)
 
     def append(self, *, user, value, _commit=True):
         self.cleanup()
