@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField
+from wtforms import BooleanField, StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired
 
 from observatory.forms.extra.validators import SafeSlug
@@ -29,11 +29,14 @@ class CommonEditForm(FlaskForm):
         'Description',
         description='Description',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+
+    @staticmethod
+    def _submit():
+        return SubmitField(
+            'Save',
+            description='Submit',
+            widget=SubmitButtonInput(icon='ops_submit'),
+        )
 
     def __init__(self, *args, obj=None, **kwargs):
         super().__init__(*args, obj=obj, **kwargs)
@@ -69,9 +72,19 @@ class CommonEditForm(FlaskForm):
 class PromptEditForm(CommonEditForm):
     Model = Prompt
 
+    submit = CommonEditForm._submit()
+
 
 class SensorEditForm(CommonEditForm):
     Model = Sensor
+
+    sticky = BooleanField(
+        'Sticky',
+        default=False,
+        description='Set sticky',
+    )
+
+    submit = CommonEditForm._submit()
 
 
 class PromptDropForm(GenericDropForm):

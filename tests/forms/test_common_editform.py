@@ -12,17 +12,28 @@ def _comm(request, gen_prompt, gen_sensor):
     def res():
         pass
 
-    res.form, res.model, res.gen_common = (
+    res.form, res.model, res.gen_common, res.data = (
         (
             PromptEditForm,
             Prompt,
             gen_prompt,
+            dict(
+                slug='prompt',
+                title='The prompt',
+                description='Prompt description',
+            ),
         )
         if request.param == 'prompt'
         else (
             SensorEditForm,
             Sensor,
             gen_sensor,
+            dict(
+                slug='sensor',
+                title='The sensor',
+                description='Sensor description',
+                sticky=True,
+            ),
         )
     )
 
@@ -35,9 +46,8 @@ class TestCommonEditForm:
     def test_basic_fields(_comm):
         form = _comm.form()
         assert form.Model == _comm.model
-        assert form.slug is not None
-        assert form.title is not None
-        assert form.description is not None
+        for key in _comm.data:
+            assert getattr(form, key, None) is not None
         assert form.submit is not None
 
     @staticmethod
@@ -88,42 +98,24 @@ class TestCommonEditForm:
 
     @staticmethod
     def test_edit_exisiting(_comm):
-        slug = 'changed_common'
-        title = 'The changed common'
-        description = 'Some changed common for testing'
-
         thing = _comm.gen_common()
         assert _comm.model.query.all() == [thing]
-        form = SensorEditForm(
-            obj=thing,
-            formdata=MultiDict(
-                {
-                    'slug': slug,
-                    'title': title,
-                    'description': description,
-                }
-            ),
-        )
+
+        form = SensorEditForm(obj=thing, formdata=MultiDict(_comm.data))
         assert form.validate() is True
         edited = form.action()
-        assert edited.slug == slug
-        assert edited.title == title
-        assert edited.description == description
         assert edited == thing
+        for key, val in _comm.data.items():
+            assert getattr(edited, key, 'error') == val
         assert _comm.model.query.all() == [edited]
 
     @staticmethod
     def test_create_new(_comm):
-        slug = 'common'
-        title = 'The common'
-        description = 'Some common for testing'
-
-        form = _comm.form(slug=slug, title=title, description=description)
+        form = _comm.form(**_comm.data)
         assert form.validate() is True
 
         thing = form.action()
-        assert thing.slug == slug
-        assert thing.title == title
-        assert thing.description == description
+        for key, val in _comm.data.items():
+            assert getattr(thing, key, 'error') == val
 
         assert _comm.model.query.all() == [thing]

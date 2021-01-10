@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 from flask import url_for
 from pytest import fixture, mark
 
@@ -10,15 +12,25 @@ def _comm(request, visitor, gen_prompt, gen_sensor, gen_user_loggedin):
     def res():
         pass
 
+    extra = namedtuple('extra', ('val', 'field'))
+
     res.login = gen_user_loggedin
     res.visitor = visitor
-    res.endpoint, res.view_ep, res.model, res.gen_common, res.url = (
+    (
+        res.endpoint,
+        res.view_ep,
+        res.model,
+        res.gen_common,
+        res.url,
+        res.extra,
+    ) = (
         (
             'mgnt.edit_prompt',
             'mgnt.view_prompt',
             Prompt,
             gen_prompt,
             '/manage/prompt/edit',
+            dict(),
         )
         if request.param == 'prompt'
         else (
@@ -27,6 +39,9 @@ def _comm(request, visitor, gen_prompt, gen_sensor, gen_user_loggedin):
             Sensor,
             gen_sensor,
             '/manage/sensor/edit',
+            dict(
+                sticky=extra(val=True, field='checkbox'),
+            ),
         )
     )
 
@@ -68,6 +83,7 @@ class TestMgntEditCommon:
             ('slug', 'text'),
             ('title', 'text'),
             ('description', '_ta_'),
+            *((key, val.field) for key, val in _comm.extra.items()),
             ('submit', 'submit'),
         ]
 
@@ -111,6 +127,7 @@ class TestMgntEditCommon:
                 'title': title,
                 'description': description,
                 'submit': True,
+                **{key: val.val for key, val in _comm.extra.items()},
             },
             code=302,
         )
@@ -120,6 +137,8 @@ class TestMgntEditCommon:
         assert thing.slug == slug
         assert thing.title == title
         assert thing.description == description
+        for key, val in _comm.extra.items():
+            assert getattr(thing, key, 'error') == val.val
 
     @staticmethod
     def test_form_changes(_comm):
@@ -138,6 +157,7 @@ class TestMgntEditCommon:
                 'slug': slug,
                 'title': title,
                 'description': description,
+                **{key: val.val for key, val in _comm.extra.items()},
                 'submit': True,
             },
             code=302,
@@ -148,3 +168,5 @@ class TestMgntEditCommon:
         assert changed.slug == slug
         assert changed.title == title
         assert changed.description == description
+        for key, val in _comm.extra.items():
+            assert getattr(changed, key, 'error') == val.val
