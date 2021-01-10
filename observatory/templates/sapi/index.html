@@ -187,6 +187,42 @@
           {{ key_val_level('Location', _value(data.location, req=true)) }}
           {{ key_val_level('Description', _value(data.description)) }}
         {% endcall %}
+        {% for (_sub, _title, params) in (
+          ('alpha', 'Alpha radiation sensor', dict(
+            edit_ep='sapi.edit_sensors_radiation_alpha',
+            drop_ep='sapi.drop_sensors_radiation_alpha',
+            drop_fm=form_drop_space_sensors_radiation_alpha,
+          )),
+          ('beta', 'Beta radiation sensor', dict(
+            edit_ep='sapi.edit_sensors_radiation_beta',
+            drop_ep='sapi.drop_sensors_radiation_beta',
+            drop_fm=form_drop_space_sensors_radiation_beta,
+          )),
+          ('gamma', 'Gamma radiation sensor', dict(
+            edit_ep='sapi.edit_sensors_radiation_gamma',
+            drop_ep='sapi.drop_sensors_radiation_gamma',
+            drop_fm=form_drop_space_sensors_radiation_gamma,
+          )),
+          ('beta_gamma', 'Beta & gamma radiation sensor', dict(
+            edit_ep='sapi.edit_sensors_radiation_beta_gamma',
+            drop_ep='sapi.drop_sensors_radiation_beta_gamma',
+            drop_fm=form_drop_space_sensors_radiation_beta_gamma,
+          )),
+        ) %}
+        {% call(data) _block(
+          _title, content['sensors']['radiation'][_sub],
+          indices=space_api.sensors_radiation_indices(_sub),
+          **params,
+        ) %}
+          {{ key_val_level('Value', _value(data.value, req=true)) }}
+          {{ key_val_level('Unit', _value(data.unit, req=true)) }}
+          {{ key_val_level('Dead time', _value(data.dead_time)) }}
+          {{ key_val_level('Conversion factor', _value(data.conversion_factor)) }}
+          {{ key_val_level('Name', _value(data.name)) }}
+          {{ key_val_level('Location', _value(data.location)) }}
+          {{ key_val_level('Description', _value(data.description)) }}
+        {% endcall %}
+        {% endfor %}
         {% call(data) _block(
           'Humidity sensor', content['sensors']['humidity'],
           edit_ep='sapi.edit_sensors_humidity',

@@ -23,6 +23,10 @@ from observatory.forms.space_drop import (
     SpaceDropSensorsHumidityForm,
     SpaceDropSensorsNetworkTrafficForm,
     SpaceDropSensorsPowerConsumptionForm,
+    SpaceDropSensorsRadiationAlphaForm,
+    SpaceDropSensorsRadiationBetaForm,
+    SpaceDropSensorsRadiationBetaGammaForm,
+    SpaceDropSensorsRadiationGammaForm,
     SpaceDropSensorsTemperatureForm,
     SpaceDropSensorsTotalMemberCountForm,
     SpaceDropSensorsWindForm,
@@ -51,6 +55,10 @@ from observatory.forms.space_edit_sensors import (
     SpaceEditSensorsHumidityForm,
     SpaceEditSensorsNetworkTrafficForm,
     SpaceEditSensorsPowerConsumptionForm,
+    SpaceEditSensorsRadiationAlphaForm,
+    SpaceEditSensorsRadiationBetaForm,
+    SpaceEditSensorsRadiationBetaGammaForm,
+    SpaceEditSensorsRadiationGammaForm,
     SpaceEditSensorsTemperatureForm,
     SpaceEditSensorsTotalMemberCountForm,
     SpaceEditSensorsWindForm,
@@ -176,6 +184,63 @@ def edit_sensors_door_locked(idx=0):
 def edit_sensors_barometer(idx=0):
     return _edit_form(
         SpaceEditSensorsBarometerForm(idx=idx), f'Barometer #{1 + idx}'
+    )
+
+
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/radiation/alpha/<int:idx>', methods=['GET', 'POST']
+)
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/radiation/alpha', methods=['GET', 'POST']
+)
+@login_required
+def edit_sensors_radiation_alpha(idx=0):
+    return _edit_form(
+        SpaceEditSensorsRadiationAlphaForm(idx=idx),
+        f'Alpha radiation #{1 + idx}',
+    )
+
+
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/radiation/beta/<int:idx>', methods=['GET', 'POST']
+)
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/radiation/beta', methods=['GET', 'POST']
+)
+@login_required
+def edit_sensors_radiation_beta(idx=0):
+    return _edit_form(
+        SpaceEditSensorsRadiationBetaForm(idx=idx),
+        f'Beta radiation #{1 + idx}',
+    )
+
+
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/radiation/gamma/<int:idx>', methods=['GET', 'POST']
+)
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/radiation/gamma', methods=['GET', 'POST']
+)
+@login_required
+def edit_sensors_radiation_gamma(idx=0):
+    return _edit_form(
+        SpaceEditSensorsRadiationGammaForm(idx=idx),
+        f'Gamma radiation #{1 + idx}',
+    )
+
+
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/radiation/beta-gamma/<int:idx>',
+    methods=['GET', 'POST'],
+)
+@BLUEPRINT_SAPI.route(
+    '/space/edit/sensors/radiation/beta-gamma', methods=['GET', 'POST']
+)
+@login_required
+def edit_sensors_radiation_beta_gamma(idx=0):
+    return _edit_form(
+        SpaceEditSensorsRadiationBetaGammaForm(idx=idx),
+        f'Beta and gamma radiation #{1 + idx}',
     )
 
 
@@ -375,6 +440,51 @@ def drop_sensors_door_locked(idx):
 def drop_sensors_barometer(idx):
     return _drop_form(
         SpaceDropSensorsBarometerForm(idx=idx), f'Barometer #{1 + idx}'
+    )
+
+
+@BLUEPRINT_SAPI.route(
+    '/space/drop/sensors/radiation/alpha/<int:idx>', methods=['GET', 'POST']
+)
+@login_required
+def drop_sensors_radiation_alpha(idx=0):
+    return _drop_form(
+        SpaceDropSensorsRadiationAlphaForm(idx=idx),
+        f'Alpha radiation #{1 + idx}',
+    )
+
+
+@BLUEPRINT_SAPI.route(
+    '/space/drop/sensors/radiation/beta/<int:idx>', methods=['GET', 'POST']
+)
+@login_required
+def drop_sensors_radiation_beta(idx=0):
+    return _drop_form(
+        SpaceDropSensorsRadiationBetaForm(idx=idx),
+        f'Beta radiation #{1 + idx}',
+    )
+
+
+@BLUEPRINT_SAPI.route(
+    '/space/drop/sensors/radiation/gamma/<int:idx>', methods=['GET', 'POST']
+)
+@login_required
+def drop_sensors_radiation_gamma(idx=0):
+    return _drop_form(
+        SpaceDropSensorsRadiationGammaForm(idx=idx),
+        f'Gamma radiation #{1 + idx}',
+    )
+
+
+@BLUEPRINT_SAPI.route(
+    '/space/drop/sensors/radiation/beta-gamma/<int:idx>',
+    methods=['GET', 'POST'],
+)
+@login_required
+def drop_sensors_radiation_beta_gamma(idx=0):
+    return _drop_form(
+        SpaceDropSensorsRadiationBetaGammaForm(idx=idx),
+        f'Beta and gamma radiation #{1 + idx}',
     )
 
 

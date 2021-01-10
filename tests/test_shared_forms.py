@@ -23,6 +23,10 @@ from observatory.forms.space_drop import (
     SpaceDropSensorsHumidityForm,
     SpaceDropSensorsNetworkTrafficForm,
     SpaceDropSensorsPowerConsumptionForm,
+    SpaceDropSensorsRadiationAlphaForm,
+    SpaceDropSensorsRadiationBetaForm,
+    SpaceDropSensorsRadiationBetaGammaForm,
+    SpaceDropSensorsRadiationGammaForm,
     SpaceDropSensorsTemperatureForm,
     SpaceDropSensorsTotalMemberCountForm,
     SpaceDropSensorsWindForm,
@@ -44,6 +48,10 @@ from observatory.shared import (
     form_drop_space_sensors_humidity,
     form_drop_space_sensors_network_traffic,
     form_drop_space_sensors_power_consumption,
+    form_drop_space_sensors_radiation_alpha,
+    form_drop_space_sensors_radiation_beta,
+    form_drop_space_sensors_radiation_beta_gamma,
+    form_drop_space_sensors_radiation_gamma,
     form_drop_space_sensors_temperature,
     form_drop_space_sensors_total_member_count,
     form_drop_space_sensors_wind,
@@ -74,6 +82,22 @@ SPACE_DROP_FORMS = [
     SpaceDrop(
         func=form_drop_space_sensors_barometer,
         form=SpaceDropSensorsBarometerForm,
+    ),
+    SpaceDrop(
+        func=form_drop_space_sensors_radiation_alpha,
+        form=SpaceDropSensorsRadiationAlphaForm,
+    ),
+    SpaceDrop(
+        func=form_drop_space_sensors_radiation_beta,
+        form=SpaceDropSensorsRadiationBetaForm,
+    ),
+    SpaceDrop(
+        func=form_drop_space_sensors_radiation_gamma,
+        form=SpaceDropSensorsRadiationGammaForm,
+    ),
+    SpaceDrop(
+        func=form_drop_space_sensors_radiation_beta_gamma,
+        form=SpaceDropSensorsRadiationBetaGammaForm,
     ),
     SpaceDrop(
         func=form_drop_space_sensors_humidity,

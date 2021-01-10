@@ -138,7 +138,7 @@ class TestSpaceApiBuildIndices:
         api = SpaceApi()
         assert getattr(api, f'sensors_{field}_indices', None) == []
 
-        indices = list(range(choice(range(23, 42))))
+        indices = list(range(4))
         for idx in indices:
             for key in keys:
                 Value.set(
@@ -148,6 +148,23 @@ class TestSpaceApiBuildIndices:
                 )
 
         assert getattr(api, f'sensors_{field}_indices', None) == indices
+
+    @staticmethod
+    @mark.parametrize('sub', ['alpha', 'beta', 'gamma', 'beta_gamma'])
+    def test_sensors_radiation(sub):
+        api = SpaceApi()
+        assert api.sensors_radiation_indices(sub) == []
+
+        indices = list(range(5))
+        for idx in indices:
+            for key in ['value', 'unit']:
+                Value.set(
+                    f'{SP_API_PREFIX}.sensors.radiation.{sub}.{key}',
+                    idx=idx,
+                    elem=f'radiation {sub} #{idx} {key}',
+                )
+
+        assert api.sensors_radiation_indices(sub) == indices
 
     @staticmethod
     def test_projects():

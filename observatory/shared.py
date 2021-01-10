@@ -23,6 +23,10 @@ from observatory.forms.space_drop import (
     SpaceDropSensorsHumidityForm,
     SpaceDropSensorsNetworkTrafficForm,
     SpaceDropSensorsPowerConsumptionForm,
+    SpaceDropSensorsRadiationAlphaForm,
+    SpaceDropSensorsRadiationBetaForm,
+    SpaceDropSensorsRadiationBetaGammaForm,
+    SpaceDropSensorsRadiationGammaForm,
     SpaceDropSensorsTemperatureForm,
     SpaceDropSensorsTotalMemberCountForm,
     SpaceDropSensorsWindForm,
@@ -135,6 +139,22 @@ def form_drop_space_sensors_door_locked(idx):
 
 def form_drop_space_sensors_barometer(idx):
     return SpaceDropSensorsBarometerForm(idx=idx)
+
+
+def form_drop_space_sensors_radiation_alpha(idx):
+    return SpaceDropSensorsRadiationAlphaForm(idx=idx)
+
+
+def form_drop_space_sensors_radiation_beta(idx):
+    return SpaceDropSensorsRadiationBetaForm(idx=idx)
+
+
+def form_drop_space_sensors_radiation_gamma(idx):
+    return SpaceDropSensorsRadiationGammaForm(idx=idx)
+
+
+def form_drop_space_sensors_radiation_beta_gamma(idx):
+    return SpaceDropSensorsRadiationBetaGammaForm(idx=idx)
 
 
 def form_drop_space_sensors_humidity(idx):

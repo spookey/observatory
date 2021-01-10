@@ -392,6 +392,46 @@ class TestSpaceApiBuildValue:
         assert res['sensors'][field] == result
 
     @staticmethod
+    @mark.parametrize('sub', ['alpha', 'beta', 'gamma', 'beta_gamma'])
+    def test_sensors_radiation(sub, gen_sensor, gen_user):
+        api = SpaceApi()
+        user = gen_user()
+
+        result = []
+        for idx in range(2):
+            sensor = gen_sensor(f'value-{sub}-{idx}')
+            sensor.append(user=user, value=idx)
+
+            result.append(
+                {
+                    '_idx': idx,
+                    'value': Value.set(
+                        key=f'{SP_API_PREFIX}.sensors.radiation.{sub}.value',
+                        idx=idx,
+                        elem=sensor,
+                    ).latest.value,
+                    **{
+                        field: Value.set(
+                            key=f'{SP_API_PREFIX}.sensors.radiation.{sub}.{field}',
+                            idx=idx,
+                            elem=field,
+                        ).elem
+                        for field in [
+                            'unit',
+                            'dead_time',
+                            'conversion_factor',
+                            'location',
+                            'name',
+                            'description',
+                        ]
+                    },
+                }
+            )
+
+        res = api.build()
+        assert res['sensors']['radiation'][sub] == result
+
+    @staticmethod
     def test_sensors_wind(gen_sensor, gen_user):
         api = SpaceApi()
         user = gen_user()

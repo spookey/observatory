@@ -117,6 +117,12 @@ class SpaceApi:
             'sensors.barometer.location',
         )
 
+    def sensors_radiation_indices(self, sub):
+        return self._indices_all(
+            f'sensors.radiation.{sub}.value',
+            f'sensors.radiation.{sub}.unit',
+        )
+
     @property
     def sensors_humidity_indices(self):
         return self._indices_all(
@@ -335,10 +341,45 @@ class SpaceApi:
                     for idx in self.sensors_barometer_indices
                 ],
                 'radiation': {
-                    'alpha': [],
-                    'beta': [],
-                    'gamma': [],
-                    'beta_gamma': [],
+                    sub: [
+                        {
+                            '_idx': idx,
+                            'value': self.latest_value(
+                                f'sensors.radiation.{sub}.value',
+                                idx=idx,
+                                horizon_key=(
+                                    f'sensors.radiation.{sub}.value.horizon'
+                                ),
+                                convert_key=(
+                                    f'sensors.radiation.{sub}.value.convert'
+                                ),
+                                elevate_key=(
+                                    f'sensors.radiation.{sub}.value.elevate'
+                                ),
+                            ),
+                            'unit': self._get(
+                                f'sensors.radiation.{sub}.unit', idx=idx
+                            ),
+                            'dead_time': self._get(
+                                f'sensors.radiation.{sub}.dead_time', idx=idx
+                            ),
+                            'conversion_factor': self._get(
+                                f'sensors.radiation.{sub}.conversion_factor',
+                                idx=idx,
+                            ),
+                            'location': self._get(
+                                f'sensors.radiation.{sub}.location', idx=idx
+                            ),
+                            'name': self._get(
+                                f'sensors.radiation.{sub}.name', idx=idx
+                            ),
+                            'description': self._get(
+                                f'sensors.radiation.{sub}.description', idx=idx
+                            ),
+                        }
+                        for idx in self.sensors_radiation_indices(sub)
+                    ]
+                    for sub in ['alpha', 'beta', 'gamma', 'beta_gamma']
                 },
                 'humidity': [
                     {

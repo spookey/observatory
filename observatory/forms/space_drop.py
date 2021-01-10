@@ -103,6 +103,41 @@ class SpaceDropSensorsBarometerForm(SpaceDropForm):
     ]
 
 
+class SpaceDropSensorsRadiationForm(SpaceDropForm):
+    KEYS = []
+
+    @staticmethod
+    def create(sub):
+        return [
+            f'sensors.radiation.{sub}.value',
+            f'sensors.radiation.{sub}.value.elevate',
+            f'sensors.radiation.{sub}.value.convert',
+            f'sensors.radiation.{sub}.value.horizon',
+            f'sensors.radiation.{sub}.unit',
+            f'sensors.radiation.{sub}.dead_time',
+            f'sensors.radiation.{sub}.conversion_factor',
+            f'sensors.radiation.{sub}.location',
+            f'sensors.radiation.{sub}.name',
+            f'sensors.radiation.{sub}.description',
+        ]
+
+
+class SpaceDropSensorsRadiationAlphaForm(SpaceDropSensorsRadiationForm):
+    KEYS = SpaceDropSensorsRadiationForm.create('alpha')
+
+
+class SpaceDropSensorsRadiationBetaForm(SpaceDropSensorsRadiationForm):
+    KEYS = SpaceDropSensorsRadiationForm.create('beta')
+
+
+class SpaceDropSensorsRadiationGammaForm(SpaceDropSensorsRadiationForm):
+    KEYS = SpaceDropSensorsRadiationForm.create('gamma')
+
+
+class SpaceDropSensorsRadiationBetaGammaForm(SpaceDropSensorsRadiationForm):
+    KEYS = SpaceDropSensorsRadiationForm.create('beta_gamma')
+
+
 class SpaceDropSensorsHumidityForm(SpaceDropForm):
     KEYS = [
         'sensors.humidity.value',
