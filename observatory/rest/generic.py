@@ -111,7 +111,10 @@ def _nest_point(default):
 
 
 def sensor_single(nest_name, nest_default):
-    res = common_single(length=Integer())
+    res = common_single(
+        length=Integer(),
+        sticky=Boolean(),
+    )
     res[nest_name] = _nest_point(nest_default)
     return res
 
