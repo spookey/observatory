@@ -3,7 +3,7 @@ from logging import getLogger
 
 from flask_login import UserMixin
 
-from observatory.database import CreatedMixin, Model
+from observatory.database import TXT_LEN_SHORT, CreatedMixin, Model
 from observatory.lib.clock import (
     epoch_milliseconds,
     epoch_seconds,
@@ -19,8 +19,10 @@ LOG = getLogger(__name__)
 
 
 class User(UserMixin, CreatedMixin, Model):
-    username = DB.Column(DB.String(length=128), unique=True, nullable=False)
-    pw_hash = DB.Column(DB.LargeBinary(length=128), nullable=True)
+    username = DB.Column(
+        DB.String(length=TXT_LEN_SHORT), unique=True, nullable=False
+    )
+    pw_hash = DB.Column(DB.LargeBinary(length=TXT_LEN_SHORT), nullable=True)
     active = DB.Column(DB.Boolean(), nullable=False, default=True)
     last_login = DB.Column(DB.DateTime(), nullable=True)
     points = DB.relationship(

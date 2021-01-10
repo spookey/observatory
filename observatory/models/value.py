@@ -3,7 +3,7 @@ from enum import Enum
 from sqlalchemy import and_, asc
 from sqlalchemy.ext.hybrid import hybrid_property
 
-from observatory.database import Model
+from observatory.database import TXT_LEN_SHORT, TXT_LEN_SUPER, Model
 from observatory.models.sensor import Sensor
 from observatory.start.extensions import DB
 
@@ -30,7 +30,7 @@ class EnumBox(Enum):
 
 class Value(Model):
     key = DB.Column(
-        DB.String(),
+        DB.String(length=TXT_LEN_SHORT),
         nullable=False,
     )
     idx = DB.Column(
@@ -44,7 +44,7 @@ class Value(Model):
         default=EnumBox.STRING,
     )
     _string = DB.Column(
-        DB.String(),
+        DB.String(length=TXT_LEN_SUPER),
         nullable=True,
     )
     _number = DB.Column(

@@ -12,6 +12,10 @@ from observatory.start.extensions import DB
 
 LOG = getLogger(__name__)
 
+TXT_LEN_SUPER = 4096
+TXT_LEN_LARGE = 1024
+TXT_LEN_SHORT = 256
+
 # pylint: disable=comparison-with-callable
 # pylint: disable=no-member
 # pylint: disable=no-self-argument
@@ -77,15 +81,17 @@ class PrimeMixin:
 class CommonMixin:
     @declared_attr
     def slug(_):
-        return DB.Column(DB.String(length=64), unique=True, nullable=False)
+        return DB.Column(
+            DB.String(length=TXT_LEN_SHORT), unique=True, nullable=False
+        )
 
     @declared_attr
     def title(_):
-        return DB.Column(DB.String(length=512), nullable=False)
+        return DB.Column(DB.String(length=TXT_LEN_LARGE), nullable=False)
 
     @declared_attr
     def description(_):
-        return DB.Column(DB.String(length=4096), nullable=False)
+        return DB.Column(DB.String(length=TXT_LEN_SUPER), nullable=False)
 
     @classmethod
     def by_slug(cls, slug):

@@ -1,6 +1,6 @@
 from pytest import mark
 
-from observatory.database import CRUDMixin
+from observatory.database import TXT_LEN_SHORT, CRUDMixin
 from observatory.start.extensions import DB
 
 # pylint: disable=no-member
@@ -11,7 +11,7 @@ LAYPOAD = 'napfkuchen!'
 
 class CRUDMixinPhony(CRUDMixin, DB.Model):
     prime = DB.Column(DB.Integer(), primary_key=True)
-    value = DB.Column(DB.String())
+    value = DB.Column(DB.String(length=TXT_LEN_SHORT))
 
 
 @mark.usefixtures('session')
