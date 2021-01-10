@@ -100,6 +100,9 @@ $(CMD_BPY) $(CMD_PUDB): | $(DIR_VENV)
 $(DIR_NODEM):
 	$(CMD_NPM) install
 
+.PHONY: node
+node: $(DIR_NODEM)
+
 .PHONY: static
 static: $(OUT_CODE) $(OUT_VIEW)
 $(OUT_CODE): | $(DIR_NODEM)
