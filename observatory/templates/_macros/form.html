@@ -39,8 +39,15 @@
     </div>
   {% elif field.type in ['BooleanField'] %}
     <div class="control">
+      <label class="label">{{ field.label.text }}</label>
+      <label class="checkbox">
       {{ field(class='checkbox', title=field.description) }}
-      {{ field.label(class='checkbox', title=field.description) }}
+      {{ field.label(
+        class='checkbox',
+        text=field.description,
+        title=field.description
+      ) }}
+      </label>
     </div>
   {% elif field.type in ['SelectField'] %}
     <div class="control">
