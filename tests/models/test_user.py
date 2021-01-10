@@ -37,10 +37,13 @@ class TestUser:
 
     @staticmethod
     def test_name_unique(gen_user):
-        one = gen_user(username='user', _commit=False)
+        name = 'user'
+
+        one = gen_user(username=name, _commit=False)
         assert one.save(_commit=True)
 
-        two = gen_user(username='user', _commit=False)
+        two = gen_user(username=name, _commit=False)
+
         with raises(IntegrityError):
             assert two.save(_commit=True)
 
@@ -107,8 +110,7 @@ class TestUser:
         assert user.pw_hash is None
         assert user.check_password(None) is False
 
-        user.set_password(None)
-        assert user.save()
+        assert user.set_password(None, _commit=True)
 
         assert user.pw_hash is None
         assert user.check_password(None) is False
@@ -124,8 +126,7 @@ class TestUser:
         assert user.check_password(pw1) is True
         assert user.check_password(pw2) is False
 
-        user.set_password(pw2)
-        assert user.save()
+        assert user.set_password(pw2, _commit=True)
 
         assert user.pw_hash != pw1
         assert user.pw_hash != pw2
@@ -149,7 +150,9 @@ class TestUser:
     def test_last_login_fmt(gen_user):
         user = gen_user()
         assert user.last_login_fmt == ''
-        user.refresh()
+
+        assert user.refresh()
+
         assert user.last_login_fmt == user.last_login.strftime(FMT_STRFTIME)
 
     @staticmethod
@@ -157,7 +160,9 @@ class TestUser:
         user = gen_user()
         assert user.last_login_epoch is None
         assert user.last_login_epoch_ms is None
-        user.refresh()
+
+        assert user.refresh()
+
         assert (
             user.last_login_epoch
             <= (user.last_login - datetime.utcfromtimestamp(0)).total_seconds()

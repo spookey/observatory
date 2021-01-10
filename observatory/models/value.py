@@ -106,11 +106,11 @@ class Value(Model):
         return [obj.elem for obj in cls.by_key(key)]
 
     @classmethod
-    def set(cls, key, idx=0, elem=None):
+    def set(cls, key, idx=0, elem=None, _commit=True):
         obj = cls.by_key_idx(key=key, idx=idx)
         if obj is None:
-            obj = cls.create(key=key, idx=idx)
-        return obj.update(elem=elem)
+            obj = cls.create(key=key, idx=idx, _commit=False)
+        return obj.update(elem=elem, _commit=_commit)
 
     @property
     def latest(self):

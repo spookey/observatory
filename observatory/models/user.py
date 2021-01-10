@@ -25,6 +25,7 @@ class User(UserMixin, CreatedMixin, Model):
     pw_hash = DB.Column(DB.LargeBinary(length=TXT_LEN_SHORT), nullable=True)
     active = DB.Column(DB.Boolean(), nullable=False, default=True)
     last_login = DB.Column(DB.DateTime(), nullable=True)
+
     points = DB.relationship(
         'Point',
         backref=DB.backref('user', lazy=True),
@@ -35,7 +36,7 @@ class User(UserMixin, CreatedMixin, Model):
 
     def __init__(self, username, password, **kwargs):
         Model.__init__(self, username=username, **kwargs)
-        self.set_password(password)
+        self.set_password(password, _commit=False)
 
     @classmethod
     def by_username(cls, username):
@@ -69,19 +70,17 @@ class User(UserMixin, CreatedMixin, Model):
 
     @staticmethod
     def hash_password(plain):
-        value = None
         if plain is not None:
-            value = BCRYPT.generate_password_hash(plain)
-        return value
+            return BCRYPT.generate_password_hash(plain)
+        return None
 
-    def set_password(self, plain):
-        self.pw_hash = self.hash_password(plain)
+    def set_password(self, plain, _commit=True):
+        return self.update(pw_hash=self.hash_password(plain), _commit=_commit)
 
-    def refresh(self):
+    def refresh(self, _commit=True):
         LOG.info('refreshing last_login for "%s"', self.username)
 
-        self.last_login = datetime.utcnow()
-        return self.save()
+        return self.update(last_login=datetime.utcnow(), _commit=_commit)
 
     @property
     def query_points(self):
