@@ -20,7 +20,6 @@ CMD_PUDB	:=	$(DIR_VENV)/bin/pudb3
 CMD_PYLINT	:=	$(DIR_VENV)/bin/pylint
 CMD_PYREV	:=	$(DIR_VENV)/bin/pyreverse
 CMD_PYTEST	:=	$(DIR_VENV)/bin/pytest
-CMD_WATCH	:=	$(DIR_VENV)/bin/watchmedo
 
 DIR_OBVTY	:=	observatory
 DIR_STUFF	:=	stuff
@@ -82,13 +81,13 @@ requirements: $(CMD_FLASK)
 .PHONY: requirements-dev
 requirements-dev: $(CMD_BLACK) $(CMD_ISORT) $(CMD_PYLINT) $(CMD_PYREV) $(CMD_PYTEST)
 .PHONY: requirements-debug
-requirements-debug: $(CMD_BPY) $(CMD_PUDB) $(CMD_WATCH)
+requirements-debug: $(CMD_BPY) $(CMD_PUDB)
 
 $(CMD_FLASK): | $(DIR_VENV)
 	$(CMD_PIP) install -r "requirements.txt"
 $(CMD_BLACK) $(CMD_ISORT) $(CMD_PYLINT) $(CMD_PYREV) $(CMD_PYTEST): | $(DIR_VENV)
 	$(CMD_PIP) install -r "requirements-dev.txt"
-$(CMD_BPY) $(CMD_PUDB) $(CMD_WATCH): | $(DIR_VENV)
+$(CMD_BPY) $(CMD_PUDB): | $(DIR_VENV)
 	$(CMD_PIP) install -r "requirements-debug.txt"
 	@echo
 	@echo "import pudb; pudb.set_trace()"
@@ -225,14 +224,7 @@ tcovh: $(CMD_PYTEST)
 .PHONY:tcovh-open
 tcovh-open: tcovh
 	$(CMD_PY) -m webbrowser -t "$(HTMLCOV)/index.html"
-.PHONY:tcovh-watch
-tcovh-watch: $(CMD_WATCH)
-	@$(CMD_WATCH) shell-command . \
-		--recursive \
-		--ignore-directories \
-		--drop \
-		--patterns="*.py" \
-		--command="$(CMD_MAKE) tcovh"
+
 
 ###
 # cleanup
