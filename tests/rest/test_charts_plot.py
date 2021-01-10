@@ -71,19 +71,19 @@ class TestChartsPlot:
                 'borderColor': m_two.color.color,
                 'data': [
                     {
-                        'x': p_two_two.created_epoch_ms,
+                        'x': p_two_one.created_epoch_ms,
                         'y': 0.0,
                     },
                     {
-                        'x': p_two_one.created_epoch_ms,
+                        'x': p_two_two.created_epoch_ms,
                         'y': -1.0,
                     },
                 ],
                 'display': {
                     'logic': {
                         'color': m_two.color.color,
-                        'epoch': p_two_two.created_epoch_ms,
-                        'stamp': p_two_two.created_fmt,
+                        'epoch': p_two_one.created_epoch_ms,
+                        'stamp': p_two_one.created_fmt,
                     },
                     'plain': {
                         'convert': m_two.convert.name,
