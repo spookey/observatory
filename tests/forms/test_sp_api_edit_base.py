@@ -79,7 +79,7 @@ class TestSpaceEditBase:
 
     @staticmethod
     def test_validation_fails():
-        form = PhonyForm()
+        form = PhonyForm(idx=42)
         assert form.validate() is False
         assert form.action() is None
 
@@ -89,7 +89,7 @@ class TestSpaceEditBase:
 
     @staticmethod
     def test_one_of_fails():
-        form = PhonyForm(string=None, number=2, cstory=None)
+        form = PhonyForm(idx=23, string=None, number=2, cstory=None)
         assert form.validate() is False
         assert form.action() is None
 

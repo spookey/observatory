@@ -36,7 +36,13 @@ class SpaceEditForm(FlaskForm):
     ONE_OF = []
     SENSORS = []
 
-    def __init__(self, *args, idx=0, **kwargs):
+    @staticmethod
+    def _currency_choices():
+        return [
+            (curr.name, f'{curr.name} — {curr.full_name}') for curr in Currency
+        ]
+
+    def __init__(self, *args, idx, **kwargs):
         super().__init__(
             *args,
             data={
@@ -163,6 +169,7 @@ class SpaceEditLocationForm(SpaceEditForm):
     timezone_sel = SelectField(
         'Timezone',
         coerce=str,
+        choices=[(None, '—'), *[(ctz, ctz) for ctz in common_timezones]],
         validators=[Optional()],
         description='The timezone the space is located in',
     )
@@ -171,15 +178,6 @@ class SpaceEditLocationForm(SpaceEditForm):
         description='Submit',
         widget=SubmitButtonInput(icon='ops_submit'),
     )
-
-    @staticmethod
-    def _timezone_choices():
-        return [(None, '—'), *[(ctz, ctz) for ctz in common_timezones]]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.timezone_sel.choices = self._timezone_choices()
 
 
 class SpaceEditSpaceFedForm(SpaceEditForm):
@@ -216,9 +214,6 @@ class SpaceEditCamForm(SpaceEditForm):
         description='Submit',
         widget=SubmitButtonInput(icon='ops_submit'),
     )
-
-    def __init__(self, idx, *args, **kwargs):
-        super().__init__(*args, idx=idx, **kwargs)
 
 
 class SpaceEditStateIconForm(SpaceEditForm):
@@ -429,9 +424,6 @@ class SpaceEditContactKeymastersForm(SpaceEditForm):
         widget=SubmitButtonInput(icon='ops_submit'),
     )
 
-    def __init__(self, idx, *args, **kwargs):
-        super().__init__(*args, idx=idx, **kwargs)
-
 
 class SpaceEditFeedForm(SpaceEditForm):
     KEYS = {}
@@ -439,6 +431,12 @@ class SpaceEditFeedForm(SpaceEditForm):
     type_sel = SelectField(
         'Type',
         coerce=str,
+        choices=[
+            (None, '—'),
+            ('rss', 'RSS'),
+            ('atom', 'Atom'),
+            ('ical', 'iCal'),
+        ],
         validators=[Optional()],
         description='Type of the feed',
     )
@@ -452,20 +450,6 @@ class SpaceEditFeedForm(SpaceEditForm):
         description='Submit',
         widget=SubmitButtonInput(icon='ops_submit'),
     )
-
-    @staticmethod
-    def _type_choices():
-        return [
-            (None, '—'),
-            ('rss', 'RSS'),
-            ('atom', 'Atom'),
-            ('ical', 'iCal'),
-        ]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.type_sel.choices = self._type_choices()
 
 
 class SpaceEditFeedBlogForm(SpaceEditFeedForm):
@@ -509,9 +493,6 @@ class SpaceEditProjectsForm(SpaceEditForm):
         widget=SubmitButtonInput(icon='ops_submit'),
     )
 
-    def __init__(self, idx, *args, **kwargs):
-        super().__init__(*args, idx=idx, **kwargs)
-
 
 class SpaceEditLinksForm(SpaceEditForm):
     KEYS = dict(
@@ -540,9 +521,6 @@ class SpaceEditLinksForm(SpaceEditForm):
         widget=SubmitButtonInput(icon='ops_submit'),
     )
 
-    def __init__(self, idx, *args, **kwargs):
-        super().__init__(*args, idx=idx, **kwargs)
-
 
 class SpaceEditMembershipPlansForm(SpaceEditForm):
     KEYS = dict(
@@ -566,12 +544,21 @@ class SpaceEditMembershipPlansForm(SpaceEditForm):
     currency_sel = SelectField(
         'Currency',
         coerce=str,
+        choices=SpaceEditForm._currency_choices(),
         validators=[DataRequired()],
         description='What\'s the currency?',
     )
     billing_interval_sel = SelectField(
         'Billing interval',
         coerce=str,
+        choices=[
+            ('yearly', 'Yearly'),
+            ('monthly', 'Monthly'),
+            ('weekly', 'Weekly'),
+            ('daily', 'Daily'),
+            ('hourly', 'Hourly'),
+            ('other', 'Other'),
+        ],
         validators=[DataRequired()],
         description='How often is the membership billed?',
     )
@@ -585,26 +572,3 @@ class SpaceEditMembershipPlansForm(SpaceEditForm):
         description='Submit',
         widget=SubmitButtonInput(icon='ops_submit'),
     )
-
-    @staticmethod
-    def _currency_choices():
-        return [
-            (curr.name, f'{curr.name} — {curr.full_name}') for curr in Currency
-        ]
-
-    @staticmethod
-    def _billing_interval_choices():
-        return [
-            ('yearly', 'Yearly'),
-            ('monthly', 'Monthly'),
-            ('weekly', 'Weekly'),
-            ('daily', 'Daily'),
-            ('hourly', 'Hourly'),
-            ('other', 'Other'),
-        ]
-
-    def __init__(self, idx, *args, **kwargs):
-        super().__init__(*args, idx=idx, **kwargs)
-
-        self.currency_sel.choices = self._currency_choices()
-        self.billing_interval_sel.choices = self._billing_interval_choices()

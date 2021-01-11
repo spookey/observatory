@@ -83,7 +83,6 @@ class SensorEditForm(CommonEditForm):
         default=False,
         description='Set sticky',
     )
-
     submit = CommonEditForm._submit()
 
 

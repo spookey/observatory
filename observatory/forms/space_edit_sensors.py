@@ -1,4 +1,3 @@
-from iso_4217 import Currency
 from wtforms import (
     DecimalField,
     SelectField,
@@ -40,12 +39,14 @@ class SpaceEditSensorsForm(SpaceEditForm):
             SelectField(
                 'Convert',
                 coerce=str,
+                choices=[(en.name, en.name) for en in EnumConvert],
                 validators=[DataRequired()],
                 description='Select conversion',
             ),
             SelectField(
                 'Horizon',
                 coerce=str,
+                choices=[(en.name, en.name) for en in EnumHorizon],
                 validators=[DataRequired()],
                 description='Select horizon',
             ),
@@ -59,12 +60,16 @@ class SpaceEditSensorsForm(SpaceEditForm):
         ]
 
     @staticmethod
-    def _convert_choices():
-        return [(en.name, en.name) for en in EnumConvert]
+    def _wind_speed_gust_unit_choices():
+        return [(val, val) for val in ('m/s', 'km/h', 'kn')]
 
-    @staticmethod
-    def _horizon_choices():
-        return [(en.name, en.name) for en in EnumHorizon]
+    def __init__(self, idx, *args, **kwargs):
+        super().__init__(*args, idx=idx, **kwargs)
+
+        for key in self.SENSORS:
+            sensor_sel = getattr(self, key, None)
+            if sensor_sel:
+                sensor_sel.choices = self._sensor_choices()
 
 
 class SpaceEditSensorsTemperatureForm(SpaceEditSensorsForm):
@@ -89,6 +94,10 @@ class SpaceEditSensorsTemperatureForm(SpaceEditSensorsForm):
     unit_sel = SelectField(
         'Unit',
         coerce=str,
+        choices=[
+            (val, val)
+            for val in ('°C', '°F', 'K', '°De', '°N', '°R', '°Ré', '°Rø')
+        ],
         validators=[DataRequired()],
         description='The unit of the sensor value',
     )
@@ -112,21 +121,6 @@ class SpaceEditSensorsTemperatureForm(SpaceEditSensorsForm):
         description='Submit',
         widget=SubmitButtonInput(icon='ops_submit'),
     )
-
-    @staticmethod
-    def _unit_choices():
-        return [
-            (val, val)
-            for val in ('°C', '°F', 'K', '°De', '°N', '°R', '°Ré', '°Rø')
-        ]
-
-    def __init__(self, idx, *args, **kwargs):
-        super().__init__(*args, idx=idx, **kwargs)
-
-        self.sensor_sel.choices = self._sensor_choices()
-        self.convert_sel.choices = self._convert_choices()
-        self.horizon_sel.choices = self._horizon_choices()
-        self.unit_sel.choices = self._unit_choices()
 
 
 class SpaceEditSensorsDoorLockedForm(SpaceEditSensorsForm):
@@ -168,13 +162,6 @@ class SpaceEditSensorsDoorLockedForm(SpaceEditSensorsForm):
         widget=SubmitButtonInput(icon='ops_submit'),
     )
 
-    def __init__(self, idx, *args, **kwargs):
-        super().__init__(*args, idx=idx, **kwargs)
-
-        self.sensor_sel.choices = self._sensor_choices()
-        self.convert_sel.choices = self._convert_choices()
-        self.horizon_sel.choices = self._horizon_choices()
-
 
 class SpaceEditSensorsBarometerForm(SpaceEditSensorsForm):
     KEYS = dict(
@@ -198,6 +185,7 @@ class SpaceEditSensorsBarometerForm(SpaceEditSensorsForm):
     unit_sel = SelectField(
         'Unit',
         coerce=str,
+        choices=[(val, val) for val in ('hPa', 'hPA')],
         validators=[DataRequired()],
         description='The unit of the sensor value',
     )
@@ -221,18 +209,6 @@ class SpaceEditSensorsBarometerForm(SpaceEditSensorsForm):
         description='Submit',
         widget=SubmitButtonInput(icon='ops_submit'),
     )
-
-    @staticmethod
-    def _unit_choices():
-        return [(val, val) for val in ('hPa', 'hPA')]
-
-    def __init__(self, idx, *args, **kwargs):
-        super().__init__(*args, idx=idx, **kwargs)
-
-        self.sensor_sel.choices = self._sensor_choices()
-        self.convert_sel.choices = self._convert_choices()
-        self.horizon_sel.choices = self._horizon_choices()
-        self.unit_sel.choices = self._unit_choices()
 
 
 class SpaceEditSensorsRadiationForm(SpaceEditSensorsForm):
@@ -263,6 +239,9 @@ class SpaceEditSensorsRadiationForm(SpaceEditSensorsForm):
     unit_sel = SelectField(
         'Unit',
         coerce=str,
+        choices=[
+            (val, val) for val in ('cpm', 'r/h', 'µSv/h', 'mSv/a', 'µSv/a')
+        ],
         validators=[DataRequired()],
         description='The unit of the sensor value',
     )
@@ -300,20 +279,6 @@ class SpaceEditSensorsRadiationForm(SpaceEditSensorsForm):
         description='Submit',
         widget=SubmitButtonInput(icon='ops_submit'),
     )
-
-    @staticmethod
-    def _unit_choices():
-        return [
-            (val, val) for val in ('cpm', 'r/h', 'µSv/h', 'mSv/a', 'µSv/a')
-        ]
-
-    def __init__(self, idx, *args, **kwargs):
-        super().__init__(*args, idx=idx, **kwargs)
-
-        self.sensor_sel.choices = self._sensor_choices()
-        self.convert_sel.choices = self._convert_choices()
-        self.horizon_sel.choices = self._horizon_choices()
-        self.unit_sel.choices = self._unit_choices()
 
 
 class SpaceEditSensorsRadiationAlphaForm(SpaceEditSensorsRadiationForm):
@@ -354,6 +319,7 @@ class SpaceEditSensorsHumidityForm(SpaceEditSensorsForm):
     unit_sel = SelectField(
         'Unit',
         coerce=str,
+        choices=[('%', '%')],
         validators=[DataRequired()],
         description='The unit of the sensor value',
     )
@@ -377,18 +343,6 @@ class SpaceEditSensorsHumidityForm(SpaceEditSensorsForm):
         description='Submit',
         widget=SubmitButtonInput(icon='ops_submit'),
     )
-
-    @staticmethod
-    def _unit_choices():
-        return [('%', '%')]
-
-    def __init__(self, idx, *args, **kwargs):
-        super().__init__(*args, idx=idx, **kwargs)
-
-        self.sensor_sel.choices = self._sensor_choices()
-        self.convert_sel.choices = self._convert_choices()
-        self.horizon_sel.choices = self._horizon_choices()
-        self.unit_sel.choices = self._unit_choices()
 
 
 class SpaceEditSensorsBeverageSupplyForm(SpaceEditSensorsForm):
@@ -415,6 +369,7 @@ class SpaceEditSensorsBeverageSupplyForm(SpaceEditSensorsForm):
     unit_sel = SelectField(
         'Unit',
         coerce=str,
+        choices=[('btl', 'Bottles'), ('crt', 'Crates')],
         validators=[DataRequired()],
         description='The unit (bottles or crates)',
     )
@@ -439,18 +394,6 @@ class SpaceEditSensorsBeverageSupplyForm(SpaceEditSensorsForm):
         widget=SubmitButtonInput(icon='ops_submit'),
     )
 
-    @staticmethod
-    def _unit_choices():
-        return [('btl', 'Bottles'), ('crt', 'Crates')]
-
-    def __init__(self, idx, *args, **kwargs):
-        super().__init__(*args, idx=idx, **kwargs)
-
-        self.sensor_sel.choices = self._sensor_choices()
-        self.convert_sel.choices = self._convert_choices()
-        self.horizon_sel.choices = self._horizon_choices()
-        self.unit_sel.choices = self._unit_choices()
-
 
 class SpaceEditSensorsPowerConsumptionForm(SpaceEditSensorsForm):
     KEYS = dict(
@@ -474,6 +417,7 @@ class SpaceEditSensorsPowerConsumptionForm(SpaceEditSensorsForm):
     unit_sel = SelectField(
         'Unit',
         coerce=str,
+        choices=[(val, val) for val in ('mW', 'W', 'VA')],
         validators=[DataRequired()],
         description='The unit of the sensor value',
     )
@@ -497,18 +441,6 @@ class SpaceEditSensorsPowerConsumptionForm(SpaceEditSensorsForm):
         description='Submit',
         widget=SubmitButtonInput(icon='ops_submit'),
     )
-
-    @staticmethod
-    def _unit_choices():
-        return [(val, val) for val in ('mW', 'W', 'VA')]
-
-    def __init__(self, idx, *args, **kwargs):
-        super().__init__(*args, idx=idx, **kwargs)
-
-        self.sensor_sel.choices = self._sensor_choices()
-        self.convert_sel.choices = self._convert_choices()
-        self.horizon_sel.choices = self._horizon_choices()
-        self.unit_sel.choices = self._unit_choices()
 
 
 class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
@@ -561,6 +493,7 @@ class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
     speed_unit_sel = SelectField(
         'Unit',
         coerce=str,
+        choices=SpaceEditSensorsForm._wind_speed_gust_unit_choices(),
         validators=[DataRequired()],
         description='The unit of the sensor value',
     )
@@ -573,6 +506,7 @@ class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
     gust_unit_sel = SelectField(
         'Unit',
         coerce=str,
+        choices=SpaceEditSensorsForm._wind_speed_gust_unit_choices(),
         validators=[DataRequired()],
         description='The unit of the sensor value',
     )
@@ -585,6 +519,7 @@ class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
     direction_unit_sel = SelectField(
         'Unit',
         coerce=str,
+        choices=[('°', '°')],
         validators=[DataRequired()],
         description='The unit of the sensor value',
     )
@@ -597,6 +532,7 @@ class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
     elevation_unit_sel = SelectField(
         'Unit',
         coerce=str,
+        choices=[('m', 'm')],
         validators=[DataRequired()],
         description='The unit of the sensor value',
     )
@@ -620,38 +556,6 @@ class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
         description='Submit',
         widget=SubmitButtonInput(icon='ops_submit'),
     )
-
-    @staticmethod
-    def _speed_gust_unit_choices():
-        return [(val, val) for val in ('m/s', 'km/h', 'kn')]
-
-    @staticmethod
-    def _direction_unit_choices():
-        return [('°', '°')]
-
-    @staticmethod
-    def _elevation_unit_choices():
-        return [('m', 'm')]
-
-    def __init__(self, idx, *args, **kwargs):
-        super().__init__(*args, idx=idx, **kwargs)
-
-        self.speed_sensor_sel.choices = self._sensor_choices()
-        self.speed_convert_sel.choices = self._convert_choices()
-        self.speed_horizon_sel.choices = self._horizon_choices()
-        self.speed_unit_sel.choices = self._speed_gust_unit_choices()
-        self.gust_sensor_sel.choices = self._sensor_choices()
-        self.gust_convert_sel.choices = self._convert_choices()
-        self.gust_horizon_sel.choices = self._horizon_choices()
-        self.gust_unit_sel.choices = self._speed_gust_unit_choices()
-        self.direction_sensor_sel.choices = self._sensor_choices()
-        self.direction_convert_sel.choices = self._convert_choices()
-        self.direction_horizon_sel.choices = self._horizon_choices()
-        self.direction_unit_sel.choices = self._direction_unit_choices()
-        self.elevation_sensor_sel.choices = self._sensor_choices()
-        self.elevation_convert_sel.choices = self._convert_choices()
-        self.elevation_horizon_sel.choices = self._horizon_choices()
-        self.elevation_unit_sel.choices = self._elevation_unit_choices()
 
 
 class SpaceEditSensorsAccountBalanceForm(SpaceEditSensorsForm):
@@ -676,6 +580,7 @@ class SpaceEditSensorsAccountBalanceForm(SpaceEditSensorsForm):
     unit_sel = SelectField(
         'Unit',
         coerce=str,
+        choices=SpaceEditSensorsForm._currency_choices(),
         validators=[DataRequired()],
         description='The unit of the sensor value',
     )
@@ -699,20 +604,6 @@ class SpaceEditSensorsAccountBalanceForm(SpaceEditSensorsForm):
         description='Submit',
         widget=SubmitButtonInput(icon='ops_submit'),
     )
-
-    @staticmethod
-    def _unit_choices():
-        return [
-            (curr.name, f'{curr.name} — {curr.full_name}') for curr in Currency
-        ]
-
-    def __init__(self, idx, *args, **kwargs):
-        super().__init__(*args, idx=idx, **kwargs)
-
-        self.sensor_sel.choices = self._sensor_choices()
-        self.convert_sel.choices = self._convert_choices()
-        self.horizon_sel.choices = self._horizon_choices()
-        self.unit_sel.choices = self._unit_choices()
 
 
 class SpaceEditSensorsTotalMemberCountForm(SpaceEditSensorsForm):
@@ -753,13 +644,6 @@ class SpaceEditSensorsTotalMemberCountForm(SpaceEditSensorsForm):
         description='Submit',
         widget=SubmitButtonInput(icon='ops_submit'),
     )
-
-    def __init__(self, idx, *args, **kwargs):
-        super().__init__(*args, idx=idx, **kwargs)
-
-        self.sensor_sel.choices = self._sensor_choices()
-        self.convert_sel.choices = self._convert_choices()
-        self.horizon_sel.choices = self._horizon_choices()
 
 
 class SpaceEditSensorsNetworkTrafficForm(SpaceEditSensorsForm):
@@ -842,14 +726,3 @@ class SpaceEditSensorsNetworkTrafficForm(SpaceEditSensorsForm):
         description='Submit',
         widget=SubmitButtonInput(icon='ops_submit'),
     )
-
-    def __init__(self, idx, *args, **kwargs):
-        super().__init__(*args, idx=idx, **kwargs)
-
-        self.bps_sensor_sel.choices = self._sensor_choices()
-        self.bps_convert_sel.choices = self._convert_choices()
-        self.bps_horizon_sel.choices = self._horizon_choices()
-
-        self.pps_sensor_sel.choices = self._sensor_choices()
-        self.pps_convert_sel.choices = self._convert_choices()
-        self.pps_horizon_sel.choices = self._horizon_choices()

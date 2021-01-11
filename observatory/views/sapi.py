@@ -101,19 +101,19 @@ def _edit_form(form, title):
 @BLUEPRINT_SAPI.route('/space/edit/info', methods=['GET', 'POST'])
 @login_required
 def edit_info():
-    return _edit_form(SpaceEditInfoForm(), 'Basic information')
+    return _edit_form(SpaceEditInfoForm(idx=0), 'Basic information')
 
 
 @BLUEPRINT_SAPI.route('/space/edit/location', methods=['GET', 'POST'])
 @login_required
 def edit_location():
-    return _edit_form(SpaceEditLocationForm(), 'Location')
+    return _edit_form(SpaceEditLocationForm(idx=0), 'Location')
 
 
 @BLUEPRINT_SAPI.route('/space/edit/spacefed', methods=['GET', 'POST'])
 @login_required
 def edit_spacefed():
-    return _edit_form(SpaceEditSpaceFedForm(), 'SpaceFED')
+    return _edit_form(SpaceEditSpaceFedForm(idx=0), 'SpaceFED')
 
 
 @BLUEPRINT_SAPI.route('/space/edit/cam/<int:idx>', methods=['GET', 'POST'])
@@ -126,13 +126,13 @@ def edit_cam(idx=0):
 @BLUEPRINT_SAPI.route('/space/edit/state/icon', methods=['GET', 'POST'])
 @login_required
 def edit_state_icon():
-    return _edit_form(SpaceEditStateIconForm(), 'State Icons')
+    return _edit_form(SpaceEditStateIconForm(idx=0), 'State Icons')
 
 
 @BLUEPRINT_SAPI.route('/space/edit/contact', methods=['GET', 'POST'])
 @login_required
 def edit_contact():
-    return _edit_form(SpaceEditContactForm(), 'Contact')
+    return _edit_form(SpaceEditContactForm(idx=0), 'Contact')
 
 
 @BLUEPRINT_SAPI.route(
@@ -339,25 +339,25 @@ def edit_sensors_network_traffic(idx=0):
 @BLUEPRINT_SAPI.route('/space/edit/feeds/blog', methods=['GET', 'POST'])
 @login_required
 def edit_feeds_blog():
-    return _edit_form(SpaceEditFeedBlogForm(), 'Blog feed')
+    return _edit_form(SpaceEditFeedBlogForm(idx=0), 'Blog feed')
 
 
 @BLUEPRINT_SAPI.route('/space/edit/feeds/wiki', methods=['GET', 'POST'])
 @login_required
 def edit_feeds_wiki():
-    return _edit_form(SpaceEditFeedWikiForm(), 'Wiki feed')
+    return _edit_form(SpaceEditFeedWikiForm(idx=0), 'Wiki feed')
 
 
 @BLUEPRINT_SAPI.route('/space/edit/feeds/calendar', methods=['GET', 'POST'])
 @login_required
 def edit_feeds_calendar():
-    return _edit_form(SpaceEditFeedCalendarForm(), 'Calendar feed')
+    return _edit_form(SpaceEditFeedCalendarForm(idx=0), 'Calendar feed')
 
 
 @BLUEPRINT_SAPI.route('/space/edit/feeds/flickr', methods=['GET', 'POST'])
 @login_required
 def edit_feeds_flickr():
-    return _edit_form(SpaceEditFeedFlickrForm(), 'Flickr feed')
+    return _edit_form(SpaceEditFeedFlickrForm(idx=0), 'Flickr feed')
 
 
 @BLUEPRINT_SAPI.route(

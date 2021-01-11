@@ -45,6 +45,7 @@ class MapperEditForm(FlaskForm):
     color_sel = SelectField(
         'Color',
         coerce=str,
+        choices=[(en.color, en.name) for en in EnumColor],
         validators=[DataRequired()],
         description='Select color',
         render_kw={'data_colorize': 'option'},
@@ -52,12 +53,14 @@ class MapperEditForm(FlaskForm):
     convert_sel = SelectField(
         'Convert',
         coerce=int,
+        choices=[(en.value, en.name) for en in EnumConvert],
         validators=[DataRequired()],
         description='Select conversion',
     )
     horizon_sel = SelectField(
         'Horizon',
         coerce=int,
+        choices=[(en.value, en.name) for en in EnumHorizon],
         validators=[DataRequired()],
         description='Select horizon',
     )
@@ -74,24 +77,12 @@ class MapperEditForm(FlaskForm):
             for cm in model.query.order_by('slug').all()
         ]
 
-    @staticmethod
-    def _color_choices():
-        return [(en.color, en.name) for en in EnumColor]
-
-    @staticmethod
-    def _translate_choices(enum):
-        return [(en.value, en.name) for en in enum]
-
     def __init__(self, *args, obj=None, **kwargs):
         super().__init__(*args, obj=obj, **kwargs)
         self.mapper = obj
 
         self.prompt_sel.choices = self._comm_choices(Prompt)
         self.sensor_sel.choices = self._comm_choices(Sensor)
-
-        self.color_sel.choices = self._color_choices()
-        self.convert_sel.choices = self._translate_choices(EnumConvert)
-        self.horizon_sel.choices = self._translate_choices(EnumHorizon)
 
     def set_selections(self):
         if not self.mapper:
