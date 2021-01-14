@@ -68,7 +68,6 @@ class SpaceDropContactKeymastersForm(SpaceDropForm):
 class SpaceDropSensorsTemperatureForm(SpaceDropForm):
     KEYS = [
         'sensors.temperature.value',
-        'sensors.temperature.value.convert',
         'sensors.temperature.unit',
         'sensors.temperature.location',
         'sensors.temperature.name',
@@ -79,7 +78,6 @@ class SpaceDropSensorsTemperatureForm(SpaceDropForm):
 class SpaceDropSensorsDoorLockedForm(SpaceDropForm):
     KEYS = [
         'sensors.door_locked.value',
-        'sensors.door_locked.value.convert',
         'sensors.door_locked.location',
         'sensors.door_locked.name',
         'sensors.door_locked.description',
@@ -89,7 +87,6 @@ class SpaceDropSensorsDoorLockedForm(SpaceDropForm):
 class SpaceDropSensorsBarometerForm(SpaceDropForm):
     KEYS = [
         'sensors.barometer.value',
-        'sensors.barometer.value.convert',
         'sensors.barometer.unit',
         'sensors.barometer.location',
         'sensors.barometer.name',
@@ -104,7 +101,6 @@ class SpaceDropSensorsRadiationForm(SpaceDropForm):
     def create(sub):
         return [
             f'sensors.radiation.{sub}.value',
-            f'sensors.radiation.{sub}.value.convert',
             f'sensors.radiation.{sub}.unit',
             f'sensors.radiation.{sub}.dead_time',
             f'sensors.radiation.{sub}.conversion_factor',
@@ -133,7 +129,6 @@ class SpaceDropSensorsRadiationBetaGammaForm(SpaceDropSensorsRadiationForm):
 class SpaceDropSensorsHumidityForm(SpaceDropForm):
     KEYS = [
         'sensors.humidity.value',
-        'sensors.humidity.value.convert',
         'sensors.humidity.unit',
         'sensors.humidity.location',
         'sensors.humidity.name',
@@ -144,7 +139,6 @@ class SpaceDropSensorsHumidityForm(SpaceDropForm):
 class SpaceDropSensorsBeverageSupplyForm(SpaceDropForm):
     KEYS = [
         'sensors.beverage_supply.value',
-        'sensors.beverage_supply.value.convert',
         'sensors.beverage_supply.unit',
         'sensors.beverage_supply.location',
         'sensors.beverage_supply.name',
@@ -155,7 +149,6 @@ class SpaceDropSensorsBeverageSupplyForm(SpaceDropForm):
 class SpaceDropSensorsPowerConsumptionForm(SpaceDropForm):
     KEYS = [
         'sensors.power_consumption.value',
-        'sensors.power_consumption.value.convert',
         'sensors.power_consumption.unit',
         'sensors.power_consumption.location',
         'sensors.power_consumption.name',
@@ -166,16 +159,12 @@ class SpaceDropSensorsPowerConsumptionForm(SpaceDropForm):
 class SpaceDropSensorsWindForm(SpaceDropForm):
     KEYS = [
         'sensors.wind.properties.speed.value',
-        'sensors.wind.properties.speed.value.convert',
         'sensors.wind.properties.speed.unit',
         'sensors.wind.properties.gust.value',
-        'sensors.wind.properties.gust.value.convert',
         'sensors.wind.properties.gust.unit',
         'sensors.wind.properties.direction.value',
-        'sensors.wind.properties.direction.value.convert',
         'sensors.wind.properties.direction.unit',
         'sensors.wind.properties.elevation.value',
-        'sensors.wind.properties.elevation.value.convert',
         'sensors.wind.properties.elevation.unit',
         'sensors.wind.location',
         'sensors.wind.name',
@@ -186,7 +175,6 @@ class SpaceDropSensorsWindForm(SpaceDropForm):
 class SpaceDropSensorsAccountBalanceForm(SpaceDropForm):
     KEYS = [
         'sensors.account_balance.value',
-        'sensors.account_balance.value.convert',
         'sensors.account_balance.unit',
         'sensors.account_balance.location',
         'sensors.account_balance.name',
@@ -197,7 +185,6 @@ class SpaceDropSensorsAccountBalanceForm(SpaceDropForm):
 class SpaceDropSensorsTotalMemberCountForm(SpaceDropForm):
     KEYS = [
         'sensors.total_member_count.value',
-        'sensors.total_member_count.value.convert',
         'sensors.total_member_count.location',
         'sensors.total_member_count.name',
         'sensors.total_member_count.description',
@@ -207,10 +194,8 @@ class SpaceDropSensorsTotalMemberCountForm(SpaceDropForm):
 class SpaceDropSensorsNetworkTrafficForm(SpaceDropForm):
     KEYS = [
         'sensors.network_traffic.properties.bits_per_second.value',
-        'sensors.network_traffic.properties.bits_per_second.value.convert',
         'sensors.network_traffic.properties.bits_per_second.maximum',
         'sensors.network_traffic.properties.packets_per_second.value',
-        'sensors.network_traffic.properties.packets_per_second.value.convert',
         'sensors.network_traffic.location',
         'sensors.network_traffic.name',
         'sensors.network_traffic.description',

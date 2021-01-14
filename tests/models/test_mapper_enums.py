@@ -1,7 +1,5 @@
 from observatory.models.mapper import EnumColor, EnumConvert, EnumHorizon
 
-# pylint: disable=too-few-public-methods
-
 
 class TestMapperEnumColor:
     @staticmethod
@@ -43,33 +41,13 @@ class TestMapperEnumColor:
         assert EnumColor.from_color(7441408) == EnumColor.GRAY
 
 
-class TestMapperEnumConvert:
-    @staticmethod
-    def test_names():
-        assert [elem.name for elem in EnumConvert] == [
-            'NATURAL',
-            'INTEGER',
-            'BOOLEAN',
-        ]
-
-    @staticmethod
-    def test_from_text():
-        assert EnumConvert.from_text('NATURAL') == EnumConvert.NATURAL
-        assert EnumConvert.from_text('INTEGER') == EnumConvert.INTEGER
-        assert EnumConvert.from_text('BOOLEAN') == EnumConvert.BOOLEAN
-
-        assert EnumConvert.from_text('boolean') == EnumConvert.BOOLEAN
-        assert EnumConvert.from_text(' INTeger ') == EnumConvert.INTEGER
-        assert EnumConvert.from_text('') == EnumConvert.NATURAL
-        assert EnumConvert.from_text('wrong') == EnumConvert.NATURAL
-
-        assert EnumConvert.from_text('23') == EnumConvert.NATURAL
-        assert EnumConvert.from_text(42) == EnumConvert.NATURAL
-        assert EnumConvert.from_text(None) == EnumConvert.NATURAL
-        assert EnumConvert.from_text(True) == EnumConvert.NATURAL
+def test_convert_names():
+    assert [elem.name for elem in EnumConvert] == [
+        'NATURAL',
+        'INTEGER',
+        'BOOLEAN',
+    ]
 
 
-class TestMapperEnumHorizon:
-    @staticmethod
-    def test_names():
-        assert [elem.name for elem in EnumHorizon] == ['NORMAL', 'INVERT']
+def test_horizon_names():
+    assert [elem.name for elem in EnumHorizon] == ['NORMAL', 'INVERT']

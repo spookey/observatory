@@ -149,7 +149,6 @@ PAGES = [
         url='/space/edit/sensors/temperature',
         keys=dict(
             sensor_sel='sensors.temperature.value',
-            convert_sel='sensors.temperature.value.convert',
             unit_sel='sensors.temperature.unit',
             location='sensors.temperature.location',
             name='sensors.temperature.name',
@@ -157,7 +156,6 @@ PAGES = [
         ),
         data=dict(
             sensor_sel=2,
-            convert_sel='NATURAL',
             unit_sel='K',
             location='upstairs',
             name='temperature',
@@ -171,14 +169,12 @@ PAGES = [
         url='/space/edit/sensors/door-locked',
         keys=dict(
             sensor_sel='sensors.door_locked.value',
-            convert_sel='sensors.door_locked.value.convert',
             location='sensors.door_locked.location',
             name='sensors.door_locked.name',
             description='sensors.door_locked.description',
         ),
         data=dict(
             sensor_sel=5,
-            convert_sel='BOOLEAN',
             location='entry',
             name='main door',
             description='the door where you can go in',
@@ -191,7 +187,6 @@ PAGES = [
         url='/space/edit/sensors/barometer',
         keys=dict(
             sensor_sel='sensors.barometer.value',
-            convert_sel='sensors.barometer.value.convert',
             unit_sel='sensors.barometer.unit',
             location='sensors.barometer.location',
             name='sensors.barometer.name',
@@ -199,7 +194,6 @@ PAGES = [
         ),
         data=dict(
             sensor_sel=6,
-            convert_sel='NATURAL',
             unit_sel='hPA',
             location='downstairs',
             name='barometer',
@@ -213,7 +207,6 @@ PAGES = [
         url='/space/edit/sensors/radiation/alpha',
         keys=dict(
             sensor_sel='sensors.radiation.alpha.value',
-            convert_sel='sensors.radiation.alpha.value.convert',
             unit_sel='sensors.radiation.alpha.unit',
             dead_time='sensors.radiation.alpha.dead_time',
             conversion_factor='sensors.radiation.alpha.conversion_factor',
@@ -223,7 +216,6 @@ PAGES = [
         ),
         data=dict(
             sensor_sel=1,
-            convert_sel='NATURAL',
             unit_sel='cpm',
             dead_time=1.0,
             conversion_factor=1.0,
@@ -239,7 +231,6 @@ PAGES = [
         url='/space/edit/sensors/radiation/beta',
         keys=dict(
             sensor_sel='sensors.radiation.beta.value',
-            convert_sel='sensors.radiation.beta.value.convert',
             unit_sel='sensors.radiation.beta.unit',
             dead_time='sensors.radiation.beta.dead_time',
             conversion_factor='sensors.radiation.beta.conversion_factor',
@@ -249,7 +240,6 @@ PAGES = [
         ),
         data=dict(
             sensor_sel=1,
-            convert_sel='NATURAL',
             unit_sel='cpm',
             dead_time=1.0,
             conversion_factor=1.0,
@@ -265,7 +255,6 @@ PAGES = [
         url='/space/edit/sensors/radiation/gamma',
         keys=dict(
             sensor_sel='sensors.radiation.gamma.value',
-            convert_sel='sensors.radiation.gamma.value.convert',
             unit_sel='sensors.radiation.gamma.unit',
             dead_time='sensors.radiation.gamma.dead_time',
             conversion_factor='sensors.radiation.gamma.conversion_factor',
@@ -275,7 +264,6 @@ PAGES = [
         ),
         data=dict(
             sensor_sel=1,
-            convert_sel='NATURAL',
             unit_sel='cpm',
             dead_time=1.0,
             conversion_factor=1.0,
@@ -291,7 +279,6 @@ PAGES = [
         url='/space/edit/sensors/radiation/beta-gamma',
         keys=dict(
             sensor_sel='sensors.radiation.beta_gamma.value',
-            convert_sel='sensors.radiation.beta_gamma.value.convert',
             unit_sel='sensors.radiation.beta_gamma.unit',
             dead_time='sensors.radiation.beta_gamma.dead_time',
             conversion_factor='sensors.radiation.beta_gamma.conversion_factor',
@@ -301,7 +288,6 @@ PAGES = [
         ),
         data=dict(
             sensor_sel=1,
-            convert_sel='NATURAL',
             unit_sel='cpm',
             dead_time=1.0,
             conversion_factor=1.0,
@@ -317,7 +303,6 @@ PAGES = [
         url='/space/edit/sensors/humidity',
         keys=dict(
             sensor_sel='sensors.humidity.value',
-            convert_sel='sensors.humidity.value.convert',
             unit_sel='sensors.humidity.unit',
             location='sensors.humidity.location',
             name='sensors.humidity.name',
@@ -325,7 +310,6 @@ PAGES = [
         ),
         data=dict(
             sensor_sel=3,
-            convert_sel='INTEGER',
             unit_sel='%',
             location='upstairs',
             name='humidity',
@@ -339,7 +323,6 @@ PAGES = [
         url='/space/edit/sensors/beverage-supply',
         keys=dict(
             sensor_sel='sensors.beverage_supply.value',
-            convert_sel='sensors.beverage_supply.value.convert',
             unit_sel='sensors.beverage_supply.unit',
             location='sensors.beverage_supply.location',
             name='sensors.beverage_supply.name',
@@ -347,7 +330,6 @@ PAGES = [
         ),
         data=dict(
             sensor_sel=7,
-            convert_sel='INTEGER',
             unit_sel='crt',
             location='cellar',
             name='beer',
@@ -361,7 +343,6 @@ PAGES = [
         url='/space/edit/sensors/power-consumption',
         keys=dict(
             sensor_sel='sensors.power_consumption.value',
-            convert_sel='sensors.power_consumption.value.convert',
             unit_sel='sensors.power_consumption.unit',
             location='sensors.power_consumption.location',
             name='sensors.power_consumption.name',
@@ -369,7 +350,6 @@ PAGES = [
         ),
         data=dict(
             sensor_sel=8,
-            convert_sel='NATURAL',
             unit_sel='W',
             location='cellar',
             name='power',
@@ -383,20 +363,12 @@ PAGES = [
         url='/space/edit/sensors/wind',
         keys=dict(
             speed_sensor_sel='sensors.wind.properties.speed.value',
-            speed_convert_sel='sensors.wind.properties.speed.value.convert',
             speed_unit_sel='sensors.wind.properties.speed.unit',
             gust_sensor_sel='sensors.wind.properties.gust.value',
-            gust_convert_sel='sensors.wind.properties.gust.value.convert',
             gust_unit_sel='sensors.wind.properties.gust.unit',
             direction_sensor_sel='sensors.wind.properties.direction.value',
-            direction_convert_sel=(
-                'sensors.wind.properties.direction.value.convert'
-            ),
             direction_unit_sel='sensors.wind.properties.direction.unit',
             elevation_sensor_sel='sensors.wind.properties.elevation.value',
-            elevation_convert_sel=(
-                'sensors.wind.properties.elevation.value.convert'
-            ),
             elevation_unit_sel='sensors.wind.properties.elevation.unit',
             location='sensors.wind.location',
             name='sensors.wind.name',
@@ -404,16 +376,12 @@ PAGES = [
         ),
         data=dict(
             speed_sensor_sel=2,
-            speed_convert_sel='NATURAL',
             speed_unit_sel='m/s',
             gust_sensor_sel=4,
-            gust_convert_sel='NATURAL',
             gust_unit_sel='m/s',
             direction_sensor_sel=6,
-            direction_convert_sel='INTEGER',
             direction_unit_sel='°',
             elevation_sensor_sel=8,
-            elevation_convert_sel='INTEGER',
             elevation_unit_sel='m',
             location='outside',
             name='wind sensor',
@@ -432,7 +400,6 @@ PAGES = [
         url='/space/edit/sensors/account-balance',
         keys=dict(
             sensor_sel='sensors.account_balance.value',
-            convert_sel='sensors.account_balance.value.convert',
             unit_sel='sensors.account_balance.unit',
             location='sensors.account_balance.location',
             name='sensors.account_balance.name',
@@ -440,7 +407,6 @@ PAGES = [
         ),
         data=dict(
             sensor_sel=3,
-            convert_sel='NATURAL',
             unit_sel='EUR',
             location='pocket',
             name='cash',
@@ -454,14 +420,12 @@ PAGES = [
         url='/space/edit/sensors/total-member-count',
         keys=dict(
             sensor_sel='sensors.total_member_count.value',
-            convert_sel='sensors.total_member_count.value.convert',
             location='sensors.total_member_count.location',
             name='sensors.total_member_count.name',
             description='sensors.total_member_count.description',
         ),
         data=dict(
             sensor_sel=6,
-            convert_sel='INTEGER',
             location='space',
             name='member',
             description='count',
@@ -476,19 +440,11 @@ PAGES = [
             bps_sensor_sel=(
                 'sensors.network_traffic.properties.bits_per_second.value'
             ),
-            bps_convert_sel=(
-                'sensors.network_traffic.properties.'
-                'bits_per_second.value.convert'
-            ),
             bps_maximum=(
                 'sensors.network_traffic.properties.bits_per_second.maximum'
             ),
             pps_sensor_sel=(
                 'sensors.network_traffic.properties.packets_per_second.value'
-            ),
-            pps_convert_sel=(
-                'sensors.network_traffic.properties.'
-                'packets_per_second.value.convert'
             ),
             location='sensors.network_traffic.location',
             name='sensors.network_traffic.name',
@@ -496,10 +452,8 @@ PAGES = [
         ),
         data=dict(
             bps_sensor_sel=2,
-            bps_convert_sel='INTEGER',
             bps_maximum=13.37,
             pps_sensor_sel=4,
-            pps_convert_sel='INTEGER',
             location='switch',
             name='traffic',
             description='collecting bits',

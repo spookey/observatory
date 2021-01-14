@@ -1,6 +1,7 @@
 from pytest import mark
 
 from observatory.logic.space_api import SpaceApi
+from observatory.models.mapper import EnumConvert, EnumHorizon
 from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
 
@@ -275,7 +276,7 @@ class TestSpaceApiBuildValue:
         [
             (
                 'temperature',
-                dict(value='sensors.temperature.value'),
+                dict(value=('sensors.temperature.value', EnumConvert.NATURAL)),
                 dict(
                     unit='sensors.temperature.unit',
                     location='sensors.temperature.location',
@@ -285,7 +286,7 @@ class TestSpaceApiBuildValue:
             ),
             (
                 'door_locked',
-                dict(value='sensors.door_locked.value'),
+                dict(value=('sensors.door_locked.value', EnumConvert.BOOLEAN)),
                 dict(
                     location='sensors.door_locked.location',
                     name='sensors.door_locked.name',
@@ -294,7 +295,7 @@ class TestSpaceApiBuildValue:
             ),
             (
                 'barometer',
-                dict(value='sensors.barometer.value'),
+                dict(value=('sensors.barometer.value', EnumConvert.NATURAL)),
                 dict(
                     unit='sensors.barometer.unit',
                     location='sensors.barometer.location',
@@ -304,7 +305,7 @@ class TestSpaceApiBuildValue:
             ),
             (
                 'humidity',
-                dict(value='sensors.humidity.value'),
+                dict(value=('sensors.humidity.value', EnumConvert.INTEGER)),
                 dict(
                     unit='sensors.humidity.unit',
                     location='sensors.humidity.location',
@@ -314,7 +315,12 @@ class TestSpaceApiBuildValue:
             ),
             (
                 'beverage_supply',
-                dict(value='sensors.beverage_supply.value'),
+                dict(
+                    value=(
+                        'sensors.beverage_supply.value',
+                        EnumConvert.INTEGER,
+                    )
+                ),
                 dict(
                     unit='sensors.beverage_supply.unit',
                     location='sensors.beverage_supply.location',
@@ -324,7 +330,12 @@ class TestSpaceApiBuildValue:
             ),
             (
                 'power_consumption',
-                dict(value='sensors.power_consumption.value'),
+                dict(
+                    value=(
+                        'sensors.power_consumption.value',
+                        EnumConvert.INTEGER,
+                    )
+                ),
                 dict(
                     unit='sensors.power_consumption.unit',
                     location='sensors.power_consumption.location',
@@ -334,7 +345,12 @@ class TestSpaceApiBuildValue:
             ),
             (
                 'account_balance',
-                dict(value='sensors.account_balance.value'),
+                dict(
+                    value=(
+                        'sensors.account_balance.value',
+                        EnumConvert.NATURAL,
+                    )
+                ),
                 dict(
                     unit='sensors.account_balance.unit',
                     location='sensors.account_balance.location',
@@ -344,7 +360,12 @@ class TestSpaceApiBuildValue:
             ),
             (
                 'total_member_count',
-                dict(value='sensors.total_member_count.value'),
+                dict(
+                    value=(
+                        'sensors.total_member_count.value',
+                        EnumConvert.INTEGER,
+                    )
+                ),
                 dict(
                     location='sensors.total_member_count.location',
                     name='sensors.total_member_count.name',
@@ -359,9 +380,19 @@ class TestSpaceApiBuildValue:
 
         result = []
         for idx in range(3):
-            payload = {'_idx': idx}
+            payload = {
+                '_idx': idx,
+                **{
+                    key: Value.set(
+                        key=f'{SP_API_PREFIX}.{field_key}',
+                        idx=idx,
+                        elem=field_key,
+                    ).elem
+                    for key, field_key in fields.items()
+                },
+            }
 
-            for key, sensor_key in sensors.items():
+            for key, (sensor_key, convert) in sensors.items():
                 sensor = gen_sensor(f'{sensor_key}-{idx}')
                 sensor.append(user=user, value=idx)
 
@@ -371,18 +402,11 @@ class TestSpaceApiBuildValue:
                             key=f'{SP_API_PREFIX}.{sensor_key}',
                             idx=idx,
                             elem=sensor,
-                        ).latest.value
-                    }
-                )
-
-            for key, field_key in fields.items():
-                payload.update(
-                    {
-                        key: Value.set(
-                            key=f'{SP_API_PREFIX}.{field_key}',
-                            idx=idx,
-                            elem=field_key,
-                        ).elem
+                        ).latest.translate(
+                            horizon=EnumHorizon.NORMAL,
+                            convert=convert,
+                            numeric=False,
+                        )
                     }
                 )
 
@@ -409,7 +433,11 @@ class TestSpaceApiBuildValue:
                         key=f'{SP_API_PREFIX}.sensors.radiation.{sub}.value',
                         idx=idx,
                         elem=sensor,
-                    ).latest.value,
+                    ).latest.translate(
+                        horizon=EnumHorizon.NORMAL,
+                        convert=EnumConvert.NATURAL,
+                        numeric=False,
+                    ),
                     **{
                         field: Value.set(
                             key=(
@@ -444,7 +472,12 @@ class TestSpaceApiBuildValue:
             payload = {'_idx': idx}
 
             properties = {}
-            for prop in ['speed', 'gust', 'direction', 'elevation']:
+            for prop, convert in [
+                ('speed', EnumConvert.NATURAL),
+                ('gust', EnumConvert.NATURAL),
+                ('direction', EnumConvert.INTEGER),
+                ('elevation', EnumConvert.INTEGER),
+            ]:
                 sensor = gen_sensor(f'{prop}-sensor-{idx}')
                 sensor.append(user=user, value=idx)
 
@@ -458,7 +491,11 @@ class TestSpaceApiBuildValue:
                                 ),
                                 idx=idx,
                                 elem=sensor,
-                            ).latest.value,
+                            ).latest.translate(
+                                horizon=EnumHorizon.NORMAL,
+                                convert=convert,
+                                numeric=False,
+                            ),
                             'unit': Value.set(
                                 key=(
                                     f'{SP_API_PREFIX}.sensors.wind.'

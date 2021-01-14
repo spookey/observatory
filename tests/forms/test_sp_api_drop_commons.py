@@ -60,7 +60,6 @@ FORMS = [
         SpaceDropSensorsTemperatureForm,
         keys=[
             'sensors.temperature.value',
-            'sensors.temperature.value.convert',
             'sensors.temperature.unit',
             'sensors.temperature.location',
             'sensors.temperature.name',
@@ -71,7 +70,6 @@ FORMS = [
         SpaceDropSensorsDoorLockedForm,
         keys=[
             'sensors.door_locked.value',
-            'sensors.door_locked.value.convert',
             'sensors.door_locked.location',
             'sensors.door_locked.name',
             'sensors.door_locked.description',
@@ -81,7 +79,6 @@ FORMS = [
         SpaceDropSensorsBarometerForm,
         keys=[
             'sensors.barometer.value',
-            'sensors.barometer.value.convert',
             'sensors.barometer.unit',
             'sensors.barometer.location',
             'sensors.barometer.name',
@@ -92,7 +89,6 @@ FORMS = [
         SpaceDropSensorsRadiationAlphaForm,
         keys=[
             'sensors.radiation.alpha.value',
-            'sensors.radiation.alpha.value.convert',
             'sensors.radiation.alpha.unit',
             'sensors.radiation.alpha.dead_time',
             'sensors.radiation.alpha.conversion_factor',
@@ -105,7 +101,6 @@ FORMS = [
         SpaceDropSensorsRadiationBetaForm,
         keys=[
             'sensors.radiation.beta.value',
-            'sensors.radiation.beta.value.convert',
             'sensors.radiation.beta.unit',
             'sensors.radiation.beta.dead_time',
             'sensors.radiation.beta.conversion_factor',
@@ -118,7 +113,6 @@ FORMS = [
         SpaceDropSensorsRadiationGammaForm,
         keys=[
             'sensors.radiation.gamma.value',
-            'sensors.radiation.gamma.value.convert',
             'sensors.radiation.gamma.unit',
             'sensors.radiation.gamma.dead_time',
             'sensors.radiation.gamma.conversion_factor',
@@ -131,7 +125,6 @@ FORMS = [
         SpaceDropSensorsRadiationBetaGammaForm,
         keys=[
             'sensors.radiation.beta_gamma.value',
-            'sensors.radiation.beta_gamma.value.convert',
             'sensors.radiation.beta_gamma.unit',
             'sensors.radiation.beta_gamma.dead_time',
             'sensors.radiation.beta_gamma.conversion_factor',
@@ -144,7 +137,6 @@ FORMS = [
         SpaceDropSensorsHumidityForm,
         keys=[
             'sensors.humidity.value',
-            'sensors.humidity.value.convert',
             'sensors.humidity.unit',
             'sensors.humidity.location',
             'sensors.humidity.name',
@@ -155,7 +147,6 @@ FORMS = [
         SpaceDropSensorsBeverageSupplyForm,
         keys=[
             'sensors.beverage_supply.value',
-            'sensors.beverage_supply.value.convert',
             'sensors.beverage_supply.unit',
             'sensors.beverage_supply.location',
             'sensors.beverage_supply.name',
@@ -166,7 +157,6 @@ FORMS = [
         SpaceDropSensorsPowerConsumptionForm,
         keys=[
             'sensors.power_consumption.value',
-            'sensors.power_consumption.value.convert',
             'sensors.power_consumption.unit',
             'sensors.power_consumption.location',
             'sensors.power_consumption.name',
@@ -177,16 +167,12 @@ FORMS = [
         SpaceDropSensorsWindForm,
         keys=[
             'sensors.wind.properties.speed.value',
-            'sensors.wind.properties.speed.value.convert',
             'sensors.wind.properties.speed.unit',
             'sensors.wind.properties.gust.value',
-            'sensors.wind.properties.gust.value.convert',
             'sensors.wind.properties.gust.unit',
             'sensors.wind.properties.direction.value',
-            'sensors.wind.properties.direction.value.convert',
             'sensors.wind.properties.direction.unit',
             'sensors.wind.properties.elevation.value',
-            'sensors.wind.properties.elevation.value.convert',
             'sensors.wind.properties.elevation.unit',
             'sensors.wind.location',
             'sensors.wind.name',
@@ -197,7 +183,6 @@ FORMS = [
         SpaceDropSensorsAccountBalanceForm,
         keys=[
             'sensors.account_balance.value',
-            'sensors.account_balance.value.convert',
             'sensors.account_balance.unit',
             'sensors.account_balance.location',
             'sensors.account_balance.name',
@@ -208,7 +193,6 @@ FORMS = [
         SpaceDropSensorsTotalMemberCountForm,
         keys=[
             'sensors.total_member_count.value',
-            'sensors.total_member_count.value.convert',
             'sensors.total_member_count.location',
             'sensors.total_member_count.name',
             'sensors.total_member_count.description',
@@ -218,13 +202,8 @@ FORMS = [
         SpaceDropSensorsNetworkTrafficForm,
         keys=[
             'sensors.network_traffic.properties.bits_per_second.value',
-            'sensors.network_traffic.properties.bits_per_second.value.convert',
             'sensors.network_traffic.properties.bits_per_second.maximum',
             'sensors.network_traffic.properties.packets_per_second.value',
-            (
-                'sensors.network_traffic.properties.'
-                'packets_per_second.value.convert'
-            ),
             'sensors.network_traffic.location',
             'sensors.network_traffic.name',
             'sensors.network_traffic.description',

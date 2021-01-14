@@ -34,15 +34,13 @@ class SpaceApi:
             if elem is not None
         ]
 
-    def latest_value(self, key, *, idx=0, convert_key):
+    def latest_value(self, key, *, idx=0, convert):
         sensor = self._get(key, idx=idx)
         if sensor is None or sensor.latest is None:
             return None
 
         return sensor.latest.translate(
-            horizon=EnumHorizon.NORMAL,
-            convert=EnumConvert.from_text(self._get(convert_key, idx=idx)),
-            numeric=False,
+            horizon=EnumHorizon.NORMAL, convert=convert, numeric=False
         )
 
     def _indices_any(self, *keys):
@@ -277,7 +275,7 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.temperature.value',
                             idx=idx,
-                            convert_key='sensors.temperature.value.convert',
+                            convert=EnumConvert.NATURAL,
                         ),
                         'unit': self._get('sensors.temperature.unit', idx=idx),
                         'location': self._get(
@@ -296,7 +294,7 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.door_locked.value',
                             idx=idx,
-                            convert_key='sensors.door_locked.value.convert',
+                            convert=EnumConvert.BOOLEAN,
                         ),
                         'location': self._get(
                             'sensors.door_locked.location', idx=idx
@@ -314,7 +312,7 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.barometer.value',
                             idx=idx,
-                            convert_key='sensors.barometer.value.convert',
+                            convert=EnumConvert.NATURAL,
                         ),
                         'unit': self._get('sensors.barometer.unit', idx=idx),
                         'location': self._get(
@@ -334,9 +332,7 @@ class SpaceApi:
                             'value': self.latest_value(
                                 f'sensors.radiation.{sub}.value',
                                 idx=idx,
-                                convert_key=(
-                                    f'sensors.radiation.{sub}.value.convert'
-                                ),
+                                convert=EnumConvert.NATURAL,
                             ),
                             'unit': self._get(
                                 f'sensors.radiation.{sub}.unit', idx=idx
@@ -368,7 +364,7 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.humidity.value',
                             idx=idx,
-                            convert_key='sensors.humidity.value.convert',
+                            convert=EnumConvert.INTEGER,
                         ),
                         'unit': self._get('sensors.humidity.unit', idx=idx),
                         'location': self._get(
@@ -387,9 +383,7 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.beverage_supply.value',
                             idx=idx,
-                            convert_key=(
-                                'sensors.beverage_supply.value.convert'
-                            ),
+                            convert=EnumConvert.INTEGER,
                         ),
                         'unit': self._get(
                             'sensors.beverage_supply.unit', idx=idx
@@ -412,9 +406,7 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.power_consumption.value',
                             idx=idx,
-                            convert_key=(
-                                'sensors.power_consumption.value.convert'
-                            ),
+                            convert=EnumConvert.INTEGER,
                         ),
                         'unit': self._get(
                             'sensors.power_consumption.unit', idx=idx
@@ -439,10 +431,7 @@ class SpaceApi:
                                 'value': self.latest_value(
                                     'sensors.wind.properties.speed.value',
                                     idx=idx,
-                                    convert_key=(
-                                        'sensors.wind.properties.speed.'
-                                        'value.convert'
-                                    ),
+                                    convert=EnumConvert.NATURAL,
                                 ),
                                 'unit': self._get(
                                     'sensors.wind.properties.speed.unit',
@@ -453,10 +442,7 @@ class SpaceApi:
                                 'value': self.latest_value(
                                     'sensors.wind.properties.gust.value',
                                     idx=idx,
-                                    convert_key=(
-                                        'sensors.wind.properties.gust.'
-                                        'value.convert'
-                                    ),
+                                    convert=EnumConvert.NATURAL,
                                 ),
                                 'unit': self._get(
                                     'sensors.wind.properties.gust.unit',
@@ -467,10 +453,7 @@ class SpaceApi:
                                 'value': self.latest_value(
                                     'sensors.wind.properties.direction.value',
                                     idx=idx,
-                                    convert_key=(
-                                        'sensors.wind.properties.direction.'
-                                        'value.convert'
-                                    ),
+                                    convert=EnumConvert.INTEGER,
                                 ),
                                 'unit': self._get(
                                     'sensors.wind.properties.direction.unit',
@@ -481,10 +464,7 @@ class SpaceApi:
                                 'value': self.latest_value(
                                     'sensors.wind.properties.elevation.value',
                                     idx=idx,
-                                    convert_key=(
-                                        'sensors.wind.properties.elevation.'
-                                        'value.convert'
-                                    ),
+                                    convert=EnumConvert.INTEGER,
                                 ),
                                 'unit': self._get(
                                     'sensors.wind.properties.elevation.unit',
@@ -509,9 +489,7 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.account_balance.value',
                             idx=idx,
-                            convert_key=(
-                                'sensors.account_balance.value.convert'
-                            ),
+                            convert=EnumConvert.NATURAL,
                         ),
                         'unit': self._get(
                             'sensors.account_balance.unit', idx=idx
@@ -534,7 +512,7 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.total_member_count.value',
                             idx=idx,
-                            convert_key='sensors.total_member_count.convert',
+                            convert=EnumConvert.INTEGER,
                         ),
                         'location': self._get(
                             'sensors.total_member_count.location', idx=idx
@@ -560,10 +538,7 @@ class SpaceApi:
                                         'bits_per_second.value'
                                     ),
                                     idx=idx,
-                                    convert_key=(
-                                        'sensors.network_traffic.properties.'
-                                        'bits_per_second.value.convert'
-                                    ),
+                                    convert=EnumConvert.NATURAL,
                                 ),
                                 'maximum': self._get(
                                     (
@@ -580,10 +555,7 @@ class SpaceApi:
                                         'packets_per_second.value'
                                     ),
                                     idx=idx,
-                                    convert_key=(
-                                        'sensors.network_traffic.properties.'
-                                        'packets_per_second.value.convert'
-                                    ),
+                                    convert=EnumConvert.NATURAL,
                                 ),
                             },
                         },

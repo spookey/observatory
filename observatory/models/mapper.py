@@ -34,15 +34,6 @@ class EnumConvert(Enum):
     INTEGER = 2
     BOOLEAN = 4
 
-    @classmethod
-    def from_text(cls, val):
-        if isinstance(val, str):
-            val = val.strip().upper()
-            for elem in cls:
-                if elem.name == val:
-                    return elem
-        return cls.NATURAL
-
 
 class EnumHorizon(Enum):
     NORMAL = 1
