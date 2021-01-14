@@ -68,7 +68,6 @@ class SpaceDropContactKeymastersForm(SpaceDropForm):
 class SpaceDropSensorsTemperatureForm(SpaceDropForm):
     KEYS = [
         'sensors.temperature.value',
-        'sensors.temperature.value.elevate',
         'sensors.temperature.value.convert',
         'sensors.temperature.unit',
         'sensors.temperature.location',
@@ -80,7 +79,6 @@ class SpaceDropSensorsTemperatureForm(SpaceDropForm):
 class SpaceDropSensorsDoorLockedForm(SpaceDropForm):
     KEYS = [
         'sensors.door_locked.value',
-        'sensors.door_locked.value.elevate',
         'sensors.door_locked.value.convert',
         'sensors.door_locked.location',
         'sensors.door_locked.name',
@@ -91,7 +89,6 @@ class SpaceDropSensorsDoorLockedForm(SpaceDropForm):
 class SpaceDropSensorsBarometerForm(SpaceDropForm):
     KEYS = [
         'sensors.barometer.value',
-        'sensors.barometer.value.elevate',
         'sensors.barometer.value.convert',
         'sensors.barometer.unit',
         'sensors.barometer.location',
@@ -107,7 +104,6 @@ class SpaceDropSensorsRadiationForm(SpaceDropForm):
     def create(sub):
         return [
             f'sensors.radiation.{sub}.value',
-            f'sensors.radiation.{sub}.value.elevate',
             f'sensors.radiation.{sub}.value.convert',
             f'sensors.radiation.{sub}.unit',
             f'sensors.radiation.{sub}.dead_time',
@@ -137,7 +133,6 @@ class SpaceDropSensorsRadiationBetaGammaForm(SpaceDropSensorsRadiationForm):
 class SpaceDropSensorsHumidityForm(SpaceDropForm):
     KEYS = [
         'sensors.humidity.value',
-        'sensors.humidity.value.elevate',
         'sensors.humidity.value.convert',
         'sensors.humidity.unit',
         'sensors.humidity.location',
@@ -149,7 +144,6 @@ class SpaceDropSensorsHumidityForm(SpaceDropForm):
 class SpaceDropSensorsBeverageSupplyForm(SpaceDropForm):
     KEYS = [
         'sensors.beverage_supply.value',
-        'sensors.beverage_supply.value.elevate',
         'sensors.beverage_supply.value.convert',
         'sensors.beverage_supply.unit',
         'sensors.beverage_supply.location',
@@ -161,7 +155,6 @@ class SpaceDropSensorsBeverageSupplyForm(SpaceDropForm):
 class SpaceDropSensorsPowerConsumptionForm(SpaceDropForm):
     KEYS = [
         'sensors.power_consumption.value',
-        'sensors.power_consumption.value.elevate',
         'sensors.power_consumption.value.convert',
         'sensors.power_consumption.unit',
         'sensors.power_consumption.location',
@@ -173,19 +166,15 @@ class SpaceDropSensorsPowerConsumptionForm(SpaceDropForm):
 class SpaceDropSensorsWindForm(SpaceDropForm):
     KEYS = [
         'sensors.wind.properties.speed.value',
-        'sensors.wind.properties.speed.value.elevate',
         'sensors.wind.properties.speed.value.convert',
         'sensors.wind.properties.speed.unit',
         'sensors.wind.properties.gust.value',
-        'sensors.wind.properties.gust.value.elevate',
         'sensors.wind.properties.gust.value.convert',
         'sensors.wind.properties.gust.unit',
         'sensors.wind.properties.direction.value',
-        'sensors.wind.properties.direction.value.elevate',
         'sensors.wind.properties.direction.value.convert',
         'sensors.wind.properties.direction.unit',
         'sensors.wind.properties.elevation.value',
-        'sensors.wind.properties.elevation.value.elevate',
         'sensors.wind.properties.elevation.value.convert',
         'sensors.wind.properties.elevation.unit',
         'sensors.wind.location',
@@ -197,7 +186,6 @@ class SpaceDropSensorsWindForm(SpaceDropForm):
 class SpaceDropSensorsAccountBalanceForm(SpaceDropForm):
     KEYS = [
         'sensors.account_balance.value',
-        'sensors.account_balance.value.elevate',
         'sensors.account_balance.value.convert',
         'sensors.account_balance.unit',
         'sensors.account_balance.location',
@@ -209,7 +197,6 @@ class SpaceDropSensorsAccountBalanceForm(SpaceDropForm):
 class SpaceDropSensorsTotalMemberCountForm(SpaceDropForm):
     KEYS = [
         'sensors.total_member_count.value',
-        'sensors.total_member_count.value.elevate',
         'sensors.total_member_count.value.convert',
         'sensors.total_member_count.location',
         'sensors.total_member_count.name',
@@ -220,11 +207,9 @@ class SpaceDropSensorsTotalMemberCountForm(SpaceDropForm):
 class SpaceDropSensorsNetworkTrafficForm(SpaceDropForm):
     KEYS = [
         'sensors.network_traffic.properties.bits_per_second.value',
-        'sensors.network_traffic.properties.bits_per_second.value.elevate',
         'sensors.network_traffic.properties.bits_per_second.value.convert',
         'sensors.network_traffic.properties.bits_per_second.maximum',
         'sensors.network_traffic.properties.packets_per_second.value',
-        'sensors.network_traffic.properties.packets_per_second.value.elevate',
         'sensors.network_traffic.properties.packets_per_second.value.convert',
         'sensors.network_traffic.location',
         'sensors.network_traffic.name',

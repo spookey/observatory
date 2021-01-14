@@ -34,19 +34,14 @@ class SpaceApi:
             if elem is not None
         ]
 
-    def latest_value(self, key, *, idx=0, convert_key, elevate_key):
+    def latest_value(self, key, *, idx=0, convert_key):
         sensor = self._get(key, idx=idx)
         if sensor is None or sensor.latest is None:
             return None
 
-        elevate = self._get(elevate_key, idx=idx)
-        if elevate is None or not isinstance(elevate, (int, float)):
-            elevate = 1.0
-
         return sensor.latest.translate(
             horizon=EnumHorizon.NORMAL,
             convert=EnumConvert.from_text(self._get(convert_key, idx=idx)),
-            elevate=elevate,
             numeric=False,
         )
 
@@ -283,7 +278,6 @@ class SpaceApi:
                             'sensors.temperature.value',
                             idx=idx,
                             convert_key='sensors.temperature.value.convert',
-                            elevate_key='sensors.temperature.value.elevate',
                         ),
                         'unit': self._get('sensors.temperature.unit', idx=idx),
                         'location': self._get(
@@ -303,7 +297,6 @@ class SpaceApi:
                             'sensors.door_locked.value',
                             idx=idx,
                             convert_key='sensors.door_locked.value.convert',
-                            elevate_key='sensors.door_locked.value.elevate',
                         ),
                         'location': self._get(
                             'sensors.door_locked.location', idx=idx
@@ -322,7 +315,6 @@ class SpaceApi:
                             'sensors.barometer.value',
                             idx=idx,
                             convert_key='sensors.barometer.value.convert',
-                            elevate_key='sensors.barometer.value.elevate',
                         ),
                         'unit': self._get('sensors.barometer.unit', idx=idx),
                         'location': self._get(
@@ -344,9 +336,6 @@ class SpaceApi:
                                 idx=idx,
                                 convert_key=(
                                     f'sensors.radiation.{sub}.value.convert'
-                                ),
-                                elevate_key=(
-                                    f'sensors.radiation.{sub}.value.elevate'
                                 ),
                             ),
                             'unit': self._get(
@@ -380,7 +369,6 @@ class SpaceApi:
                             'sensors.humidity.value',
                             idx=idx,
                             convert_key='sensors.humidity.value.convert',
-                            elevate_key='sensors.humidity.value.elevate',
                         ),
                         'unit': self._get('sensors.humidity.unit', idx=idx),
                         'location': self._get(
@@ -401,9 +389,6 @@ class SpaceApi:
                             idx=idx,
                             convert_key=(
                                 'sensors.beverage_supply.value.convert'
-                            ),
-                            elevate_key=(
-                                'sensors.beverage_supply.value.elevate'
                             ),
                         ),
                         'unit': self._get(
@@ -429,9 +414,6 @@ class SpaceApi:
                             idx=idx,
                             convert_key=(
                                 'sensors.power_consumption.value.convert'
-                            ),
-                            elevate_key=(
-                                'sensors.power_consumption.value.elevate'
                             ),
                         ),
                         'unit': self._get(
@@ -461,10 +443,6 @@ class SpaceApi:
                                         'sensors.wind.properties.speed.'
                                         'value.convert'
                                     ),
-                                    elevate_key=(
-                                        'sensors.wind.properties.speed.'
-                                        'value.elevate'
-                                    ),
                                 ),
                                 'unit': self._get(
                                     'sensors.wind.properties.speed.unit',
@@ -478,10 +456,6 @@ class SpaceApi:
                                     convert_key=(
                                         'sensors.wind.properties.gust.'
                                         'value.convert'
-                                    ),
-                                    elevate_key=(
-                                        'sensors.wind.properties.gust.'
-                                        'value.elevate'
                                     ),
                                 ),
                                 'unit': self._get(
@@ -497,10 +471,6 @@ class SpaceApi:
                                         'sensors.wind.properties.direction.'
                                         'value.convert'
                                     ),
-                                    elevate_key=(
-                                        'sensors.wind.properties.direction.'
-                                        'value.elevate'
-                                    ),
                                 ),
                                 'unit': self._get(
                                     'sensors.wind.properties.direction.unit',
@@ -514,10 +484,6 @@ class SpaceApi:
                                     convert_key=(
                                         'sensors.wind.properties.elevation.'
                                         'value.convert'
-                                    ),
-                                    elevate_key=(
-                                        'sensors.wind.properties.elevation.'
-                                        'value.elevate'
                                     ),
                                 ),
                                 'unit': self._get(
@@ -546,9 +512,6 @@ class SpaceApi:
                             convert_key=(
                                 'sensors.account_balance.value.convert'
                             ),
-                            elevate_key=(
-                                'sensors.account_balance.value.elevate'
-                            ),
                         ),
                         'unit': self._get(
                             'sensors.account_balance.unit', idx=idx
@@ -572,7 +535,6 @@ class SpaceApi:
                             'sensors.total_member_count.value',
                             idx=idx,
                             convert_key='sensors.total_member_count.convert',
-                            elevate_key='sensors.total_member_count.elevate',
                         ),
                         'location': self._get(
                             'sensors.total_member_count.location', idx=idx
@@ -602,10 +564,6 @@ class SpaceApi:
                                         'sensors.network_traffic.properties.'
                                         'bits_per_second.value.convert'
                                     ),
-                                    elevate_key=(
-                                        'sensors.network_traffic.properties.'
-                                        'bits_per_second.value.elevate'
-                                    ),
                                 ),
                                 'maximum': self._get(
                                     (
@@ -625,10 +583,6 @@ class SpaceApi:
                                     convert_key=(
                                         'sensors.network_traffic.properties.'
                                         'packets_per_second.value.convert'
-                                    ),
-                                    elevate_key=(
-                                        'sensors.network_traffic.properties.'
-                                        'packets_per_second.value.elevate'
                                     ),
                                 ),
                             },

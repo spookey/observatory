@@ -41,7 +41,6 @@ PAGES = [
         url='/space/drop/sensors/temperature',
         keys=[
             'sensors.temperature.value',
-            'sensors.temperature.value.elevate',
             'sensors.temperature.value.convert',
             'sensors.temperature.unit',
             'sensors.temperature.location',
@@ -54,7 +53,6 @@ PAGES = [
         url='/space/drop/sensors/door-locked',
         keys=[
             'sensors.door_locked.value',
-            'sensors.door_locked.value.elevate',
             'sensors.door_locked.value.convert',
             'sensors.door_locked.location',
             'sensors.door_locked.name',
@@ -66,7 +64,6 @@ PAGES = [
         url='/space/drop/sensors/barometer',
         keys=[
             'sensors.barometer.value',
-            'sensors.barometer.value.elevate',
             'sensors.barometer.value.convert',
             'sensors.barometer.unit',
             'sensors.barometer.location',
@@ -79,7 +76,6 @@ PAGES = [
         url='/space/drop/sensors/radiation/alpha',
         keys=[
             'sensors.radiation.alpha.value',
-            'sensors.radiation.alpha.value.elevate',
             'sensors.radiation.alpha.value.convert',
             'sensors.radiation.alpha.unit',
             'sensors.radiation.alpha.dead_time',
@@ -94,7 +90,6 @@ PAGES = [
         url='/space/drop/sensors/radiation/beta',
         keys=[
             'sensors.radiation.beta.value',
-            'sensors.radiation.beta.value.elevate',
             'sensors.radiation.beta.value.convert',
             'sensors.radiation.beta.unit',
             'sensors.radiation.beta.dead_time',
@@ -109,7 +104,6 @@ PAGES = [
         url='/space/drop/sensors/radiation/gamma',
         keys=[
             'sensors.radiation.gamma.value',
-            'sensors.radiation.gamma.value.elevate',
             'sensors.radiation.gamma.value.convert',
             'sensors.radiation.gamma.unit',
             'sensors.radiation.gamma.dead_time',
@@ -124,7 +118,6 @@ PAGES = [
         url='/space/drop/sensors/radiation/beta-gamma',
         keys=[
             'sensors.radiation.beta_gamma.value',
-            'sensors.radiation.beta_gamma.value.elevate',
             'sensors.radiation.beta_gamma.value.convert',
             'sensors.radiation.beta_gamma.unit',
             'sensors.radiation.beta_gamma.dead_time',
@@ -139,7 +132,6 @@ PAGES = [
         url='/space/drop/sensors/humidity',
         keys=[
             'sensors.humidity.value',
-            'sensors.humidity.value.elevate',
             'sensors.humidity.value.convert',
             'sensors.humidity.unit',
             'sensors.humidity.location',
@@ -152,7 +144,6 @@ PAGES = [
         url='/space/drop/sensors/beverage-supply',
         keys=[
             'sensors.beverage_supply.value',
-            'sensors.beverage_supply.value.elevate',
             'sensors.beverage_supply.value.convert',
             'sensors.beverage_supply.unit',
             'sensors.beverage_supply.location',
@@ -165,7 +156,6 @@ PAGES = [
         url='/space/drop/sensors/power-consumption',
         keys=[
             'sensors.power_consumption.value',
-            'sensors.power_consumption.value.elevate',
             'sensors.power_consumption.value.convert',
             'sensors.power_consumption.unit',
             'sensors.power_consumption.location',
@@ -178,19 +168,15 @@ PAGES = [
         url='/space/drop/sensors/wind',
         keys=[
             'sensors.wind.properties.speed.value',
-            'sensors.wind.properties.speed.value.elevate',
             'sensors.wind.properties.speed.value.convert',
             'sensors.wind.properties.speed.unit',
             'sensors.wind.properties.gust.value',
-            'sensors.wind.properties.gust.value.elevate',
             'sensors.wind.properties.gust.value.convert',
             'sensors.wind.properties.gust.unit',
             'sensors.wind.properties.direction.value',
-            'sensors.wind.properties.direction.value.elevate',
             'sensors.wind.properties.direction.value.convert',
             'sensors.wind.properties.direction.unit',
             'sensors.wind.properties.elevation.value',
-            'sensors.wind.properties.elevation.value.elevate',
             'sensors.wind.properties.elevation.value.convert',
             'sensors.wind.properties.elevation.unit',
             'sensors.wind.location',
@@ -203,7 +189,6 @@ PAGES = [
         url='/space/drop/sensors/account-balance',
         keys=[
             'sensors.account_balance.value',
-            'sensors.account_balance.value.elevate',
             'sensors.account_balance.value.convert',
             'sensors.account_balance.unit',
             'sensors.account_balance.location',
@@ -216,7 +201,6 @@ PAGES = [
         url='/space/drop/sensors/total-member-count',
         keys=[
             'sensors.total_member_count.value',
-            'sensors.total_member_count.value.elevate',
             'sensors.total_member_count.value.convert',
             'sensors.total_member_count.location',
             'sensors.total_member_count.name',
@@ -228,14 +212,9 @@ PAGES = [
         url='/space/drop/sensors/network-traffic',
         keys=[
             'sensors.network_traffic.properties.bits_per_second.value',
-            'sensors.network_traffic.properties.bits_per_second.value.elevate',
             'sensors.network_traffic.properties.bits_per_second.value.convert',
             'sensors.network_traffic.properties.bits_per_second.maximum',
             'sensors.network_traffic.properties.packets_per_second.value',
-            (
-                'sensors.network_traffic.properties.'
-                'packets_per_second.value.elevate'
-            ),
             (
                 'sensors.network_traffic.properties.'
                 'packets_per_second.value.convert'

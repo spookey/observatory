@@ -11,15 +11,7 @@ class TestSpaceApiLatestValue:
     def test_empty():
         api = SpaceApi()
 
-        assert (
-            api.latest_value(
-                key='missing',
-                idx=1337,
-                convert_key='',
-                elevate_key='',
-            )
-            is None
-        )
+        assert api.latest_value(key='missing', idx=23, convert_key='') is None
 
     @staticmethod
     def test_empty_points(gen_sensor):
@@ -29,15 +21,7 @@ class TestSpaceApiLatestValue:
 
         Value.set(f'{SP_API_PREFIX}.{key}', idx=idx, elem=gen_sensor())
 
-        assert (
-            api.latest_value(
-                key=key,
-                idx=idx,
-                convert_key='',
-                elevate_key='',
-            )
-            is None
-        )
+        assert api.latest_value(key=key, idx=idx, convert_key='') is None
 
     @staticmethod
     def test_empty_options(gen_sensor, gen_user):
@@ -50,15 +34,7 @@ class TestSpaceApiLatestValue:
         sensor.append(user=gen_user(), value=value)
         Value.set(f'{SP_API_PREFIX}.{key}', idx=idx, elem=sensor)
 
-        assert (
-            api.latest_value(
-                key=key,
-                idx=idx,
-                convert_key='',
-                elevate_key='',
-            )
-            == value
-        )
+        assert api.latest_value(key=key, idx=idx, convert_key='') == value
 
     @staticmethod
     def test_convert(gen_sensor, gen_user):
@@ -81,41 +57,6 @@ class TestSpaceApiLatestValue:
 
             Value.set(f'{SP_API_PREFIX}.{convert_key}', idx=idx, elem=convert)
             assert (
-                api.latest_value(
-                    key=key,
-                    idx=idx,
-                    convert_key=convert_key,
-                    elevate_key='',
-                )
-                == expect
-            )
-
-    @staticmethod
-    def test_elevate(gen_sensor, gen_user):
-        api = SpaceApi()
-
-        key, idx = 'some.sensor', 23
-        elevate_key = f'{key}.elevate'
-
-        sensor = gen_sensor()
-        sensor.append(user=gen_user(), value=5)
-        Value.set(f'{SP_API_PREFIX}.{key}', idx=idx, elem=sensor)
-
-        for elevate, expect in [
-            (1, 5),
-            (2, 10),
-            (-1, -5),
-            (None, 5),
-            ('banana', 5),
-        ]:
-
-            Value.set(f'{SP_API_PREFIX}.{elevate_key}', idx=idx, elem=elevate)
-            assert (
-                api.latest_value(
-                    key=key,
-                    idx=idx,
-                    convert_key='',
-                    elevate_key=elevate_key,
-                )
+                api.latest_value(key=key, idx=idx, convert_key=convert_key)
                 == expect
             )

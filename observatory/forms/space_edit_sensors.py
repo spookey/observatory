@@ -29,13 +29,6 @@ class SpaceEditSensorsForm(SpaceEditForm):
                 validators=[DataRequired()],
                 description='Select sensor',
             ),
-            DecimalField(
-                'Elevate',
-                default=1.0,
-                places=4,
-                validators=[NumberRange(min=0.0)],
-                description='Increase raw value with this factor',
-            ),
             SelectField(
                 'Convert',
                 coerce=str,
@@ -68,7 +61,6 @@ class SpaceEditSensorsForm(SpaceEditForm):
 class SpaceEditSensorsTemperatureForm(SpaceEditSensorsForm):
     KEYS = dict(
         sensor_sel='sensors.temperature.value',
-        elevate='sensors.temperature.value.elevate',
         convert_sel='sensors.temperature.value.convert',
         unit_sel='sensors.temperature.unit',
         location='sensors.temperature.location',
@@ -79,7 +71,6 @@ class SpaceEditSensorsTemperatureForm(SpaceEditSensorsForm):
 
     (
         sensor_sel,
-        elevate,
         convert_sel,
     ) = SpaceEditSensorsForm.sensor_fields('Temperature sensor')
     unit_sel = SelectField(
@@ -117,7 +108,6 @@ class SpaceEditSensorsTemperatureForm(SpaceEditSensorsForm):
 class SpaceEditSensorsDoorLockedForm(SpaceEditSensorsForm):
     KEYS = dict(
         sensor_sel='sensors.door_locked.value',
-        elevate='sensors.door_locked.value.elevate',
         convert_sel='sensors.door_locked.value.convert',
         location='sensors.door_locked.location',
         name='sensors.door_locked.name',
@@ -127,7 +117,6 @@ class SpaceEditSensorsDoorLockedForm(SpaceEditSensorsForm):
 
     (
         sensor_sel,
-        elevate,
         convert_sel,
     ) = SpaceEditSensorsForm.sensor_fields('Door lock sensor')
     location = StringField(
@@ -155,7 +144,6 @@ class SpaceEditSensorsDoorLockedForm(SpaceEditSensorsForm):
 class SpaceEditSensorsBarometerForm(SpaceEditSensorsForm):
     KEYS = dict(
         sensor_sel='sensors.barometer.value',
-        elevate='sensors.barometer.value.elevate',
         convert_sel='sensors.barometer.value.convert',
         unit_sel='sensors.barometer.unit',
         location='sensors.barometer.location',
@@ -166,7 +154,6 @@ class SpaceEditSensorsBarometerForm(SpaceEditSensorsForm):
 
     (
         sensor_sel,
-        elevate,
         convert_sel,
     ) = SpaceEditSensorsForm.sensor_fields('Barometer')
     unit_sel = SelectField(
@@ -206,7 +193,6 @@ class SpaceEditSensorsRadiationForm(SpaceEditSensorsForm):
     def create(sub):
         return dict(
             sensor_sel=f'sensors.radiation.{sub}.value',
-            elevate=f'sensors.radiation.{sub}.value.elevate',
             convert_sel=f'sensors.radiation.{sub}.value.convert',
             unit_sel=f'sensors.radiation.{sub}.unit',
             dead_time=f'sensors.radiation.{sub}.dead_time',
@@ -218,7 +204,6 @@ class SpaceEditSensorsRadiationForm(SpaceEditSensorsForm):
 
     (
         sensor_sel,
-        elevate,
         convert_sel,
     ) = SpaceEditSensorsForm.sensor_fields('Radiation sensor')
     unit_sel = SelectField(
@@ -285,7 +270,6 @@ class SpaceEditSensorsRadiationBetaGammaForm(SpaceEditSensorsRadiationForm):
 class SpaceEditSensorsHumidityForm(SpaceEditSensorsForm):
     KEYS = dict(
         sensor_sel='sensors.humidity.value',
-        elevate='sensors.humidity.value.elevate',
         convert_sel='sensors.humidity.value.convert',
         unit_sel='sensors.humidity.unit',
         location='sensors.humidity.location',
@@ -296,7 +280,6 @@ class SpaceEditSensorsHumidityForm(SpaceEditSensorsForm):
 
     (
         sensor_sel,
-        elevate,
         convert_sel,
     ) = SpaceEditSensorsForm.sensor_fields('Humidity sensor')
     unit_sel = SelectField(
@@ -331,7 +314,6 @@ class SpaceEditSensorsHumidityForm(SpaceEditSensorsForm):
 class SpaceEditSensorsBeverageSupplyForm(SpaceEditSensorsForm):
     KEYS = dict(
         sensor_sel='sensors.beverage_supply.value',
-        elevate='sensors.beverage_supply.value.elevate',
         convert_sel='sensors.beverage_supply.value.convert',
         unit_sel='sensors.beverage_supply.unit',
         location='sensors.beverage_supply.location',
@@ -340,7 +322,7 @@ class SpaceEditSensorsBeverageSupplyForm(SpaceEditSensorsForm):
     )
     SENSORS = ['sensor_sel']
 
-    (sensor_sel, elevate, convert_sel,) = SpaceEditSensorsForm.sensor_fields(
+    (sensor_sel, convert_sel,) = SpaceEditSensorsForm.sensor_fields(
         'How much Mate and beer is in your fridge?'
     )
     unit_sel = SelectField(
@@ -375,7 +357,6 @@ class SpaceEditSensorsBeverageSupplyForm(SpaceEditSensorsForm):
 class SpaceEditSensorsPowerConsumptionForm(SpaceEditSensorsForm):
     KEYS = dict(
         sensor_sel='sensors.power_consumption.value',
-        elevate='sensors.power_consumption.value.elevate',
         convert_sel='sensors.power_consumption.value.convert',
         unit_sel='sensors.power_consumption.unit',
         location='sensors.power_consumption.location',
@@ -386,7 +367,6 @@ class SpaceEditSensorsPowerConsumptionForm(SpaceEditSensorsForm):
 
     (
         sensor_sel,
-        elevate,
         convert_sel,
     ) = SpaceEditSensorsForm.sensor_fields('Power consumption')
     unit_sel = SelectField(
@@ -421,21 +401,17 @@ class SpaceEditSensorsPowerConsumptionForm(SpaceEditSensorsForm):
 class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
     KEYS = dict(
         speed_sensor_sel='sensors.wind.properties.speed.value',
-        speed_elevate='sensors.wind.properties.speed.value.elevate',
         speed_convert_sel='sensors.wind.properties.speed.value.convert',
         speed_unit_sel='sensors.wind.properties.speed.unit',
         gust_sensor_sel='sensors.wind.properties.gust.value',
-        gust_elevate='sensors.wind.properties.gust.value.elevate',
         gust_convert_sel='sensors.wind.properties.gust.value.convert',
         gust_unit_sel='sensors.wind.properties.gust.unit',
         direction_sensor_sel='sensors.wind.properties.direction.value',
-        direction_elevate='sensors.wind.properties.direction.value.elevate',
         direction_convert_sel=(
             'sensors.wind.properties.direction.value.convert'
         ),
         direction_unit_sel='sensors.wind.properties.direction.unit',
         elevation_sensor_sel='sensors.wind.properties.elevation.value',
-        elevation_elevate='sensors.wind.properties.elevation.value.elevate',
         elevation_convert_sel=(
             'sensors.wind.properties.elevation.value.convert'
         ),
@@ -453,7 +429,6 @@ class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
 
     (
         speed_sensor_sel,
-        speed_elevate,
         speed_convert_sel,
     ) = SpaceEditSensorsForm.sensor_fields('Wind speed sensor')
     speed_unit_sel = SelectField(
@@ -465,7 +440,6 @@ class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
     )
     (
         gust_sensor_sel,
-        gust_elevate,
         gust_convert_sel,
     ) = SpaceEditSensorsForm.sensor_fields('Wind gust sensor')
     gust_unit_sel = SelectField(
@@ -477,7 +451,6 @@ class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
     )
     (
         direction_sensor_sel,
-        direction_elevate,
         direction_convert_sel,
     ) = SpaceEditSensorsForm.sensor_fields('Wind direction sensor')
     direction_unit_sel = SelectField(
@@ -489,7 +462,6 @@ class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
     )
     (
         elevation_sensor_sel,
-        elevation_elevate,
         elevation_convert_sel,
     ) = SpaceEditSensorsForm.sensor_fields('Wind elevation sensor')
     elevation_unit_sel = SelectField(
@@ -524,7 +496,6 @@ class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
 class SpaceEditSensorsAccountBalanceForm(SpaceEditSensorsForm):
     KEYS = dict(
         sensor_sel='sensors.account_balance.value',
-        elevate='sensors.account_balance.value.elevate',
         convert_sel='sensors.account_balance.value.convert',
         unit_sel='sensors.account_balance.unit',
         location='sensors.account_balance.location',
@@ -535,7 +506,6 @@ class SpaceEditSensorsAccountBalanceForm(SpaceEditSensorsForm):
 
     (
         sensor_sel,
-        elevate,
         convert_sel,
     ) = SpaceEditSensorsForm.sensor_fields('Account balance')
     unit_sel = SelectField(
@@ -570,7 +540,6 @@ class SpaceEditSensorsAccountBalanceForm(SpaceEditSensorsForm):
 class SpaceEditSensorsTotalMemberCountForm(SpaceEditSensorsForm):
     KEYS = dict(
         sensor_sel='sensors.total_member_count.value',
-        elevate='sensors.total_member_count.value.elevate',
         convert_sel='sensors.total_member_count.value.convert',
         location='sensors.total_member_count.location',
         name='sensors.total_member_count.name',
@@ -580,7 +549,6 @@ class SpaceEditSensorsTotalMemberCountForm(SpaceEditSensorsForm):
 
     (
         sensor_sel,
-        elevate,
         convert_sel,
     ) = SpaceEditSensorsForm.sensor_fields('Total member count')
     location = StringField(
@@ -610,9 +578,6 @@ class SpaceEditSensorsNetworkTrafficForm(SpaceEditSensorsForm):
         bps_sensor_sel=(
             'sensors.network_traffic.properties.bits_per_second.value'
         ),
-        bps_elevate=(
-            'sensors.network_traffic.properties.bits_per_second.value.elevate'
-        ),
         bps_convert_sel=(
             'sensors.network_traffic.properties.bits_per_second.value.convert'
         ),
@@ -621,10 +586,6 @@ class SpaceEditSensorsNetworkTrafficForm(SpaceEditSensorsForm):
         ),
         pps_sensor_sel=(
             'sensors.network_traffic.properties.packets_per_second.value'
-        ),
-        pps_elevate=(
-            'sensors.network_traffic.properties.'
-            'packets_per_second.value.elevate'
         ),
         pps_convert_sel=(
             'sensors.network_traffic.properties.'
@@ -641,7 +602,6 @@ class SpaceEditSensorsNetworkTrafficForm(SpaceEditSensorsForm):
 
     (
         bps_sensor_sel,
-        bps_elevate,
         bps_convert_sel,
     ) = SpaceEditSensorsForm.sensor_fields('Bits per second')
     bps_maximum = DecimalField(
@@ -653,7 +613,6 @@ class SpaceEditSensorsNetworkTrafficForm(SpaceEditSensorsForm):
     )
     (
         pps_sensor_sel,
-        pps_elevate,
         pps_convert_sel,
     ) = SpaceEditSensorsForm.sensor_fields('Packages per second')
     location = StringField(
