@@ -15,7 +15,6 @@ class TestSpaceApiLatestValue:
             api.latest_value(
                 key='missing',
                 idx=1337,
-                horizon_key='',
                 convert_key='',
                 elevate_key='',
             )
@@ -34,7 +33,6 @@ class TestSpaceApiLatestValue:
             api.latest_value(
                 key=key,
                 idx=idx,
-                horizon_key='',
                 convert_key='',
                 elevate_key='',
             )
@@ -56,42 +54,11 @@ class TestSpaceApiLatestValue:
             api.latest_value(
                 key=key,
                 idx=idx,
-                horizon_key='',
                 convert_key='',
                 elevate_key='',
             )
             == value
         )
-
-    @staticmethod
-    def test_horizon(gen_sensor, gen_user):
-        api = SpaceApi()
-
-        key, idx = 'some.sensor', 23
-        horizon_key = f'{key}.horizon'
-
-        sensor = gen_sensor()
-        sensor.append(user=gen_user(), value=23)
-        Value.set(f'{SP_API_PREFIX}.{key}', idx=idx, elem=sensor)
-
-        for horizon, expect in [
-            ('NORMAL', 23),
-            ('INVERT', -23),
-            (None, 23),
-            ('banana', 23),
-        ]:
-
-            Value.set(f'{SP_API_PREFIX}.{horizon_key}', idx=idx, elem=horizon)
-            assert (
-                api.latest_value(
-                    key=key,
-                    idx=idx,
-                    horizon_key=horizon_key,
-                    convert_key='',
-                    elevate_key='',
-                )
-                == expect
-            )
 
     @staticmethod
     def test_convert(gen_sensor, gen_user):
@@ -117,7 +84,6 @@ class TestSpaceApiLatestValue:
                 api.latest_value(
                     key=key,
                     idx=idx,
-                    horizon_key='',
                     convert_key=convert_key,
                     elevate_key='',
                 )
@@ -148,7 +114,6 @@ class TestSpaceApiLatestValue:
                 api.latest_value(
                     key=key,
                     idx=idx,
-                    horizon_key='',
                     convert_key='',
                     elevate_key=elevate_key,
                 )

@@ -1,5 +1,7 @@
 from observatory.models.mapper import EnumColor, EnumConvert, EnumHorizon
 
+# pylint: disable=too-few-public-methods
+
 
 class TestMapperEnumColor:
     @staticmethod
@@ -71,18 +73,3 @@ class TestMapperEnumHorizon:
     @staticmethod
     def test_names():
         assert [elem.name for elem in EnumHorizon] == ['NORMAL', 'INVERT']
-
-    @staticmethod
-    def test_from_text():
-        assert EnumHorizon.from_text('NORMAL') == EnumHorizon.NORMAL
-        assert EnumHorizon.from_text('INVERT') == EnumHorizon.INVERT
-
-        assert EnumHorizon.from_text('normal') == EnumHorizon.NORMAL
-        assert EnumHorizon.from_text(' INvert ') == EnumHorizon.INVERT
-        assert EnumHorizon.from_text('') == EnumHorizon.NORMAL
-        assert EnumHorizon.from_text('wrong') == EnumHorizon.NORMAL
-
-        assert EnumHorizon.from_text('23') == EnumHorizon.NORMAL
-        assert EnumHorizon.from_text(42) == EnumHorizon.NORMAL
-        assert EnumHorizon.from_text(None) == EnumHorizon.NORMAL
-        assert EnumHorizon.from_text(True) == EnumHorizon.NORMAL

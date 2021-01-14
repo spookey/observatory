@@ -412,7 +412,10 @@ class TestSpaceApiBuildValue:
                     ).latest.value,
                     **{
                         field: Value.set(
-                            key=f'{SP_API_PREFIX}.sensors.radiation.{sub}.{field}',
+                            key=(
+                                f'{SP_API_PREFIX}.sensors.'
+                                f'radiation.{sub}.{field}'
+                            ),
                             idx=idx,
                             elem=field,
                         ).elem

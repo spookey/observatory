@@ -34,9 +34,7 @@ class SpaceApi:
             if elem is not None
         ]
 
-    def latest_value(
-        self, key, *, idx=0, horizon_key, convert_key, elevate_key
-    ):
+    def latest_value(self, key, *, idx=0, convert_key, elevate_key):
         sensor = self._get(key, idx=idx)
         if sensor is None or sensor.latest is None:
             return None
@@ -46,7 +44,7 @@ class SpaceApi:
             elevate = 1.0
 
         return sensor.latest.translate(
-            horizon=EnumHorizon.from_text(self._get(horizon_key, idx=idx)),
+            horizon=EnumHorizon.NORMAL,
             convert=EnumConvert.from_text(self._get(convert_key, idx=idx)),
             elevate=elevate,
             numeric=False,
@@ -284,7 +282,6 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.temperature.value',
                             idx=idx,
-                            horizon_key='sensors.temperature.value.horizon',
                             convert_key='sensors.temperature.value.convert',
                             elevate_key='sensors.temperature.value.elevate',
                         ),
@@ -305,7 +302,6 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.door_locked.value',
                             idx=idx,
-                            horizon_key='sensors.door_locked.value.horizon',
                             convert_key='sensors.door_locked.value.convert',
                             elevate_key='sensors.door_locked.value.elevate',
                         ),
@@ -325,7 +321,6 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.barometer.value',
                             idx=idx,
-                            horizon_key='sensors.barometer.value.horizon',
                             convert_key='sensors.barometer.value.convert',
                             elevate_key='sensors.barometer.value.elevate',
                         ),
@@ -347,9 +342,6 @@ class SpaceApi:
                             'value': self.latest_value(
                                 f'sensors.radiation.{sub}.value',
                                 idx=idx,
-                                horizon_key=(
-                                    f'sensors.radiation.{sub}.value.horizon'
-                                ),
                                 convert_key=(
                                     f'sensors.radiation.{sub}.value.convert'
                                 ),
@@ -387,7 +379,6 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.humidity.value',
                             idx=idx,
-                            horizon_key='sensors.humidity.value.horizon',
                             convert_key='sensors.humidity.value.convert',
                             elevate_key='sensors.humidity.value.elevate',
                         ),
@@ -408,9 +399,6 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.beverage_supply.value',
                             idx=idx,
-                            horizon_key=(
-                                'sensors.beverage_supply.value.horizon'
-                            ),
                             convert_key=(
                                 'sensors.beverage_supply.value.convert'
                             ),
@@ -439,9 +427,6 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.power_consumption.value',
                             idx=idx,
-                            horizon_key=(
-                                'sensors.power_consumption.value.horizon'
-                            ),
                             convert_key=(
                                 'sensors.power_consumption.value.convert'
                             ),
@@ -472,10 +457,6 @@ class SpaceApi:
                                 'value': self.latest_value(
                                     'sensors.wind.properties.speed.value',
                                     idx=idx,
-                                    horizon_key=(
-                                        'sensors.wind.properties.speed.'
-                                        'value.horizon'
-                                    ),
                                     convert_key=(
                                         'sensors.wind.properties.speed.'
                                         'value.convert'
@@ -494,10 +475,6 @@ class SpaceApi:
                                 'value': self.latest_value(
                                     'sensors.wind.properties.gust.value',
                                     idx=idx,
-                                    horizon_key=(
-                                        'sensors.wind.properties.gust.'
-                                        'value.horizon'
-                                    ),
                                     convert_key=(
                                         'sensors.wind.properties.gust.'
                                         'value.convert'
@@ -516,10 +493,6 @@ class SpaceApi:
                                 'value': self.latest_value(
                                     'sensors.wind.properties.direction.value',
                                     idx=idx,
-                                    horizon_key=(
-                                        'sensors.wind.properties.direction.'
-                                        'value.horizon'
-                                    ),
                                     convert_key=(
                                         'sensors.wind.properties.direction.'
                                         'value.convert'
@@ -538,10 +511,6 @@ class SpaceApi:
                                 'value': self.latest_value(
                                     'sensors.wind.properties.elevation.value',
                                     idx=idx,
-                                    horizon_key=(
-                                        'sensors.wind.properties.elevation.'
-                                        'value.horizon'
-                                    ),
                                     convert_key=(
                                         'sensors.wind.properties.elevation.'
                                         'value.convert'
@@ -574,9 +543,6 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.account_balance.value',
                             idx=idx,
-                            horizon_key=(
-                                'sensors.account_balance.value.horizon'
-                            ),
                             convert_key=(
                                 'sensors.account_balance.value.convert'
                             ),
@@ -605,7 +571,6 @@ class SpaceApi:
                         'value': self.latest_value(
                             'sensors.total_member_count.value',
                             idx=idx,
-                            horizon_key='sensors.total_member_count.horizon',
                             convert_key='sensors.total_member_count.convert',
                             elevate_key='sensors.total_member_count.elevate',
                         ),
@@ -633,10 +598,6 @@ class SpaceApi:
                                         'bits_per_second.value'
                                     ),
                                     idx=idx,
-                                    horizon_key=(
-                                        'sensors.network_traffic.properties.'
-                                        'bits_per_second.value.horizon'
-                                    ),
                                     convert_key=(
                                         'sensors.network_traffic.properties.'
                                         'bits_per_second.value.convert'
@@ -661,10 +622,6 @@ class SpaceApi:
                                         'packets_per_second.value'
                                     ),
                                     idx=idx,
-                                    horizon_key=(
-                                        'sensors.network_traffic.properties.'
-                                        'packets_per_second.value.horizon'
-                                    ),
                                     convert_key=(
                                         'sensors.network_traffic.properties.'
                                         'packets_per_second.value.convert'

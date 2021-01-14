@@ -48,15 +48,6 @@ class EnumHorizon(Enum):
     NORMAL = 1
     INVERT = 2
 
-    @classmethod
-    def from_text(cls, val):
-        if isinstance(val, str):
-            val = val.strip().upper()
-            for elem in cls:
-                if elem.name == val:
-                    return elem
-        return cls.NORMAL
-
 
 # pylint: disable=no-member
 # pylint: disable=too-many-ancestors
