@@ -17,25 +17,25 @@ class SpaceApi:
         self._last = None
 
     @staticmethod
-    def _by_key(key):
+    def _by_key(*, key):
         return Value.by_key(key=f'{SP_API_PREFIX}.{key}')
 
     @staticmethod
-    def _get(key, idx=0):
+    def _get(*, key, idx=0):
         return Value.get(key=f'{SP_API_PREFIX}.{key}', idx=idx)
 
-    def _get_all(self, key):
+    def _get_all(self, *, key):
         return [
             {
                 '_idx': elem.idx,
                 'value': elem.elem,
             }
-            for elem in self._by_key(key)
+            for elem in self._by_key(key=key)
             if elem is not None
         ]
 
-    def latest_value(self, key, *, idx=0, convert):
-        sensor = self._get(key, idx=idx)
+    def latest_value(self, *, key, idx=0, convert):
+        sensor = self._get(key=key, idx=idx)
         if sensor is None or sensor.latest is None:
             return None
 
@@ -193,8 +193,8 @@ class SpaceApi:
         self._log.info('gathering state')
         return {
             'icon': {
-                'open': self._get('state.icon.open'),
-                'closed': self._get('state.icon.closed'),
+                'open': self._get(key='state.icon.open'),
+                'closed': self._get(key='state.icon.closed'),
             },
         }
 
@@ -205,25 +205,25 @@ class SpaceApi:
     def build(self):
         return {
             'api_compatibility': ['14'],
-            'space': self._get('space'),
-            'logo': self._get('logo'),
-            'url': self._get('url'),
+            'space': self._get(key='space'),
+            'logo': self._get(key='logo'),
+            'url': self._get(key='url'),
             'location': {
-                'address': self._get('location.address'),
-                'lat': self._get('location.lat'),
-                'lon': self._get('location.lon'),
-                'timezone': self._get('location.timezone'),
+                'address': self._get(key='location.address'),
+                'lat': self._get(key='location.lat'),
+                'lon': self._get(key='location.lon'),
+                'timezone': self._get(key='location.timezone'),
             },
             'spacefed': {
-                'spacenet': self._get('spacefed.spacenet'),
-                'spacesaml': self._get('spacefed.spacesaml'),
+                'spacenet': self._get(key='spacefed.spacenet'),
+                'spacesaml': self._get(key='spacefed.spacesaml'),
             },
-            'cam': self._get_all('cam'),
+            'cam': self._get_all(key='cam'),
             'state': self.get_state(),
             'events': self.get_events(),
             'contact': {
-                'phone': self._get('contact.phone'),
-                'sip': self._get('contact.sip'),
+                'phone': self._get(key='contact.phone'),
+                'sip': self._get(key='contact.sip'),
                 'keymasters': [
                     {
                         '_idx': idx,
@@ -254,36 +254,40 @@ class SpaceApi:
                     }
                     for idx in self.contact_keymasters_indices
                 ],
-                'irc': self._get('contact.irc'),
-                'twitter': self._get('contact.twitter'),
-                'mastodon': self._get('contact.mastodon'),
-                'facebook': self._get('contact.facebook'),
-                'identica': self._get('contact.identica'),
-                'foursquare': self._get('contact.foursquare'),
-                'email': self._get('contact.email'),
-                'ml': self._get('contact.ml'),
-                'xmpp': self._get('contact.xmpp'),
-                'issue_mail': self._get('contact.issue_mail'),
-                'gopher': self._get('contact.gopher'),
-                'matrix': self._get('contact.matrix'),
-                'mumble': self._get('contact.mumble'),
+                'irc': self._get(key='contact.irc'),
+                'twitter': self._get(key='contact.twitter'),
+                'mastodon': self._get(key='contact.mastodon'),
+                'facebook': self._get(key='contact.facebook'),
+                'identica': self._get(key='contact.identica'),
+                'foursquare': self._get(key='contact.foursquare'),
+                'email': self._get(key='contact.email'),
+                'ml': self._get(key='contact.ml'),
+                'xmpp': self._get(key='contact.xmpp'),
+                'issue_mail': self._get(key='contact.issue_mail'),
+                'gopher': self._get(key='contact.gopher'),
+                'matrix': self._get(key='contact.matrix'),
+                'mumble': self._get(key='contact.mumble'),
             },
             'sensors': {
                 'temperature': [
                     {
                         '_idx': idx,
                         'value': self.latest_value(
-                            'sensors.temperature.value',
+                            key='sensors.temperature.value',
                             idx=idx,
                             convert=EnumConvert.NATURAL,
                         ),
-                        'unit': self._get('sensors.temperature.unit', idx=idx),
-                        'location': self._get(
-                            'sensors.temperature.location', idx=idx
+                        'unit': self._get(
+                            key='sensors.temperature.unit', idx=idx
                         ),
-                        'name': self._get('sensors.temperature.name', idx=idx),
+                        'location': self._get(
+                            key='sensors.temperature.location', idx=idx
+                        ),
+                        'name': self._get(
+                            key='sensors.temperature.name', idx=idx
+                        ),
                         'description': self._get(
-                            'sensors.temperature.description', idx=idx
+                            key='sensors.temperature.description', idx=idx
                         ),
                     }
                     for idx in self.sensors_temperature_indices
@@ -292,16 +296,18 @@ class SpaceApi:
                     {
                         '_idx': idx,
                         'value': self.latest_value(
-                            'sensors.door_locked.value',
+                            key='sensors.door_locked.value',
                             idx=idx,
                             convert=EnumConvert.BOOLEAN,
                         ),
                         'location': self._get(
-                            'sensors.door_locked.location', idx=idx
+                            key='sensors.door_locked.location', idx=idx
                         ),
-                        'name': self._get('sensors.door_locked.name', idx=idx),
+                        'name': self._get(
+                            key='sensors.door_locked.name', idx=idx
+                        ),
                         'description': self._get(
-                            'sensors.door_locked.description', idx=idx
+                            key='sensors.door_locked.description', idx=idx
                         ),
                     }
                     for idx in self.sensors_door_locked_indices
@@ -310,17 +316,21 @@ class SpaceApi:
                     {
                         '_idx': idx,
                         'value': self.latest_value(
-                            'sensors.barometer.value',
+                            key='sensors.barometer.value',
                             idx=idx,
                             convert=EnumConvert.NATURAL,
                         ),
-                        'unit': self._get('sensors.barometer.unit', idx=idx),
-                        'location': self._get(
-                            'sensors.barometer.location', idx=idx
+                        'unit': self._get(
+                            key='sensors.barometer.unit', idx=idx
                         ),
-                        'name': self._get('sensors.barometer.name', idx=idx),
+                        'location': self._get(
+                            key='sensors.barometer.location', idx=idx
+                        ),
+                        'name': self._get(
+                            key='sensors.barometer.name', idx=idx
+                        ),
                         'description': self._get(
-                            'sensors.barometer.description', idx=idx
+                            key='sensors.barometer.description', idx=idx
                         ),
                     }
                     for idx in self.sensors_barometer_indices
@@ -330,28 +340,34 @@ class SpaceApi:
                         {
                             '_idx': idx,
                             'value': self.latest_value(
-                                f'sensors.radiation.{sub}.value',
+                                key=f'sensors.radiation.{sub}.value',
                                 idx=idx,
                                 convert=EnumConvert.NATURAL,
                             ),
                             'unit': self._get(
-                                f'sensors.radiation.{sub}.unit', idx=idx
+                                key=f'sensors.radiation.{sub}.unit', idx=idx
                             ),
                             'dead_time': self._get(
-                                f'sensors.radiation.{sub}.dead_time', idx=idx
+                                key=f'sensors.radiation.{sub}.dead_time',
+                                idx=idx,
                             ),
                             'conversion_factor': self._get(
-                                f'sensors.radiation.{sub}.conversion_factor',
+                                key=(
+                                    f'sensors.radiation.{sub}.'
+                                    'conversion_factor'
+                                ),
                                 idx=idx,
                             ),
                             'location': self._get(
-                                f'sensors.radiation.{sub}.location', idx=idx
+                                key=f'sensors.radiation.{sub}.location',
+                                idx=idx,
                             ),
                             'name': self._get(
-                                f'sensors.radiation.{sub}.name', idx=idx
+                                key=f'sensors.radiation.{sub}.name', idx=idx
                             ),
                             'description': self._get(
-                                f'sensors.radiation.{sub}.description', idx=idx
+                                key=f'sensors.radiation.{sub}.description',
+                                idx=idx,
                             ),
                         }
                         for idx in self.sensors_radiation_indices(sub)
@@ -362,17 +378,21 @@ class SpaceApi:
                     {
                         '_idx': idx,
                         'value': self.latest_value(
-                            'sensors.humidity.value',
+                            key='sensors.humidity.value',
                             idx=idx,
                             convert=EnumConvert.INTEGER,
                         ),
-                        'unit': self._get('sensors.humidity.unit', idx=idx),
-                        'location': self._get(
-                            'sensors.humidity.location', idx=idx
+                        'unit': self._get(
+                            key='sensors.humidity.unit', idx=idx
                         ),
-                        'name': self._get('sensors.humidity.name', idx=idx),
+                        'location': self._get(
+                            key='sensors.humidity.location', idx=idx
+                        ),
+                        'name': self._get(
+                            key='sensors.humidity.name', idx=idx
+                        ),
                         'description': self._get(
-                            'sensors.humidity.description', idx=idx
+                            key='sensors.humidity.description', idx=idx
                         ),
                     }
                     for idx in self.sensors_humidity_indices
@@ -381,21 +401,21 @@ class SpaceApi:
                     {
                         '_idx': idx,
                         'value': self.latest_value(
-                            'sensors.beverage_supply.value',
+                            key='sensors.beverage_supply.value',
                             idx=idx,
                             convert=EnumConvert.INTEGER,
                         ),
                         'unit': self._get(
-                            'sensors.beverage_supply.unit', idx=idx
+                            key='sensors.beverage_supply.unit', idx=idx
                         ),
                         'location': self._get(
-                            'sensors.beverage_supply.location', idx=idx
+                            key='sensors.beverage_supply.location', idx=idx
                         ),
                         'name': self._get(
-                            'sensors.beverage_supply.name', idx=idx
+                            key='sensors.beverage_supply.name', idx=idx
                         ),
                         'description': self._get(
-                            'sensors.beverage_supply.description', idx=idx
+                            key='sensors.beverage_supply.description', idx=idx
                         ),
                     }
                     for idx in self.sensors_beverage_supply_indices
@@ -404,21 +424,22 @@ class SpaceApi:
                     {
                         '_idx': idx,
                         'value': self.latest_value(
-                            'sensors.power_consumption.value',
+                            key='sensors.power_consumption.value',
                             idx=idx,
                             convert=EnumConvert.INTEGER,
                         ),
                         'unit': self._get(
-                            'sensors.power_consumption.unit', idx=idx
+                            key='sensors.power_consumption.unit', idx=idx
                         ),
                         'location': self._get(
-                            'sensors.power_consumption.location', idx=idx
+                            key='sensors.power_consumption.location', idx=idx
                         ),
                         'name': self._get(
-                            'sensors.power_consumption.name', idx=idx
+                            key='sensors.power_consumption.name', idx=idx
                         ),
                         'description': self._get(
-                            'sensors.power_consumption.description', idx=idx
+                            key='sensors.power_consumption.description',
+                            idx=idx,
                         ),
                     }
                     for idx in self.sensors_power_consumption_indices
@@ -429,55 +450,67 @@ class SpaceApi:
                         'properties': {
                             'speed': {
                                 'value': self.latest_value(
-                                    'sensors.wind.properties.speed.value',
+                                    key='sensors.wind.properties.speed.value',
                                     idx=idx,
                                     convert=EnumConvert.NATURAL,
                                 ),
                                 'unit': self._get(
-                                    'sensors.wind.properties.speed.unit',
+                                    key='sensors.wind.properties.speed.unit',
                                     idx=idx,
                                 ),
                             },
                             'gust': {
                                 'value': self.latest_value(
-                                    'sensors.wind.properties.gust.value',
+                                    key='sensors.wind.properties.gust.value',
                                     idx=idx,
                                     convert=EnumConvert.NATURAL,
                                 ),
                                 'unit': self._get(
-                                    'sensors.wind.properties.gust.unit',
+                                    key='sensors.wind.properties.gust.unit',
                                     idx=idx,
                                 ),
                             },
                             'direction': {
                                 'value': self.latest_value(
-                                    'sensors.wind.properties.direction.value',
+                                    key=(
+                                        'sensors.wind.properties.'
+                                        'direction.value'
+                                    ),
                                     idx=idx,
                                     convert=EnumConvert.INTEGER,
                                 ),
                                 'unit': self._get(
-                                    'sensors.wind.properties.direction.unit',
+                                    key=(
+                                        'sensors.wind.properties.'
+                                        'direction.unit'
+                                    ),
                                     idx=idx,
                                 ),
                             },
                             'elevation': {
                                 'value': self.latest_value(
-                                    'sensors.wind.properties.elevation.value',
+                                    key=(
+                                        'sensors.wind.properties.'
+                                        'elevation.value'
+                                    ),
                                     idx=idx,
                                     convert=EnumConvert.INTEGER,
                                 ),
                                 'unit': self._get(
-                                    'sensors.wind.properties.elevation.unit',
+                                    key=(
+                                        'sensors.wind.properties.'
+                                        'elevation.unit'
+                                    ),
                                     idx=idx,
                                 ),
                             },
                         },
                         'location': self._get(
-                            'sensors.wind.location', idx=idx
+                            key='sensors.wind.location', idx=idx
                         ),
-                        'name': self._get('sensors.wind.name', idx=idx),
+                        'name': self._get(key='sensors.wind.name', idx=idx),
                         'description': self._get(
-                            'sensors.wind.description', idx=idx
+                            key='sensors.wind.description', idx=idx
                         ),
                     }
                     for idx in self.sensors_wind_indices
@@ -487,21 +520,21 @@ class SpaceApi:
                     {
                         '_idx': idx,
                         'value': self.latest_value(
-                            'sensors.account_balance.value',
+                            key='sensors.account_balance.value',
                             idx=idx,
                             convert=EnumConvert.NATURAL,
                         ),
                         'unit': self._get(
-                            'sensors.account_balance.unit', idx=idx
+                            key='sensors.account_balance.unit', idx=idx
                         ),
                         'location': self._get(
-                            'sensors.account_balance.location', idx=idx
+                            key='sensors.account_balance.location', idx=idx
                         ),
                         'name': self._get(
-                            'sensors.account_balance.name', idx=idx
+                            key='sensors.account_balance.name', idx=idx
                         ),
                         'description': self._get(
-                            'sensors.account_balance.description', idx=idx
+                            key='sensors.account_balance.description', idx=idx
                         ),
                     }
                     for idx in self.sensors_account_balance_indices
@@ -510,18 +543,19 @@ class SpaceApi:
                     {
                         '_idx': idx,
                         'value': self.latest_value(
-                            'sensors.total_member_count.value',
+                            key='sensors.total_member_count.value',
                             idx=idx,
                             convert=EnumConvert.INTEGER,
                         ),
                         'location': self._get(
-                            'sensors.total_member_count.location', idx=idx
+                            key='sensors.total_member_count.location', idx=idx
                         ),
                         'name': self._get(
-                            'sensors.total_member_count.name', idx=idx
+                            key='sensors.total_member_count.name', idx=idx
                         ),
                         'description': self._get(
-                            'sensors.total_member_count.description', idx=idx
+                            key='sensors.total_member_count.description',
+                            idx=idx,
                         ),
                     }
                     for idx in self.sensors_total_member_count_indices
@@ -533,7 +567,7 @@ class SpaceApi:
                         'properties': {
                             'bits_per_second': {
                                 'value': self.latest_value(
-                                    (
+                                    key=(
                                         'sensors.network_traffic.properties.'
                                         'bits_per_second.value'
                                     ),
@@ -541,7 +575,7 @@ class SpaceApi:
                                     convert=EnumConvert.NATURAL,
                                 ),
                                 'maximum': self._get(
-                                    (
+                                    key=(
                                         'sensors.network_traffic.properties.'
                                         'bits_per_second.maximum'
                                     ),
@@ -550,7 +584,7 @@ class SpaceApi:
                             },
                             'packets_per_second': {
                                 'value': self.latest_value(
-                                    (
+                                    key=(
                                         'sensors.network_traffic.properties.'
                                         'packets_per_second.value'
                                     ),
@@ -560,13 +594,13 @@ class SpaceApi:
                             },
                         },
                         'location': self._get(
-                            'sensors.network_traffic.location', idx=idx
+                            key='sensors.network_traffic.location', idx=idx
                         ),
                         'name': self._get(
-                            'sensors.network_traffic.name', idx=idx
+                            key='sensors.network_traffic.name', idx=idx
                         ),
                         'description': self._get(
-                            'sensors.network_traffic.description', idx=idx
+                            key='sensors.network_traffic.description', idx=idx
                         ),
                     }
                     for idx in self.sensors_network_traffic_indices
@@ -574,23 +608,23 @@ class SpaceApi:
             },
             'feeds': {
                 'blog': {
-                    'type': self._get('feeds.blog.type'),
-                    'url': self._get('feeds.blog.url'),
+                    'type': self._get(key='feeds.blog.type'),
+                    'url': self._get(key='feeds.blog.url'),
                 },
                 'wiki': {
-                    'type': self._get('feeds.wiki.type'),
-                    'url': self._get('feeds.wiki.url'),
+                    'type': self._get(key='feeds.wiki.type'),
+                    'url': self._get(key='feeds.wiki.url'),
                 },
                 'calendar': {
-                    'type': self._get('feeds.calendar.type'),
-                    'url': self._get('feeds.calendar.url'),
+                    'type': self._get(key='feeds.calendar.type'),
+                    'url': self._get(key='feeds.calendar.url'),
                 },
                 'flickr': {
-                    'type': self._get('feeds.calendar.type'),
-                    'url': self._get('feeds.calendar.url'),
+                    'type': self._get(key='feeds.calendar.type'),
+                    'url': self._get(key='feeds.calendar.url'),
                 },
             },
-            'projects': self._get_all('projects'),
+            'projects': self._get_all(key='projects'),
             'links': [
                 {
                     '_idx': idx,

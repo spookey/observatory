@@ -27,7 +27,7 @@ class TestSpaceApiBuildIndices:
 
         indices = list(range(5))
         for idx in indices:
-            Value.set(f'{SP_API_PREFIX}.cam', idx=idx, elem=f'cam #{idx}')
+            Value.set(key=f'{SP_API_PREFIX}.cam', idx=idx, elem=f'cam #{idx}')
 
         assert api.cam_indices == indices
 
@@ -39,7 +39,7 @@ class TestSpaceApiBuildIndices:
         indices = list(range(5))
         for idx in indices:
             Value.set(
-                choice(
+                key=choice(
                     [
                         f'{SP_API_PREFIX}.contact.keymasters.irc_nick',
                         f'{SP_API_PREFIX}.contact.keymasters.phone',
@@ -142,7 +142,7 @@ class TestSpaceApiBuildIndices:
         for idx in indices:
             for key in keys:
                 Value.set(
-                    f'{SP_API_PREFIX}.{key}',
+                    key=f'{SP_API_PREFIX}.{key}',
                     idx=idx,
                     elem=f'{field} #{idx} {key}',
                 )
@@ -159,7 +159,7 @@ class TestSpaceApiBuildIndices:
         for idx in indices:
             for key in ['value', 'unit']:
                 Value.set(
-                    f'{SP_API_PREFIX}.sensors.radiation.{sub}.{key}',
+                    key=f'{SP_API_PREFIX}.sensors.radiation.{sub}.{key}',
                     idx=idx,
                     elem=f'radiation {sub} #{idx} {key}',
                 )
@@ -174,7 +174,9 @@ class TestSpaceApiBuildIndices:
         indices = list(range(7))
         for idx in indices:
             Value.set(
-                f'{SP_API_PREFIX}.projects', idx=idx, elem=f'project #{idx}'
+                key=f'{SP_API_PREFIX}.projects',
+                idx=idx,
+                elem=f'project #{idx}',
             )
 
         assert api.projects_indices == indices
@@ -187,10 +189,10 @@ class TestSpaceApiBuildIndices:
         indices = list(range(7))
         for idx in indices:
             Value.set(
-                f'{SP_API_PREFIX}.links.name', idx=idx, elem=f'link #{idx}'
+                key=f'{SP_API_PREFIX}.links.name', idx=idx, elem=f'link #{idx}'
             )
             Value.set(
-                f'{SP_API_PREFIX}.links.url', idx=idx, elem=f'url #{idx}'
+                key=f'{SP_API_PREFIX}.links.url', idx=idx, elem=f'url #{idx}'
             )
 
         assert api.links_indices == indices
@@ -203,20 +205,22 @@ class TestSpaceApiBuildIndices:
         indices = list(range(3))
         for idx in indices:
             Value.set(
-                f'{SP_API_PREFIX}.membership_plans.name',
+                key=f'{SP_API_PREFIX}.membership_plans.name',
                 idx=idx,
                 elem=f'name #{idx}',
             )
             Value.set(
-                f'{SP_API_PREFIX}.membership_plans.value', idx=idx, elem=idx
+                key=f'{SP_API_PREFIX}.membership_plans.value',
+                idx=idx,
+                elem=idx,
             )
             Value.set(
-                f'{SP_API_PREFIX}.membership_plans.currency',
+                key=f'{SP_API_PREFIX}.membership_plans.currency',
                 idx=idx,
                 elem=f'currency #{idx}',
             )
             Value.set(
-                f'{SP_API_PREFIX}.membership_plans.billing_interval',
+                key=f'{SP_API_PREFIX}.membership_plans.billing_interval',
                 idx=idx,
                 elem=f'interval #{idx}',
             )

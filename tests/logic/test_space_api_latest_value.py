@@ -25,7 +25,7 @@ class TestSpaceApiLatestValue:
 
         key, idx = 'some.sensor', 42
 
-        Value.set(f'{SP_API_PREFIX}.{key}', idx=idx, elem=gen_sensor())
+        Value.set(key=f'{SP_API_PREFIX}.{key}', idx=idx, elem=gen_sensor())
 
         assert (
             api.latest_value(key=key, idx=idx, convert=EnumConvert.INTEGER)
@@ -40,7 +40,7 @@ class TestSpaceApiLatestValue:
 
         sensor = gen_sensor()
         sensor.append(user=gen_user(), value=13.37)
-        Value.set(f'{SP_API_PREFIX}.{key}', idx=idx, elem=sensor)
+        Value.set(key=f'{SP_API_PREFIX}.{key}', idx=idx, elem=sensor)
 
         for convert, expect in [
             (EnumConvert.NATURAL, 13.37),

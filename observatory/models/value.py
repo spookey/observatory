@@ -62,7 +62,7 @@ class Value(Model):
     )
 
     @classmethod
-    def by_key_idx(cls, key, idx=0):
+    def by_key_idx(cls, *, key, idx=0):
         return cls.query.filter(
             and_(
                 cls.key == key,
@@ -71,7 +71,7 @@ class Value(Model):
         ).first()
 
     @classmethod
-    def by_key(cls, key):
+    def by_key(cls, *, key):
         return (
             cls.query.filter(
                 cls.key == key,
@@ -97,16 +97,16 @@ class Value(Model):
         self.update(box=box, sensor=sensor, **underscore)
 
     @classmethod
-    def get(cls, key, idx=0):
-        obj = cls.by_key_idx(key, idx=idx)
+    def get(cls, *, key, idx=0):
+        obj = cls.by_key_idx(key=key, idx=idx)
         return obj.elem if obj is not None else None
 
     @classmethod
-    def get_all(cls, key):
-        return [obj.elem for obj in cls.by_key(key)]
+    def get_all(cls, *, key):
+        return [obj.elem for obj in cls.by_key(key=key)]
 
     @classmethod
-    def set(cls, key, idx=0, elem=None, _commit=True):
+    def set(cls, *, key, idx=0, elem=None, _commit=True):
         obj = cls.by_key_idx(key=key, idx=idx)
         if obj is None:
             obj = cls.create(key=key, idx=idx, _commit=False)

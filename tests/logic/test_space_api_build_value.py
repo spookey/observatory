@@ -543,7 +543,7 @@ class TestSpaceApiBuildValue:
                 'properties': {
                     'bits_per_second': {
                         'value': Value.set(
-                            (
+                            key=(
                                 f'{SP_API_PREFIX}.sensors.network_traffic.'
                                 'properties.bits_per_second.value'
                             ),
@@ -551,7 +551,7 @@ class TestSpaceApiBuildValue:
                             elem=bps_sensor,
                         ).latest.value,
                         'maximum': Value.set(
-                            (
+                            key=(
                                 f'{SP_API_PREFIX}.sensors.network_traffic.'
                                 'properties.bits_per_second.maximum'
                             ),
@@ -561,7 +561,7 @@ class TestSpaceApiBuildValue:
                     },
                     'packets_per_second': {
                         'value': Value.set(
-                            (
+                            key=(
                                 f'{SP_API_PREFIX}.sensors.network_traffic.'
                                 'properties.packets_per_second.value'
                             ),
@@ -572,7 +572,7 @@ class TestSpaceApiBuildValue:
                 },
                 **{
                     key: Value.set(
-                        f'{SP_API_PREFIX}.sensors.network_traffic.{key}',
+                        key=f'{SP_API_PREFIX}.sensors.network_traffic.{key}',
                         idx=idx,
                         elem=key,
                     ).elem

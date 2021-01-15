@@ -58,15 +58,15 @@ class TestValue:
         one = Value.create(key=one_key, idx=one_idx)
         two = Value.create(key=two_key, idx=two_idx)
 
-        assert Value.by_key_idx(nil_key) == nil
-        assert Value.by_key_idx(nil_key, idx=one_idx) is None
-        assert Value.by_key_idx(nil_key, idx=two_idx) is None
-        assert Value.by_key_idx(one_key) is None
-        assert Value.by_key_idx(one_key, idx=one_idx) == one
-        assert Value.by_key_idx(one_key, idx=two_idx) is None
-        assert Value.by_key_idx(two_key) is None
-        assert Value.by_key_idx(two_key, idx=one_idx) is None
-        assert Value.by_key_idx(two_key, idx=two_idx) == two
+        assert Value.by_key_idx(key=nil_key) == nil
+        assert Value.by_key_idx(key=nil_key, idx=one_idx) is None
+        assert Value.by_key_idx(key=nil_key, idx=two_idx) is None
+        assert Value.by_key_idx(key=one_key) is None
+        assert Value.by_key_idx(key=one_key, idx=one_idx) == one
+        assert Value.by_key_idx(key=one_key, idx=two_idx) is None
+        assert Value.by_key_idx(key=two_key) is None
+        assert Value.by_key_idx(key=two_key, idx=one_idx) is None
+        assert Value.by_key_idx(key=two_key, idx=two_idx) == two
 
     @staticmethod
     def test_by_key():
@@ -75,8 +75,8 @@ class TestValue:
         for idx in range(42, 23, -1):
             res.append(Value.create(key=key, idx=idx))
 
-        assert Value.by_key('some') == []
-        assert Value.by_key(key) == list(reversed(res))
+        assert Value.by_key(key='some') == []
+        assert Value.by_key(key=key) == list(reversed(res))
 
     @staticmethod
     def test_elem_property(bucket):
@@ -119,10 +119,10 @@ class TestValue:
     def test_get(bucket):
         idx = 23
         for key, obj in bucket.obj.items():
-            Value.create(key=str(key), idx=idx).update(elem=obj)
+            Value.create(key=f'{key}', idx=idx).update(elem=obj)
 
         for key, obj in bucket.obj.items():
-            assert Value.get(key=str(key), idx=idx) == obj
+            assert Value.get(key=f'{key}', idx=idx) == obj
 
     @staticmethod
     def test_get_all():
@@ -130,8 +130,8 @@ class TestValue:
         for idx in range(42, 23, -1):
             Value.create(key=key, idx=idx).update(elem=idx)
 
-        assert Value.get_all('some') == []
-        assert Value.get_all(key) == list(range(1 + 23, 1 + 42))
+        assert Value.get_all(key='some') == []
+        assert Value.get_all(key=key) == list(range(1 + 23, 1 + 42))
 
     @staticmethod
     def test_set_method():
