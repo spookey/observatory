@@ -1,6 +1,6 @@
 from logging import getLogger
 
-from flask import render_template, request, url_for
+from flask import current_app, render_template, request, url_for
 from jinja2 import Markup
 
 from observatory.forms.common import (
@@ -75,6 +75,11 @@ def tagline():
 
 def script_config_data():
     api_plot_base_url = url_for('api.charts.plot', slug='', _external=True)
+    api_space_api_url = (
+        url_for('api.sp_api.json', _external=True)
+        if current_app.config.get('SP_API_ENABLE', False)
+        else ''
+    )
 
     return Markup(
         ' '.join(
@@ -82,6 +87,7 @@ def script_config_data():
             for line in f'''
 data-api-plot-base-url="{api_plot_base_url}"
 data-api-plot-refresh-ms="{API_PLOT_REFRESH_MS}"
+data-api-space-api-url="{api_space_api_url}"
 data-moment-default-format="{FMT_MOMENT_DEFAULT}"
 data-moment-msecond-format="{FMT_MOMENT_MSECOND}"
 data-moment-second-format="{FMT_MOMENT_SECOND}"

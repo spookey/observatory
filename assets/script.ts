@@ -4,6 +4,7 @@ import { drawCharts } from "./charts";
 import { dropToggle } from "./dropdowns";
 import { flashClose } from "./notifications";
 import { momentTime } from "./moments";
+import { sApiHelper } from "./space";
 
 conf.initialize();
 
@@ -12,3 +13,4 @@ drawCharts();
 dropToggle();
 flashClose();
 momentTime();
+sApiHelper();

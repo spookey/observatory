@@ -40,7 +40,7 @@ class TestSapiIndex:
         gen_user_loggedin()
 
         res = visitor(ENDPOINT)
-        box = res.soup.select('div.is-one-third pre code')[-1]
+        box = res.soup.select('div#spaceapi-raw pre code')[-1]
 
         assert box.text == dumps(SPACE_API.content, indent=2, sort_keys=True)
 

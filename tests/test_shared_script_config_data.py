@@ -1,4 +1,4 @@
-from flask import url_for
+from flask import current_app, url_for
 from jinja2 import Markup
 from pytest import mark
 
@@ -19,11 +19,17 @@ from observatory.start.environment import (
 
 
 @mark.usefixtures('ctx_app')
-def test_script_config_data():
+@mark.parametrize('enabled', (True, False))
+def test_script_config_data(enabled, monkeypatch):
+    api_plot_base_url = url_for('api.charts.plot', slug='', _external=True)
+    api_space_api_url = url_for('api.sp_api.json', _external=True)
+    if not enabled:
+        monkeypatch.setitem(current_app.config, 'SP_API_ENABLE', False)
+        api_space_api_url = ''
+
     config = script_config_data()
     assert isinstance(config, Markup)
 
-    api_plot_base_url = url_for('api.charts.plot', slug='', _external=True)
     text = config.unescape()
 
     for line in (elem.strip() for elem in text.split('data') if elem.strip()):
@@ -32,6 +38,7 @@ def test_script_config_data():
 
     assert f'data-api-plot-base-url="{api_plot_base_url}"' in text
     assert f'data-api-plot-refresh-ms="{API_PLOT_REFRESH_MS}"' in text
+    assert f'data-api-space-api-url="{api_space_api_url}"' in text
     assert f'data-moment-default-format="{FMT_MOMENT_DEFAULT}"' in text
     assert f'data-moment-msecond-format="{FMT_MOMENT_MSECOND}"' in text
     assert f'data-moment-second-format="{FMT_MOMENT_SECOND}"' in text

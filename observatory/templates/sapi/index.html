@@ -370,9 +370,21 @@
         {% endcall %}
       </div>
       <div class="column is-one-third">
-        {{ _heading('Raw Content') }}
-        <div class="content">
-          <pre><code>{{ content|tojson(indent=2, sort_keys=true) }}</code></pre>
+        <div class="columns" id="spaceapi-raw">
+          <div class="column is-full">
+            {{ _heading('Raw Content') }}
+            <div class="content">
+              <pre><code>{{ content|tojson(indent=2, sort_keys=true) }}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="columns" id="spaceapi-rendered">
+          <div class="column is-full">
+            {{ _heading('Rendered') }}
+            <div class="content">
+              <pre><code>ʕ •ᴥ•ʔ</code></pre>
+            </div>
+          </div>
         </div>
       </div>
     </div>
