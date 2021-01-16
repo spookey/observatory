@@ -91,330 +91,268 @@ class TestPoint:
         assert Point.query_outdated(outdated=False).all() == news
 
     @staticmethod
-    def test_translate(gen_sensor, gen_user):
+    @mark.parametrize(
+        ('config', 'nnp'),
+        [
+            (
+                dict(horizon=None, convert=None, elevate=1.0, numeric=False),
+                (-23.5, 0.0, 13.37),
+            ),
+            (
+                dict(horizon=None, convert=None, elevate=1.0, numeric=True),
+                (-23.5, 0.0, 13.37),
+            ),
+            (
+                dict(horizon=None, convert=None, elevate=0.0, numeric=False),
+                (0.0, 0.0, 0.0),
+            ),
+            (
+                dict(horizon=None, convert=None, elevate=0.0, numeric=True),
+                (0.0, 0.0, 0.0),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.NORMAL,
+                    convert=EnumConvert.NATURAL,
+                    elevate=1.0,
+                    numeric=False,
+                ),
+                (-23.5, 0.0, 13.37),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.NORMAL,
+                    convert=EnumConvert.NATURAL,
+                    elevate=1.0,
+                    numeric=True,
+                ),
+                (-23.5, 0.0, 13.37),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.NORMAL,
+                    convert=EnumConvert.NATURAL,
+                    elevate=5.0,
+                    numeric=False,
+                ),
+                (-117.5, 0.0, 66.85),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.NORMAL,
+                    convert=EnumConvert.NATURAL,
+                    elevate=5.0,
+                    numeric=True,
+                ),
+                (-117.5, 0.0, 66.85),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.INVERT,
+                    convert=EnumConvert.NATURAL,
+                    elevate=1.0,
+                    numeric=False,
+                ),
+                (23.5, 0.0, -13.37),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.INVERT,
+                    convert=EnumConvert.NATURAL,
+                    elevate=1.0,
+                    numeric=True,
+                ),
+                (23.5, 0.0, -13.37),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.INVERT,
+                    convert=EnumConvert.NATURAL,
+                    elevate=1.0,
+                    numeric=False,
+                ),
+                (23.5, 0.0, -13.37),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.INVERT,
+                    convert=EnumConvert.NATURAL,
+                    elevate=1.0,
+                    numeric=True,
+                ),
+                (23.5, 0.0, -13.37),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.INVERT,
+                    convert=EnumConvert.NATURAL,
+                    elevate=5.0,
+                    numeric=False,
+                ),
+                (117.5, 0.0, -66.85),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.INVERT,
+                    convert=EnumConvert.NATURAL,
+                    elevate=5.0,
+                    numeric=True,
+                ),
+                (117.5, 0.0, -66.85),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.NORMAL,
+                    convert=EnumConvert.INTEGER,
+                    elevate=1.0,
+                    numeric=False,
+                ),
+                (-24, 0, 13),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.NORMAL,
+                    convert=EnumConvert.INTEGER,
+                    elevate=1.0,
+                    numeric=True,
+                ),
+                (-24, 0, 13),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.NORMAL,
+                    convert=EnumConvert.INTEGER,
+                    elevate=5.0,
+                    numeric=False,
+                ),
+                (-118, 0, 67),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.NORMAL,
+                    convert=EnumConvert.INTEGER,
+                    elevate=5.0,
+                    numeric=True,
+                ),
+                (-118, 0, 67),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.INVERT,
+                    convert=EnumConvert.INTEGER,
+                    elevate=1.0,
+                    numeric=False,
+                ),
+                (24, 0, -13),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.INVERT,
+                    convert=EnumConvert.INTEGER,
+                    elevate=1.0,
+                    numeric=True,
+                ),
+                (24, 0, -13),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.INVERT,
+                    convert=EnumConvert.INTEGER,
+                    elevate=5.0,
+                    numeric=False,
+                ),
+                (118, 0, -67),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.INVERT,
+                    convert=EnumConvert.INTEGER,
+                    elevate=5.0,
+                    numeric=True,
+                ),
+                (118, 0, -67),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.NORMAL,
+                    convert=EnumConvert.BOOLEAN,
+                    elevate=1.0,
+                    numeric=False,
+                ),
+                (True, False, True),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.NORMAL,
+                    convert=EnumConvert.BOOLEAN,
+                    elevate=1.0,
+                    numeric=True,
+                ),
+                (1.0, 0.0, 1.0),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.NORMAL,
+                    convert=EnumConvert.BOOLEAN,
+                    elevate=5.0,
+                    numeric=False,
+                ),
+                (True, False, True),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.NORMAL,
+                    convert=EnumConvert.BOOLEAN,
+                    elevate=5.0,
+                    numeric=True,
+                ),
+                (5.0, 0.0, 5.0),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.INVERT,
+                    convert=EnumConvert.BOOLEAN,
+                    elevate=1.0,
+                    numeric=False,
+                ),
+                (True, False, True),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.INVERT,
+                    convert=EnumConvert.BOOLEAN,
+                    elevate=1.0,
+                    numeric=True,
+                ),
+                (-1.0, 0.0, -1.0),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.INVERT,
+                    convert=EnumConvert.BOOLEAN,
+                    elevate=5.0,
+                    numeric=False,
+                ),
+                (True, False, True),
+            ),
+            (
+                dict(
+                    horizon=EnumHorizon.INVERT,
+                    convert=EnumConvert.BOOLEAN,
+                    elevate=5.0,
+                    numeric=True,
+                ),
+                (-5.0, 0.0, -5.0),
+            ),
+        ],
+    )
+    def test_translate(config, nnp, gen_sensor, gen_user):
         sensor = gen_sensor()
         user = gen_user()
+
         neg = sensor.append(user=user, value=-23.5)
         nil = sensor.append(user=user, value=0)
         pos = sensor.append(user=user, value=13.37)
 
-        for horizon, convert, elevate, numeric, params in [
-            (
-                None,
-                None,
-                1.0,
-                False,
-                (
-                    (neg, -23.5),
-                    (nil, 0.0),
-                    (pos, 13.37),
-                ),
-            ),
-            (
-                None,
-                None,
-                1.0,
-                True,
-                (
-                    (neg, -23.5),
-                    (nil, 0.0),
-                    (pos, 13.37),
-                ),
-            ),
-            (
-                None,
-                None,
-                0.0,
-                False,
-                (
-                    (neg, 0.0),
-                    (nil, 0.0),
-                    (pos, 0.0),
-                ),
-            ),
-            (
-                None,
-                None,
-                0.0,
-                True,
-                (
-                    (neg, 0.0),
-                    (nil, 0.0),
-                    (pos, 0.0),
-                ),
-            ),
-            (
-                EnumHorizon.NORMAL,
-                EnumConvert.NATURAL,
-                1.0,
-                False,
-                (
-                    (neg, -23.5),
-                    (nil, 0.0),
-                    (pos, 13.37),
-                ),
-            ),
-            (
-                EnumHorizon.NORMAL,
-                EnumConvert.NATURAL,
-                1.0,
-                True,
-                (
-                    (neg, -23.5),
-                    (nil, 0.0),
-                    (pos, 13.37),
-                ),
-            ),
-            (
-                EnumHorizon.NORMAL,
-                EnumConvert.NATURAL,
-                5.0,
-                False,
-                (
-                    (neg, -117.5),
-                    (nil, 0.0),
-                    (pos, 66.85),
-                ),
-            ),
-            (
-                EnumHorizon.NORMAL,
-                EnumConvert.NATURAL,
-                5.0,
-                True,
-                (
-                    (neg, -117.5),
-                    (nil, 0.0),
-                    (pos, 66.85),
-                ),
-            ),
-            (
-                EnumHorizon.INVERT,
-                EnumConvert.NATURAL,
-                1.0,
-                False,
-                (
-                    (neg, 23.5),
-                    (nil, 0.0),
-                    (pos, -13.37),
-                ),
-            ),
-            (
-                EnumHorizon.INVERT,
-                EnumConvert.NATURAL,
-                1.0,
-                True,
-                (
-                    (neg, 23.5),
-                    (nil, 0.0),
-                    (pos, -13.37),
-                ),
-            ),
-            (
-                EnumHorizon.INVERT,
-                EnumConvert.NATURAL,
-                5.0,
-                False,
-                (
-                    (neg, 117.5),
-                    (nil, 0.0),
-                    (pos, -66.85),
-                ),
-            ),
-            (
-                EnumHorizon.INVERT,
-                EnumConvert.NATURAL,
-                5.0,
-                True,
-                (
-                    (neg, 117.5),
-                    (nil, 0.0),
-                    (pos, -66.85),
-                ),
-            ),
-            (
-                EnumHorizon.NORMAL,
-                EnumConvert.INTEGER,
-                1.0,
-                False,
-                (
-                    (neg, -24),
-                    (nil, 0),
-                    (pos, 13),
-                ),
-            ),
-            (
-                EnumHorizon.NORMAL,
-                EnumConvert.INTEGER,
-                1.0,
-                True,
-                (
-                    (neg, -24),
-                    (nil, 0),
-                    (pos, 13),
-                ),
-            ),
-            (
-                EnumHorizon.NORMAL,
-                EnumConvert.INTEGER,
-                5.0,
-                False,
-                (
-                    (neg, -118),
-                    (nil, 0),
-                    (pos, 67),
-                ),
-            ),
-            (
-                EnumHorizon.NORMAL,
-                EnumConvert.INTEGER,
-                5.0,
-                True,
-                (
-                    (neg, -118),
-                    (nil, 0),
-                    (pos, 67),
-                ),
-            ),
-            (
-                EnumHorizon.INVERT,
-                EnumConvert.INTEGER,
-                1.0,
-                False,
-                (
-                    (neg, 24),
-                    (nil, 0),
-                    (pos, -13),
-                ),
-            ),
-            (
-                EnumHorizon.INVERT,
-                EnumConvert.INTEGER,
-                1.0,
-                True,
-                (
-                    (neg, 24),
-                    (nil, 0),
-                    (pos, -13),
-                ),
-            ),
-            (
-                EnumHorizon.INVERT,
-                EnumConvert.INTEGER,
-                5.0,
-                False,
-                (
-                    (neg, 118),
-                    (nil, 0),
-                    (pos, -67),
-                ),
-            ),
-            (
-                EnumHorizon.INVERT,
-                EnumConvert.INTEGER,
-                5.0,
-                True,
-                (
-                    (neg, 118),
-                    (nil, 0),
-                    (pos, -67),
-                ),
-            ),
-            (
-                EnumHorizon.NORMAL,
-                EnumConvert.BOOLEAN,
-                1.0,
-                False,
-                (
-                    (neg, True),
-                    (nil, False),
-                    (pos, True),
-                ),
-            ),
-            (
-                EnumHorizon.NORMAL,
-                EnumConvert.BOOLEAN,
-                1.0,
-                True,
-                (
-                    (neg, 1.0),
-                    (nil, 0.0),
-                    (pos, 1.0),
-                ),
-            ),
-            (
-                EnumHorizon.NORMAL,
-                EnumConvert.BOOLEAN,
-                5.0,
-                False,
-                (
-                    (neg, True),
-                    (nil, False),
-                    (pos, True),
-                ),
-            ),
-            (
-                EnumHorizon.NORMAL,
-                EnumConvert.BOOLEAN,
-                5.0,
-                True,
-                (
-                    (neg, 5.0),
-                    (nil, 0.0),
-                    (pos, 5.0),
-                ),
-            ),
-            (
-                EnumHorizon.INVERT,
-                EnumConvert.BOOLEAN,
-                1.0,
-                False,
-                (
-                    (neg, True),
-                    (nil, False),
-                    (pos, True),
-                ),
-            ),
-            (
-                EnumHorizon.INVERT,
-                EnumConvert.BOOLEAN,
-                1.0,
-                True,
-                (
-                    (neg, -1.0),
-                    (nil, 0.0),
-                    (pos, -1.0),
-                ),
-            ),
-            (
-                EnumHorizon.INVERT,
-                EnumConvert.BOOLEAN,
-                5.0,
-                False,
-                (
-                    (neg, True),
-                    (nil, False),
-                    (pos, True),
-                ),
-            ),
-            (
-                EnumHorizon.INVERT,
-                EnumConvert.BOOLEAN,
-                5.0,
-                True,
-                (
-                    (neg, -5.0),
-                    (nil, 0.0),
-                    (pos, -5.0),
-                ),
-            ),
-        ]:
-            for point, expect in params:
-                assert (
-                    point.translate(
-                        horizon=horizon,
-                        convert=convert,
-                        elevate=elevate,
-                        numeric=numeric,
-                    )
-                    == expect
-                )
+        for point, expect in zip((neg, nil, pos), nnp):
+            assert point.translate(**config) == expect
