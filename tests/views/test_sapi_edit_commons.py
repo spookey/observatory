@@ -194,7 +194,7 @@ PAGES = [
         ),
         data=dict(
             sensor_sel=6,
-            unit_sel='hPA',
+            unit_sel='hPa',
             location='downstairs',
             name='barometer',
             description='our barometer',

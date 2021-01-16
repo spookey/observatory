@@ -133,7 +133,7 @@ class SpaceEditSensorsBarometerForm(SpaceEditSensorsForm):
     unit_sel = SelectField(
         'Unit',
         coerce=str,
-        choices=[(val, val) for val in ('hPa', 'hPA')],
+        choices=[('hPa', 'hPa')],
         validators=[DataRequired()],
         description='The unit of the sensor value',
     )
