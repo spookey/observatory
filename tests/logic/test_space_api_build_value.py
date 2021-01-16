@@ -471,12 +471,31 @@ class TestSpaceApiBuildValue:
         for idx in range(2):
             payload = {'_idx': idx}
 
-            properties = {}
+            properties = {
+                'elevation': {
+                    'value': Value.set(
+                        key=(
+                            f'{SP_API_PREFIX}.sensors.wind.'
+                            'properties.elevation.value'
+                        ),
+                        idx=idx,
+                        elem=idx * 100.1,
+                    ).elem,
+                    'unit': Value.set(
+                        key=(
+                            f'{SP_API_PREFIX}.sensors.wind.'
+                            'properties.elevation.unit'
+                        ),
+                        idx=idx,
+                        elem='elevation-unit',
+                    ).elem,
+                }
+            }
+
             for prop, convert in [
                 ('speed', EnumConvert.NATURAL),
                 ('gust', EnumConvert.NATURAL),
                 ('direction', EnumConvert.INTEGER),
-                ('elevation', EnumConvert.INTEGER),
             ]:
                 sensor = gen_sensor(f'{prop}-sensor-{idx}')
                 sensor.append(user=user, value=idx)

@@ -367,7 +367,7 @@ class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
         gust_unit_sel='sensors.wind.properties.gust.unit',
         direction_sensor_sel='sensors.wind.properties.direction.value',
         direction_unit_sel='sensors.wind.properties.direction.unit',
-        elevation_sensor_sel='sensors.wind.properties.elevation.value',
+        elevation_value='sensors.wind.properties.elevation.value',
         elevation_unit_sel='sensors.wind.properties.elevation.unit',
         location='sensors.wind.location',
         name='sensors.wind.name',
@@ -377,7 +377,6 @@ class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
         'speed_sensor_sel',
         'gust_sensor_sel',
         'direction_sensor_sel',
-        'elevation_sensor_sel',
     ]
 
     speed_sensor_sel = SpaceEditSensorsForm._sensor_field('Wind speed sensor')
@@ -406,8 +405,12 @@ class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
         validators=[DataRequired()],
         description='The unit of the sensor value',
     )
-    elevation_sensor_sel = SpaceEditSensorsForm._sensor_field(
-        'Wind elevation sensor'
+    elevation_value = DecimalField(
+        'Elevation',
+        default=0.0,
+        places=2,
+        validators=[NumberRange(min=0.0)],
+        description='Height above mean sea level',
     )
     elevation_unit_sel = SelectField(
         'Unit',

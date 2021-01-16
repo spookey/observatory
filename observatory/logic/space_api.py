@@ -488,13 +488,12 @@ class SpaceApi:
                                 ),
                             },
                             'elevation': {
-                                'value': self.latest_value(
+                                'value': self._get(
                                     key=(
                                         'sensors.wind.properties.'
                                         'elevation.value'
                                     ),
                                     idx=idx,
-                                    convert=EnumConvert.INTEGER,
                                 ),
                                 'unit': self._get(
                                     key=(
