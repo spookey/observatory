@@ -29,9 +29,9 @@ class Point(CreatedMixin, Model):
         return is_outdated(self.created, BACKLOG_DAYS)
 
     @classmethod
-    def query_outdated(cls, query=None):
+    def query_outdated(cls, *, outdated=True, query=None):
         query = query if query is not None else cls.query
-        return query.filter(cls.outdated)
+        return query.filter(cls.outdated == outdated)
 
     def translate(self, *, horizon, convert, elevate=1.0, numeric=False):
         _flip = -1 if horizon == EnumHorizon.INVERT else +1

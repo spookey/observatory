@@ -37,13 +37,13 @@ class Sensor(CommonMixin, SortMixin, CreatedMixin, Model):
         return any(self.mapping_active)
 
     @classmethod
-    def query_sticky(cls, sticky=True, query=None):
+    def query_sticky(cls, *, sticky=True, query=None):
         query = query if query is not None else cls.query
         return query.filter(cls.sticky == sticky)
 
     @property
     def query_points(self):
-        return Point.query_sorted(Point.query.with_parent(self))
+        return Point.query_sorted(query=Point.query.with_parent(self))
 
     @property
     def length(self):
@@ -57,7 +57,10 @@ class Sensor(CommonMixin, SortMixin, CreatedMixin, Model):
     def cleanup(cls, _commit=True):
         result = []
         for sensor in cls.query.all():
-            query = Point.query_outdated(sensor.query_points)
+            query = Point.query_outdated(
+                outdated=True,
+                query=sensor.query_points,
+            )
             if sensor.sticky:
                 query = query.offset(1)
 

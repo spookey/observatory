@@ -118,7 +118,7 @@ class CreatedMixin:
         return epoch_milliseconds(self.created)
 
     @classmethod
-    def query_sorted(cls, query=None):
+    def query_sorted(cls, *, query=None):
         query = query if query is not None else cls.query
         return query.order_by(cls.created.desc())
 
@@ -142,15 +142,15 @@ class SortMixin:
         return cls.sortkey
 
     @classmethod
-    def query_sorted(cls, query=None):
+    def query_sorted(cls, *, query=None):
         query = query if query is not None else cls.query
         return query.order_by(cls._get_class_sortkey().desc())
 
-    def query_above(self, query=None):
+    def query_above(self, *, query=None):
         query = query if query is not None else self.query
         return query.filter(self._get_class_sortkey() > self.sortkey)
 
-    def query_below(self, query=None):
+    def query_below(self, *, query=None):
         query = query if query is not None else self.query
         return query.filter(self._get_class_sortkey() < self.sortkey)
 
@@ -175,14 +175,14 @@ class SortMixin:
     def raise_step(self):
         return self.__flip_sortkey(
             self.query_above(
-                self.query.order_by(self._get_class_sortkey().asc())
+                query=self.query.order_by(self._get_class_sortkey().asc())
             ).first()
         )
 
     def lower_step(self):
         return self.__flip_sortkey(
             self.query_below(
-                self.query.order_by(self._get_class_sortkey().desc())
+                query=self.query.order_by(self._get_class_sortkey().desc())
             ).first()
         )
 

@@ -67,36 +67,36 @@ class TestSortMixin:
         assert thr.query_below().all() == [one, two]
 
         qa_one = SortMixinPhony.query.filter(SortMixinPhony.num_a == 1)
-        assert one.query_above(qa_one).all() == [two, thr]
-        assert one.query_below(qa_one).all() == []
-        assert two.query_above(qa_one).all() == [thr]
-        assert two.query_below(qa_one).all() == []
-        assert thr.query_above(qa_one).all() == []
-        assert thr.query_below(qa_one).all() == [two]
+        assert one.query_above(query=qa_one).all() == [two, thr]
+        assert one.query_below(query=qa_one).all() == []
+        assert two.query_above(query=qa_one).all() == [thr]
+        assert two.query_below(query=qa_one).all() == []
+        assert thr.query_above(query=qa_one).all() == []
+        assert thr.query_below(query=qa_one).all() == [two]
 
         qa_two = SortMixinPhony.query.filter(SortMixinPhony.num_a == 2)
-        assert one.query_above(qa_two).all() == []
-        assert one.query_below(qa_two).all() == []
-        assert two.query_above(qa_two).all() == []
-        assert two.query_below(qa_two).all() == [one]
-        assert thr.query_above(qa_two).all() == []
-        assert thr.query_below(qa_two).all() == [one]
+        assert one.query_above(query=qa_two).all() == []
+        assert one.query_below(query=qa_two).all() == []
+        assert two.query_above(query=qa_two).all() == []
+        assert two.query_below(query=qa_two).all() == [one]
+        assert thr.query_above(query=qa_two).all() == []
+        assert thr.query_below(query=qa_two).all() == [one]
 
         qb_one = SortMixinPhony.query.filter(SortMixinPhony.num_b == 1)
-        assert one.query_above(qb_one).all() == [thr]
-        assert one.query_below(qb_one).all() == []
-        assert two.query_above(qb_one).all() == [thr]
-        assert two.query_below(qb_one).all() == []
-        assert thr.query_above(qb_one).all() == []
-        assert thr.query_below(qb_one).all() == []
+        assert one.query_above(query=qb_one).all() == [thr]
+        assert one.query_below(query=qb_one).all() == []
+        assert two.query_above(query=qb_one).all() == [thr]
+        assert two.query_below(query=qb_one).all() == []
+        assert thr.query_above(query=qb_one).all() == []
+        assert thr.query_below(query=qb_one).all() == []
 
         qb_two = SortMixinPhony.query.filter(SortMixinPhony.num_b == 2)
-        assert one.query_above(qb_two).all() == [two]
-        assert one.query_below(qb_two).all() == []
-        assert two.query_above(qb_two).all() == []
-        assert two.query_below(qb_two).all() == [one]
-        assert thr.query_above(qb_two).all() == []
-        assert thr.query_below(qb_two).all() == [one, two]
+        assert one.query_above(query=qb_two).all() == [two]
+        assert one.query_below(query=qb_two).all() == []
+        assert two.query_above(query=qb_two).all() == []
+        assert two.query_below(query=qb_two).all() == [one]
+        assert thr.query_above(query=qb_two).all() == []
+        assert thr.query_below(query=qb_two).all() == [one, two]
 
     @staticmethod
     def test_raise_lower_step():
@@ -147,14 +147,14 @@ class TestSortMixin:
         qb_two = SortMixinPhony.query.filter(SortMixinPhony.num_b == 2)
 
         def _check(flip_a, flip_b):
-            assert SortMixinPhony.query_sorted(qa_one).all() == (
+            assert SortMixinPhony.query_sorted(query=qa_one).all() == (
                 [one, two] if flip_a else [two, one]
             )
-            assert SortMixinPhony.query_sorted(qa_two).all() == [thr]
-            assert SortMixinPhony.query_sorted(qb_one).all() == (
+            assert SortMixinPhony.query_sorted(query=qa_two).all() == [thr]
+            assert SortMixinPhony.query_sorted(query=qb_one).all() == (
                 [two, thr] if flip_b else [thr, two]
             )
-            assert SortMixinPhony.query_sorted(qb_two).all() == [one]
+            assert SortMixinPhony.query_sorted(query=qb_two).all() == [one]
 
         assert SortMixinPhony.query_sorted().all() == [thr, two, one]
         _check(False, False)

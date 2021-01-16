@@ -84,10 +84,11 @@ class TestPoint:
 
     @staticmethod
     def test_query_outdated(gen_points_batch):
-        olds, _, complete = gen_points_batch()
+        olds, news, complete = gen_points_batch()
 
         assert Point.query.all() == complete
-        assert Point.query_outdated().all() == olds
+        assert Point.query_outdated(outdated=True).all() == olds
+        assert Point.query_outdated(outdated=False).all() == news
 
     @staticmethod
     def test_translate(gen_sensor, gen_user):

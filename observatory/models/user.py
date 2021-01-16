@@ -84,7 +84,7 @@ class User(UserMixin, CreatedMixin, Model):
 
     @property
     def query_points(self):
-        return Point.query_sorted(Point.query.with_parent(self))
+        return Point.query_sorted(query=Point.query.with_parent(self))
 
     @property
     def length(self):
