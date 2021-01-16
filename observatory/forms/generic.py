@@ -1,21 +1,15 @@
-from flask_wtf import FlaskForm
-from wtforms import SubmitField
-
-from observatory.forms.extra.widgets import SubmitButtonInput
+from observatory.forms.base import BaseForm
 
 # pylint: disable=arguments-differ
 
 
-class GenericDropForm(FlaskForm):
+class GenericDropForm(BaseForm):
     Model = None
 
-    submit = SubmitField(
+    submit = BaseForm.gen_submit_button(
         'Delete',
-        description='Submit',
-        widget=SubmitButtonInput(
-            icon='ops_delete',
-            classreplace_kw={'is-dark': 'is-danger is-small'},
-        ),
+        icon='ops_delete',
+        classreplace_kw={'is-dark': 'is-danger is-small'},
     )
 
     def __init__(self, *args, obj=None, **kwargs):
@@ -32,16 +26,13 @@ class GenericDropForm(FlaskForm):
         return self.thing.delete()
 
 
-class GenericSortForm(FlaskForm):
+class GenericSortForm(BaseForm):
     Model = None
 
-    submit = SubmitField(
+    submit = BaseForm.gen_submit_button(
         'Sort',
-        description='Submit',
-        widget=SubmitButtonInput(
-            icon='glob_error',
-            classreplace_kw={'is-dark': 'is-dark is-small'},
-        ),
+        icon='glob_error',
+        classreplace_kw={'is-dark': 'is-dark is-small'},
     )
 
     def __init__(self, *args, obj=None, lift, **kwargs):

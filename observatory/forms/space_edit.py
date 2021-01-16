@@ -1,16 +1,8 @@
 from string import digits, hexdigits
 
-from flask_wtf import FlaskForm
 from iso_4217 import Currency
 from pytz import common_timezones
-from wtforms import (
-    BooleanField,
-    DecimalField,
-    SelectField,
-    StringField,
-    SubmitField,
-    TextAreaField,
-)
+from wtforms import BooleanField, DecimalField, StringField, TextAreaField
 from wtforms.validators import (
     URL,
     DataRequired,
@@ -20,8 +12,8 @@ from wtforms.validators import (
     Optional,
 )
 
+from observatory.forms.base import BaseForm
 from observatory.forms.extra.validators import NeedInner, NeedStart
-from observatory.forms.extra.widgets import SubmitButtonInput
 from observatory.instance import SPACE_API
 from observatory.models.sensor import Sensor
 from observatory.models.value import Value
@@ -31,7 +23,7 @@ from observatory.start.environment import SP_API_PREFIX
 # pylint: disable=no-member
 
 
-class SpaceEditForm(FlaskForm):
+class SpaceEditForm(BaseForm):
     KEYS = {}
     ONE_OF = []
     SENSORS = []
@@ -114,6 +106,7 @@ class SpaceEditInfoForm(SpaceEditForm):
         logo='logo',
         url='url',
     )
+
     space = StringField(
         'Space',
         validators=[DataRequired()],
@@ -129,11 +122,7 @@ class SpaceEditInfoForm(SpaceEditForm):
         validators=[DataRequired(), URL()],
         description='URL to your space website',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditLocationForm(SpaceEditForm):
@@ -143,6 +132,7 @@ class SpaceEditLocationForm(SpaceEditForm):
         lon='location.lon',
         timezone_sel='location.timezone',
     )
+
     address = StringField(
         'Address',
         validators=[Optional()],
@@ -166,18 +156,14 @@ class SpaceEditLocationForm(SpaceEditForm):
             'Longitude of your space location, in degree with decimal places'
         ),
     )
-    timezone_sel = SelectField(
+    timezone_sel = SpaceEditForm.gen_select_field(
         'Timezone',
+        description='The timezone the space is located in',
         coerce=str,
         choices=[(None, '—'), *[(ctz, ctz) for ctz in common_timezones]],
-        validators=[Optional()],
-        description='The timezone the space is located in',
+        required=False,
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditSpaceFedForm(SpaceEditForm):
@@ -185,6 +171,7 @@ class SpaceEditSpaceFedForm(SpaceEditForm):
         spacenet='spacefed.spacenet',
         spacesaml='spacefed.spacesaml',
     )
+
     spacenet = BooleanField(
         'SpaceNET',
         default=False,
@@ -195,25 +182,18 @@ class SpaceEditSpaceFedForm(SpaceEditForm):
         default=False,
         description='SpaceSAML support',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditCamForm(SpaceEditForm):
     KEYS = dict(cam='cam')
+
     cam = StringField(
         'Webcam URL',
         validators=[DataRequired(), URL()],
         description='Webcam URLs in your space',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditStateIconForm(SpaceEditForm):
@@ -221,6 +201,7 @@ class SpaceEditStateIconForm(SpaceEditForm):
         opened='state.icon.open',
         closed='state.icon.closed',
     )
+
     opened = StringField(
         'Open',
         validators=[DataRequired(), URL()],
@@ -235,11 +216,7 @@ class SpaceEditStateIconForm(SpaceEditForm):
             'The URL to your customized space logo showing ' 'a closed space '
         ),
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditContactForm(SpaceEditForm):
@@ -261,6 +238,7 @@ class SpaceEditContactForm(SpaceEditForm):
         mumble='contact.mumble',
     )
     ONE_OF = ['email', 'issue_mail', 'twitter', 'mailinglist']
+
     phone = StringField(
         'Phone',
         validators=[
@@ -348,11 +326,7 @@ class SpaceEditContactForm(SpaceEditForm):
         validators=[Optional(), URL(), NeedStart('mumble://')],
         description='URL to a Mumble server/channel',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditContactKeymastersForm(SpaceEditForm):
@@ -372,6 +346,7 @@ class SpaceEditContactKeymastersForm(SpaceEditForm):
         'email',
         'twitter',
     ]
+
     name = StringField(
         'Name',
         validators=[Optional()],
@@ -418,18 +393,15 @@ class SpaceEditContactKeymastersForm(SpaceEditForm):
         validators=[Optional(), NeedStart('@'), NeedInner(':')],
         description='Matrix username',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditFeedForm(SpaceEditForm):
     KEYS = {}
 
-    type_sel = SelectField(
+    type_sel = SpaceEditForm.gen_select_field(
         'Type',
+        description='Type of the feed',
         coerce=str,
         choices=[
             (None, '—'),
@@ -437,19 +409,13 @@ class SpaceEditFeedForm(SpaceEditForm):
             ('atom', 'Atom'),
             ('ical', 'iCal'),
         ],
-        validators=[Optional()],
-        description='Type of the feed',
     )
     url = StringField(
         'URL',
         validators=[DataRequired(), URL()],
         description='Feed URL',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditFeedBlogForm(SpaceEditFeedForm):
@@ -482,16 +448,13 @@ class SpaceEditFeedFlickrForm(SpaceEditFeedForm):
 
 class SpaceEditProjectsForm(SpaceEditForm):
     KEYS = dict(projects='projects')
+
     projects = StringField(
         'Projects',
         validators=[DataRequired(), URL()],
         description='Your project sites',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditLinksForm(SpaceEditForm):
@@ -500,6 +463,7 @@ class SpaceEditLinksForm(SpaceEditForm):
         description='links.description',
         url='links.url',
     )
+
     name = StringField(
         'Name',
         validators=[DataRequired()],
@@ -515,11 +479,7 @@ class SpaceEditLinksForm(SpaceEditForm):
         validators=[DataRequired(), URL()],
         description='The URL',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditMembershipPlansForm(SpaceEditForm):
@@ -530,6 +490,7 @@ class SpaceEditMembershipPlansForm(SpaceEditForm):
         billing_interval_sel='membership_plans.billing_interval',
         description='membership_plans.description',
     )
+
     name = StringField(
         'Name',
         validators=[DataRequired()],
@@ -538,18 +499,18 @@ class SpaceEditMembershipPlansForm(SpaceEditForm):
     value = DecimalField(
         'Value',
         places=2,
-        validators=[DataRequired(), NumberRange(min=0)],
+        validators=[DataRequired(), NumberRange(min=0.0)],
         description='How much does this plan cost?',
     )
-    currency_sel = SelectField(
+    currency_sel = SpaceEditForm.gen_select_field(
         'Currency',
+        description='What\'s the currency?',
         coerce=str,
         choices=SpaceEditForm._currency_choices(),
-        validators=[DataRequired()],
-        description='What\'s the currency?',
     )
-    billing_interval_sel = SelectField(
+    billing_interval_sel = SpaceEditForm.gen_select_field(
         'Billing interval',
+        description='How often is the membership billed?',
         coerce=str,
         choices=[
             ('yearly', 'Yearly'),
@@ -559,16 +520,10 @@ class SpaceEditMembershipPlansForm(SpaceEditForm):
             ('hourly', 'Hourly'),
             ('other', 'Other'),
         ],
-        validators=[DataRequired()],
-        description='How often is the membership billed?',
     )
     description = TextAreaField(
         'Description',
         validators=[Optional()],
         description='A free form string',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()

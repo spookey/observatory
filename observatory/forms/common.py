@@ -1,9 +1,8 @@
-from flask_wtf import FlaskForm
-from wtforms import BooleanField, StringField, SubmitField, TextAreaField
+from wtforms import BooleanField, StringField, TextAreaField
 from wtforms.validators import DataRequired
 
+from observatory.forms.base import BaseForm
 from observatory.forms.extra.validators import SafeSlug
-from observatory.forms.extra.widgets import SubmitButtonInput
 from observatory.forms.generic import GenericDropForm, GenericSortForm
 from observatory.models.prompt import Prompt
 from observatory.models.sensor import Sensor
@@ -12,7 +11,7 @@ from observatory.models.sensor import Sensor
 # pylint: disable=no-member
 
 
-class CommonEditForm(FlaskForm):
+class CommonEditForm(BaseForm):
     Model = None
 
     slug = StringField(
@@ -29,14 +28,6 @@ class CommonEditForm(FlaskForm):
         'Description',
         description='Description',
     )
-
-    @staticmethod
-    def _submit():
-        return SubmitField(
-            'Save',
-            description='Submit',
-            widget=SubmitButtonInput(icon='ops_submit'),
-        )
 
     def __init__(self, *args, obj=None, **kwargs):
         super().__init__(*args, obj=obj, **kwargs)
@@ -72,7 +63,7 @@ class CommonEditForm(FlaskForm):
 class PromptEditForm(CommonEditForm):
     Model = Prompt
 
-    submit = CommonEditForm._submit()
+    submit = CommonEditForm.gen_submit_button()
 
 
 class SensorEditForm(CommonEditForm):
@@ -83,7 +74,7 @@ class SensorEditForm(CommonEditForm):
         default=False,
         description='Set sticky',
     )
-    submit = CommonEditForm._submit()
+    submit = CommonEditForm.gen_submit_button()
 
 
 class PromptDropForm(GenericDropForm):

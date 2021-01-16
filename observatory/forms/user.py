@@ -1,11 +1,10 @@
 from logging import getLogger
 
 from flask_login import login_user
-from flask_wtf import FlaskForm
-from wtforms import BooleanField, PasswordField, StringField, SubmitField
+from wtforms import BooleanField, PasswordField, StringField
 from wtforms.validators import DataRequired
 
-from observatory.forms.extra.widgets import SubmitButtonInput
+from observatory.forms.base import BaseForm
 from observatory.models.user import User
 
 LOG = getLogger(__name__)
@@ -13,7 +12,7 @@ LOG = getLogger(__name__)
 # pylint: disable=arguments-differ
 
 
-class LoginForm(FlaskForm):
+class LoginForm(BaseForm):
     username = StringField(
         'Username',
         validators=[DataRequired()],
@@ -28,11 +27,7 @@ class LoginForm(FlaskForm):
         'Remember',
         description='Set cookie',
     )
-    submit = SubmitField(
-        'Login',
-        description='Submit',
-        widget=SubmitButtonInput(icon='user_enter'),
-    )
+    submit = BaseForm.gen_submit_button('Login', icon='user_enter')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -1,7 +1,4 @@
-from flask_wtf import FlaskForm
-from wtforms import SubmitField
-
-from observatory.forms.extra.widgets import SubmitButtonInput
+from observatory.forms.base import BaseForm
 from observatory.instance import SPACE_API
 from observatory.models.value import Value
 from observatory.start.environment import SP_API_PREFIX
@@ -10,16 +7,13 @@ from observatory.start.environment import SP_API_PREFIX
 # pylint: disable=no-member
 
 
-class SpaceDropForm(FlaskForm):
+class SpaceDropForm(BaseForm):
     KEYS = []
 
-    submit = SubmitField(
+    submit = BaseForm.gen_submit_button(
         'Delete',
-        description='Submit',
-        widget=SubmitButtonInput(
-            icon='ops_delete',
-            classreplace_kw={'is-dark': 'is-danger is-small'},
-        ),
+        icon='ops_delete',
+        classreplace_kw={'is-dark': 'is-danger is-small'},
     )
 
     def __init__(self, *args, idx, **kwargs):

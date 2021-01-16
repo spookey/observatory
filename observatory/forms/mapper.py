@@ -1,8 +1,7 @@
-from flask_wtf import FlaskForm
-from wtforms import BooleanField, DecimalField, SelectField, SubmitField
-from wtforms.validators import DataRequired, NumberRange
+from wtforms import BooleanField, DecimalField
+from wtforms.validators import NumberRange
 
-from observatory.forms.extra.widgets import SubmitButtonInput
+from observatory.forms.base import BaseForm
 from observatory.forms.generic import GenericDropForm, GenericSortForm
 from observatory.models.mapper import (
     EnumColor,
@@ -17,18 +16,12 @@ from observatory.models.sensor import Sensor
 # pylint: disable=no-member
 
 
-class MapperEditForm(FlaskForm):
-    prompt_sel = SelectField(
-        'Prompt',
-        coerce=int,
-        validators=[DataRequired()],
-        description='Select prompt',
+class MapperEditForm(BaseForm):
+    prompt_sel = BaseForm.gen_select_field(
+        'Prompt', description='Select prompt', coerce=int
     )
-    sensor_sel = SelectField(
-        'Sensor',
-        coerce=int,
-        validators=[DataRequired()],
-        description='Select sensor',
+    sensor_sel = BaseForm.gen_select_field(
+        'Sensor', description='Select sensor', coerce=int
     )
     active = BooleanField(
         'Active',
@@ -42,33 +35,26 @@ class MapperEditForm(FlaskForm):
         validators=[NumberRange(min=0.0)],
         description='Increase raw value with this factor',
     )
-    color_sel = SelectField(
+    color_sel = BaseForm.gen_select_field(
         'Color',
+        description='Select color',
         coerce=str,
         choices=[(en.color, en.name) for en in EnumColor],
-        validators=[DataRequired()],
-        description='Select color',
         render_kw={'data_colorize': 'option'},
     )
-    convert_sel = SelectField(
+    convert_sel = BaseForm.gen_select_field(
         'Convert',
+        description='Select conversion',
         coerce=int,
         choices=[(en.value, en.name) for en in EnumConvert],
-        validators=[DataRequired()],
-        description='Select conversion',
     )
-    horizon_sel = SelectField(
+    horizon_sel = BaseForm.gen_select_field(
         'Horizon',
+        description='Select horizon',
         coerce=int,
         choices=[(en.value, en.name) for en in EnumHorizon],
-        validators=[DataRequired()],
-        description='Select horizon',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = BaseForm.gen_submit_button()
 
     @staticmethod
     def _comm_choices(model):

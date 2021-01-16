@@ -1,18 +1,12 @@
-from wtforms import (
-    DecimalField,
-    SelectField,
-    StringField,
-    SubmitField,
-    TextAreaField,
-)
+from wtforms import DecimalField, StringField, TextAreaField
 from wtforms.validators import DataRequired, NumberRange, Optional
 
-from observatory.forms.extra.widgets import SubmitButtonInput
 from observatory.forms.space_edit import SpaceEditForm
 from observatory.models.sensor import Sensor
 
 # pylint: disable=arguments-differ
 # pylint: disable=no-member
+# pylint: disable=too-many-ancestors
 
 
 class SpaceEditSensorsForm(SpaceEditForm):
@@ -21,11 +15,8 @@ class SpaceEditSensorsForm(SpaceEditForm):
 
     @staticmethod
     def _sensor_field(label):
-        return SelectField(
-            label,
-            coerce=int,
-            validators=[DataRequired()],
-            description='Select sensor',
+        return SpaceEditForm.gen_select_field(
+            label, description='Select sensor', coerce=int
         )
 
     @staticmethod
@@ -55,15 +46,14 @@ class SpaceEditSensorsTemperatureForm(SpaceEditSensorsForm):
     SENSORS = ['sensor_sel']
 
     sensor_sel = SpaceEditSensorsForm._sensor_field('Temperature sensor')
-    unit_sel = SelectField(
+    unit_sel = SpaceEditSensorsForm.gen_select_field(
         'Unit',
+        description='The unit of the sensor value',
         coerce=str,
         choices=[
             (val, val)
             for val in ('°C', '°F', 'K', '°De', '°N', '°R', '°Ré', '°Rø')
         ],
-        validators=[DataRequired()],
-        description='The unit of the sensor value',
     )
     location = StringField(
         'Location',
@@ -80,11 +70,7 @@ class SpaceEditSensorsTemperatureForm(SpaceEditSensorsForm):
         validators=[Optional()],
         description='Some additional information',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditSensorsDoorLockedForm(SpaceEditSensorsForm):
@@ -112,11 +98,7 @@ class SpaceEditSensorsDoorLockedForm(SpaceEditSensorsForm):
         validators=[Optional()],
         description='Some additional information',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditSensorsBarometerForm(SpaceEditSensorsForm):
@@ -130,12 +112,11 @@ class SpaceEditSensorsBarometerForm(SpaceEditSensorsForm):
     SENSORS = ['sensor_sel']
 
     sensor_sel = SpaceEditSensorsForm._sensor_field('Barometer')
-    unit_sel = SelectField(
+    unit_sel = SpaceEditSensorsForm.gen_select_field(
         'Unit',
+        description='The unit of the sensor value',
         coerce=str,
         choices=[('hPa', 'hPa')],
-        validators=[DataRequired()],
-        description='The unit of the sensor value',
     )
     location = StringField(
         'Location',
@@ -152,11 +133,7 @@ class SpaceEditSensorsBarometerForm(SpaceEditSensorsForm):
         validators=[Optional()],
         description='Some additional information',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditSensorsRadiationForm(SpaceEditSensorsForm):
@@ -176,14 +153,13 @@ class SpaceEditSensorsRadiationForm(SpaceEditSensorsForm):
         )
 
     sensor_sel = SpaceEditSensorsForm._sensor_field('Radiation sensor')
-    unit_sel = SelectField(
+    unit_sel = SpaceEditSensorsForm.gen_select_field(
         'Unit',
+        description='The unit of the sensor value',
         coerce=str,
         choices=[
             (val, val) for val in ('cpm', 'r/h', 'µSv/h', 'mSv/a', 'µSv/a')
         ],
-        validators=[DataRequired()],
-        description='The unit of the sensor value',
     )
     dead_time = DecimalField(
         'Dead time',
@@ -214,11 +190,7 @@ class SpaceEditSensorsRadiationForm(SpaceEditSensorsForm):
         validators=[Optional()],
         description='Some additional information',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditSensorsRadiationAlphaForm(SpaceEditSensorsRadiationForm):
@@ -248,12 +220,11 @@ class SpaceEditSensorsHumidityForm(SpaceEditSensorsForm):
     SENSORS = ['sensor_sel']
 
     sensor_sel = SpaceEditSensorsForm._sensor_field('Humidity sensor')
-    unit_sel = SelectField(
+    unit_sel = SpaceEditSensorsForm.gen_select_field(
         'Unit',
+        description='The unit of the sensor value',
         coerce=str,
         choices=[('%', '%')],
-        validators=[DataRequired()],
-        description='The unit of the sensor value',
     )
     location = StringField(
         'Location',
@@ -270,11 +241,7 @@ class SpaceEditSensorsHumidityForm(SpaceEditSensorsForm):
         validators=[Optional()],
         description='Some additional information',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditSensorsBeverageSupplyForm(SpaceEditSensorsForm):
@@ -290,12 +257,11 @@ class SpaceEditSensorsBeverageSupplyForm(SpaceEditSensorsForm):
     sensor_sel = SpaceEditSensorsForm._sensor_field(
         'How much Mate and beer is in your fridge?'
     )
-    unit_sel = SelectField(
+    unit_sel = SpaceEditSensorsForm.gen_select_field(
         'Unit',
+        description='The unit (bottles or crates)',
         coerce=str,
         choices=[('btl', 'Bottles'), ('crt', 'Crates')],
-        validators=[DataRequired()],
-        description='The unit (bottles or crates)',
     )
     location = StringField(
         'Location',
@@ -312,11 +278,7 @@ class SpaceEditSensorsBeverageSupplyForm(SpaceEditSensorsForm):
         validators=[Optional()],
         description='Some additional information',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditSensorsPowerConsumptionForm(SpaceEditSensorsForm):
@@ -330,12 +292,11 @@ class SpaceEditSensorsPowerConsumptionForm(SpaceEditSensorsForm):
     SENSORS = ['sensor_sel']
 
     sensor_sel = SpaceEditSensorsForm._sensor_field('Power consumption')
-    unit_sel = SelectField(
+    unit_sel = SpaceEditSensorsForm.gen_select_field(
         'Unit',
+        description='The unit of the sensor value',
         coerce=str,
         choices=[(val, val) for val in ('mW', 'W', 'VA')],
-        validators=[DataRequired()],
-        description='The unit of the sensor value',
     )
     location = StringField(
         'Location',
@@ -352,11 +313,7 @@ class SpaceEditSensorsPowerConsumptionForm(SpaceEditSensorsForm):
         validators=[Optional()],
         description='Some additional information',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
@@ -380,30 +337,27 @@ class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
     ]
 
     speed_sensor_sel = SpaceEditSensorsForm._sensor_field('Wind speed sensor')
-    speed_unit_sel = SelectField(
+    speed_unit_sel = SpaceEditSensorsForm.gen_select_field(
         'Unit',
+        description='The unit of the sensor value',
         coerce=str,
         choices=[(val, val) for val in ('m/s', 'km/h', 'kn')],
-        validators=[DataRequired()],
-        description='The unit of the sensor value',
     )
     gust_sensor_sel = SpaceEditSensorsForm._sensor_field('Wind gust sensor')
-    gust_unit_sel = SelectField(
+    gust_unit_sel = SpaceEditSensorsForm.gen_select_field(
         'Unit',
+        description='The unit of the sensor value',
         coerce=str,
         choices=[(val, val) for val in ('m/s', 'km/h', 'kn')],
-        validators=[DataRequired()],
-        description='The unit of the sensor value',
     )
     direction_sensor_sel = SpaceEditSensorsForm._sensor_field(
         'Wind direction sensor'
     )
-    direction_unit_sel = SelectField(
+    direction_unit_sel = SpaceEditSensorsForm.gen_select_field(
         'Unit',
+        description='The unit of the sensor value',
         coerce=str,
         choices=[('°', '°')],
-        validators=[DataRequired()],
-        description='The unit of the sensor value',
     )
     elevation_value = DecimalField(
         'Elevation',
@@ -412,12 +366,11 @@ class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
         validators=[NumberRange(min=0.0)],
         description='Height above mean sea level',
     )
-    elevation_unit_sel = SelectField(
+    elevation_unit_sel = SpaceEditSensorsForm.gen_select_field(
         'Unit',
+        description='The unit of the sensor value',
         coerce=str,
         choices=[('m', 'm')],
-        validators=[DataRequired()],
-        description='The unit of the sensor value',
     )
     location = StringField(
         'Location',
@@ -434,11 +387,7 @@ class SpaceEditSensorsWindForm(SpaceEditSensorsForm):
         validators=[Optional()],
         description='Some additional information',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditSensorsAccountBalanceForm(SpaceEditSensorsForm):
@@ -452,12 +401,11 @@ class SpaceEditSensorsAccountBalanceForm(SpaceEditSensorsForm):
     SENSORS = ['sensor_sel']
 
     sensor_sel = SpaceEditSensorsForm._sensor_field('Account balance')
-    unit_sel = SelectField(
+    unit_sel = SpaceEditSensorsForm.gen_select_field(
         'Unit',
+        description='The unit of the sensor value',
         coerce=str,
         choices=SpaceEditSensorsForm._currency_choices(),
-        validators=[DataRequired()],
-        description='The unit of the sensor value',
     )
     location = StringField(
         'Location',
@@ -474,11 +422,7 @@ class SpaceEditSensorsAccountBalanceForm(SpaceEditSensorsForm):
         validators=[Optional()],
         description='Some additional information',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditSensorsTotalMemberCountForm(SpaceEditSensorsForm):
@@ -506,11 +450,7 @@ class SpaceEditSensorsTotalMemberCountForm(SpaceEditSensorsForm):
         validators=[Optional()],
         description='Some additional information',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
 
 
 class SpaceEditSensorsNetworkTrafficForm(SpaceEditSensorsForm):
@@ -557,8 +497,4 @@ class SpaceEditSensorsNetworkTrafficForm(SpaceEditSensorsForm):
         validators=[Optional()],
         description='Some additional information',
     )
-    submit = SubmitField(
-        'Save',
-        description='Submit',
-        widget=SubmitButtonInput(icon='ops_submit'),
-    )
+    submit = SpaceEditForm.gen_submit_button()
