@@ -69,10 +69,11 @@ def collect_generic(prompt):
 def collect_points(mapper, sensor):
     if sensor.active:
         for point in sensor.query_points.all():
-            yield dict(
-                x=point.created_epoch_ms,
-                y=point.translate_map(mapper, numeric=True),
-            )
+            if not point.outdated:
+                yield dict(
+                    x=point.created_epoch_ms,
+                    y=point.translate_map(mapper, numeric=True),
+                )
 
 
 def assemble(prompt):

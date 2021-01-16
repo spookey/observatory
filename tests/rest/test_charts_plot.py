@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from flask import url_for
 from pytest import mark
 
@@ -8,6 +10,7 @@ from observatory.models.mapper import (
     Mapper,
 )
 from observatory.models.point import Point
+from observatory.start.environment import BACKLOG_DAYS
 
 ENDPOINT = 'api.charts.plot'
 
@@ -36,6 +39,23 @@ class TestChartsPlot:
     def test_get_no_data(visitor, gen_prompt, gen_sensor):
         prompt, sensor = gen_prompt(), gen_sensor()
         Mapper.create(prompt=prompt, sensor=sensor)
+
+        res = visitor(ENDPOINT, params={'slug': prompt.slug})
+        assert res.json == []
+
+    @staticmethod
+    def test_get_outdated_data(visitor, gen_prompt, gen_sensor, gen_user):
+        prompt, sensor, user = gen_prompt(), gen_sensor(), gen_user()
+        Mapper.create(prompt=prompt, sensor=sensor)
+        start = datetime.utcnow()
+
+        for value in range(3):
+            Point.create(
+                sensor=sensor,
+                user=user,
+                value=value,
+                created=start - timedelta(days=BACKLOG_DAYS, hours=value),
+            )
 
         res = visitor(ENDPOINT, params={'slug': prompt.slug})
         assert res.json == []

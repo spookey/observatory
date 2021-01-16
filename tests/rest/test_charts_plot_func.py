@@ -1,9 +1,10 @@
 from collections import namedtuple
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from flask_restful.fields import Boolean, Float, Integer, String
 from pytest import mark
 
+from observatory.lib.clock import epoch_milliseconds
 from observatory.models.mapper import EnumConvert, EnumHorizon, Mapper
 from observatory.models.point import Point
 from observatory.rest.charts import (
@@ -12,6 +13,7 @@ from observatory.rest.charts import (
     collect_points,
     get_value_step_types,
 )
+from observatory.start.environment import BACKLOG_DAYS
 
 
 @mark.usefixtures('session')
@@ -64,87 +66,95 @@ class TestChartsPlotFunc:
         assert list(collect_points(mapper, sensor)) == []
 
     @staticmethod
+    def test_collect_points_outdated_empty(gen_prompt, gen_sensor, gen_user):
+        prompt, sensor, user = gen_prompt(), gen_sensor(), gen_user()
+        mapper = Mapper.create(prompt=prompt, sensor=sensor)
+        start = datetime.utcnow()
+
+        for value in range(5):
+            Point.create(
+                sensor=sensor,
+                user=user,
+                value=value,
+                created=start - timedelta(days=BACKLOG_DAYS, hours=value),
+            )
+
+        assert list(collect_points(mapper, sensor)) == []
+
+    @staticmethod
     def test_collect_points(gen_prompt, gen_sensor, gen_user):
         prompt, sensor, user = gen_prompt(), gen_sensor(), gen_user()
         mapper = Mapper.create(prompt=prompt, sensor=sensor)
-        Point.create(
-            sensor=sensor,
-            user=user,
-            created=datetime.utcfromtimestamp(2),
-            value=13.37,
+        start = datetime.utcnow()
+        two, one, nil = (
+            start + timedelta(minutes=2),
+            start + timedelta(minutes=1),
+            start + timedelta(minutes=0),
         )
-        Point.create(
-            sensor=sensor,
-            user=user,
-            created=datetime.utcfromtimestamp(1),
-            value=23,
-        )
-        Point.create(
-            sensor=sensor,
-            user=user,
-            created=datetime.utcfromtimestamp(0),
-            value=0,
-        )
+
+        Point.create(sensor=sensor, user=user, created=two, value=13.37)
+        Point.create(sensor=sensor, user=user, created=one, value=23)
+        Point.create(sensor=sensor, user=user, created=nil, value=0)
 
         for horizon, convert, params in [
             (
                 EnumHorizon.NORMAL,
                 EnumConvert.NATURAL,
                 [
-                    (2000, 13.37),
-                    (1000, 23.0),
-                    (0, 0.0),
+                    (two, 13.37),
+                    (one, 23.0),
+                    (nil, 0.0),
                 ],
             ),
             (
                 EnumHorizon.NORMAL,
                 EnumConvert.INTEGER,
                 [
-                    (2000, 13),
-                    (1000, 23),
-                    (0, 0),
+                    (two, 13),
+                    (one, 23),
+                    (nil, 0),
                 ],
             ),
             (
                 EnumHorizon.NORMAL,
                 EnumConvert.BOOLEAN,
                 [
-                    (2000, 1.0),
-                    (1000, 1.0),
-                    (0, 0.0),
+                    (two, 1.0),
+                    (one, 1.0),
+                    (nil, 0.0),
                 ],
             ),
             (
                 EnumHorizon.INVERT,
                 EnumConvert.NATURAL,
                 [
-                    (2000, -13.37),
-                    (1000, -23.0),
-                    (0, 0),
+                    (two, -13.37),
+                    (one, -23.0),
+                    (nil, 0),
                 ],
             ),
             (
                 EnumHorizon.INVERT,
                 EnumConvert.INTEGER,
                 [
-                    (2000, -13),
-                    (1000, -23),
-                    (0, 0),
+                    (two, -13),
+                    (one, -23),
+                    (nil, 0),
                 ],
             ),
             (
                 EnumHorizon.INVERT,
                 EnumConvert.BOOLEAN,
                 [
-                    (2000, -1.0),
-                    (1000, -1.0),
-                    (0, 0.0),
+                    (two, -1.0),
+                    (one, -1.0),
+                    (nil, 0.0),
                 ],
             ),
         ]:
             mapper.update(horizon=horizon, convert=convert)
             assert list(collect_points(mapper, sensor)) == [
-                {'x': xx, 'y': yy} for xx, yy in params
+                {'x': epoch_milliseconds(xx), 'y': yy} for xx, yy in params
             ]
 
     @staticmethod
@@ -167,12 +177,12 @@ class TestChartsPlotFunc:
             'ex',
             (
                 'value',
-                'd_val',
+                'translated',
                 'fill',
                 'stepped',
                 'tension',
-                'val_t',
-                'stp_t',
+                'value_type',
+                'step_type',
             ),
         )
 
@@ -182,12 +192,12 @@ class TestChartsPlotFunc:
                 EnumConvert.NATURAL,
                 expect(
                     value=42.0,
-                    d_val=42.0,
+                    translated=42.0,
                     fill=True,
                     stepped=False,
                     tension=0.4,
-                    val_t=Float,
-                    stp_t=Boolean,
+                    value_type=Float,
+                    step_type=Boolean,
                 ),
             ),
             (
@@ -195,12 +205,12 @@ class TestChartsPlotFunc:
                 EnumConvert.INTEGER,
                 expect(
                     value=-42,
-                    d_val=-42,
+                    translated=-42,
                     fill=True,
                     stepped=False,
                     tension=0.0,
-                    val_t=Integer,
-                    stp_t=Boolean,
+                    value_type=Integer,
+                    step_type=Boolean,
                 ),
             ),
             (
@@ -208,12 +218,12 @@ class TestChartsPlotFunc:
                 EnumConvert.BOOLEAN,
                 expect(
                     value=-1.0,
-                    d_val=True,
+                    translated=True,
                     fill=False,
                     stepped='before',
                     tension=0.4,
-                    val_t=Float,
-                    stp_t=String,
+                    value_type=Float,
+                    step_type=String,
                 ),
             ),
         ]:
@@ -243,7 +253,7 @@ class TestChartsPlotFunc:
                                 'points': 1,
                                 'slug': sensor.slug,
                                 'title': sensor.title,
-                                'value': ex.d_val,
+                                'value': ex.translated,
                             },
                         },
                         'fill': ex.fill,
@@ -251,7 +261,7 @@ class TestChartsPlotFunc:
                         'lineTension': ex.tension,
                         'steppedLine': ex.stepped,
                     },
-                    ex.val_t,
-                    ex.stp_t,
+                    ex.value_type,
+                    ex.step_type,
                 )
             ]
